@@ -18,7 +18,12 @@ BugReports: https://github.com/mums2/mums2/issues
 LinkingTo: 
     Rcpp
 Imports: 
-    Rcpp
+    cli,
+    dplyr,
+    magrittr,
+    massdataset,
+    Rcpp,
+    tibble
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
