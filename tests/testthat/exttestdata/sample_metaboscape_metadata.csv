@@ -1,0 +1,7 @@
+sample_id,class,group,injection.order
+Blank_1_1,Blank,Solvent_blank,3
+Blank_1_2,Blank,Solvent_blank,1
+Control_1_1,Sample,Control,2
+Control_1_2,Sample,Control,5
+Exp_1_1,Sample,Treatment1,6
+Exp_1_2,Sample,Treatment1,4
