@@ -71,11 +71,14 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP run_testthat_tests(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
