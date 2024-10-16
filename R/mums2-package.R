@@ -11,7 +11,9 @@
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
 #' @importFrom massdataset create_mass_dataset
+#' @importFrom msentropy msentropy_similarity
 #' @importFrom tibble column_to_rownames
+#' @importFrom Rcpp sourceCpp
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
 NULL

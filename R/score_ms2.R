@@ -64,7 +64,7 @@
 #'                                          "intensity" = int_2),
 #'                               pmz_2)
 #'
-#' score <- score_ms2(peaks_1, peaks_2, gnps_param(frag_tolerance = 0.5))
+#' score <- score_ms2(peaks_1, peaks_2, gnps_params(frag_tolerance = 0.5))
 #' score <- score_ms2(peaks_1, peaks_2, spec_entropy_params())
 #'
 score_ms2 <- function(peaks_1, peaks_2, score_params) {
