@@ -6,3 +6,10 @@ test_that("gnps_params works", {
 
   expect_error(gnps_params())
 })
+
+test_that("spec_entropy_params works", {
+  p <- spec_entropy_params()
+
+  expect_equal(length(p), 9)
+  expect_equal(p$clean_spectra, TRUE)
+})
