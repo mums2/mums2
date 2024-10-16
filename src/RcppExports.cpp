@@ -10,6 +10,25 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// AnnotateMs2Features
+Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type variableId(variableIdSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type ms2Id(ms2IdSEXP);
+    Rcpp::traits::input_parameter< const std::vector<float>& >::type ms2Mz(ms2MzSEXP);
+    Rcpp::traits::input_parameter< const std::vector<float>& >::type ms2Rt(ms2RtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type ms2Spectra(ms2SpectraSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type reference(referenceSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type parameters(parametersSEXP);
+    Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
+    Rcpp::traits::input_parameter< double >::type minScore(minScoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -52,10 +71,14 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP run_testthat_tests(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
