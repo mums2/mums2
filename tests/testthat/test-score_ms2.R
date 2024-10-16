@@ -10,7 +10,7 @@ test_that("score_ms2 works on class peaks_data", {
   adenine <- create_peaks_data(read.csv(test_path(dir, file2)),
                                136.0620)
 
-  score <- score_ms2(scan_32, adenine, gnps_param(frag_tolerance = 0.5))
+  score <- score_ms2(scan_32, adenine, gnps_params(frag_tolerance = 0.5))
   expect_equal(score, 0.81162792)
 })
 
