@@ -1,3 +1,6 @@
+#' @keywords internal
+"_PACKAGE"
+
 ## usethis namespace: start
 #' @importFrom cli cli_abort
 #' @importFrom dplyr case_when
@@ -11,3 +14,4 @@
 #' @importFrom tibble column_to_rownames
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
+NULL
