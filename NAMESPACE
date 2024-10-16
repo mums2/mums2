@@ -2,6 +2,8 @@
 
 export("%>%")
 export(convert_metaboscape2mass_dataset)
+export(gnps_params)
+export(spec_entropy_params)
 importFrom(cli,cli_abort)
 importFrom(dplyr,case_when)
 importFrom(dplyr,ends_with)
