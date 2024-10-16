@@ -9,7 +9,7 @@
 #' `"spectral_entropy"` are supported. The scoring method is specified by the
 #' `score_params` argument. `score_params` is a list of parameters for the
 #' chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
-#' created with notur functions [gnps_param()] and [spec_entropy_params()],
+#' created with notur functions [gnps_params()] and [spec_entropy_params()],
 #' respectively.
 #'
 #'

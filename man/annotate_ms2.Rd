@@ -47,7 +47,7 @@ spectral scoring methods. Currently scoring methods \code{"gnps"} and
 \code{"spectral_entropy"} are supported. The scoring method is specified by the
 \code{score_params} argument. \code{score_params} is a list of parameters for the
 chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
-created with notur functions \code{\link[=gnps_param]{gnps_param()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}},
+created with notur functions \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}},
 respectively.
 }
 \examples{
