@@ -43,63 +43,16 @@ dist_ms2 <- function(data, cutoff, precursor_thresh, score_params) {
 #' @method dist_ms2 mass_dataset
 #' @export
 dist_ms2.mass_dataset <- function(data, cutoff, precursor_thresh, score_params) {
-  # ms1_data <- data@variable_info
-  # n <- nrow(ms1_data)
-  # ms2_matches <- data@ms2_data[[1]]@variable_id
-  n <- length(data@ms2_data[[1]]@variable_id)
-
-  dist <- MatrixExtra::emptySparse(nrow = n, ncol = n, format = "T", dtype = "d")
-
-  if (any(duplicated(data@ms2_data[[1]]@variable_id))) {
-    cli::cli_abort(c("One or more ms1 features are represented multiple times in ms2 scans."))
-  }
-
-  for (i in seq_along(1:(n-1))) {
-    # if there is no ms2 scan for i
-    # if (isFALSE(does_ms1_have_ms2(data$variable_id[i], 
-    #                               ms2_matches))) {
-    #   next
-    # }
-    # for(int i =0; )
-    for (j in seq(i + 1, n)[seq(i + 1, n) <= n]) {
-      val1 <- data@ms2_data[[1]]@ms2_mz[[i]]
-      if (data@ms2_data[[1]]@ms2_mz[[i]] == data@ms2_data[[1]]@ms2_mz[[j]] &
-          nrow(data@ms2_data[[1]]@ms2_spectra[[i]] ==
-          nrow(data@ms2_data[[1]]@ms2_spectra[[j]]))) {
-        dist[i, j] <- .Machine$double.xmin
-        next
-      }
-      
-      if (abs(data@ms2_data[[1]]@ms2_mz[[i]] - data@ms2_data[[1]]@ms2_mz[[j]]) > precursor_thresh) {
-        # dist[i, j] <- .Machine$double.xmin
-        next
-      }
-
-      score <- score_ms2(get_peaks_data(data, i), get_peaks_data(data, j),
-                         score_params)
-      
-      if ((1 - score) <= cutoff) {
-        dist[i, j] <- 1 - score
-      }
-    }
-
-      
-  }
-  
-  return(dist)
-}
-
-dist_ms2_cpp <- function(data, cutoff, precursor_thresh, score_params) {
-  # spectraDataList, parameters, precursor_thresh, cutoff
   data_list <- list("pmz" = data@ms2_data[[1]]@ms2_mz,
                     "id" = data@ms2_data[[1]]@variable_id,
                     "spectra" = lapply(data@ms2_data[[1]]@ms2_spectra,
                                        as.data.frame))
-  
+
   dist <- distMS2(data_list, score_params, precursor_thresh, cutoff)
 
   return(dist)
 }
+
 
 # is_same_scan <- function(spectra_1, spectra_2) {
 #   if (nrow(spectra_1) != nrow(sepectra_2)) {
