@@ -18,7 +18,7 @@ test_that("dist_ms2 works", {
                        j = dist@j + 1,
                        x = dist@x)
   
-  expect_equal(nrow(result), 23)
+  expect_equal(nrow(result), 10)
 })
 
 test_that("dist_ms2_cpp works", {
@@ -34,7 +34,7 @@ test_that("dist_ms2_cpp works", {
 
   dist <- dist_ms2_cpp(dat_sub, 0.3, 2, gnps_params(0.5))
   expect_s3_class(dist, "data.frame")
-  expect_equal(nrow(dist), 23)
+  expect_equal(nrow(dist), 10)
 })
 
 test_that("dist_ms2_cpp gives the same output as dist_ms2", {
@@ -48,9 +48,16 @@ test_that("dist_ms2_cpp gives the same output as dist_ms2", {
     massdataset::activate_mass_dataset("variable_info") %>%
     massdataset::filter(variable_id %in% first_10)
 
-  expected <- data.frame(i = dist@i + 1,
-                         j = dist@j + 1,
-                         dist = dist@x)
+  dist <- dist_ms2(dat_sub, cutoff = .3, precursor_thresh = 2,
+    gnps_params(frag_tolerance = 0.5))
+
+  dist_r <- data.frame(i = dist@i + 1,
+                       j = dist@j + 1,
+                       dist = dist@x)
+  
+  dist_cpp <- dist_ms2_cpp(dat_sub, 0.3, 2, gnps_params(0.5))
+
+  expect_true(all(dist_r == dist_cpp))
 })
 
 

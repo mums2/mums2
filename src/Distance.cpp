@@ -14,7 +14,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
     }
 }
 
-void Distance::CalculateDistances(const double prec_threshold, const ScoringFactory& scoreMethod) {
+void Distance::CalculateDistances(const double prec_threshold, double cutoff, const ScoringFactory& scoreMethod) {
     const size_t size = spectraList.size();
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];
@@ -25,6 +25,11 @@ void Distance::CalculateDistances(const double prec_threshold, const ScoringFact
                 continue;
             }
             double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra);
+
+            if ((1 - score) > cutoff) {
+                continue;
+            }
+            
             SparseValue dist(i, j, (1 - score));
             sparseMatrix.emplace_back(dist);
         }

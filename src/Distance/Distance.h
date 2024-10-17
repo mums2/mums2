@@ -16,7 +16,7 @@ public:
     Distance() = default;
     ~Distance() = default;
     void CreateSpectraList(Rcpp::List data);
-    void CalculateDistances(double prec_threshold, const ScoringFactory& scoreMethod);
+    void CalculateDistances(double prec_threshold, double cutoff, const ScoringFactory& scoreMethod);
     Rcpp::DataFrame ExtractMatrix();
 
 private:
