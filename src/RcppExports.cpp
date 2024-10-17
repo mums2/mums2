@@ -29,6 +29,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// distMS2
+Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, double precursor_thresh, double cutoff);
+RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type spectraDataList(spectraDataListSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type parameters(parametersSEXP);
+    Rcpp::traits::input_parameter< double >::type precursor_thresh(precursor_threshSEXP);
+    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
+    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -75,6 +89,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
+    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

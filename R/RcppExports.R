@@ -5,6 +5,10 @@ AnnotateMs2Features <- function(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, ref
     .Call(`_mums2_AnnotateMs2Features`, variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore)
 }
 
+distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff) {
+    .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
