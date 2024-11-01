@@ -73,7 +73,7 @@ NULL
 #' @export
 #' @rdname annotate_ms2
 annotate_ms2 <- function(query, reference, score_params,
-                                 precursor_tolerance, min_score) {
+                         precursor_tolerance, min_score) {
   UseMethod("annotate_ms2", query)
 }
 
@@ -81,7 +81,7 @@ annotate_ms2 <- function(query, reference, score_params,
 #' @importFrom stats setNames
 #' @export
 annotate_ms2.mass_dataset <- function(query, reference, score_params,
-                                              precursor_tolerance, min_score) {
+                                      precursor_tolerance, min_score) {
   ms2 <- query@ms2_data[[1]]
   matches <- AnnotateMs2Features(ms2@variable_id, ms2@ms2_spectrum_id,
                                  ms2@ms2_mz, ms2@ms2_rt, ms2@ms2_spectra,
