@@ -33,4 +33,24 @@ context("Test cpp Utils") {
     expect_true(result == expected);
   }
 
+    test_that("testing my_rep works") {
+    std::vector<int> values(3);
+    values[0] = 1;
+    values[1] = 2;
+    values[2] = 3;
+
+    std::vector<int> times(3);
+    times[0] = 2;
+    times[1] = 3;
+    times[2] = 2;
+
+    // out: 1, 1, 2, 2, 2, 3, 3
+    std::vector<int> out{1, 1, 2, 2, 2, 3, 3};
+    Utils util;
+
+    std::vector<int> rep = util.my_rep(values, times);
+    Rcpp::Rcout << rep[0] << std::endl;
+    expect_true(rep == out);
+  }
+
 }
