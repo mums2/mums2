@@ -5,6 +5,8 @@
 #include <vector>
 #include <cctype>
 #include <iostream>
+#include <cmath>
+#include <sstream>
 #include <Rcpp.h>
 // #include <algorithm>
 
@@ -39,6 +41,20 @@ class Utils {
  
         }
 
+        std::vector<int> my_rep(std::vector<int> x, std::vector<int> times) {
+            int n = x.size();
+
+            std::vector<int> out;
+            
+            for (int i = 0; i < n; i++) {
+
+                std::vector<int> temp(times[i], x[i]);
+                out.insert(out.end(), temp.begin(), temp.end());
+            } 
+            
+            return out;
+ 
+        }
 };
 
 #endif //UTILS
