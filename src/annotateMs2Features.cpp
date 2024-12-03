@@ -8,7 +8,7 @@ Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, 
           const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra,
           const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore) {
 
-    ScoringFactory factory(parameters);    
+    const ScoringFactory factory(parameters);
     AnnotateMs2 annotateMs2;
     annotateMs2.createQueryList(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra);
     annotateMs2.createRefList(reference);

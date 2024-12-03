@@ -4,3 +4,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+src/.idea
+src/cmake-build-debug/
+src/CMakeLists.txt

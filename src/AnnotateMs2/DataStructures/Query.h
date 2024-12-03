@@ -7,9 +7,9 @@
 
 class Query {
     public:
-    Query(std::string variableId, std::string ms2Id, double ms2Mz,
-          double ms2Rt, std::vector<double> mz,
-          std::vector<double> intensity):
+    Query(std::string variableId, std::string ms2Id, const double ms2Mz,
+          const double ms2Rt, const std::vector<double> &mz,
+          const std::vector<double> &intensity):
     variableId(std::move(variableId)), ms2Id(std::move(ms2Id)), ms2Rt(ms2Rt),
     spectra(variableId, mz, intensity, ms2Mz){};
     
@@ -39,19 +39,19 @@ class Query {
         return ms2Id;
     }
     
-    double getMs2Pmz() {
+    double getMs2Pmz() const {
         return spectra.precursorMz;
     }
     
-    double getMs2Rt() {
+    double getMs2Rt() const {
         return ms2Rt;
     }
     
-    std::vector<double> getSpecMz() {
+    std::vector<double> getSpecMz() const {
         return spectra.mz;
     }
     
-    std::vector<double> getSpecIntensity() {
+    std::vector<double> getSpecIntensity()const {
         return spectra.intensity;
     }
     
