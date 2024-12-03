@@ -80,15 +80,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // rarefyMs_2
-Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund, int size, int threshold);
+Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold);
 RcppExport SEXP _mums2_rarefyMs_2(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
     Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     rcpp_result_gen = Rcpp::wrap(rarefyMs_2(feature, abund, size, threshold));
     return rcpp_result_gen;
 END_RCPP

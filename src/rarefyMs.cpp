@@ -88,35 +88,53 @@ DataFrame rarefyMs(IntegerVector feature, IntegerVector abund, int size, int thr
                              _["abund"] = rare_abund);
 }
 
+size_t GetRandomNumberIndex(const std::vector<int>& weightedToPull, const int sum) {
+    auto randomNumber = static_cast<int>(R::runif(0, static_cast<double>(sum)));
+    for (size_t i = 0; i < weightedToPull.size(); i++) {
+        if (randomNumber <= weightedToPull[i])
+            return i;
+        randomNumber -= weightedToPull[i];
+    }
+    return 0;
+}
+
 // [[Rcpp::export]]
-Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund, int size, int threshold) {
-    const IntegerVector featureSugar = Rcpp::wrap(feature);
-
-    const int sizeOfPool = static_cast<int>(feature.size());
-    std::vector<AbundanceMap> pool(sizeOfPool);
-    std::vector<double> percentageToPull(sizeOfPool);
-    int currentMaxAbundance = 0;
-    for(int i = 0; i < sizeOfPool; i++) {
-        currentMaxAbundance += abund[i];
+Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund,
+    const int size, const int threshold) {
+    // const IntegerVector featureSugar = Rcpp::wrap(feature);
+    //
+    // const int sizeOfPool = static_cast<int>(feature.size());
+    // std::vector<AbundanceMap> pool(sizeOfPool);
+    // std::vector<double> percentageToPull(sizeOfPool);
+    // int currentMaxAbundance = 0;
+    // for(int i = 0; i < sizeOfPool; i++) {
+    //     currentMaxAbundance += abund[i];
+    // }
+    // for(int i = 0; i < sizeOfPool; i++) {
+    //     const int abundance = abund[i];
+    //     pool[i] = AbundanceMap{feature[i], abundance};
+    //     percentageToPull[i] = static_cast<double>(abundance)/currentMaxAbundance;
+    //
+    // }
+    int sum = 0;
+    for (const auto& value : abund) {
+        sum += value;
     }
-    for(int i = 0; i < sizeOfPool; i++) {
-        const int abundance = abund[i];
-        pool[i] = AbundanceMap{feature[i], abundance};
-        percentageToPull[i] = static_cast<double>(abundance)/currentMaxAbundance;
-
-    }
-    const NumericVector percentage = Rcpp::wrap(percentageToPull);
     int grandTotal = 0;
     int incrementer = 0;
     std::unordered_map<int, int> filtered;
     while(grandTotal <= size) {
         std::unordered_map<int, int> finalMap;
         std::unordered_map<int, int> counter;
-        for(int i = 0; i < size+incrementer; i++) {
+        std::vector<int> abundanceCopy = abund;
+        const int currentSize = size + incrementer;
+        for(int i = 0; i < currentSize; i++) {
             // const double randomNumber = R::runif(0, 1);
             // const int index = CloserIndex(percentageToPull, randomNumber);
-            int value = sample(featureSugar, 1, false, percentage)[0];
-            counter[value]++;
+            // int value = sample(featureSugar, size, false, percentage)[0];
+            const size_t index = GetRandomNumberIndex(abundanceCopy, sum - i);
+            abundanceCopy[index]--;
+            counter[feature[index]]++;
         }
         for(const auto& values: counter) {
             if(values.second < threshold)
@@ -141,72 +159,63 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
         rare_abund[pos] = it.second;
         pos ++;
     }
-    DiversityCalculator* calculator = new SimpsonsDiversityIndex();
-    const double simpsonDiversity = calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
-    Rcpp::Rcout << "The Simpson's Diversity is: " << simpsonDiversity << std::endl;
+    // DiversityCalculator* calculator = new SimpsonsDiversityIndex();
+    // const double simpsonDiversity = calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
+    // Rcpp::Rcout << "The Simpson's Diversity is: " << simpsonDiversity << std::endl;
     // delete calculator;
     // This is where we compute alpha and beta diversity
     return DataFrame::create(Named("mz") = rare_mz,
                              _["abund"] = rare_abund);
 }
 
-Rcpp::DataFrame rarefyMs_3(const std::vector<int>& feature, const std::vector<int>& abund, int size, int threshold) {
-    const IntegerVector featureSugar = Rcpp::wrap(feature);
 
-    const int sizeOfPool = static_cast<int>(feature.size());
-    std::vector<AbundanceMap> pool(sizeOfPool);
-    std::vector<double> percentageToPull(sizeOfPool);
-    int currentMaxAbundance = 0;
-    for(int i = 0; i < sizeOfPool; i++) {
-        currentMaxAbundance += abund[i];
-    }
-    for(int i = 0; i < sizeOfPool; i++) {
-        const int abundance = abund[i];
-        pool[i] = AbundanceMap{feature[i], abundance};
-        percentageToPull[i] = static_cast<double>(abundance)/currentMaxAbundance;
+int RcppSample(const Rcpp::IntegerVector& numbers,const Rcpp::NumericVector& weights, int n) {
 
-    }
-    const NumericVector percentage = Rcpp::wrap(percentageToPull);
-    int grandTotal = 0;
-    int incrementer = 0;
-    std::unordered_map<int, int> filtered;
-    while(grandTotal <= size) {
-        std::unordered_map<int, int> finalMap;
-        std::unordered_map<int, int> counter;
-        for(int i = 0; i < size+incrementer; i++) {
-            // const double randomNumber = R::runif(0, 1);
-            // const int index = CloserIndex(percentageToPull, randomNumber);
-            int value = sample(featureSugar, 1, false, percentage)[0];
-            counter[value]++;
-        }
-        for(const auto& values: counter) {
-            if(values.second < threshold)
-                continue;
-
-            grandTotal += values.second;
-            finalMap[values.first] = values.second;
-        }
-
-        if(grandTotal >= size) {
-            filtered = finalMap;
-            break;
-        }
-        incrementer++;
-    }
-
-    std::vector<int> rare_mz(filtered.size(), 0);
-    std::vector<int> rare_abund(filtered.size(), 0);
-    int pos = 0;
-    for (const auto & it : filtered) {
-        rare_mz[pos] = it.first;
-        rare_abund[pos] = it.second;
-        pos ++;
-    }
-    DiversityCalculator* calculator = new SimpsonsDiversityIndex();
-    const double simpsonDiversity = calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
-    Rcpp::Rcout << "The Simpson's Diversity is: " << simpsonDiversity << std::endl;
-    // delete calculator;
-    // This is where we compute alpha and beta diversity
-    return DataFrame::create(Named("mz") = rare_mz,
-                             _["abund"] = rare_abund);
+    const int val = Rcpp::sample(numbers, n, false, weights)[0];
+    return val;
 }
+// Rcpp::DataFrame rarefyMs_3(const std::vector<uint64_t>& feature, const std::vector<uint64_t>& abund,
+//     const uint64_t size, const uint64_t threshold) {
+//     const IntegerVector featureSugar = Rcpp::wrap(feature);
+//
+//     const int sizeOfPool = static_cast<int>(feature.size());
+//     std::vector<uint64_t> weightedToPull(sizeOfPool);
+//     int grandTotal = 0;
+//     int incrementer = 0;
+//     std::unordered_map<uint64_t, int> filtered;
+//     while(grandTotal <= size) {
+//         std::unordered_map<uint64_t, int> finalMap;
+//         std::unordered_map<uint64_t, int> counter;
+//         for(uint64_t i = 0; i < size + incrementer; i++) {
+//             // const double randomNumber = R::runif(0, 1);
+//             const size_t index = GetRandomNumberIndex(weightedToPull, size);
+//             uint64_t value = weightedToPull[index];
+//             weightedToPull[index]--;
+//             counter[value]++;
+//         }
+//         for(const auto& values: counter) {
+//             if(values.second < threshold)
+//                 continue;
+//
+//             grandTotal += values.second;
+//             finalMap[values.first] = values.second;
+//         }
+//
+//         if(grandTotal >= size) {
+//             filtered = finalMap;
+//             break;
+//         }
+//         incrementer++;
+//     }
+//     std::vector<uint64_t> rare_mz(filtered.size(), 0);
+//     std::vector<uint64_t> rare_abund(filtered.size(), 0);
+//     int pos = 0;
+//     for (const auto & it : filtered) {
+//         rare_mz[pos] = it.first;
+//         rare_abund[pos] = it.second;
+//         pos ++;
+//     }
+//
+//     return DataFrame::create(Named("mz") = rare_mz,
+//                              _["abund"] = rare_abund);
+// }

@@ -40,3 +40,7 @@
 #   sample_info = sample_info_pos,
 #   variable_info = variable_info_pos
 # )
+
+
+# microbenchmark::microbenchmark(GetRandomNumberIndex(numbers_sample, 100), RcppSample(numbers_sample, number_weights), times = 1000)
+# RcppSample(numbers_sample, number_weights, 3)

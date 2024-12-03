@@ -7,3 +7,4 @@
 src/.idea
 src/cmake-build-debug/
 src/CMakeLists.txt
+.vscode/launch.json
