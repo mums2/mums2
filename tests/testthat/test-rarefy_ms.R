@@ -13,7 +13,7 @@ test_that("rarefy_ms returns the correct total", {
   dilute_filter <- dplyr::filter(dilute, abund > thresh)
 
   dilute_total <- sum(dilute_filter$abund)
-  
+
   conc_rarefy <- rarefy_ms(concentrated, dilute_total, thresh)
 
   compare <- dplyr::full_join(concentrated, dilute_filter,

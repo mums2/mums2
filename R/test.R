@@ -44,3 +44,5 @@
 
 # microbenchmark::microbenchmark(GetRandomNumberIndex(numbers_sample, 100), RcppSample(numbers_sample, number_weights), times = 1000)
 # RcppSample(numbers_sample, number_weights, 3)
+# set.seed(40)
+# GetRandomNumberIndex(c(10,20,30,40), 100)
