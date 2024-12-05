@@ -141,9 +141,9 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
         rare_abund[pos] = it.second;
         pos ++;
     }
-    // DiversityCalculator* calculator = new SimpsonsDiversityIndex();
-    // const double simpsonDiversity = calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
-    // Rcpp::Rcout << "The Simpson's Diversity is: " << simpsonDiversity << std::endl;
+    DiversityCalculator* calculator = new SimpsonsDiversityIndex();
+    const double simpsonDiversity = calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
+    Rcpp::Rcout << "The Simpson's Diversity is: " << simpsonDiversity << std::endl;
     // delete calculator;
     // This is where we compute alpha and beta diversity
     return DataFrame::create(Named("mz") = rare_mz,
