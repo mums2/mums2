@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.28)
 project(mums2)
 set(CMAKE_CXX_STANDARD 11)
-include_directories("C:\\Users\\gregj\\AppData\\Local\\R\\win-library\\4.4\\Rcpp\\include")
+include_directories("/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/Rcpp/libs/")
+include_directories("/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/Rcpp/include/")
+include_directories("/Library/Frameworks/R.framework/Versions/4.3-arm64/Headers/")
 add_executable(mums2 distMs2.cpp
         AnnotateMs2/DataStructures/Query.h
         AnnotateMs2/DataStructures/Reference.h
