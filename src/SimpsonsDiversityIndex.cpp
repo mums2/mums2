@@ -4,7 +4,7 @@
 
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
 
-double SimpsonsDiversityIndex::Calculate(const std::vector<double>& abundances) {
+double SimpsonsDiversityIndex::Calculate(const std::vector<double>& abundances) const {
 
     double sumOfParticularSpecies = 0;
     double sumOfSpeciesInTotalPopulation = 0;

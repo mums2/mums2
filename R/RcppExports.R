@@ -33,8 +33,12 @@ CalculateAlphaDiverstiy <- function(feature, abund, size, threshold, iterations 
     .Call(`_mums2_CalculateAlphaDiverstiy`, feature, abund, size, threshold, iterations)
 }
 
-CalculateAlphaDiverstiyInt <- function(feature, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateAlphaDiverstiyInt`, feature, abund, size, threshold, iterations)
+CalculateAlphaDiversityInt <- function(feature, abund, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_CalculateAlphaDiversityInt`, feature, abund, size, threshold, iterations)
+}
+
+CalculateAlphaDiversityShannon <- function(feature, abund, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_CalculateAlphaDiversityShannon`, feature, abund, size, threshold, iterations)
 }
 
 ScoreMs2 <- function(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters) {

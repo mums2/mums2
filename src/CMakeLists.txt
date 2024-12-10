@@ -42,4 +42,6 @@ add_executable(mums2 distMs2.cpp
         SimpsonsDiversityIndex.cpp
         DiversityMetrics/AlphaDIversityCalculators/SimpsonsDiversityIndex.h
         DIversityMetrics/DiversityCalculator.cpp
-        DIversityMetrics/DiversityCalculator.h)
+        DIversityMetrics/DiversityCalculator.h
+        ShannonDiversityIndex.cpp
+        DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h)

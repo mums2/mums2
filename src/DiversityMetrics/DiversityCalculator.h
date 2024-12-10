@@ -11,7 +11,7 @@ class DiversityCalculator {
 public:
 
     virtual ~DiversityCalculator() = default;
-    virtual double Calculate(const std::vector<double>&) = 0;
+    virtual double Calculate(const std::vector<double>&) const = 0;
 };
 
 

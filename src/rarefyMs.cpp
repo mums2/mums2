@@ -5,6 +5,7 @@
 #include <map>
 
 #include "DiversityMetrics/DiversityCalculator.h"
+#include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
 #include "Utils/Utils.h"
 #include "Rarefy/AbundanceMap.h"
@@ -214,16 +215,30 @@ double CalculateAlphaDiverstiy(const std::vector<std::string>& feature, const st
 }
 
 // [[Rcpp::export]]
-double CalculateAlphaDiverstiyInt(const std::vector<int>& feature, const std::vector<int>& abund,
+double CalculateAlphaDiversityInt(const std::vector<int>& feature, const std::vector<int>& abund,
     const int size, const int threshold, const int iterations = 1000) {
-    DiversityCalculator* calculator = new SimpsonsDiversityIndex();
+    const DiversityCalculator* calculator = new SimpsonsDiversityIndex();
     double simpsonDiversity = 0;
     for(int i = 0; i < iterations; i++) {
         const auto df = rarefyMs_2(feature, abund, size, threshold);
-        // const std::vector<int> rare_abund = df["abund"];
-        // simpsonDiversity += calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
+        const std::vector<int> rare_abund = df["abund"];
+        simpsonDiversity += calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
     }
     delete calculator;
     return simpsonDiversity/iterations;
+}
+
+// [[Rcpp::export]]
+double CalculateAlphaDiversityShannon(const std::vector<int>& feature, const std::vector<int>& abund,
+    const int size, const int threshold, const int iterations = 1000) {
+    const DiversityCalculator* calculator = new ShannonDiversityIndex();
+    double diversity = 0;
+    for(int i = 0; i < iterations; i++) {
+        const auto df = rarefyMs_2(feature, abund, size, threshold);
+        const std::vector<int> rare_abund = df["abund"];
+        diversity += calculator->Calculate(std::vector<double>(rare_abund.begin(), rare_abund.end()));
+    }
+    delete calculator;
+    return diversity/iterations;
 }
 

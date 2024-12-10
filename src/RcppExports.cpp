@@ -122,9 +122,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CalculateAlphaDiverstiyInt
-double CalculateAlphaDiverstiyInt(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
-RcppExport SEXP _mums2_CalculateAlphaDiverstiyInt(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
+// CalculateAlphaDiversityInt
+double CalculateAlphaDiversityInt(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
+RcppExport SEXP _mums2_CalculateAlphaDiversityInt(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -133,7 +133,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiverstiyInt(feature, abund, size, threshold, iterations));
+    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiversityInt(feature, abund, size, threshold, iterations));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CalculateAlphaDiversityShannon
+double CalculateAlphaDiversityShannon(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
+RcppExport SEXP _mums2_CalculateAlphaDiversityShannon(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiversityShannon(feature, abund, size, threshold, iterations));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -168,7 +183,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_rarefyMs_2", (DL_FUNC) &_mums2_rarefyMs_2, 4},
     {"_mums2_rarefyMs_3", (DL_FUNC) &_mums2_rarefyMs_3, 4},
     {"_mums2_CalculateAlphaDiverstiy", (DL_FUNC) &_mums2_CalculateAlphaDiverstiy, 5},
-    {"_mums2_CalculateAlphaDiverstiyInt", (DL_FUNC) &_mums2_CalculateAlphaDiverstiyInt, 5},
+    {"_mums2_CalculateAlphaDiversityInt", (DL_FUNC) &_mums2_CalculateAlphaDiversityInt, 5},
+    {"_mums2_CalculateAlphaDiversityShannon", (DL_FUNC) &_mums2_CalculateAlphaDiversityShannon, 5},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
