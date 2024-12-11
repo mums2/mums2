@@ -1,9 +1,10 @@
 
 #include "Rarefy/rarefyMs.h"
 #include <algorithm>
+#include <chrono>
 #include <random>
 #include <map>
-
+#include <unordered_map>
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
@@ -88,12 +89,13 @@ DataFrame rarefyMs(IntegerVector feature, IntegerVector abund, int size, int thr
     return DataFrame::create(Named("mz") = rare_mz,
                              _["abund"] = rare_abund);
 }
-size_t GetRandomNumberIndex(const std::vector<int>& weightedToPull, const int sum) {
 
+size_t GetRandomNumberIndex(const std::vector<int>& weightedToPull, const int sum) {
     auto randomNumber = static_cast<int>(R::runif(0, static_cast<double>(sum)));
     for (size_t i = 0; i < weightedToPull.size(); i++) {
-        if (randomNumber <= weightedToPull[i])
+        if (randomNumber <= weightedToPull[i]) {
             return i;
+        }
         randomNumber -= weightedToPull[i];
     }
     return 0;
@@ -103,23 +105,27 @@ size_t GetRandomNumberIndex(const std::vector<int>& weightedToPull, const int su
 // [[Rcpp::export]]
 Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund,
     const int size, const int threshold) {
-    int sum = 0;
-    for (const auto& value : abund) {
-        sum += value;
-    }
+    const auto startTime = std::chrono::system_clock::now();
+    const int sum = std::accumulate(abund.begin(), abund.end(), 0);
     int grandTotal = 0;
     int incrementer = 0;
     std::unordered_map<int, int> filtered;
     while(grandTotal <= size) {
+        const auto startTimeLoop = std::chrono::system_clock::now();
         std::unordered_map<int, int> finalMap;
         std::unordered_map<int, int> counter;
         std::vector<int> abundanceCopy = abund;
         const int currentSize = size + incrementer;
+        const auto firstLoop = std::chrono::system_clock::now();
         for(int i = 0; i < currentSize; i++) {
             const size_t index = GetRandomNumberIndex(abundanceCopy, sum - i);
             abundanceCopy[index]--;
             counter[feature[index]]++;
         }
+        const auto secondTimeLoop = std::chrono::system_clock::now();
+        std::chrono::duration<double> currentTime = secondTimeLoop - firstLoop;
+        Rcpp::Rcout << "First Loop Timing: " << currentTime.count() << std::endl;
+        const auto secondLoop = std::chrono::system_clock::now();
         for(const auto& values: counter) {
             if(values.second < threshold)
                 continue;
@@ -127,12 +133,17 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
             grandTotal += values.second;
             finalMap[values.first] = values.second;
         }
-
+        const auto secondLoopEndTime = std::chrono::system_clock::now();
+        currentTime = secondLoopEndTime - secondLoop;
+        Rcpp::Rcout << "Second Loop Timing: " << currentTime.count() << std::endl;
         if(grandTotal >= size) {
             filtered = finalMap;
             break;
         }
         incrementer++;
+        const auto endTime = std::chrono::system_clock::now();
+        currentTime = endTime - startTimeLoop;
+        Rcpp::Rcout << "Loop Timing: " << currentTime.count() << std::endl;
     }
 
     std::vector<int> rare_mz(filtered.size(), 0);
@@ -144,11 +155,29 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
         pos ++;
     }
 
+    const auto endTime = std::chrono::system_clock::now();
+    const std::chrono::duration<double> currentTime = endTime - startTime;
+    Rcpp::Rcout << "Rarefy Time: " << currentTime.count() << std::endl;
     // delete calculator;
     // This is where we compute alpha and beta diversity
     return DataFrame::create(Named("mz") = rare_mz,
                              _["abund"] = rare_abund);
 }
+
+// [[Rcpp::export]]
+void Test(const std::vector<int>& abund) {
+    constexpr auto size = 25011;
+    const auto startTime = std::chrono::system_clock::now();
+    const int sum = std::accumulate(abund.begin(), abund.end(), 0);
+    //auto vec = std::vector<size_t>(size);
+    for(int i = 0; i < 25011; i++) {
+        GetRandomNumberIndex(abund, sum - i);
+    }
+    const auto endTime = std::chrono::system_clock::now();
+    const std::chrono::duration<double> currentTime = endTime - startTime;
+    Rcpp::Rcout << "Time: " << currentTime.count() << std::endl;
+}
+
 
 // [[Rcpp::export]]
 Rcpp::DataFrame rarefyMs_3(const std::vector<std::string>& feature, const std::vector<int>& abund,

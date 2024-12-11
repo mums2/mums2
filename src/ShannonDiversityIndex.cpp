@@ -4,7 +4,6 @@
 
 #include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 
-#include <numeric>
 
 double ShannonDiversityIndex::Calculate(const std::vector<double> &abundances) const {
     const double sum = std::accumulate(abundances.begin(), abundances.end(), 0.0);

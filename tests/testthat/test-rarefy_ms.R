@@ -14,7 +14,7 @@ test_that("rarefy_ms returns the correct total", {
   dilute_total <- sum(dilute_filter$abund)
   
   conc_rarefy <- rarefy_ms(concentrated, dilute_total, thresh)
-  microbenchmark::microbenchmark(rarefy_ms(concentrated, dilute_total, thresh))
+  # microbenchmark::microbenchmark(rarefy_ms(concentrated, dilute_total, thresh))
   compare <- dplyr::full_join(concentrated, dilute_filter,
                        by = "mz", suffix = c(".conc", ".dil")) %>%
              dplyr::full_join(., conc_rarefy, by = "mz")
@@ -25,27 +25,28 @@ test_that("rarefy_ms returns the correct total", {
 # cpp()
 
 # CalculateAlphaDiversityInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1000)
-microbenchmark::microbenchmark(cpp)
-# microbenchmark::microbenchmark(CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1), times = 10)
-microbenchmark::microbenchmark(diversity(rrarefy(m, 100), "shannon"))
+# microbenchmark::microbenchmark(cpp)
+# # microbenchmark::microbenchmark(CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1), times = 10)
+# microbenchmark::microbenchmark(diversity(rrarefy(m, 100), "shannon"))
 
 
-# #' @export
-# cpp <- function(iter = 1) {
-#   CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = iter)
-# }
-# # conc_rarefy$samples <- rep("no_group", times = 10)
-# # test <- data.frame(sample = conc_rarefy$samples, mz = conc_rarefy$mz, abund = conc_rarefy$abund)
-# f <- function()
-# {
-#   browser()
-#   diversity(m, "simpson")
-# }
-# diversity(m, "shannon")
+#' @export
+cpp <- function(iter = 1) {
+  CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = iter)
+}
+conc_rarefy$samples <- rep("no_group", times = 9)
+test <- data.frame(sample = conc_rarefy$samples, mz = conc_rarefy$mz, abund = conc_rarefy$abund)
+f <- function()
+{
+  browser()
+  diversity(m, "simpson")
+}
+diversity(m, "shannon")
 # f()
-# # m <- matrify(test)
 
-
+m <- matrify(test)
+rrarefy(m, sample = 25011)
+# microbenchmark::microbenchmark(rarefy(m, sample = 250000))
 # benchmark()
 # conc_two <- concentrated
 # conc_two$mz <- as.character(conc_two$mz)

@@ -41,9 +41,15 @@
 # #   variable_info = variable_info_pos
 # # )
 
-# library(clustur)
-# library(vegan)
-# library(labdsv)
+library(clustur)
+library(vegan)
+library(labdsv)
+
+#' @export
+t <- function()
+{
+  Test(conc_rarefy$abund)
+}
 # rrarefy(BCI, min(rowSums(BCI)))
 # data(BCI)
 # # Test the base functionality

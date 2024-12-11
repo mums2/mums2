@@ -93,6 +93,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Test
+void Test(const std::vector<int>& abund);
+RcppExport SEXP _mums2_Test(SEXP abundSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
+    Test(abund);
+    return R_NilValue;
+END_RCPP
+}
 // rarefyMs_3
 Rcpp::DataFrame rarefyMs_3(const std::vector<std::string>& feature, const std::vector<int>& abund, const int size, const int threshold);
 RcppExport SEXP _mums2_rarefyMs_3(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
@@ -181,6 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_rarefyMs", (DL_FUNC) &_mums2_rarefyMs, 4},
     {"_mums2_rarefyMs_2", (DL_FUNC) &_mums2_rarefyMs_2, 4},
+    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 1},
     {"_mums2_rarefyMs_3", (DL_FUNC) &_mums2_rarefyMs_3, 4},
     {"_mums2_CalculateAlphaDiverstiy", (DL_FUNC) &_mums2_CalculateAlphaDiverstiy, 5},
     {"_mums2_CalculateAlphaDiversityInt", (DL_FUNC) &_mums2_CalculateAlphaDiversityInt, 5},
