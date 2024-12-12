@@ -103,6 +103,34 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// rarefyMs_4
+Rcpp::DataFrame rarefyMs_4(const std::vector<int>& feature, std::vector<int>& abund, const int size, const int threshold);
+RcppExport SEXP _mums2_rarefyMs_4(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
+    Rcpp::traits::input_parameter< std::vector<int>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(rarefyMs_4(feature, abund, size, threshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rarefyMs_5
+Rcpp::DataFrame rarefyMs_5(const std::vector<int>& feature, std::vector<int>& abund, const int size, const int threshold);
+RcppExport SEXP _mums2_rarefyMs_5(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
+    Rcpp::traits::input_parameter< std::vector<int>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(rarefyMs_5(feature, abund, size, threshold));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rarefyMs_3
 Rcpp::DataFrame rarefyMs_3(const std::vector<std::string>& feature, const std::vector<int>& abund, const int size, const int threshold);
 RcppExport SEXP _mums2_rarefyMs_3(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
@@ -192,6 +220,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_rarefyMs", (DL_FUNC) &_mums2_rarefyMs, 4},
     {"_mums2_rarefyMs_2", (DL_FUNC) &_mums2_rarefyMs_2, 4},
     {"_mums2_Test", (DL_FUNC) &_mums2_Test, 1},
+    {"_mums2_rarefyMs_4", (DL_FUNC) &_mums2_rarefyMs_4, 4},
+    {"_mums2_rarefyMs_5", (DL_FUNC) &_mums2_rarefyMs_5, 4},
     {"_mums2_rarefyMs_3", (DL_FUNC) &_mums2_rarefyMs_3, 4},
     {"_mums2_CalculateAlphaDiverstiy", (DL_FUNC) &_mums2_CalculateAlphaDiverstiy, 5},
     {"_mums2_CalculateAlphaDiversityInt", (DL_FUNC) &_mums2_CalculateAlphaDiversityInt, 5},

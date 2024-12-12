@@ -1,7 +1,6 @@
 
 #include "Rarefy/rarefyMs.h"
 #include <algorithm>
-#include <chrono>
 #include <random>
 #include <map>
 #include <unordered_map>
@@ -10,7 +9,7 @@
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
 #include "Utils/Utils.h"
 #include "Rarefy/AbundanceMap.h"
-// #include <Rcpp.h>
+#include <Rcpp.h>
 // #include <vector>
 // using namespace Rcpp;
 
@@ -101,31 +100,44 @@ size_t GetRandomNumberIndex(const std::vector<int>& weightedToPull, const int su
     return 0;
 }
 
+std::vector<int> GetRandomNumberIndexVector(std::vector<int>& weightedToPull, int sum,
+    const size_t number)
+{
+    const auto size = static_cast<size_t>(weightedToPull.size());
+    std::vector<int> randomNumbers(size, 0);
+    for(size_t i = 0; i < number; i++) {
+        auto randomNumber = static_cast<int>(R::runif(0, static_cast<double>(sum)));
+        for (size_t j = 0; j < size; j++) {
+            if (randomNumber <= weightedToPull[j]) {
+                weightedToPull[j]--;
+                sum--;
+                randomNumbers[j]++;
+                break;
+            }
+            randomNumber -= weightedToPull[j];
+        }
+    }
+    return randomNumbers;
+}
 
-// [[Rcpp::export]]
+
+// [[Rcpp::export]]                             // mz,otu                          //abundances
 Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund,
     const int size, const int threshold) {
-    const auto startTime = std::chrono::system_clock::now();
     const int sum = std::accumulate(abund.begin(), abund.end(), 0);
     int grandTotal = 0;
     int incrementer = 0;
     std::unordered_map<int, int> filtered;
     while(grandTotal <= size) {
-        const auto startTimeLoop = std::chrono::system_clock::now();
         std::unordered_map<int, int> finalMap;
         std::unordered_map<int, int> counter;
         std::vector<int> abundanceCopy = abund;
         const int currentSize = size + incrementer;
-        const auto firstLoop = std::chrono::system_clock::now();
         for(int i = 0; i < currentSize; i++) {
             const size_t index = GetRandomNumberIndex(abundanceCopy, sum - i);
             abundanceCopy[index]--;
             counter[feature[index]]++;
         }
-        const auto secondTimeLoop = std::chrono::system_clock::now();
-        std::chrono::duration<double> currentTime = secondTimeLoop - firstLoop;
-        Rcpp::Rcout << "First Loop Timing: " << currentTime.count() << std::endl;
-        const auto secondLoop = std::chrono::system_clock::now();
         for(const auto& values: counter) {
             if(values.second < threshold)
                 continue;
@@ -133,17 +145,11 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
             grandTotal += values.second;
             finalMap[values.first] = values.second;
         }
-        const auto secondLoopEndTime = std::chrono::system_clock::now();
-        currentTime = secondLoopEndTime - secondLoop;
-        Rcpp::Rcout << "Second Loop Timing: " << currentTime.count() << std::endl;
         if(grandTotal >= size) {
             filtered = finalMap;
             break;
         }
         incrementer++;
-        const auto endTime = std::chrono::system_clock::now();
-        currentTime = endTime - startTimeLoop;
-        Rcpp::Rcout << "Loop Timing: " << currentTime.count() << std::endl;
     }
 
     std::vector<int> rare_mz(filtered.size(), 0);
@@ -155,9 +161,6 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
         pos ++;
     }
 
-    const auto endTime = std::chrono::system_clock::now();
-    const std::chrono::duration<double> currentTime = endTime - startTime;
-    Rcpp::Rcout << "Rarefy Time: " << currentTime.count() << std::endl;
     // delete calculator;
     // This is where we compute alpha and beta diversity
     return DataFrame::create(Named("mz") = rare_mz,
@@ -166,18 +169,113 @@ Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<in
 
 // [[Rcpp::export]]
 void Test(const std::vector<int>& abund) {
-    constexpr auto size = 25011;
-    const auto startTime = std::chrono::system_clock::now();
+    // constexpr auto size = 25011;
     const int sum = std::accumulate(abund.begin(), abund.end(), 0);
     //auto vec = std::vector<size_t>(size);
     for(int i = 0; i < 25011; i++) {
         GetRandomNumberIndex(abund, sum - i);
     }
-    const auto endTime = std::chrono::system_clock::now();
-    const std::chrono::duration<double> currentTime = endTime - startTime;
-    Rcpp::Rcout << "Time: " << currentTime.count() << std::endl;
+    // const auto endTime = std::chrono::system_clock::now();
+    // const std::chrono::duration<double> currentTime = endTime - startTime;
+    // Rcpp::Rcout << "Time: " << currentTime.count() << std::endl;
 }
 
+
+
+
+// [[Rcpp::export]]
+Rcpp::DataFrame rarefyMs_4(const std::vector<int>& feature, std::vector<int>& abund,
+    const int size, const int threshold) {
+    const int sum = std::accumulate(abund.begin(), abund.end(), 0);
+    int grandTotal = 0;
+    int incrementer = size;
+    const size_t abundSize = abund.size();
+    std::unordered_map<int, int> filtered;
+    std::vector<int> counter(abundSize, 0);
+    while(grandTotal <= size) {
+        std::unordered_map<int, int> finalMap;
+        const int currentSize = incrementer;
+        for(int i = 0; i < currentSize; i++) {
+            const size_t index = GetRandomNumberIndex(abund, sum - i);
+            abund[index]--;
+            counter[index]++;
+        }
+        int count = 0;
+        for(const auto& value: feature) {
+            const int abundance = counter[count++];
+            if(abundance < threshold)
+                continue;
+            grandTotal += abundance;
+            finalMap[value] += abundance;
+        }
+        if(grandTotal >= size) {
+            filtered = finalMap;
+            break;
+        }
+        incrementer = threshold - *std::min_element(counter.begin(), counter.end());
+        grandTotal = 0;
+    }
+    std::vector<int> rare_mz(filtered.size(), 0);
+    std::vector<int> rare_abund(filtered.size(), 0);
+    int pos = 0;
+    for (const auto & it : filtered) {
+        rare_mz[pos] = it.first;
+        rare_abund[pos] = it.second;
+        pos ++;
+    }
+
+    // delete calculator;
+    // This is where we compute alpha and beta diversity
+    return DataFrame::create(Named("mz") = rare_mz,
+                             _["abund"] = rare_abund);
+}
+
+
+// [[Rcpp::export]]
+Rcpp::DataFrame rarefyMs_5(const std::vector<int>& feature, std::vector<int>& abund,
+    const int size, const int threshold) {
+    const int sum = std::accumulate(abund.begin(), abund.end(), 0);
+    int grandTotal = 0;
+    int incrementer = size;
+    const size_t abundSize = abund.size();
+    std::unordered_map<int, int> filtered;
+    std::vector<int> counter(abundSize, 0);
+    while(grandTotal <= size) {
+        std::unordered_map<int, int> finalMap;
+        const int currentSize = incrementer;
+        const auto currentCount = GetRandomNumberIndexVector(abund, sum, currentSize);
+        for(size_t i = 0; i < abundSize; i++) {
+            counter[i] += currentCount[i];
+        }
+        int count = 0;
+        for(const auto& value: feature) {
+            const int abundance = counter[count++];
+            if(abundance < threshold)
+                continue;
+            grandTotal += abundance;
+            finalMap[value] += abundance;
+        }
+        if(grandTotal >= size) {
+            filtered = finalMap;
+            break;
+        }
+        incrementer = threshold - *std::min_element(counter.begin(), counter.end());
+        grandTotal = 0;
+    }
+    std::vector<int> rare_mz(filtered.size(), 0);
+    std::vector<int> rare_abund(filtered.size(), 0);
+    int pos = 0;
+    for (const auto & it : filtered) {
+        rare_mz[pos] = it.first;
+        rare_abund[pos] = it.second;
+        pos ++;
+    }
+
+    // delete calculator;
+    // This is where we compute alpha and beta diversity
+    return DataFrame::create(Named("mz") = rare_mz,
+                             _["abund"] = rare_abund);
+}
 
 // [[Rcpp::export]]
 Rcpp::DataFrame rarefyMs_3(const std::vector<std::string>& feature, const std::vector<int>& abund,
@@ -270,4 +368,7 @@ double CalculateAlphaDiversityShannon(const std::vector<int>& feature, const std
     delete calculator;
     return diversity/iterations;
 }
+
+
+
 

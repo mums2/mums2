@@ -38,6 +38,13 @@ rarefy_ms_generic <- function(data, size, threshold, feature_name = "mz") {
   rarefyMs_3(data[[feature_name]], data$abund, size, threshold)
 }
 
+#' Rarefy 
+#'
+#' @export
+rarefy_four <- function(data, size, threshold, feature_name = "mz") {
+  rarefyMs_4(data$mz, data$abund, size, threshold)
+}
+
 #' @export
 benchmark <- function(){
   microbenchmark::microbenchmark(CalculateAlphaDiverstiy(conc_two$mz, conc_two$abund, dilute_total, thresh, iterations = 1000),

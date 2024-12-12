@@ -50,6 +50,12 @@ t <- function()
 {
   Test(conc_rarefy$abund)
 }
+#'
+#' @export
+rare_i <- function(data, size, threshold, feature_name = "mz") {
+  rarefyMs_4(data$mz, data$abund, size, threshold)
+}
+
 # rrarefy(BCI, min(rowSums(BCI)))
 # data(BCI)
 # # Test the base functionality
@@ -102,3 +108,152 @@ cpp <- function(iter = 1) {
 }
 
 # cpp()
+
+# cpp()
+
+# CalculateAlphaDiversityInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1000)
+# microbenchmark::microbenchmark(cpp)
+# # microbenchmark::microbenchmark(CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1), times = 10)
+# microbenchmark::microbenchmark(diversity(rrarefy(m, 100), "shannon"))
+
+#' @export
+cpp <- function(iter = 1) {
+  CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = iter)
+}
+
+fun <- function(){
+  concentrated$samples <- rep("no_group", times = 10)
+  test <- data.frame(sample = concentrated$samples, mz = concentrated$mz, abund = concentrated$abund)  
+  m <- matrify(test)
+# microbenchmark::microbenchmark(rrarefy(m, sample = 25011))
+microbenchmark::microbenchmark(rrarefy(m, sample = dilute_total),  rarefy_four(concentrated, dilute_total, thresh))
+}
+
+f <- function()
+{
+  browser()
+  diversity(m, "simpson")
+}
+# sub.sample
+# subsample.h/subsample.cpp
+# summary.shared command
+# 
+
+# diversity(m, "shannon")
+# f()
+
+# benchmark()
+# conc_two <- concentrated
+# conc_two$mz <- as.character(conc_two$mz)
+# conc_rarefy <- rarefy_ms_generic(conc_two, dilute_total, thresh)
+# name <- "mz"
+# conc_two[[name]]
+
+# microbenchmark::microbenchmark(CalculateAlphaDiverstiy(conc_two$mz, conc_two$abund, dilute_total, thresh, iterations = 10),
+# CalculateAlphaDiverstiyInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1000),
+# times = 5)
+
+# func <- benchmark2() {
+#   microbenchmark::microbenchmark(CalculateAlphaDiversityInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1000), times = 5)
+# }
+
+# microbenchmark::microbenchmark(CalculateAlphaDiversityInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1000), times = 5)
+# # microbenchmark::microbenchmark(vegan::rarefy())
+
+# data <- import_data(example("cultures_peak_table.csv"),
+#   example("cultures_metadata.csv"),
+#   format = "Progenesis"
+# )
+
+
+# data_mpactr <- filter_mispicked_ions(data,
+#   ringwin = 0.5,
+#   isowin = 0.01,
+#   trwin = 0.005,
+#   max_iso_shift = 3,
+#   merge_peaks = TRUE,
+#   merge_method = "sum"
+# )
+# data_mpactr <- filter_group(data_mpactr, 0.01, "Solvent_Blank", TRUE)
+
+# data_mpactr_copy <- filter_insource_ions(data_mpactr,
+#                                          cluster_threshold = 0.95,
+#                                          copy_object = TRUE)
+
+# data_mpactr <- filter_insource_ions(data_mpactr, cluster_threshold = 0.95)
+
+# print(data_mpactr)
+# filtered <- get_peak_table(data_mpactr)[1:5, 1:5]
+# pt <- get_peak_table(data_mpactr) %>%
+#   select(Compound, starts_with("102423"), starts_with("102623")) %>%
+#   pivot_longer(-Compound, names_to = "sample") %>% #10152
+#   mutate(value = as.integer(value)) %>%
+#   mutate(total = sum(value), .by = c("sample")) %>%
+#   filter(total > 0) %>% #8,883
+#   mutate(total = sum(value), .by = c("Compound")) %>% #8,883
+#   filter(total != 0) %>% #8,883
+#   select(-total) %>%
+#   filter(!str_detect(sample, "Media")) %>%
+#   mutate(Compound = str_c("ion", Compound, sep = "_"))
+# head(pt)
+# pt_df_temp <- as.data.frame(pt)
+# mat_pt <- matrify(pt_df_temp)
+
+
+# pt_df <- pt %>%
+#   pivot_wider(names_from = "Compound", values_from = "value", values_fill = 0)
+#   column_to_rownames(var = "sample")
+
+#   dim(pt_df)
+
+# rare <- rarefy(mat_pt, 284)
+# microbenchmark::microbenchmark(rarefy(mat_pt, 284), times = 5)
+# res <- avgdist(mat_pt, 10, iterations = 1000)
+# pt_df_2 <- as.data.frame(pt)
+# mat_pt <- labdsv::matrify(pt_df_2)
+# print(mat_pt)
+
+# We cant really avg dist with mz unless we add the column, do we need the mz? What if we cluster the data, what then?
+# TODO: Create a bray curtis calculator
+# TODO: Keep researching about bias in alpha diversity
+# TODO: Find ways to replicate the data in vegan (alpha/beta diversity. We have the formula)
+
+
+# test_log <- function(){
+#   product <- 1
+#   for(i in 1:100){
+#     product <- product * i
+#   }
+#   return(log(product))
+# }
+
+# test_log_2 <- function(){
+#   sum <- 0
+#   for(i in 1:100){
+#     sum <- sum + log(i)
+#   }
+#   return(sum)
+# }
+# test_log()
+# test_log_2()
+# microbenchmark::microbenchmark(test_log(), test_log_2(), times = 10)
+
+# sum(rarefy_four(concentrated, dilute_total, thresh)$abund)
+# ls <- vector("numeric", 1000)
+# ls_data <- list()
+
+# for(i in 1:1000){
+#   rarefy_four(concentrated, dilute_total, thresh)
+#   # summation <- sum(dat$abund) 
+#   # # if(summation < dilute_total) {
+#   # #   ls_data <- c(ls_data, dat)
+#   # #   next
+#   # # }
+#   # ls[i] <- summation
+# }
+# # sum(ls_data$abund)
+# # max(ls)
+# # min(ls)
+
+# 1 - dilute_total/max(ls)
+# 1 - (min(ls))/dilute_total

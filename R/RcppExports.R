@@ -29,6 +29,14 @@ Test <- function(abund) {
     invisible(.Call(`_mums2_Test`, abund))
 }
 
+rarefyMs_4 <- function(feature, abund, size, threshold) {
+    .Call(`_mums2_rarefyMs_4`, feature, abund, size, threshold)
+}
+
+rarefyMs_5 <- function(feature, abund, size, threshold) {
+    .Call(`_mums2_rarefyMs_5`, feature, abund, size, threshold)
+}
+
 rarefyMs_3 <- function(feature, abund, size, threshold) {
     .Call(`_mums2_rarefyMs_3`, feature, abund, size, threshold)
 }
