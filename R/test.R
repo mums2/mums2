@@ -60,29 +60,34 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # data(BCI)
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
-rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
-amazon_count <- read_count(example_path("amazon.sparse.count_table"))
-amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
-amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
+# rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
+# amazon_count <- read_count(example_path("amazon.sparse.count_table"))
+# amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
+# amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
 
-# Separate Samples and rename rows
-amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
-amazon_forest$bin <- 1:nrow(amazon_forest)
-amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
-amazon_pasture$bin <- 1:nrow(amazon_pasture)
-community_pasture <- matrify(amazon_pasture)
+# # Separate Samples and rename rows
+# amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
+# amazon_forest$bin <- 1:nrow(amazon_forest)
+# amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
+# amazon_pasture$bin <- 1:nrow(amazon_pasture)
+# community_pasture <- matrify(amazon_pasture)
 
-sum(amazon_pasture$abundance)
-CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
-list(amazon_forest$abundance, amazon_pasture$abundance), )
+# sum(amazon_pasture$abundance)
 
 
-
+#' @export
+test_bray <- function(iters = 10, n_times = 10)
+{
+  microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+  list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, iters), times = n_times)
+}
+# CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+#   list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, 1)
 # diversity(df_amazon) 
-df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
-df_amazon <- matrify(amazon_cluster$abundance)
-avg_dist <- avgdist(df_amazon, sample = 50, iterations = 1000)
-diversity(df_amazon, index = "simpson")
+# df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
+# df_amazon <- matrify(amazon_cluster$abundance)
+# avg_dist <- avgdist(df_amazon, sample = 50, iterations = 1000)
+# diversity(df_amazon, index = "simpson")
 # df <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
 # modified_abundance_df <- amazon_cluster$abundance
 # modified_abundance_df$omu <- 1:length(modified_abundance_df$bin)

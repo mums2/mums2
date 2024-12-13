@@ -110,7 +110,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CalculateBrayCurtisDissimilarity
-double CalculateBrayCurtisDissimilarity(const Rcpp::List& features, Rcpp::List& abund, const int size, const int threshold, const int iterations);
+NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List& features, Rcpp::List& abund, const int size, const int threshold, const int iterations);
 RcppExport SEXP _mums2_CalculateBrayCurtisDissimilarity(SEXP featuresSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

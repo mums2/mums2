@@ -108,11 +108,12 @@ double CalculateAlphaDiversityShannon(const std::vector<int>& feature, std::vect
 
 
 // [[Rcpp::export]]
-double CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& abund,
+NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& abund,
     const int size, const int threshold, const int iterations = 1000) {
     const DiversityCalculator* calculator = new BrayCurtisDissimilarity();
-    double braycurtis = 0;
+
     const size_t abundSize = abund.size();
+    NumericMatrix brayCurtisMatrix(abundSize, abundSize);
     for(int i = 0; i < iterations; i++) {
         std::vector<std::vector<double>> rarefyAbundanceVector(abundSize, std::vector<double>());
         for(size_t j = 0; j < abundSize; j++) {
@@ -127,17 +128,20 @@ double CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& 
             // Make this work for all of them using the Rcpp::list notation
             // We have to ensure that we rarefy each one of the samples and then compare them all*/
             const std::vector<double>& currentAbundance = rarefyAbundanceVector[j];
+            std::vector<double> brayResults = std::vector<double>(abundSize, 0);
             for(size_t k = j; k < abundSize; k++) {
                 if(j == k) continue;
                 const std::vector<double>& otherAbundance = rarefyAbundanceVector[k];
-                    braycurtis += calculator->Calculate({std::vector<double>(currentAbundance.begin(),
+                    const double result = calculator->Calculate({std::vector<double>(currentAbundance.begin(),
                         currentAbundance.end()),
                             std::vector<double>(otherAbundance.begin(),otherAbundance.end())});
+                brayCurtisMatrix(j,k) += result;
+                brayCurtisMatrix(k,j) += result;
             }
         }
     }
     delete calculator;
-    return braycurtis/iterations;
+    return brayCurtisMatrix/abundSize;
 }
 
 
