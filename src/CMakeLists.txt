@@ -44,4 +44,6 @@ add_executable(mums2 distMs2.cpp
         DIversityMetrics/DiversityCalculator.cpp
         DIversityMetrics/DiversityCalculator.h
         ShannonDiversityIndex.cpp
-        DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h)
+        DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h
+        BrayCurtisDissimilarity.cpp
+        DiversityMetrics/BetaDiversityCalculators/BrayCurtisDissimilarity.h)

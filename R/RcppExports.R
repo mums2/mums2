@@ -21,36 +21,16 @@ rarefyMs <- function(feature, abund, size, threshold) {
     .Call(`_mums2_rarefyMs`, feature, abund, size, threshold)
 }
 
-rarefyMs_2 <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs_2`, feature, abund, size, threshold)
-}
-
-Test <- function(abund) {
-    invisible(.Call(`_mums2_Test`, abund))
-}
-
-rarefyMs_4 <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs_4`, feature, abund, size, threshold)
-}
-
-rarefyMs_5 <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs_5`, feature, abund, size, threshold)
-}
-
-rarefyMs_3 <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs_3`, feature, abund, size, threshold)
-}
-
-CalculateAlphaDiverstiy <- function(feature, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateAlphaDiverstiy`, feature, abund, size, threshold, iterations)
-}
-
-CalculateAlphaDiversityInt <- function(feature, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateAlphaDiversityInt`, feature, abund, size, threshold, iterations)
+CalculateAlphaDiversitySimpson <- function(feature, abund, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_CalculateAlphaDiversitySimpson`, feature, abund, size, threshold, iterations)
 }
 
 CalculateAlphaDiversityShannon <- function(feature, abund, size, threshold, iterations = 1000L) {
     .Call(`_mums2_CalculateAlphaDiversityShannon`, feature, abund, size, threshold, iterations)
+}
+
+CalculateBrayCurtisDissimilarity <- function(features, abund, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_CalculateBrayCurtisDissimilarity`, features, abund, size, threshold, iterations)
 }
 
 ScoreMs2 <- function(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters) {

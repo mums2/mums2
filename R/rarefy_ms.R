@@ -28,7 +28,7 @@
 #' rarefy_ms(sample1, 25000, 1000)
 #' 
 rarefy_ms <- function(data, size, threshold) {
-  rarefyMs_2(data$mz, data$abund, size, threshold)
+  rarefyMs(data$mz, data$abund, size, threshold)
 }
 
 #' Rarefy 
@@ -47,7 +47,11 @@ rarefy_four <- function(data, size, threshold, feature_name = "mz") {
 
 #' @export
 benchmark <- function(){
-  microbenchmark::microbenchmark(CalculateAlphaDiverstiy(conc_two$mz, conc_two$abund, dilute_total, thresh, iterations = 1000),
-  CalculateAlphaDiverstiyInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 10),
-  times = 4)
-}
+ 
+  # microbenchmark::microbenchmark(CalculateAlphaDiversitySimpson(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1))
+  # CalculateAlphaDiverstiyInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 10),
+  # times = 4)
+}  
+
+# microbenchmark::microbenchmark(CalculateAlphaDiversityShannon()(conc_rarefy$mz, conc_rarefy$abund, dilute_total, thresh, iterations = 1))
+# CalculateBrayCurtisDissimilarity(list(dilute$mz, dilute$mz), list(dilute$abund, dilute$abund), dilute_total, thresh, iterations = 10)

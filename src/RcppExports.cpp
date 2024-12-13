@@ -66,127 +66,61 @@ BEGIN_RCPP
 END_RCPP
 }
 // rarefyMs
-DataFrame rarefyMs(IntegerVector feature, IntegerVector abund, int size, int threshold);
+Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& abund, const int size, const int threshold);
 RcppExport SEXP _mums2_rarefyMs(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
+    Rcpp::traits::input_parameter< std::vector<int64_t>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     rcpp_result_gen = Rcpp::wrap(rarefyMs(feature, abund, size, threshold));
     return rcpp_result_gen;
 END_RCPP
 }
-// rarefyMs_2
-Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold);
-RcppExport SEXP _mums2_rarefyMs_2(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
+// CalculateAlphaDiversitySimpson
+double CalculateAlphaDiversitySimpson(const std::vector<int>& feature, const std::vector<int64_t>& abund, const int size, const int threshold, const int iterations);
+RcppExport SEXP _mums2_CalculateAlphaDiversitySimpson(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs_2(feature, abund, size, threshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test
-void Test(const std::vector<int>& abund);
-RcppExport SEXP _mums2_Test(SEXP abundSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Test(abund);
-    return R_NilValue;
-END_RCPP
-}
-// rarefyMs_4
-Rcpp::DataFrame rarefyMs_4(const std::vector<int>& feature, std::vector<int>& abund, const int size, const int threshold);
-RcppExport SEXP _mums2_rarefyMs_4(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs_4(feature, abund, size, threshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rarefyMs_5
-Rcpp::DataFrame rarefyMs_5(const std::vector<int>& feature, std::vector<int>& abund, const int size, const int threshold);
-RcppExport SEXP _mums2_rarefyMs_5(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs_5(feature, abund, size, threshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rarefyMs_3
-Rcpp::DataFrame rarefyMs_3(const std::vector<std::string>& feature, const std::vector<int>& abund, const int size, const int threshold);
-RcppExport SEXP _mums2_rarefyMs_3(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs_3(feature, abund, size, threshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CalculateAlphaDiverstiy
-double CalculateAlphaDiverstiy(const std::vector<std::string>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
-RcppExport SEXP _mums2_CalculateAlphaDiverstiy(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int64_t>& >::type abund(abundSEXP);
     Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiverstiy(feature, abund, size, threshold, iterations));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CalculateAlphaDiversityInt
-double CalculateAlphaDiversityInt(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
-RcppExport SEXP _mums2_CalculateAlphaDiversityInt(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
-    Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiversityInt(feature, abund, size, threshold, iterations));
+    rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiversitySimpson(feature, abund, size, threshold, iterations));
     return rcpp_result_gen;
 END_RCPP
 }
 // CalculateAlphaDiversityShannon
-double CalculateAlphaDiversityShannon(const std::vector<int>& feature, const std::vector<int>& abund, const int size, const int threshold, const int iterations);
+double CalculateAlphaDiversityShannon(const std::vector<int>& feature, std::vector<int64_t>& abund, const int size, const int threshold, const int iterations);
 RcppExport SEXP _mums2_CalculateAlphaDiversityShannon(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< std::vector<int64_t>& >::type abund(abundSEXP);
     Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     rcpp_result_gen = Rcpp::wrap(CalculateAlphaDiversityShannon(feature, abund, size, threshold, iterations));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CalculateBrayCurtisDissimilarity
+double CalculateBrayCurtisDissimilarity(const Rcpp::List& features, Rcpp::List& abund, const int size, const int threshold, const int iterations);
+RcppExport SEXP _mums2_CalculateBrayCurtisDissimilarity(SEXP featuresSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type features(featuresSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List& >::type abund(abundSEXP);
+    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CalculateBrayCurtisDissimilarity(features, abund, size, threshold, iterations));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -218,14 +152,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_rarefyMs", (DL_FUNC) &_mums2_rarefyMs, 4},
-    {"_mums2_rarefyMs_2", (DL_FUNC) &_mums2_rarefyMs_2, 4},
-    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 1},
-    {"_mums2_rarefyMs_4", (DL_FUNC) &_mums2_rarefyMs_4, 4},
-    {"_mums2_rarefyMs_5", (DL_FUNC) &_mums2_rarefyMs_5, 4},
-    {"_mums2_rarefyMs_3", (DL_FUNC) &_mums2_rarefyMs_3, 4},
-    {"_mums2_CalculateAlphaDiverstiy", (DL_FUNC) &_mums2_CalculateAlphaDiverstiy, 5},
-    {"_mums2_CalculateAlphaDiversityInt", (DL_FUNC) &_mums2_CalculateAlphaDiversityInt, 5},
+    {"_mums2_CalculateAlphaDiversitySimpson", (DL_FUNC) &_mums2_CalculateAlphaDiversitySimpson, 5},
     {"_mums2_CalculateAlphaDiversityShannon", (DL_FUNC) &_mums2_CalculateAlphaDiversityShannon, 5},
+    {"_mums2_CalculateBrayCurtisDissimilarity", (DL_FUNC) &_mums2_CalculateBrayCurtisDissimilarity, 5},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

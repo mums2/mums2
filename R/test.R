@@ -60,15 +60,29 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # data(BCI)
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
-# rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
-# amazon_count <- read_count(example_path("amazon.sparse.count_table"))
-# amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
-# amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
-# # diversity(df_amazon) 
-# df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
-# df_amazon <- matrify(amazon_cluster$abundance)
-# avg_dist <- avgdist(df_amazon, sample = 50, iterations = 1000)
-# diversity(df_amazon, index = "simpson")
+rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
+amazon_count <- read_count(example_path("amazon.sparse.count_table"))
+amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
+amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
+
+# Separate Samples and rename rows
+amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
+amazon_forest$bin <- 1:nrow(amazon_forest)
+amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
+amazon_pasture$bin <- 1:nrow(amazon_pasture)
+community_pasture <- matrify(amazon_pasture)
+
+sum(amazon_pasture$abundance)
+CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+list(amazon_forest$abundance, amazon_pasture$abundance), )
+
+
+
+# diversity(df_amazon) 
+df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
+df_amazon <- matrify(amazon_cluster$abundance)
+avg_dist <- avgdist(df_amazon, sample = 50, iterations = 1000)
+diversity(df_amazon, index = "simpson")
 # df <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
 # modified_abundance_df <- amazon_cluster$abundance
 # modified_abundance_df$omu <- 1:length(modified_abundance_df$bin)
@@ -121,12 +135,21 @@ cpp <- function(iter = 1) {
   CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = iter)
 }
 
-fun <- function(){
+#' @export
+bray <- function(iter = 1) {
+  CalculateBrayCurtisDissimilarity(list(concentrated$mz), list(concentrated$abund), dilute_total, thresh, iterations = iter)
+}
+
+
+
+# # cpp()
+# microbenchmark::microbenchmark(cpp(1000), times = 10)
+fun <- function() {
   concentrated$samples <- rep("no_group", times = 10)
   test <- data.frame(sample = concentrated$samples, mz = concentrated$mz, abund = concentrated$abund)  
   m <- matrify(test)
-# microbenchmark::microbenchmark(rrarefy(m, sample = 25011))
-microbenchmark::microbenchmark(rrarefy(m, sample = dilute_total),  rarefy_four(concentrated, dilute_total, thresh))
+  # microbenchmark::microbenchmark(rrarefy(m, sample = 25011))
+  microbenchmark::microbenchmark(rrarefy(m, sample = dilute_total),  rarefy_four(concentrated, dilute_total, thresh))
 }
 
 f <- function()
