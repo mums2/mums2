@@ -105,8 +105,6 @@ double CalculateAlphaDiversityShannon(const std::vector<int>& feature, std::vect
     return diversity/iterations;
 }
 
-
-
 // [[Rcpp::export]]
 NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& abund,
     const int size, const int threshold, const int iterations = 1000) {
@@ -141,7 +139,5 @@ NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp:
         }
     }
     delete calculator;
-    return brayCurtisMatrix/abundSize;
+    return brayCurtisMatrix/iterations;
 }
-
-

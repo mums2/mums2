@@ -61,16 +61,16 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
-# amazon_count <- read_count(example_path("amazon.sparse.count_table"))
-# amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
-# amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
+amazon_count <- read_count(example_path("amazon.sparse.count_table"))
+amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
+amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
 
-# # Separate Samples and rename rows
-# amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
-# amazon_forest$bin <- 1:nrow(amazon_forest)
-# amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
-# amazon_pasture$bin <- 1:nrow(amazon_pasture)
-# community_pasture <- matrify(amazon_pasture)
+# Separate Samples and rename rows
+amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
+amazon_forest$bin <- 1:nrow(amazon_forest)
+amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
+amazon_pasture$bin <- 1:nrow(amazon_pasture)
+community_pasture <- matrify(amazon_pasture)
 
 # sum(amazon_pasture$abundance)
 
@@ -79,11 +79,11 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 test_bray <- function(iters = 10, n_times = 10)
 {
   microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
-  list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, iters), times = n_times)
+  list(amazon_forest$abundance, amazon_pasture$abundance,),30, 3, iters), times = n_times)
 }
-# CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
-#   list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, 1)
-# diversity(df_amazon) 
+# CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin, amazon_pasture$bin), 
+#   list(amazon_forest$abundance, amazon_pasture$abundance, amazon_pasture$abundance*6),30, 3, iterations=100)
+# # diversity(df_amazon) 
 # df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
 # df_amazon <- matrify(amazon_cluster$abundance)
 # avg_dist <- avgdist(df_amazon, sample = 50, iterations = 1000)
