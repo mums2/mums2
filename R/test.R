@@ -61,26 +61,29 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
-amazon_count <- read_count(example_path("amazon.sparse.count_table"))
-amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
-amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
+# amazon_count <- read_count(example_path("amazon.sparse.count_table"))
+# amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
+# amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
 
-# Separate Samples and rename rows
-amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
-amazon_forest$bin <- 1:nrow(amazon_forest)
-amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
-amazon_pasture$bin <- 1:nrow(amazon_pasture)
-community_pasture <- matrify(amazon_pasture)
-
+# # Separate Samples and rename rows
+# amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
+# amazon_forest$bin <- 1:nrow(amazon_forest)
+# amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
+# amazon_pasture$bin <- 1:nrow(amazon_pasture)
+# community_pasture <- matrify(amazon_pasture)
+# community_forest <- matrify(amazon_forest)
 # sum(amazon_pasture$abundance)
-
+# community_mat <- matrify(amazon_cluster$abundance)
 
 #' @export
-test_bray <- function(iters = 10, n_times = 10)
+test_bray <- function(iters = 10)
 {
-  microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
-  list(amazon_forest$abundance, amazon_pasture$abundance,),30, 3, iters), times = n_times)
+  CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+  list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, iters)
 }
+
+# microbenchmark::microbenchmark(avgdist(community_mat, 30, iterations = 1000))
+# test_bray(iters = 1000)
 # CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin, amazon_pasture$bin), 
 #   list(amazon_forest$abundance, amazon_pasture$abundance, amazon_pasture$abundance*6),30, 3, iterations=100)
 # # diversity(df_amazon) 
@@ -125,6 +128,7 @@ test_bray <- function(iters = 10, n_times = 10)
 cpp <- function(iter = 1) {
   CalculateAlphaDiversityShannon(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = iter)
 }
+
 
 # cpp()
 
