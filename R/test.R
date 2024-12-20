@@ -311,19 +311,6 @@ f <- function()
 
 
 
-#Creating fake data
-ratios <- runif(100, 0, 10)
-df <- data.frame(ratio = ratios, yVals = runif(100, 0, 10))
-
-#Normalize the data to 0 and 1
-df$normalized <- sapply(df$ratio, function(x){
-  return(((2 *(x - min(df$ratio)))/(max(df$ratio) - min(df$ratio))) - 1)
-})
-  return(((2 *(x - min(df$yVals)))/(max(df$yVals) - min(df$yVals))) - 1)
-})
-# Plotting normalized data
-library(ggplot2)
-ggplot(df, aes(x = normalized, y = normalized_y)) +
-  geom_point() +
-  geom_line(aes(x = normalized, y = normalized)) + 
-  geom_line(aes(x = normalized + 0.1 , y = normalized - 0.1))
+# TODO Make rarefaction and diversity functions faster than mothur and vegan
+# TODO Finish the pipeline for mums2
+# TODO Benchmark package
