@@ -61,31 +61,49 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
-# amazon_count <- read_count(example_path("amazon.sparse.count_table"))
-# amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
-# amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
+v <- function(){
+  amazon_count <- read_count(example_path("amazon.sparse.count_table"))
+  amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
+  amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
 
-# # Separate Samples and rename rows
-# amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
-# amazon_forest$bin <- 1:nrow(amazon_forest)
-# amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
-# amazon_pasture$bin <- 1:nrow(amazon_pasture)
-# community_pasture <- matrify(amazon_pasture)
-# community_forest <- matrify(amazon_forest)
-# sum(amazon_pasture$abundance)
-# community_mat <- matrify(amazon_cluster$abundance)
+  # Separate Samples and rename rows
+  amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
+  amazon_forest$bin <- 1:nrow(amazon_forest)
+  amazon_pasture <- amazon_cluster$abundance[-which(amazon_cluster$abundance$samples == "forest"), ]
+  amazon_pasture$bin <- 1:nrow(amazon_pasture)
+  community_pasture <- matrify(amazon_pasture)
+  community_forest <- matrify(amazon_forest)
+  sum(amazon_pasture$abundance)
+  community_mat <- matrify(amazon_cluster$abundance)
+
+  microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+    list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iterations=1000))
+  microbenchmark::microbenchmark(CalculateAlphaDiversityShannon(amazon_forest$bin, amazon_forest$abundance, 30, 1, 1000))
+  amazon_forest_generic <- amazon_forest
+  colnames(amazon_forest_generic) <- c("sample" ,"mz", "abund")
+  microbenchmark::microbenchmark(rarefy_ms(amazon_forest_generic, 30, 1))
+  microbenchmark::microbenchmark(test_shannon())
+  microbenchmark::microbenchmark(test_bray(1000))
+}
+
+#' @export
+test_shannon <- function() {
+  CalculateAlphaDiversityShannon(amazon_forest$bin, amazon_forest$abundance, 30, 1, 1000)
+}
 
 #' @export
 test_bray <- function(iters = 10)
 {
   CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
-  list(amazon_forest$abundance, amazon_pasture$abundance),30, 3, iters)
+  list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iters)
 }
 
+# microbenchmark::microbenchmark(rrarefy(community_mat, 5))
+# microbenchmark::microbenchmark(diversity(community_mat, index = "shannon"))
 # microbenchmark::microbenchmark(avgdist(community_mat, 30, iterations = 1000))
 # test_bray(iters = 1000)
-# CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin, amazon_pasture$bin), 
-#   list(amazon_forest$abundance, amazon_pasture$abundance, amazon_pasture$abundance*6),30, 3, iterations=100)
+# microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
+#   list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iterations=1000))
 # # diversity(df_amazon) 
 # df_amazon <- reshape2::dcast(amazon_cluster$abundance, samples ~ bin)
 # df_amazon <- matrify(amazon_cluster$abundance)
@@ -289,3 +307,23 @@ f <- function()
 
 # 1 - dilute_total/max(ls)
 # 1 - (min(ls))/dilute_total
+
+
+
+
+#Creating fake data
+ratios <- runif(100, 0, 10)
+df <- data.frame(ratio = ratios, yVals = runif(100, 0, 10))
+
+#Normalize the data to 0 and 1
+df$normalized <- sapply(df$ratio, function(x){
+  return(((2 *(x - min(df$ratio)))/(max(df$ratio) - min(df$ratio))) - 1)
+})
+  return(((2 *(x - min(df$yVals)))/(max(df$yVals) - min(df$yVals))) - 1)
+})
+# Plotting normalized data
+library(ggplot2)
+ggplot(df, aes(x = normalized, y = normalized_y)) +
+  geom_point() +
+  geom_line(aes(x = normalized, y = normalized)) + 
+  geom_line(aes(x = normalized + 0.1 , y = normalized - 0.1))
