@@ -16,9 +16,9 @@
 // using namespace Rcpp;
 
 size_t GetRandomNumberIndex(const std::vector<int64_t>& weightedToPull, const int64_t sum) {
-    auto randomNumber = static_cast<uint64_t>(R::runif(0, static_cast<double>(sum)));
+    auto randomNumber = static_cast<int64_t>(R::runif(0, static_cast<double>(sum)));
     for (size_t i = 0; i < weightedToPull.size(); i++) {
-        if (randomNumber <= weightedToPull[i]) {
+        if (randomNumber < weightedToPull[i]) {
             return i;
         }
         randomNumber -= weightedToPull[i];
@@ -28,17 +28,17 @@ size_t GetRandomNumberIndex(const std::vector<int64_t>& weightedToPull, const in
 
 // [[Rcpp::export]]
 Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& abund,
-    const int size, const int threshold) {
+    const int64_t size, const int threshold) {
     const int64_t sum = std::accumulate(abund.begin(), abund.end(), 0LL);
-    uint64_t grandTotal = 0;
-    int incrementer = size;
+    int64_t grandTotal = 0;
+    int64_t incrementer = size;
     const size_t abundSize = abund.size();
     std::unordered_map<int, int64_t> filtered;
     std::vector<int> counter(abundSize, 0);
     while(grandTotal <= size) {
         std::unordered_map<int, int64_t> finalMap;
-        const int currentSize = incrementer;
-        for(int i = 0; i < currentSize; i++) {
+        const int64_t currentSize = incrementer;
+        for(int64_t i = 0; i < currentSize; i++) {
             const size_t index = GetRandomNumberIndex(abund, sum - i);
             abund[index]--;
             counter[index]++;
@@ -55,7 +55,7 @@ Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& 
             filtered = finalMap;
             break;
         }
-        incrementer = threshold - *std::min_element(counter.begin(), counter.end());
+        incrementer = size - grandTotal;
         grandTotal = 0;
     }
     std::vector<int> rare_mz(filtered.size(), 0);

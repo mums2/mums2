@@ -43,6 +43,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CalculateDiversity
+double CalculateDiversity(Rcpp::List abundanceList, std::string& diversityIndex);
+RcppExport SEXP _mums2_CalculateDiversity(SEXP abundanceListSEXP, SEXP diversityIndexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type abundanceList(abundanceListSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type diversityIndex(diversityIndexSEXP);
+    rcpp_result_gen = Rcpp::wrap(CalculateDiversity(abundanceList, diversityIndex));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -66,14 +78,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // rarefyMs
-Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& abund, const int size, const int threshold);
+Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& abund, const int64_t size, const int threshold);
 RcppExport SEXP _mums2_rarefyMs(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
     Rcpp::traits::input_parameter< std::vector<int64_t>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< const int >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int64_t >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< const int >::type threshold(thresholdSEXP);
     rcpp_result_gen = Rcpp::wrap(rarefyMs(feature, abund, size, threshold));
     return rcpp_result_gen;
@@ -149,6 +161,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
+    {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_rarefyMs", (DL_FUNC) &_mums2_rarefyMs, 4},

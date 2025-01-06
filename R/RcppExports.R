@@ -9,6 +9,10 @@ distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff)
 }
 
+CalculateDiversity <- function(abundanceList, diversityIndex) {
+    .Call(`_mums2_CalculateDiversity`, abundanceList, diversityIndex)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

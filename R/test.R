@@ -86,6 +86,24 @@ v <- function(){
   microbenchmark::microbenchmark(test_bray(1000))
 }
 
+final_dist_benchmark <- function(){
+  final_count <- read_count("/Users/grejoh/Documents/clustur_files/final.count_table")
+  final_dist <- read_dist("/Users/grejoh/Documents/clustur_files/final.dist", final_count, 0.03, F)
+  final_cluster <- cluster(final_dist, 0.03, "opticlust")
+
+  sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
+  sample_f3d2$bin <- 1:nrow(sample_f3d2)
+  colnames(sample_f3d2)[2] <- "mz"
+  colnames(sample_f3d2)[3] <- "abund"
+  rarefy_ms(sample_f3d2, 10000, 100)
+  community_mat <- matrify(sample_f3d2)
+  sum(sample_f3d2$abund)
+  set.seed(2)
+  rarefy_ms(sample_f3d2, 10000, 50)
+  diversity(rrarefy(community_mat, sample=10000))
+
+}
+
 #' @export
 test_shannon <- function() {
   CalculateAlphaDiversityShannon(amazon_forest$bin, amazon_forest$abundance, 30, 1, 1000)
