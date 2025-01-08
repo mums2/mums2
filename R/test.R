@@ -87,8 +87,8 @@ v <- function(){
 }
 
 final_dist_benchmark <- function(){
-  final_count <- read_count("/Users/grejoh/Documents/clustur_files/final.count_table")
-  final_dist <- read_dist("/Users/grejoh/Documents/clustur_files/final.dist", final_count, 0.03, F)
+  final_count <- read_count("tests\\testthat\\exttestdata\\final.count_table")
+  final_dist <- read_dist("tests\\testthat\\exttestdata\\final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
 
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
@@ -108,6 +108,8 @@ final_dist_benchmark <- function(){
   microbenchmark::microbenchmark(
   test_alpha(sample_f3d2_mat), times = 10)
   diversity(rrarefy(community_pasture, sample=10000))
+  d <- test_alpha_all(final_cluster)
+  microbenchmark::microbenchmark(test_alpha_all(final_cluster), times = 5)
 
 }
 test_alpha <- function(community_matrix) {
@@ -118,6 +120,20 @@ test_alpha <- function(community_matrix) {
   sum/1000
 }
 
+#' @export
+test_alpha_all <- function(shared_df) {
+  # shared_df <- final_cluster
+  samples <- unique(shared_df$abundance$samples)
+  resultant_data_table <- data.frame(samples = samples)
+  resultant_data_table$diversity <- 0
+  for(i in 1:length(samples)){
+    temp_df <- shared_df$abundance[which(shared_df$abundance$samples == samples[i]),]
+    names(temp_df) <- c("samples", "mz", "abund")
+    temp_df[[2]] <- 1:nrow(temp_df)
+    resultant_data_table$diversity[[i]] <- CalculateAlphaDiversityShannon(temp_df$mz, temp_df$abund, sum(temp_df$abund)/2, 50)
+  }
+  return(resultant_data_table)
+}
 #' @export
 test_shannon <- function(mat, size, threshold) {
   CalculateAlphaDiversityShannon(mat$mz, mat$abund, size, threshold)

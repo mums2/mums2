@@ -10,7 +10,7 @@
 #include "Utils/Utils.h"
 #include "Rarefy/AbundanceMap.h"
 #include <Rcpp.h>
-
+#include <chrono>
 #include "DiversityMetrics/BetaDiversityCalculators/BrayCurtisDissimilarity.h"
 // #include <vector>
 // using namespace Rcpp;
@@ -94,17 +94,12 @@ double CalculateAlphaDiversityShannon(const std::vector<int>& feature, std::vect
     const int size, const int threshold, const int iterations = 1000) {
     const DiversityCalculator* calculator = new ShannonDiversityIndex();
     double diversity = 0;
-    // auto currentTime = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < iterations; i++) {
-        auto currentTime = std::chrono::high_resolution_clock::now();
         auto abundCopy = std::vector<int64_t>(abund.begin(), abund.end());
         const auto df = rarefyMs(feature,abundCopy, size, threshold);
         const std::vector<int> rare_abund = df["abund"];
         diversity += calculator->Calculate({std::vector<double>(rare_abund.begin(),
             rare_abund.end())});
-        auto endTime = std::chrono::high_resolution_clock::now();
-        // Rcpp::Rcout << "It took: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - currentTime).count()
-        // << "\n";
     }
     delete calculator;
     return diversity/iterations;
