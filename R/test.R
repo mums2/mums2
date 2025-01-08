@@ -98,15 +98,29 @@ final_dist_benchmark <- function(){
   rarefy_ms(sample_f3d2, 10000, 100)
   community_mat <- matrify(sample_f3d2)
   sum(sample_f3d2$abund)
+  microbenchmark::microbenchmark(
+  CalculateAlphaDiversityShannon(sample_f3d2$mz, sample_f3d2$abund, 10000, 100), times = 10)
   set.seed(2)
-  rarefy_ms(sample_f3d2, 10000, 50)
-  diversity(rrarefy(community_mat, sample=10000))
+  sample_f3d2_mat <- matrify(sample_f3d2)
+  rarefy_ms(sample_f3d2, 10000, 100)
+  microbenchmark::microbenchmark(test_shannon(sample_f3d2, 10000, 100), times = 5)
+  microbenchmark::microbenchmark(diversity(rrarefy(sample_f3d2_mat, sample=10000)))
+  microbenchmark::microbenchmark(
+  test_alpha(sample_f3d2_mat), times = 10)
+  diversity(rrarefy(community_pasture, sample=10000))
 
+}
+test_alpha <- function(community_matrix) {
+  sum <- 0
+  for(i in 1:1000) {
+    sum <- sum +   diversity(rrarefy(community_matrix, sample=10000))
+  }
+  sum/1000
 }
 
 #' @export
-test_shannon <- function() {
-  CalculateAlphaDiversityShannon(amazon_forest$bin, amazon_forest$abundance, 30, 1, 1000)
+test_shannon <- function(mat, size, threshold) {
+  CalculateAlphaDiversityShannon(mat$mz, mat$abund, size, threshold)
 }
 
 #' @export
