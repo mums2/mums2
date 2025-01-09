@@ -76,6 +76,8 @@ v <- function(){
   sum(amazon_pasture$abundance)
   community_mat <- matrify(amazon_cluster$abundance)
 
+  amazon_shannon <- test_alpha_all(amazon_cluster)
+
   microbenchmark::microbenchmark(CalculateBrayCurtisDissimilarity(list(amazon_forest$bin, amazon_pasture$bin), 
     list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iterations=1000))
   microbenchmark::microbenchmark(CalculateAlphaDiversityShannon(amazon_forest$bin, amazon_forest$abundance, 30, 1, 1000))
@@ -98,6 +100,7 @@ final_dist_benchmark <- function(){
   rarefy_ms(sample_f3d2, 10000, 100)
   community_mat <- matrify(sample_f3d2)
   sum(sample_f3d2$abund)
+  diversity(final_cluster$abundance)
   microbenchmark::microbenchmark(
   CalculateAlphaDiversityShannon(sample_f3d2$mz, sample_f3d2$abund, 10000, 100), times = 10)
   set.seed(2)
@@ -110,7 +113,7 @@ final_dist_benchmark <- function(){
   diversity(rrarefy(community_pasture, sample=10000))
   d <- test_alpha_all(final_cluster)
   microbenchmark::microbenchmark(test_alpha_all(final_cluster), times = 5)
-
+  
 }
 test_alpha <- function(community_matrix) {
   sum <- 0
@@ -118,6 +121,13 @@ test_alpha <- function(community_matrix) {
     sum <- sum +   diversity(rrarefy(community_matrix, sample=10000))
   }
   sum/1000
+}
+
+
+generate_sabund <- function(shared_df) {
+  shared_df <- clustur::split_clusters_to_list(final_cluster)
+  sabund <- lapply(shared_df, length)
+
 }
 
 #' @export
