@@ -28,3 +28,16 @@ double CalculateDiversity(Rcpp::List abundanceList, std::string& diversityIndex)
     }
     return diversity->Calculate(listOfAbundances);
 }
+
+// [[Rcpp::export]]
+Rcpp::DataFrame Rarefaction(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
+    const int64_t threshold) {
+
+    for(int i = 0; i < communityMatrix.nrow(); i++) {
+        Rcpp::NumericVector community = communityMatrix[i];
+        std::vector<double> communityVector = Rcpp::as<std::vector<double>>(community);
+        // Rarefy
+        // Then compute the alpha diversity
+    }
+    return {};
+}

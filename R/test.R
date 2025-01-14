@@ -46,7 +46,7 @@ library(vegan)
 library(labdsv)
 
 #' @export
-t <- function()
+ta <- function()
 {
   Test(conc_rarefy$abund)
 }
@@ -65,7 +65,11 @@ v <- function(){
   amazon_count <- read_count(example_path("amazon.sparse.count_table"))
   amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
   amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
-
+  samples <- unique(amazon_cluster$abundance$samples)
+  amazon_sample_one <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == samples[[1]]), ]
+  amazon_sample_two <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == samples[[2]]), ]
+  combined_sample <- cbind(amazon_sample_one$abundance, amazon_sample_two$abundance)
+  colnames(combined_sample) <- samples
   # Separate Samples and rename rows
   amazon_forest <- amazon_cluster$abundance[which(amazon_cluster$abundance$samples == "forest"), ]
   amazon_forest$bin <- 1:nrow(amazon_forest)
@@ -89,8 +93,8 @@ v <- function(){
 }
 
 final_dist_benchmark <- function(){
-  final_count <- read_count("tests\\testthat\\exttestdata\\final.count_table")
-  final_dist <- read_dist("tests\\testthat\\exttestdata\\final.dist", final_count, 0.03, F)
+  final_count <- read_count("tests/testthat/exttestdata/final.count_table")
+  final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
 
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
@@ -114,15 +118,31 @@ final_dist_benchmark <- function(){
   d <- test_alpha_all(final_cluster)
   microbenchmark::microbenchmark(test_alpha_all(final_cluster), times = 5)
   
+  
 }
+
+prepare_for_rarefaction <- function(df){
+  df <- final_cluster$abundance
+  samples <- unique(df$samples)
+
+  combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
+
+  for(i in 2:length(samples)) {
+    combined_df <- cbind(combined_df, data.frame(abund = df[which(df$samples == samples[[i]]), ]$abundance))
+  }
+  colnames(combined_df) <- samples
+  m <- as.matrix(combined_df)
+  Rarefaction(m, 1000, 20)
+}
+
 test_alpha <- function(community_matrix) {
   sum <- 0
   for(i in 1:1000) {
-    sum <- sum +   diversity(rrarefy(community_matrix, sample=10000))
+    sum <- sum + diversity(rrarefy(community_matrix, sample=10000))
   }
   sum/1000
 }
-
+matrix(1:3, 3, 3)
 
 generate_sabund <- function(shared_df) {
   shared_df <- clustur::split_clusters_to_list(final_cluster)
@@ -156,6 +176,10 @@ test_bray <- function(iters = 10)
   list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iters)
 }
 
+test_rrarefy <- function(x) {
+  browser()
+  rrarefy(x, 100)
+}
 # microbenchmark::microbenchmark(rrarefy(community_mat, 5))
 # microbenchmark::microbenchmark(diversity(community_mat, index = "shannon"))
 # microbenchmark::microbenchmark(avgdist(community_mat, 30, iterations = 1000))

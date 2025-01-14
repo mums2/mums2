@@ -13,6 +13,10 @@ CalculateDiversity <- function(abundanceList, diversityIndex) {
     .Call(`_mums2_CalculateDiversity`, abundanceList, diversityIndex)
 }
 
+Rarefaction <- function(communityMatrix, size, threshold) {
+    .Call(`_mums2_Rarefaction`, communityMatrix, size, threshold)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
