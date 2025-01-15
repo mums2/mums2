@@ -10,7 +10,8 @@
 
 class Rarefaction {
 public:
-    Rcpp::DataFrame Rarefy(const std::vector<int>& feature, std::vector<int64_t>& abund, int64_t size, int threshold);
+    std::vector<int64_t> Rarefy(const std::vector<int>& feature, std::vector<int64_t>& abund, int64_t size,
+        int64_t threshold);
 };
 
 

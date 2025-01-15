@@ -117,12 +117,17 @@ final_dist_benchmark <- function(){
   diversity(rrarefy(community_pasture, sample=10000))
   d <- test_alpha_all(final_cluster)
   microbenchmark::microbenchmark(test_alpha_all(final_cluster), times = 5)
-  
-  
+  rare <- test_new_rarefaction(final_cluster$abundance)
+  CalculateDiversity(rare, "shannon")
+  microbenchmark::microbenchmark(test_new_rarefaction(final_cluster$abundance), rrarefy(combined_df, 400))
+  microbenchmark::microbenchmark(diversity(rare, "shannon"), CalculateDiversity(rare, "shannon"))
+
 }
 
+
+
 prepare_for_rarefaction <- function(df){
-  df <- final_cluster$abundance
+  # df <- final_cluster$abundance
   samples <- unique(df$samples)
 
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
@@ -131,8 +136,21 @@ prepare_for_rarefaction <- function(df){
     combined_df <- cbind(combined_df, data.frame(abund = df[which(df$samples == samples[[i]]), ]$abundance))
   }
   colnames(combined_df) <- samples
-  m <- as.matrix(combined_df)
-  Rarefaction(m, 1000, 20)
+  # combined_df <- t(as.matrix(combined_df))
+  return(t(as.matrix(combined_df)))
+  # rareified$rowsum <- lapply(rareified, sum)
+  # rowSums(rareified)
+}
+
+test_new_rarefaction <- function(x)
+{
+  m <- prepare_for_rarefaction(x)
+  samples <- unique(x$samples)
+  rareified <- as.matrix(RarefactionCalculation(m, 400, 5))
+  rareified <- t(rareified)
+  row.names(rareified) <- samples
+  return(as.matrix(rareified))
+  
 }
 
 test_alpha <- function(community_matrix) {
@@ -176,6 +194,10 @@ test_bray <- function(iters = 10)
   list(amazon_forest$abundance, amazon_pasture$abundance),30, 1, iters)
 }
 
+test_diversity <- function(x){
+  browser()
+  diversity(x)
+}
 test_rrarefy <- function(x) {
   browser()
   rrarefy(x, 100)

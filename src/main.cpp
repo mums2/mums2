@@ -12,24 +12,22 @@
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
 // [[Rcpp::export]]
-double CalculateDiversity(Rcpp::List abundanceList, std::string& diversityIndex) {
+std::vector<double> CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex) {
     // Beta diversity requires two vectors
     // Alpha diversity requires one
     // Rarefaction requires one but also other parameters
     // Should I make a class to deal with the parametrization?
     std::transform(diversityIndex.begin(), diversityIndex.end(), diversityIndex.begin(), tolower);
     const DiversityCalculator* diversity = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(diversityIndex);
-    const int size = abundanceList.size();
-    std::vector<std::vector<double>> listOfAbundances(abundanceList.size(), std::vector<double>());
-    if(size > 1) {
-        for(int i = 0; i < size; i++) {
-            listOfAbundances[i] = Rcpp::as<std::vector<double>>(abundanceList[i]);
-        }
+    const int size = abundances.nrow();
+    const Rcpp::CharacterVector samples = Rcpp::rownames(abundances);
+    std::vector<double> results(size);
+    for(int i = 0; i < size; i++) {
+        Rcpp::NumericVector abundance = abundances(i, Rcpp::_);
+        std::vector<double> diversities = Rcpp::as<std::vector<double>>(abundance);
+        results[i] = diversity->Calculate({diversities});
     }
-    else {
-        listOfAbundances[0] = Rcpp::as<std::vector<double>>(abundanceList[0]);
-    }
-    return diversity->Calculate(listOfAbundances);
+    return results;
 }
 
 // [[Rcpp::export]]
@@ -41,15 +39,25 @@ Rcpp::DataFrame RarefactionCalculation(const Rcpp::NumericMatrix& communityMatri
     std::vector<int> indexToName(col);
     std::iota(indexToName.begin(), indexToName.end(), 0);
     Rarefaction rarefaction;
-    std::vector<std::vector<int64_t>> communityList(row, std::vector<int64_t>(col));
+    std::vector<std::vector<int64_t>> communityList(row, std::vector<int64_t>());
     for(int i = 0; i < row; i++) {
-        Rcpp::NumericVector community = communityMatrix[i];
-        std::vector<double> communityVector = Rcpp::as<std::vector<double>>(community);
+        Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
+        std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
+        // Rcpp::Rcout << communityVector << std::endl;
         // Rarefy
-        rarefaction.Rarefy(communityMatrix, indexToName, size, threshold);
-
-        // Then compute the alpha diversity
+        // We are going to have to switch between the tranpose of the community matrix and
+        // the orignal matrix.
+        // Samples are represented by rows and columns represent species.
+        // So ex..
+        //          FD39  FD09 <- is backwards            species1     <- Correct
+        // Species1  0      1                       FD39    1
+        //                                          DF09    0
+        communityList[i] = rarefaction.Rarefy(indexToName, communityVector, size, threshold);
     }
-    return {};
+    return communityList;
 }
 
+// [[Rcpp::export]]
+std::vector<std::vector<int>> TestMat() {
+    return std::vector<std::vector<int>>(10, std::vector<int>(10, 0));
+}
