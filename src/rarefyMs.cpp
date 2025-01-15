@@ -1,5 +1,4 @@
 
-#include "Rarefy/rarefyMs.h"
 #include <algorithm>
 #include <random>
 #include <map>
@@ -69,8 +68,8 @@ Rcpp::DataFrame rarefyMs(const std::vector<int>& feature, std::vector<int64_t>& 
 
     // delete calculator;
     // This is where we compute alpha and beta diversity
-    return DataFrame::create(Named("mz") = rare_mz,
-                             _["abund"] = rare_abund);
+    return Rcpp::DataFrame::create(Rcpp::Named("mz") = rare_mz,
+                             Rcpp::Named("abund") = rare_abund);
 }
 
 // [[Rcpp::export]]
@@ -106,12 +105,12 @@ double CalculateAlphaDiversityShannon(const std::vector<int>& feature, std::vect
 }
 
 // [[Rcpp::export]]
-NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& abund,
+Rcpp::NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp::List& abund,
     const int size, const int threshold, const int iterations = 1000) {
     const DiversityCalculator* calculator = new BrayCurtisDissimilarity();
 
     const size_t abundSize = abund.size();
-    NumericMatrix brayCurtisMatrix(abundSize, abundSize);
+    Rcpp::NumericMatrix brayCurtisMatrix(abundSize, abundSize);
     for(int i = 0; i < iterations; i++) {
         std::vector<std::vector<double>> rarefyAbundanceVector(abundSize, std::vector<double>());
         for(size_t j = 0; j < abundSize; j++) {
@@ -119,7 +118,7 @@ NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features, Rcpp:
             std::vector<int64_t> ab = abund[j];
             const Rcpp::DataFrame val = rarefyMs(feat,
                 ab, size, threshold);
-            rarefyAbundanceVector[j] = as<std::vector<double>>(val["abund"]);
+            rarefyAbundanceVector[j] = Rcpp::as<std::vector<double>>(val["abund"]);
         }
         for(size_t j = 0; j < abundSize; j++) {
             /* TODO: Create a list of dataframes then use those to calculate bray between each of them.

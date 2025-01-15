@@ -14,7 +14,6 @@ add_executable(mums2 distMs2.cpp
         NormalizeMs2/ScaleNormalize.h
         NormalizeMs2/SquareRootNormalize.h
         Rarefy/AbundanceMap.h
-        Rarefy/rarefyMs.h
         ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h
         ScoringMethods/SpectralEntropy/CleanSpectrum.h
         ScoringMethods/SpectralEntropy/entropy.h
@@ -49,4 +48,8 @@ add_executable(mums2 distMs2.cpp
         DiversityMetrics/BetaDiversityCalculators/BrayCurtisDissimilarity.h
         main.cpp
         DiversityMetricFactory.cpp
-        DiversityMetrics/DiversityMetricFactory.h)
+        DiversityMetrics/DiversityMetricFactory.h
+        RandomizationMethods.cpp
+        Random/RandomizationMethods.h
+        Rarefaction.cpp
+        Rarefy/Rarefaction.h)

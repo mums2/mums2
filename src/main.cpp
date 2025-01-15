@@ -4,7 +4,10 @@
 #include <iostream>
 #include <Rcpp.h>
 #include <algorithm>
+#include <cstdint>
+#include <numeric>
 
+#include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
@@ -30,14 +33,23 @@ double CalculateDiversity(Rcpp::List abundanceList, std::string& diversityIndex)
 }
 
 // [[Rcpp::export]]
-Rcpp::DataFrame Rarefaction(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
+Rcpp::DataFrame RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
     const int64_t threshold) {
+    const int row = communityMatrix.nrow();
+    const int col = communityMatrix.ncol();
 
-    for(int i = 0; i < communityMatrix.nrow(); i++) {
+    std::vector<int> indexToName(col);
+    std::iota(indexToName.begin(), indexToName.end(), 0);
+    Rarefaction rarefaction;
+    std::vector<std::vector<int64_t>> communityList(row, std::vector<int64_t>(col));
+    for(int i = 0; i < row; i++) {
         Rcpp::NumericVector community = communityMatrix[i];
         std::vector<double> communityVector = Rcpp::as<std::vector<double>>(community);
         // Rarefy
+        rarefaction.Rarefy(communityMatrix, indexToName, size, threshold);
+
         // Then compute the alpha diversity
     }
     return {};
 }
+
