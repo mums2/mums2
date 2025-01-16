@@ -130,6 +130,7 @@ final_dist_benchmark <- function(){
   microbenchmark::microbenchmark(prepare_for_rarefaction(final_cluster$abundance))
   microbenchmark::microbenchmark(CalculateDiversity(m, "shannon"))
   microbenchmark::microbenchmark(diversity())
+  microbenchmark::microbenchmark(RarefactionCalculation(m, 400, 10))
 }
 #' @export
 new_rarefaction <- function(community_matrix, size, threshold){

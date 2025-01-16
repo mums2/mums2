@@ -10,7 +10,7 @@
 #include "../Diversity.h"
 
 
-class BetaDiversity : public Diversity {
+class BetaDiversity final : public Diversity {
     Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
         const std::string& index) override;
     ~BetaDiversity() override = default;

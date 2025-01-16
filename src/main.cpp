@@ -24,7 +24,7 @@ Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, st
 }
 
 // [[Rcpp::export]]
-std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
+Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
     const int64_t threshold) {
     const int row = communityMatrix.nrow();
     const int col = communityMatrix.ncol();
@@ -32,7 +32,7 @@ std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatr
     std::vector<int> indexToName(col);
     std::iota(indexToName.begin(), indexToName.end(), 0);
     Rarefaction rarefaction;
-    std::vector<std::vector<int64_t>> communityList(row, std::vector<int64_t>());
+    Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
         Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
         std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
@@ -45,12 +45,22 @@ std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatr
         //          FD39  FD09 <- is backwards            species1     <- Correct
         // Species1  0      1                       FD39    1
         //                                          DF09    0
-        communityList[i] = rarefaction.Rarefy(indexToName, communityVector, size, threshold);
+        const auto results = rarefaction.Rarefy(indexToName, communityVector, size, threshold);
+        for(int j = 0; j < col; j++) {
+            resultantMatrix(i, j) = results[j];
+        }
     }
-    return communityList;
+    return resultantMatrix;
 }
 
 // [[Rcpp::export]]
-std::vector<std::vector<int>> TestMat() {
-    return std::vector<std::vector<int>>(10, std::vector<int>(10, 0));
+Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, const std::string& index,
+    const int64_t size, const int64_t threshold, const int iterations = 1000) {
+
+    for(int i = 0; i < iterations; i++) {
+
+    }
+    return {};
 }
+
+

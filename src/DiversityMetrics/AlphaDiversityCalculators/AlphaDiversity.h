@@ -10,12 +10,10 @@
 #include "../Diversity.h"
 
 
-class AlphaDiversity : public Diversity {
+class AlphaDiversity final : public Diversity {
 public:
     Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
         const std::string& index) override;
-
-
 };
 
 

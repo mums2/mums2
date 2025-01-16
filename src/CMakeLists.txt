@@ -31,7 +31,6 @@ add_executable(mums2 distMs2.cpp
         entropy.cpp
         GNPSScoringDynamicPriorityQueue.cpp
         normalizeMs2.cpp
-        rarefyMs.cpp
         RcppExports.cpp
         scoreMs2.cpp
         ScoringFactory.cpp
@@ -58,4 +57,5 @@ add_executable(mums2 distMs2.cpp
         DiversityMetrics/Diversity.h
         AlphaDiversity.cpp
         BetaDiversity.cpp
-        Diversity.cpp)
+        Diversity.cpp
+        DiversityMetrics/AlphaDiversityCalculators/MothurShannonCalculator.cpp)

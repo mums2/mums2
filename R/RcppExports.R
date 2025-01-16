@@ -17,8 +17,8 @@ RarefactionCalculation <- function(communityMatrix, size, threshold) {
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
 }
 
-TestMat <- function() {
-    .Call(`_mums2_TestMat`)
+FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
 squareRootNormalize <- function(vec) {
@@ -27,22 +27,6 @@ squareRootNormalize <- function(vec) {
 
 scaleNormalize <- function(vec) {
     .Call(`_mums2_scaleNormalize`, vec)
-}
-
-rarefyMs <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs`, feature, abund, size, threshold)
-}
-
-CalculateAlphaDiversitySimpson <- function(feature, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateAlphaDiversitySimpson`, feature, abund, size, threshold, iterations)
-}
-
-CalculateAlphaDiversityShannon <- function(feature, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateAlphaDiversityShannon`, feature, abund, size, threshold, iterations)
-}
-
-CalculateBrayCurtisDissimilarity <- function(features, abund, size, threshold, iterations = 1000L) {
-    .Call(`_mums2_CalculateBrayCurtisDissimilarity`, features, abund, size, threshold, iterations)
 }
 
 ScoreMs2 <- function(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters) {
