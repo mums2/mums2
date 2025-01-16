@@ -125,7 +125,6 @@ Rcpp::NumericMatrix CalculateBrayCurtisDissimilarity(const Rcpp::List &features,
             // Make this work for all of them using the Rcpp::list notation
             // We have to ensure that we rarefy each one of the samples and then compare them all*/
             const std::vector<double>& currentAbundance = rarefyAbundanceVector[j];
-            std::vector<double> brayResults = std::vector<double>(abundSize, 0);
             for(size_t k = j; k < abundSize; k++) {
                 if(j == k) continue;
                 const std::vector<double>& otherAbundance = rarefyAbundanceVector[k];

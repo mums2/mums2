@@ -10,7 +10,7 @@ class Diversity {
 public:
     virtual ~Diversity();
     virtual Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
-        const std::string& index);
+        const std::string& index) = 0;
 };
 
 

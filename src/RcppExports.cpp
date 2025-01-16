@@ -44,7 +44,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CalculateDiversity
-std::vector<double> CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex);
+Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex);
 RcppExport SEXP _mums2_CalculateDiversity(SEXP abundancesSEXP, SEXP diversityIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -52,16 +52,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type abundances(abundancesSEXP);
     Rcpp::traits::input_parameter< std::string& >::type diversityIndex(diversityIndexSEXP);
     rcpp_result_gen = Rcpp::wrap(CalculateDiversity(abundances, diversityIndex));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test
-double Test();
-RcppExport SEXP _mums2_Test() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(Test());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -195,7 +185,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
     {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
-    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_TestMat", (DL_FUNC) &_mums2_TestMat, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},

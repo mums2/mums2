@@ -53,9 +53,9 @@ add_executable(mums2 distMs2.cpp
         Random/RandomizationMethods.h
         Rarefaction.cpp
         Rarefy/Rarefaction.h
-        DiversityMetrics/AlphaDiversityCalculators/AlphaDiversity.cpp
         DiversityMetrics/AlphaDiversityCalculators/AlphaDiversity.h
-        DiversityMetrics/BetaDiversityCalculators/BetaDiversity.cpp
         DiversityMetrics/BetaDiversityCalculators/BetaDiversity.h
-        DiversityMetrics/Diversity.cpp
-        DiversityMetrics/Diversity.h)
+        DiversityMetrics/Diversity.h
+        AlphaDiversity.cpp
+        BetaDiversity.cpp
+        Diversity.cpp)

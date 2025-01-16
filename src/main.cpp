@@ -6,41 +6,22 @@
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
+#include "DiversityMetrics/Diversity.h"
 // #include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
 // [[Rcpp::export]]
-std::vector<double> CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex) {
-    // Beta diversity requires two vectors
-    // Alpha diversity requires one
-    // Rarefaction requires one but also other parameters
-    // Should I make a class to deal with the parametrization?
+Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex) {
     std::transform(diversityIndex.begin(), diversityIndex.end(), diversityIndex.begin(), tolower);
-    const DiversityCalculator* diversity = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(diversityIndex);
-    const int size = abundances.nrow();
-    const Rcpp::CharacterVector samples = Rcpp::rownames(abundances);
-    std::vector<double> results(size);
-    for(int i = 0; i < size; i++) {
-        Rcpp::NumericVector abundance = abundances(i, Rcpp::_);
-        std::vector<double> diversities = Rcpp::as<std::vector<double>>(abundance);
-        results[i] = diversity->Calculate({diversities});
+    Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex(diversityIndex);
+    if(diversity == nullptr) {
+        Rcpp::stop("Diversity Metric not found");
     }
+    Rcpp::NumericMatrix results = diversity->CalculateDiversity(abundances, diversityIndex);
     return results;
 }
-// [[Rcpp::export]]
-double Test() {
-    Rcpp::NumericVector vec(5);
-    auto sum = std::accumulate(vec.begin(), vec.end(), 0.0);
-    return sum;
-}
-void DiversityTest() {
-    Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex("shannon");
-    //diversity->CalculateDiversity(matrix, "shannon")
-
-}
-
 
 // [[Rcpp::export]]
 std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,

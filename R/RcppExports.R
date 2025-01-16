@@ -13,10 +13,6 @@ CalculateDiversity <- function(abundances, diversityIndex) {
     .Call(`_mums2_CalculateDiversity`, abundances, diversityIndex)
 }
 
-Test <- function() {
-    .Call(`_mums2_Test`)
-}
-
 RarefactionCalculation <- function(communityMatrix, size, threshold) {
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
 }

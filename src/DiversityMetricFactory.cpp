@@ -32,5 +32,8 @@ Diversity* DiversityMetricFactory::ChooseDiversityBasedOnIndex(const std::string
     if(indexMap[index] == "alpha") {
         return new AlphaDiversity();
     }
-    return new BetaDiversity();
+    if(indexMap[index] == "beta") {
+        return new BetaDiversity();
+    }
+    return nullptr;
 }
