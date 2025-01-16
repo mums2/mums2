@@ -55,8 +55,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Test
+double Test();
+RcppExport SEXP _mums2_Test() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(Test());
+    return rcpp_result_gen;
+END_RCPP
+}
 // RarefactionCalculation
-Rcpp::DataFrame RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size, const int64_t threshold);
+std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size, const int64_t threshold);
 RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -185,6 +195,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
     {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
+    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_TestMat", (DL_FUNC) &_mums2_TestMat, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},

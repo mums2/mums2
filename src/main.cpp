@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
-
+// #include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
@@ -29,9 +29,21 @@ std::vector<double> CalculateDiversity(const Rcpp::NumericMatrix& abundances, st
     }
     return results;
 }
+// [[Rcpp::export]]
+double Test() {
+    Rcpp::NumericVector vec(5);
+    auto sum = std::accumulate(vec.begin(), vec.end(), 0.0);
+    return sum;
+}
+void DiversityTest() {
+    Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex("shannon");
+    //diversity->CalculateDiversity(matrix, "shannon")
+
+}
+
 
 // [[Rcpp::export]]
-Rcpp::DataFrame RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
+std::vector<std::vector<int64_t>> RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
     const int64_t threshold) {
     const int row = communityMatrix.nrow();
     const int col = communityMatrix.ncol();

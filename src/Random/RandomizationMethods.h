@@ -12,7 +12,7 @@ class RandomizationMethods final {
 public:
     RandomizationMethods() = default;
     ~RandomizationMethods() = default;
-    static size_t GetRandomNumberIndex(const std::vector<int64_t>& weightedToPull, int64_t sum);
+    static size_t GetRandomNumberIndex(const std::vector<int64_t> &weightedToPull, size_t vectorSize, int64_t sum);
 };
 
 

@@ -19,7 +19,7 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
     while(grandTotal <= size) {
         const int64_t currentSize = incrementer;
         for(int64_t i = 0; i < currentSize; i++) {
-            const size_t index = RandomizationMethods::GetRandomNumberIndex(abund, sum - i);
+            const size_t index = RandomizationMethods::GetRandomNumberIndex(abund, abundSize, sum - i);
             abund[index]--;
             counter[index]++;
         }

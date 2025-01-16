@@ -96,6 +96,8 @@ final_dist_benchmark <- function(){
   final_count <- read_count("tests/testthat/exttestdata/final.count_table")
   final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
+  m <- prepare_for_rarefaction(final_cluster$abundance)
+  new_rarefaction(m, 400, 5)
 
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
   sample_f3d2$bin <- 1:nrow(sample_f3d2)
@@ -120,11 +122,24 @@ final_dist_benchmark <- function(){
   rare <- test_new_rarefaction(final_cluster$abundance)
   CalculateDiversity(rare, "shannon")
   microbenchmark::microbenchmark(test_new_rarefaction(final_cluster$abundance), rrarefy(combined_df, 400))
-  microbenchmark::microbenchmark(diversity(rare, "shannon"), CalculateDiversity(rare, "shannon"))
-
+  microbenchmark::microbenchmark(diversity(m, "shannon"), test_diversity_calc(m, "shannon"))
+  start_profiler("rarefaction_test.out")
+  microbenchmark::microbenchmark(new_rarefaction(m, 400, 5), rrarefy(m, 400))
+  stop_profiler()
+  m <- prepare_for_rarefaction(final_cluster$abundance)
+  microbenchmark::microbenchmark(prepare_for_rarefaction(final_cluster$abundance))
+  microbenchmark::microbenchmark(CalculateDiversity(m, "shannon"))
+  microbenchmark::microbenchmark(diversity())
+}
+#' @export
+new_rarefaction <- function(community_matrix, size, threshold){
+  return(RarefactionCalculation(m, size, threshold))
 }
 
-
+#' @export
+test_diversity_calc <- function(abundances, diversity_index) {
+CalculateDiversity(abundances, diversity_index)
+}
 
 prepare_for_rarefaction <- function(df){
   # df <- final_cluster$abundance
@@ -144,6 +159,7 @@ prepare_for_rarefaction <- function(df){
 
 test_new_rarefaction <- function(x)
 {
+  x <- final_cluster$abundance
   m <- prepare_for_rarefaction(x)
   samples <- unique(x$samples)
   rareified <- as.matrix(RarefactionCalculation(m, 400, 5))
