@@ -97,6 +97,8 @@ final_dist_benchmark <- function(){
   final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
   m <- prepare_for_rarefaction(final_cluster$abundance)
+  microbenchmark::microbenchmark(new_rarefaction(m, 400, 5))
+
   start_profiler("fast_avg_dist.out")
   my_avg_dist <- faster_avg_dist(m, "bray", 400, 10, 100)
   stop_profiler()
@@ -183,8 +185,8 @@ faster_avg_dist <- function(community_matrix, diversity_index, sample, threshold
 
 test_alpha <- function(community_matrix) {
   sum <- 0
+  sum <- sum + diversity(rrarefy(community_matrix, sample=10000))
   for(i in 1:1000) {
-    sum <- sum + diversity(rrarefy(community_matrix, sample=10000))
   }
   sum/1000
 }

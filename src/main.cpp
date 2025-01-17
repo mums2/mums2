@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <numeric>
 #include "DiversityMetrics/Diversity.h"
-#include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
+// #include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
@@ -21,6 +21,7 @@ Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, co
         Rcpp::stop("Diversity Metric not found");
     }
     Rcpp::NumericMatrix results = diversity->CalculateDiversity(abundances, index);
+    delete diversity;
     return results;
 }
 
@@ -39,8 +40,8 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
         // Rcpp::Rcout << communityVector << std::endl;
         // Rarefy
-        // We are going to have to switch between the tranpose of the community matrix and
-        // the orignal matrix.
+        // We are going to have to switch between the transpose of the community matrix and
+        // the original matrix.
         // Samples are represented by rows and columns represent species.
         // So ex..
         //          FD39  FD09 <- is backwards            species1     <- Correct
@@ -64,17 +65,5 @@ Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, co
         diversity += CalculateDiversity(rarefyMatrix, index);
     }
     return diversity/iterations;
-}
-
-// [[Rcpp::export]]
-SEXP start_profiler(const SEXP& str) {
-    ProfilerStart(Rcpp::as<const char*>(str));
-    return R_NilValue;
-}
-
-// [[Rcpp::export]]
-SEXP stop_profiler() {
-    ProfilerStop();
-    return R_NilValue;
 }
 
