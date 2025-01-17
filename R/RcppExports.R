@@ -21,6 +21,14 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
+start_profiler <- function(str) {
+    .Call(`_mums2_start_profiler`, str)
+}
+
+stop_profiler <- function() {
+    .Call(`_mums2_stop_profiler`)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

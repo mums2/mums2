@@ -7,7 +7,6 @@
 size_t RandomizationMethods::GetRandomNumberIndex(const std::vector<int64_t> &weightedToPull, const size_t vectorSize,
     const int64_t sum) {
     auto randomNumber = static_cast<int64_t>(R::runif(0, static_cast<double>(sum)));
-    int count = 0;
     for (size_t i = 0; i < vectorSize; i++) {
         const int64_t currentWeight = weightedToPull[i];
         if (randomNumber < currentWeight) {

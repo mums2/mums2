@@ -44,13 +44,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // CalculateDiversity
-Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex);
+Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex);
 RcppExport SEXP _mums2_CalculateDiversity(SEXP abundancesSEXP, SEXP diversityIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type abundances(abundancesSEXP);
-    Rcpp::traits::input_parameter< std::string& >::type diversityIndex(diversityIndexSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type diversityIndex(diversityIndexSEXP);
     rcpp_result_gen = Rcpp::wrap(CalculateDiversity(abundances, diversityIndex));
     return rcpp_result_gen;
 END_RCPP
@@ -80,6 +80,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int64_t >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, iterations));
+    return rcpp_result_gen;
+END_RCPP
+}
+// start_profiler
+SEXP start_profiler(const SEXP& str);
+RcppExport SEXP _mums2_start_profiler(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(start_profiler(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stop_profiler
+SEXP stop_profiler();
+RcppExport SEXP _mums2_stop_profiler() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(stop_profiler());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -133,6 +154,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
+    {"_mums2_start_profiler", (DL_FUNC) &_mums2_start_profiler, 1},
+    {"_mums2_stop_profiler", (DL_FUNC) &_mums2_stop_profiler, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

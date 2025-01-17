@@ -7,19 +7,20 @@
 #include <cstdint>
 #include <numeric>
 #include "DiversityMetrics/Diversity.h"
-// #include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
+#include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityCalculator.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, std::string& diversityIndex) {
-    std::transform(diversityIndex.begin(), diversityIndex.end(), diversityIndex.begin(), tolower);
-    Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex(diversityIndex);
+Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
+    std::string index = diversityIndex;
+    std::transform(index.begin(), index.end(), index.begin(), tolower);
+    Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex(index);
     if(diversity == nullptr) {
         Rcpp::stop("Diversity Metric not found");
     }
-    Rcpp::NumericMatrix results = diversity->CalculateDiversity(abundances, diversityIndex);
+    Rcpp::NumericMatrix results = diversity->CalculateDiversity(abundances, index);
     return results;
 }
 
@@ -56,11 +57,24 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, const std::string& index,
     const int64_t size, const int64_t threshold, const int iterations = 1000) {
-
-    for(int i = 0; i < iterations; i++) {
-
+    Rcpp::NumericMatrix diversity = CalculateDiversity(RarefactionCalculation(communityMatrix,
+        size, threshold), index);
+    for(int i = 1; i < iterations; i++) {
+        Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityMatrix, size, threshold);
+        diversity += CalculateDiversity(rarefyMatrix, index);
     }
-    return {};
+    return diversity/iterations;
 }
 
+// [[Rcpp::export]]
+SEXP start_profiler(const SEXP& str) {
+    ProfilerStart(Rcpp::as<const char*>(str));
+    return R_NilValue;
+}
+
+// [[Rcpp::export]]
+SEXP stop_profiler() {
+    ProfilerStop();
+    return R_NilValue;
+}
 

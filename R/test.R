@@ -97,8 +97,13 @@ final_dist_benchmark <- function(){
   final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
   m <- prepare_for_rarefaction(final_cluster$abundance)
+  start_profiler("fast_avg_dist.out")
+  my_avg_dist <- faster_avg_dist(m, "bray", 400, 10, 100)
+  stop_profiler()
+  avg_distance_function <- as.matrix(avgdist(m, 400, iterations = 100))
+  comp_matrix <- abs(my_avg_dist - avg_distance_function)
   new_rarefaction(m, 400, 5)
-
+  microbenchmark::microbenchmark(faster_avg_dist(m, "bray", 400, 10, 100), avgdist(m, 400, iterations = 100))
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
   sample_f3d2$bin <- 1:nrow(sample_f3d2)
   colnames(sample_f3d2)[2] <- "mz"
@@ -168,6 +173,12 @@ test_new_rarefaction <- function(x)
   row.names(rareified) <- samples
   return(as.matrix(rareified))
   
+}
+
+#'@export
+faster_avg_dist <- function(community_matrix, diversity_index, sample, threshold, iterations)
+{
+  FasterAvgDist(community_matrix, diversity_index, sample, threshold, iterations)
 }
 
 test_alpha <- function(community_matrix) {
