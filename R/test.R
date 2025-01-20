@@ -138,7 +138,41 @@ final_dist_benchmark <- function(){
   microbenchmark::microbenchmark(CalculateDiversity(m, "shannon"))
   microbenchmark::microbenchmark(diversity())
   microbenchmark::microbenchmark(RarefactionCalculation(m, 400, 10))
+  p <- c(0.1,0.1,0.05,0.05, 0.2, 0.3, 0.05, 0.05, 0.05, 0.05)
+  sum(p)
+  length(p)
+  unique(sample(1:10, size = 7, replace = T, prob = p))
+
 }
+
+rejection_sample <- function(n, s, p){
+  k_i <- unique(sample(n, size = expected_items(n , s), T, p))
+  l <- length(k_i)
+  if(l >= s){
+    return(k_i[[1:s]])               
+  }
+
+}
+
+
+expected_items <- function(n,s)
+{
+  summation_to <- n
+  summation_from <- n - s + 1
+  sum <- 0
+  for(i in summation_from:summation_to){
+    sum <- sum + (1/i)
+  }
+  return(n * sum)
+}
+
+one_pass_sampling <- function(n, s, pi){
+  # r  <- c()
+  # for()
+}
+# microbenchmark::microbenchmark(wrswoR::sample_int_crank(1000, 200, 1:1000), new_rarefaction(m[1,] , 1000, 10))
+# new_rarefaction(m[1,] , 10000, 100)
+
 #' @export
 new_rarefaction <- function(community_matrix, size, threshold){
   return(RarefactionCalculation(m, size, threshold))
@@ -190,7 +224,7 @@ test_alpha <- function(community_matrix) {
   }
   sum/1000
 }
-matrix(1:3, 3, 3)
+# matrix(1:3, 3, 3)
 
 generate_sabund <- function(shared_df) {
   shared_df <- clustur::split_clusters_to_list(final_cluster)
@@ -448,3 +482,6 @@ f <- function()
 # TODO Make rarefaction and diversity functions faster than mothur and vegan
 # TODO Finish the pipeline for mums2
 # TODO Benchmark package
+
+
+# SomePaper(100, 10, p)
