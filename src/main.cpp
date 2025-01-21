@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Rcpp.h>
 #include <algorithm>
+#include <complex>
 #include <cstdint>
 #include <numeric>
 #include "DiversityMetrics/Diversity.h"
@@ -87,16 +88,19 @@ struct CompareReservoir {
 };
 
 // [[Rcpp::export]]
-void SomePaper(int V, int m, const std::vector<double>& weights) {
+Rcpp::NumericVector SomePaper(int V, int m, const std::vector<double>& weights) {
     // Population = V
     // weighted items
     // m is the sample size
 
     // Step one the first m items are inserted into R
-    std::vector<ReservoirPairs> reservoirPairs(m);
+    const size_t size = weights.size();
+    std::vector<ReservoirPairs> reservoirPairs(size);
+    auto it = reservoirPairs.begin();
+    ++it;
     // Step two: for each item calculate the key, k_i = Ui^(1/weight[i])
     // Ui = random(0,1)
-    for(int i = 0; i < m; i++) {
+    for(int i = 0; i < size; i++) {
         const double u_i = R::runif(0, 1);
         reservoirPairs[i] = {std::pow(u_i, 1.0 / weights[i]), i};
     }
@@ -137,12 +141,26 @@ void SomePaper(int V, int m, const std::vector<double>& weights) {
         std::push_heap(reservoirPairs.begin(), reservoirPairs.end(), CompareReservoir());
         minKey = reservoirPairs.front().key;
     }
-    Rcpp::NumericVector vals(static_cast<int>(reservoirPairs.size()));
+
+    Rcpp::NumericVector vals(static_cast<int>(m));
     int count = 0;
-    while(!reservoirPairs.empty()) {
-        vals[count++] = reservoirPairs.front().value;
-        std::pop_heap(reservoirPairs.begin(), reservoirPairs.end(), CompareReservoir());
+    while(!reservoirPairs.empty() && count < m) {
+        vals[count++] = reservoirPairs.back().value;
         reservoirPairs.pop_back();
     }
-    Rcpp::Rcout << vals;
+    return vals;
+}
+
+// [[Rcpp::export]]
+size_t GetRandomNumberIndex(const std::vector<double> &weightedToPull, const size_t vectorSize,
+    const double sum) {
+    auto randomNumber = static_cast<double>(R::runif(0, static_cast<double>(sum)));
+    for (size_t i = 0; i < vectorSize; i++) {
+        const double currentWeight = weightedToPull[i];
+        if (randomNumber < currentWeight) {
+            return i;
+        }
+        randomNumber -= currentWeight;
+    }
+    return 0;
 }

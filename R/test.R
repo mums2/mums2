@@ -92,13 +92,24 @@ v <- function(){
   microbenchmark::microbenchmark(test_bray(1000))
 }
 
+get_sample <- function(sample, weight, sum){
+  for(i in 1:sample){
+    GetRandomNumberIndex(weight, length(weight), sum)
+  }
+}
+
 final_dist_benchmark <- function(){
   final_count <- read_count("tests/testthat/exttestdata/final.count_table")
   final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
   m <- prepare_for_rarefaction(final_cluster$abundance)
   microbenchmark::microbenchmark(new_rarefaction(m, 400, 5))
+  weight <- m[1, ]
+  sum <- sum(weight)
+  GetRandomNumberIndex(weight, length(weight), sum)
+  SomePaper(length(weight), 1, weight)
 
+  microbenchmark::microbenchmark(get_sample(400, weight, sum), SomePaper(length(weight), 400, weight))
   start_profiler("fast_avg_dist.out")
   my_avg_dist <- faster_avg_dist(m, "bray", 400, 10, 100)
   stop_profiler()
@@ -225,6 +236,12 @@ test_alpha <- function(community_matrix) {
   sum/1000
 }
 # matrix(1:3, 3, 3)
+
+#' @export
+benchmark_sample_without_replacement <- function()
+{
+  microbenchmark::microbenchmark(SomePaper(10, 1, p), GetRandomNumberIndex(p, 10, 1))
+}
 
 generate_sabund <- function(shared_df) {
   shared_df <- clustur::split_clusters_to_list(final_cluster)

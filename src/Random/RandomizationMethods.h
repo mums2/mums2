@@ -13,6 +13,8 @@ public:
     RandomizationMethods() = default;
     ~RandomizationMethods() = default;
     static size_t GetRandomNumberIndex(const std::vector<int64_t> &weightedToPull, size_t vectorSize, int64_t sum);
+
+    static std::vector<size_t> ReservoirSampling(int V, size_t m, const std::vector<int64_t> &weights);
 };
 
 
