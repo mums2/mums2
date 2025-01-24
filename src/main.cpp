@@ -39,6 +39,17 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
     for(int i = 0; i < row; i++) {
         Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
         std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
+        std::vector<int64_t> eVectorIndexes;
+        std::vector<int64_t> eVectorAbundances;
+        eVectorAbundances.reserve(communityVector.size());
+        eVectorIndexes.reserve(communityVector.size());
+        for(size_t j = 0; j < communityVector.size(); j++) {
+            int64_t val = communityVector[j];
+            if(val > 0) {
+                eVectorIndexes.emplace_back(j);
+                eVectorAbundances.emplace_back(val);
+            }
+        }
         // Rcpp::Rcout << communityVector << std::endl;
         // Rarefy
         // We are going to have to switch between the transpose of the community matrix and
@@ -48,7 +59,9 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         //          FD39  FD09 <- is backwards            species1     <- Correct
         // Species1  0      1                       FD39    1
         //                                          DF09    0
-        const auto results = rarefaction.Rarefy(indexToName, communityVector, size, threshold);
+
+        const auto results = rarefaction.Rarefy(indexToName, communityVector,
+            eVectorIndexes, eVectorAbundances, size, threshold);
         for(int j = 0; j < col; j++) {
             resultantMatrix(i, j) = results[j];
         }
@@ -59,12 +72,14 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, const std::string& index,
     const int64_t size, const int64_t threshold, const int iterations = 1000) {
+    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rcpp::NumericMatrix diversity = CalculateDiversity(RarefactionCalculation(communityMatrix,
         size, threshold), index);
     for(int i = 1; i < iterations; i++) {
         Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityMatrix, size, threshold);
         diversity += CalculateDiversity(rarefyMatrix, index);
     }
+    Rcpp::colnames(diversity) = samples;
     return diversity/iterations;
 }
 

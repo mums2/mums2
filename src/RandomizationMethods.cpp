@@ -29,7 +29,7 @@ std::vector<size_t> RandomizationMethods::ReservoirSampling(const int V, const s
     std::vector<ReservoirPairs> reservoirPairs(size);
     // Step two: for each item calculate the key, k_i = Ui^(1/weight[i])
     // Ui = random(0,1)
-    for(int i = 0; i < size; i++) {
+    for(size_t i = 0; i < size; i++) {
         const double u_i = R::runif(0, 1);
         reservoirPairs[i] = {std::pow(u_i, 1.0 / weights[i]), i};
     }

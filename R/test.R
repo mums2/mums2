@@ -106,6 +106,7 @@ final_dist_benchmark <- function(){
   microbenchmark::microbenchmark(new_rarefaction(m, 400, 5))
   weight <- m[1, ]
   sum <- sum(weight)
+  r_m <- new_rarefaction(m, 400, 5)
   GetRandomNumberIndex(weight, length(weight), sum)
   SomePaper(length(weight), 1, weight)
 
