@@ -34,9 +34,10 @@ rarefy_ms <- function(data, size, threshold) {
 #' Rarefy 
 #'
 #' @examples
-rarefy_ms_generic <- function(data, size, threshold, feature_name = "mz") {
-  rarefyMs_3(data[[feature_name]], data$abund, size, threshold)
+new_rarefaction <- function(community_matrix, size, threshold){
+  return(RarefactionCalculation(community_matrix, size, threshold))
 }
+
 
 #' Rarefy 
 #'

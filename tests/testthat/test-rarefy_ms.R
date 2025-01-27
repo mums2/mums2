@@ -12,7 +12,14 @@ test_that("rarefy_ms returns the correct total", {
   dilute_filter <- dplyr::filter(dilute, abund > thresh)
 
   dilute_total <- sum(dilute_filter$abund)
-  
+  # test <- as.matrix(t(concentrated))
+
+  # test <- test[2, ]
+  # test <- t(as.matrix(test))
+  # colnames(test) <- as.character(concentrated$mz)
+  #   rownames(test) <- "blank"
+  # div(test, "shannon")
+  # RarefactionCalculation(test, dilute_total, thresh)
   conc_rarefy <- rarefy_ms(concentrated, dilute_total, thresh)
   rare <- rarefy_four(concentrated, dilute_total, thresh)
   # microbenchmark::microbenchmark(rarefy_ms(concentrated, dilute_total, thresh))

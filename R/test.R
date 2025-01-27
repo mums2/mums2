@@ -109,6 +109,7 @@ final_dist_benchmark <- function(){
   r_m <- new_rarefaction(m, 400, 5)
   GetRandomNumberIndex(weight, length(weight), sum)
   SomePaper(length(weight), 1, weight)
+  avg_dist <- vegan::avgdist(m, 400)
 
   microbenchmark::microbenchmark(get_sample(400, weight, sum), SomePaper(length(weight), 400, weight))
   start_profiler("fast_avg_dist.out")
@@ -117,6 +118,8 @@ final_dist_benchmark <- function(){
   avg_distance_function <- as.matrix(avgdist(m, 400, iterations = 100))
   comp_matrix <- abs(my_avg_dist - avg_distance_function)
   new_rarefaction(m, 400, 5)
+  avg <- avgdist(m, 400, iterations = 1000)
+  faster <- faster_avg_dist(m, "bray", 400, 10, 1000)
   microbenchmark::microbenchmark(faster_avg_dist(m, "bray", 400, 10, 100), avgdist(m, 400, iterations = 100))
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
   sample_f3d2$bin <- 1:nrow(sample_f3d2)
@@ -154,6 +157,66 @@ final_dist_benchmark <- function(){
   sum(p)
   length(p)
   unique(sample(1:10, size = 7, replace = T, prob = p))
+
+
+  # Modifed Method
+  faster <- faster_avg_dist(m, "bray", 400, 10, 1000)
+  sample_names <- rownames(m)
+  faster <- as.data.frame(faster)
+  faster <- cbind(sample_names, faster)
+  colnames(faster) <- c("names", sample_names)
+  rownames(faster) <- sample_names
+  fast <- pivot_longer(faster, -names)
+  colnames(fast) <- c("rowname", "name", "value")
+
+  # Vegan Method
+  avg <- avgdist(m, 400, iterations = 1000)
+  veg_df <- as.matrix(avg)
+  samples <- colnames(veg_df)
+  rownames(veg_df) <- samples
+  veg_df <- cbind(samples, veg_df)
+  colnames(veg_df) <- c("names", samples)
+  veg <-  pivot_longer(as.data.frame(veg_df), -names)
+  colnames(veg) <- c("rowname", "name", "value")
+  veg$value <- as.double(veg$value)
+
+  # Get mothur data
+  mothur_matrix <- read.delim("tests/testthat/exttestdata/final.opti_mcc.braycurtis.0.03.square.ave.dist", 
+  skip = 1,  col.names = letters[1:20], header = F)
+  sample_names <- mothur_matrix[, 1]
+  colnames(mothur_matrix) <- c("names" ,sample_names)
+  mothur_1000 <- mothur_matrix %>% pivot_longer(-names)
+  colnames(mothur_1000) <- c("rowname", "name", "value")
+
+
+  inner_join(fast, mothur_1000, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + 
+    geom_point() + 
+    geom_abline(intercept = 0, slope = 1) +
+    ggtitle("Modified vs Mothur per 1000 iterations")
+
+  inner_join(veg, mothur_1000, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + 
+    geom_point() + 
+    geom_abline(intercept = 0, slope = 1) +
+    ggtitle("Vegan vs Mothur per 1000 iterations")
+
+  inner_join(fast, veg, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + 
+    geom_point() + 
+    geom_abline(intercept = 0, slope = 1) +
+    ggtitle("Modified vs Vegan per 1000 iterations")
+
+
+  inner_join(veg, mothur_1000, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + geom_point() + geom_abline(intercept = 0, slope = 1)
+
+
+  mothur_matrix_longer <- mothur_matrix %>% pivot_longer(-names)
+  inner_join(veg, mothur_matrix_longer, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + geom_point() + geom_abline(intercept = 0, slope = 1)
+  inner_join(veg, fast, by = c("rowname", "name"))
+
+  inner_join(fast, mothur_matrix_longer, by = c("rowname", "name")) %>% ggplot(aes(x = value.x, y = value.y)) + geom_point() + geom_abline(intercept = 0, slope = 1)
+
+  rownames_to_column(as.data.frame(faster)) %>% pivot_longer(-rowname) %>% filter(rowname < name) -> fast
+  joined <- inner_join(veg, fast, by = c("rowname", "name"))
+  joined <- inner_join(joined, mothur_1000, by = c("rowname", "name"))
 
 }
 
@@ -198,15 +261,15 @@ CalculateDiversity(abundances, diversity_index)
 prepare_for_rarefaction <- function(df){
   # df <- final_cluster$abundance
   samples <- unique(df$samples)
-
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
 
   for(i in 2:length(samples)) {
     combined_df <- cbind(combined_df, data.frame(abund = df[which(df$samples == samples[[i]]), ]$abundance))
   }
-  colnames(combined_df) <- samples
-  # combined_df <- t(as.matrix(combined_df))
-  return(t(as.matrix(combined_df)))
+  
+  combined_df <- t(as.matrix(combined_df))
+  rownames(combined_df) <- samples
+  return(combined_df)
   # rareified$rowsum <- lapply(rareified, sum)
   # rowSums(rareified)
 }
