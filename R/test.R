@@ -42,7 +42,7 @@
 # # )
 
 library(clustur)
-library(vegan)
+# library(vegan)
 library(labdsv)
 
 #' @export
@@ -259,19 +259,16 @@ CalculateDiversity(abundances, diversity_index)
 }
 
 prepare_for_rarefaction <- function(df){
-  # df <- final_cluster$abundance
   samples <- unique(df$samples)
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
 
   for(i in 2:length(samples)) {
     combined_df <- cbind(combined_df, data.frame(abund = df[which(df$samples == samples[[i]]), ]$abundance))
   }
-  
+
   combined_df <- t(as.matrix(combined_df))
   rownames(combined_df) <- samples
   return(combined_df)
-  # rareified$rowsum <- lapply(rareified, sum)
-  # rowSums(rareified)
 }
 
 test_new_rarefaction <- function(x)
