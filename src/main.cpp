@@ -31,7 +31,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
     const int64_t threshold) {
     const int row = communityMatrix.nrow();
     const int col = communityMatrix.ncol();
-
+    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     std::vector<int> indexToName(col);
     std::iota(indexToName.begin(), indexToName.end(), 0);
     Rarefaction rarefaction;
@@ -66,6 +66,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
             resultantMatrix(i, j) = results[j];
         }
     }
+    Rcpp::rownames(resultantMatrix) = samples;
     return resultantMatrix;
 }
 
@@ -73,14 +74,18 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
 Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, const std::string& index,
     const int64_t size, const int64_t threshold, const int iterations = 1000) {
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
+
     Rcpp::NumericMatrix diversity = CalculateDiversity(RarefactionCalculation(communityMatrix,
         size, threshold), index);
     for(int i = 1; i < iterations; i++) {
         Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityMatrix, size, threshold);
         diversity += CalculateDiversity(rarefyMatrix, index);
     }
+    diversity = diversity/iterations;
     Rcpp::colnames(diversity) = samples;
-    return diversity/iterations;
+    Rcpp::rownames(diversity) = samples;
+
+    return diversity;
 }
 
 

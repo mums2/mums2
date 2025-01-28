@@ -102,11 +102,21 @@ final_dist_benchmark <- function(){
   final_count <- read_count("tests/testthat/exttestdata/final.count_table")
   final_dist <- read_dist("tests/testthat/exttestdata/final.dist", final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
+  m <- create_community_matrix(final_cluster)
+  rownames(m)
+  diversity(m, "shannon")
+  diversity(m, "simpson")
+  diversity(m, "bray")
+  r_m <- rarefaction(m, 400, 10)
+  avg <- averaged_subsampled_dissimilarity(m, 400, 10)
+
+
+
   m <- prepare_for_rarefaction(final_cluster$abundance)
-  microbenchmark::microbenchmark(new_rarefaction(m, 400, 5))
+  microbenchmark::microbenchmark(rarefaction(m, 400, 5), rrarefy(m, 400))
   weight <- m[1, ]
   sum <- sum(weight)
-  r_m <- new_rarefaction(m, 400, 5)
+  r_m <- rarefaction(m, 400, 5)
   GetRandomNumberIndex(weight, length(weight), sum)
   SomePaper(length(weight), 1, weight)
   avg_dist <- vegan::avgdist(m, 400)
@@ -120,7 +130,7 @@ final_dist_benchmark <- function(){
   new_rarefaction(m, 400, 5)
   avg <- avgdist(m, 400, iterations = 1000)
   faster <- faster_avg_dist(m, "bray", 400, 10, 1000)
-  microbenchmark::microbenchmark(faster_avg_dist(m, "bray", 400, 10, 100), avgdist(m, 400, iterations = 100))
+  microbenchmark::microbenchmark(averaged_subsampled_dissimilarity(m, 400, 10, "bray", 100), avgdist(m, 400, iterations = 100))
   sample_f3d2 <- final_cluster$abundance[which(final_cluster$abundance$samples == "F3D2"), ]
   sample_f3d2$bin <- 1:nrow(sample_f3d2)
   colnames(sample_f3d2)[2] <- "mz"

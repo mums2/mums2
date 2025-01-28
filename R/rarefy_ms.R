@@ -31,28 +31,12 @@ rarefy_ms <- function(data, size, threshold) {
   rarefyMs(data$mz, data$abund, size, threshold)
 }
 
+
 #' Rarefy 
 #'
+#' @export
 #' @examples
-new_rarefaction <- function(community_matrix, size, threshold){
+rarefaction <- function(community_matrix, size, threshold){
   return(RarefactionCalculation(community_matrix, size, threshold))
 }
 
-
-#' Rarefy 
-#'
-#' @export
-rarefy_four <- function(data, size, threshold, feature_name = "mz") {
-  rarefyMs_4(data$mz, data$abund, size, threshold)
-}
-
-#' @export
-benchmark <- function(){
- 
-  # microbenchmark::microbenchmark(CalculateAlphaDiversitySimpson(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 1))
-  # CalculateAlphaDiverstiyInt(concentrated$mz, concentrated$abund, dilute_total, thresh, iterations = 10),
-  # times = 4)
-}  
-
-# microbenchmark::microbenchmark(CalculateAlphaDiversityShannon()(conc_rarefy$mz, conc_rarefy$abund, dilute_total, thresh, iterations = 1))
-# CalculateBrayCurtisDissimilarity(list(dilute$mz, dilute$mz), list(dilute$abund, dilute$abund), dilute_total, thresh, iterations = 10)
