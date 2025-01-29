@@ -62,6 +62,16 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
 v <- function(){
+    data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
+    data_filtered <- data |>
+      filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
+      filter_group(group_to_remove = "ANGDT") |>
+      filter_cv(cv_threshold = 0.2, cv_param = "median")
+
+
+
+
+
   amazon_count <- read_count(example_path("amazon.sparse.count_table"))
   amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)
   amazon_cluster <- cluster(amazon_dist, 0.03, "opticlust")
@@ -113,7 +123,7 @@ final_dist_benchmark <- function(){
 
 
   m <- prepare_for_rarefaction(final_cluster$abundance)
-  microbenchmark::microbenchmark(rarefaction(m, 400, 5), rrarefy(m, 400))
+  microbenchmark::microbenchmark(rarefaction(m, 400, 10), rrarefy(m, 400))
   weight <- m[1, ]
   sum <- sum(weight)
   r_m <- rarefaction(m, 400, 5)
