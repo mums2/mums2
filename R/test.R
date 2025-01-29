@@ -65,10 +65,10 @@ v <- function(){
     data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
     data_filtered <- data |>
       filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
-      filter_group(group_to_remove = "ANGDT") |>
-      filter_cv(cv_threshold = 0.2, cv_param = "median")
+      filter_group(group_to_remove = "Coculture") |>
 
-
+  print()
+  dt <- get_peak_table(data)
 
 
 
@@ -514,6 +514,8 @@ f <- function()
 # head(pt)
 # pt_df_temp <- as.data.frame(pt)
 # mat_pt <- matrify(pt_df_temp)
+
+
 
 
 # pt_df <- pt %>%
