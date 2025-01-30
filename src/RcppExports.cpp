@@ -83,32 +83,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// SomePaper
-Rcpp::NumericVector SomePaper(int V, int m, const std::vector<double>& weights);
-RcppExport SEXP _mums2_SomePaper(SEXP VSEXP, SEXP mSEXP, SEXP weightsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type V(VSEXP);
-    Rcpp::traits::input_parameter< int >::type m(mSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type weights(weightsSEXP);
-    rcpp_result_gen = Rcpp::wrap(SomePaper(V, m, weights));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetRandomNumberIndex
-size_t GetRandomNumberIndex(const std::vector<double>& weightedToPull, const size_t vectorSize, const double sum);
-RcppExport SEXP _mums2_GetRandomNumberIndex(SEXP weightedToPullSEXP, SEXP vectorSizeSEXP, SEXP sumSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type weightedToPull(weightedToPullSEXP);
-    Rcpp::traits::input_parameter< const size_t >::type vectorSize(vectorSizeSEXP);
-    Rcpp::traits::input_parameter< const double >::type sum(sumSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetRandomNumberIndex(weightedToPull, vectorSize, sum));
-    return rcpp_result_gen;
-END_RCPP
-}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -159,8 +133,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
-    {"_mums2_SomePaper", (DL_FUNC) &_mums2_SomePaper, 3},
-    {"_mums2_GetRandomNumberIndex", (DL_FUNC) &_mums2_GetRandomNumberIndex, 3},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

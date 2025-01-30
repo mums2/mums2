@@ -59,4 +59,9 @@ add_executable(mums2 distMs2.cpp
         BetaDiversity.cpp
         Diversity.cpp
         DiversityMetrics/AlphaDiversityCalculators/MothurShannonCalculator.cpp
-        Random/ReservoirPairs.h)
+        Random/ReservoirPairs.h
+        test-alpha_diversity.cpp
+        test-beta_diversity.cpp
+        test-rarefaction.cpp
+        test-randomization_methods.cpp
+        test-diversity_metric_function.cpp)

@@ -11,6 +11,7 @@
 
 
 class BetaDiversity final : public Diversity {
+public:
     Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
         const std::string& index) override;
     ~BetaDiversity() override = default;

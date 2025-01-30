@@ -1,3 +1,6 @@
+# TODO: Create test for rarefaction and alpha/beta diversity
+# TODO: Do a mock run with a regular file to see if we can go through all the analysis.
+
 # # dir <- "exttestdata"
 # # file <- "demo_massdataset"
 # # dat <- readRDS(test_path(dir, file))
@@ -61,14 +64,31 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # # Test the base functionality
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
+
+create_expression_data <- function(peak_table, metadata){
+
+}
 v <- function(){
     data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
     data_filtered <- data |>
       filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
-      filter_group(group_to_remove = "Coculture") |>
+      filter_group(group_to_remove = "Coculture")
 
-  print()
   dt <- get_peak_table(data)
+  
+  meta_f <- mpactr::example_path("cultures_metaboscape_metadata.csv")
+  meta <- read.csv(meta_f)
+
+  file <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
+  path <- test_path("exttestdata", file)
+  # Get Expression data
+  expression_data <- dt[ , unique(meta$Injection), with = FALSE]
+
+  # Get variable info
+  variable_info <- dt[ , -unique(meta$Injection), with = FALSE][
+     ,-"kmd", with = FALSE]
+
+  out <- convert_metaboscape2mass_dataset(file, meta)
 
 
 
@@ -532,9 +552,6 @@ f <- function()
 # print(mat_pt)
 
 # We cant really avg dist with mz unless we add the column, do we need the mz? What if we cluster the data, what then?
-# TODO: Create a bray curtis calculator
-# TODO: Keep researching about bias in alpha diversity
-# TODO: Find ways to replicate the data in vegan (alpha/beta diversity. We have the formula)
 
 
 # test_log <- function(){
@@ -579,7 +596,6 @@ f <- function()
 
 
 
-# TODO Make rarefaction and diversity functions faster than mothur and vegan
 # TODO Finish the pipeline for mums2
 # TODO Benchmark package
 
