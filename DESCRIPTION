@@ -26,7 +26,8 @@ Imports:
     massdataset,
     msentropy,
     Rcpp,
-    tibble
+    tibble,
+    data.table
 Suggests: 
     testthat (>= 3.0.0),
     xml2

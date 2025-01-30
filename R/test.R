@@ -65,32 +65,192 @@ rare_i <- function(data, size, threshold, feature_name = "mz") {
 # mean.avg.dist <- avgdist(BCI, sample = 50, iterations = 10)
 # rare <- rrarefy(df_amazon, min(rowSums(df_amazon)))
 
-create_expression_data <- function(peak_table, metadata){
-
-}
-v <- function(){
-    data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
-    data_filtered <- data |>
-      filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
-      filter_group(group_to_remove = "Coculture")
-
-  dt <- get_peak_table(data)
+convert_mpactr_object_to_mass_data_set <- function(mpactr_object) {
+  dt <- as.data.table(get_peak_table(mpactr_object))
+  meta <- get_meta_data(mpactr_object)
+  # Get variable info
+  variable_info <- dt[ , -c(unique(meta$Injection),"kmd"), with = FALSE]
+  names(variable_info) <- c("variable_id", "mz", "rt")
+   #sample_info
+  sample_info <- data.frame(sample_id = meta$Injection, injection.order = 1:nrow(meta), class = meta$Sample_Code, 
+                            group = meta$Biological_Group)
   
-  meta_f <- mpactr::example_path("cultures_metaboscape_metadata.csv")
-  meta <- read.csv(meta_f)
-
-  file <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
-  path <- test_path("exttestdata", file)
   # Get Expression data
   expression_data <- dt[ , unique(meta$Injection), with = FALSE]
+  rownames(expression_data) <- variable_info$variable_id
+  
+  return(create_mass_dataset(expression_data = expression_data,
+                      sample_info = sample_info,
+                      variable_info = variable_info))
+}
 
-  # Get variable info
-  variable_info <- dt[ , -unique(meta$Injection), with = FALSE][
-     ,-"kmd", with = FALSE]
 
+
+
+
+ base_vignette <- function() {
+  data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
+  data_filtered <- data |>
+    filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
+    filter_group(group_to_remove = "Coculture")
+
+  data_set <- convert_mpactr_object_to_mass_data_set(data)
   out <- convert_metaboscape2mass_dataset(file, meta)
 
+  # Import Data and filter
+  JC1_Data <- import_data("peak_table.csv", "meta_jc1.csv", "Metaboscape")
+  jc1 <- JC1_Data  |> 
+    filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
+    filter_group(group_to_remove = "Coculture")
 
+  # Convert mpactr object to a mass data set
+  Jc_mass_data <- convert_mpactr_object_to_mass_data_set(jc1)
+
+  # Add ms2 spectra to massdataset
+  Jc_with_MS2 <- massdataset::mutate_ms2(
+    object = Jc_mass_data, 
+    polarity = "negative",
+    ms1.ms2.match.mz.tol = 100,
+    ms1.ms2.match.rt.tol = 150
+  )
+  
+  # Annotate
+  dir <- "exttestdata"
+  file <- "demo_massdataset"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path(dir, file))
+  dat_sub_200 <- dat %>%
+    massdataset::activate_mass_dataset("variable_info") %>%
+    massdataset::slice_head(n = 200)
+
+  psu_msmls <- massdatabase::read_msp_data(test_path(dir, r_file),
+                                           source = "gnps")
+
+  annotations <- annotate_ms2(Jc_with_MS2, psu_msmls,
+                              gnps_params(0.5), 2, .7)
+  
+  # Generate Distance
+  dist <- dist_ms2(Jc_with_MS2, 0.3, 2, gnps_params(0.5))
+  sparse_matrix <- create_sparse_matrix(dist$i, dist$j, dist$dist)
+  
+  # Create Count Table
+  jc1_peak <- get_peak_table(jc1)
+  sample_cols <- colnames(jc1_peak)[5:ncol(jc1_peak)]
+  
+  count_table <- data.frame(Representative_Sequence = 1:nrow(jc1_peak))
+  count_table$sum <- rowSums(jc1_peak[, .SD, .SDcols = sample_cols])
+  count_table <- cbind(count_table, jc1_peak[, .SD, .SDcols = sample_cols])
+  colnames(count_table)[2] <- "total"
+  count_table$Representative_Sequence <- jc1_peak$Compound
+  count_table$Representative_Sequence <- as.character(count_table$Representative_Sequence)
+  # ensure sum is correct
+  all(rowSums(count_table[, 3:ncol(count_table)]) == count_table$total)
+
+  write.table(count_table, "count_table_jc1.count", sep = "\t")
+  # Create Count Table
+  count <- read_count("count_table_jc1.count")
+  count$Representative_Sequence <- as.character(count$Representative_Sequence)
+  # Create Distance Object
+  dist <- read_dist(sparse_matrix, count, 0.3, F)
+  get_distance_df(dist)
+
+  # Cluster Data
+  cluster_results <- cluster(dist, 0.2, "opticlust")
+
+  # Create community matrix
+  community_matrix <- create_community_matrix(cluster_results)
+
+  # Calculate Alpha Diversity
+  shannon_diversity <- diversity(community_matrix, "shannon")
+  simpson_diversity <- diversity(community_matrix, "simpson")
+
+  #Calculate Beta Diversity
+  braycurits <- diversity(community_matrix, "bray")
+
+ }
+
+
+
+
+
+v <- function(){
+  data <- import_data(mpactr::example_path("cultures_metaboscape_peaktable.csv"), mpactr::example_path("cultures_metaboscape_metadata.csv"), "Metaboscape")
+  data_filtered <- data |>
+    filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
+    filter_group(group_to_remove = "Coculture")
+
+  data_set <- convert_mpactr_object_to_mass_data_set(data)
+  out <- convert_metaboscape2mass_dataset(file, meta)
+
+  # Import Data and filter
+  JC1_Data <- import_data("peak_table.csv", "meta_jc1.csv", "Metaboscape")
+  jc1 <- JC1_Data  |> 
+    filter_mispicked_ions(merge_peaks = TRUE, merge_method = "sum") |>
+    filter_group(group_to_remove = "Coculture")
+
+  # Convert mpactr object to a mass data set
+  Jc_mass_data <- convert_mpactr_object_to_mass_data_set(jc1)
+
+  # Add ms2 spectra to massdataset
+  Jc_with_MS2 <- massdataset::mutate_ms2(
+    object = Jc_mass_data, 
+    polarity = "negative",
+    ms1.ms2.match.mz.tol = 100,
+    ms1.ms2.match.rt.tol = 150
+  )
+  
+  # Annotate
+  dir <- "exttestdata"
+  file <- "demo_massdataset"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path(dir, file))
+  dat_sub_200 <- dat %>%
+    massdataset::activate_mass_dataset("variable_info") %>%
+    massdataset::slice_head(n = 200)
+
+  psu_msmls <- massdatabase::read_msp_data(test_path(dir, r_file),
+                                           source = "gnps")
+
+  annotations <- annotate_ms2(Jc_with_MS2, psu_msmls,
+                              gnps_params(0.5), 2, .7)
+  
+  # Generate Distance
+  dist <- dist_ms2(Jc_with_MS2, 0.3, 2, gnps_params(0.5))
+  sparse_matrix <- create_sparse_matrix(dist$i, dist$j, dist$dist)
+  
+  # Create Count Table
+  jc1_peak <- get_peak_table(jc1)
+  sample_cols <- colnames(jc1_peak)[5:ncol(jc1_peak)]
+  
+  count_table <- data.frame(Representative_Sequence = 1:nrow(jc1_peak))
+  count_table$sum <- rowSums(jc1_peak[, .SD, .SDcols = sample_cols])
+  count_table <- cbind(count_table, jc1_peak[, .SD, .SDcols = sample_cols])
+  colnames(count_table)[2] <- "total"
+  count_table$Representative_Sequence <- jc1_peak$Compound
+  count_table$Representative_Sequence <- as.character(count_table$Representative_Sequence)
+  # ensure sum is correct
+  all(rowSums(count_table[, 3:ncol(count_table)]) == count_table$total)
+
+  write.table(count_table, "count_table_jc1.count", sep = "\t")
+  # Create Count Table
+  count <- read_count("count_table_jc1.count")
+  count$Representative_Sequence <- as.character(count$Representative_Sequence)
+  # Create Distance Object
+  dist <- read_dist(sparse_matrix, count, 0.3, F)
+  get_distance_df(dist)
+
+  # Cluster Data
+  cluster_results <- cluster(dist, 0.2, "opticlust")
+
+  # Create community matrix
+  community_matrix <- create_community_matrix(cluster_results)
+
+  # Calculate Alpha Diversity
+  shannon_diversity <- diversity(community_matrix, "shannon")
+  simpson_diversity <- diversity(community_matrix, "simpson")
+
+  #Calculate Beta Diversity
+  braycurits <- diversity(community_matrix, "bray")
 
   amazon_count <- read_count(example_path("amazon.sparse.count_table"))
   amazon_dist <- read_dist(example_path("amazon_column.dist"), amazon_count, 0.03, F)

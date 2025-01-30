@@ -7,6 +7,7 @@
 #' @importFrom clustur get_abundance
 #' @importFrom clustur read_count
 #' @importFrom clustur read_dist
+#' @importFrom data.table data.table
 #' @importFrom dplyr case_when
 #' @importFrom dplyr ends_with
 #' @importFrom dplyr left_join
