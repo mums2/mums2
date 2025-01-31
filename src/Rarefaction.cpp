@@ -13,6 +13,7 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
                                     const std::vector<int64_t>& eligibleIndexes,
                                     const std::vector<int64_t>& eligibleAbundances,
                                     const int64_t size, const int64_t threshold) {
+    if(eligibleIndexes.empty()) return abund;
     int64_t sum = std::accumulate(abund.begin(), abund.end(), 0LL);
     int64_t grandTotal = 0;
     int64_t incrementer = size;
