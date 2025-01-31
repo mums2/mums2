@@ -28,5 +28,15 @@
 #' rarefy_ms(sample1, 25000, 1000)
 #' 
 rarefy_ms <- function(data, size, threshold) {
-  rarefyMs_2(data$mz, data$abund, size, threshold)
+  rarefyMs(data$mz, data$abund, size, threshold)
 }
+
+
+#' Rarefy 
+#'
+#' @export
+#' @examples
+rarefaction <- function(community_matrix, size, threshold){
+  return(RarefactionCalculation(community_matrix, size, threshold))
+}
+

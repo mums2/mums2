@@ -9,20 +9,24 @@ distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff)
 }
 
+CalculateDiversity <- function(abundances, diversityIndex) {
+    .Call(`_mums2_CalculateDiversity`, abundances, diversityIndex)
+}
+
+RarefactionCalculation <- function(communityMatrix, size, threshold) {
+    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
+}
+
+FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
 
 scaleNormalize <- function(vec) {
     .Call(`_mums2_scaleNormalize`, vec)
-}
-
-rarefyMs <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs`, feature, abund, size, threshold)
-}
-
-rarefyMs_2 <- function(feature, abund, size, threshold) {
-    .Call(`_mums2_rarefyMs_2`, feature, abund, size, threshold)
 }
 
 ScoreMs2 <- function(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters) {

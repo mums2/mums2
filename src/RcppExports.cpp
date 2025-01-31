@@ -43,6 +43,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CalculateDiversity
+Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex);
+RcppExport SEXP _mums2_CalculateDiversity(SEXP abundancesSEXP, SEXP diversityIndexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type abundances(abundancesSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type diversityIndex(diversityIndexSEXP);
+    rcpp_result_gen = Rcpp::wrap(CalculateDiversity(abundances, diversityIndex));
+    return rcpp_result_gen;
+END_RCPP
+}
+// RarefactionCalculation
+Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size, const int64_t threshold);
+RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type communityMatrix(communityMatrixSEXP);
+    Rcpp::traits::input_parameter< const int64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int64_t >::type threshold(thresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(RarefactionCalculation(communityMatrix, size, threshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FasterAvgDist
+Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, const std::string& index, const int64_t size, const int64_t threshold, const int iterations);
+RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type communityMatrix(communityMatrixSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< const int64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const int64_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
+    rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, iterations));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -62,34 +102,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double>& >::type vec(vecSEXP);
     rcpp_result_gen = Rcpp::wrap(scaleNormalize(vec));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rarefyMs
-DataFrame rarefyMs(IntegerVector feature, IntegerVector abund, int size, int threshold);
-RcppExport SEXP _mums2_rarefyMs(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs(feature, abund, size, threshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rarefyMs_2
-Rcpp::DataFrame rarefyMs_2(const std::vector<int>& feature, const std::vector<int>& abund, int size, int threshold);
-RcppExport SEXP _mums2_rarefyMs_2(SEXP featureSEXP, SEXP abundSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type feature(featureSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int>& >::type abund(abundSEXP);
-    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(rarefyMs_2(feature, abund, size, threshold));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -118,10 +130,11 @@ RcppExport SEXP run_testthat_tests(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
+    {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
+    {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
+    {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
-    {"_mums2_rarefyMs", (DL_FUNC) &_mums2_rarefyMs, 4},
-    {"_mums2_rarefyMs_2", (DL_FUNC) &_mums2_rarefyMs_2, 4},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

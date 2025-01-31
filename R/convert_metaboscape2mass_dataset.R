@@ -159,3 +159,25 @@ get_variable_info <- function(ft, sample_info) {
     dplyr::left_join(ion_masses, dplyr::join_by("ion" == "IONS")) %>%
     dplyr::mutate(mz = (pepmass / charge) + MASS)
 }
+
+
+#' @export
+convert_mpactr_object_to_mass_data_set <- function(mpactr_object) {
+  dt <- as.data.table(get_peak_table(mpactr_object))
+  meta <- get_meta_data(mpactr_object)
+  # Get variable info
+  variable_info <- dt[ , -c(unique(meta$Injection),"kmd"), with = FALSE]
+  names(variable_info) <- c("variable_id", "mz", "rt")
+   #sample_info
+  sample_info <- data.frame(sample_id = meta$Injection, injection.order = 1:nrow(meta), class = meta$Sample_Code, 
+                            group = meta$Biological_Group)
+  
+  # Get Expression data
+  expression_data <- dt[ , unique(meta$Injection), with = FALSE]
+  rownames(expression_data) <- variable_info$variable_id
+  
+  return(create_mass_dataset(expression_data = expression_data,
+                      sample_info = sample_info,
+                      variable_info = variable_info))
+}
+

@@ -3,6 +3,11 @@
 
 ## usethis namespace: start
 #' @importFrom cli cli_abort
+#' @importFrom clustur cluster
+#' @importFrom clustur get_abundance
+#' @importFrom clustur read_count
+#' @importFrom clustur read_dist
+#' @importFrom data.table data.table
 #' @importFrom dplyr case_when
 #' @importFrom dplyr ends_with
 #' @importFrom dplyr left_join
@@ -12,8 +17,8 @@
 #' @importFrom magrittr %>%
 #' @importFrom massdataset create_mass_dataset
 #' @importFrom msentropy msentropy_similarity
-#' @importFrom tibble column_to_rownames
 #' @importFrom Rcpp sourceCpp
+#' @importFrom tibble column_to_rownames
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
 NULL
