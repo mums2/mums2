@@ -18,12 +18,13 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
     int64_t grandTotal = 0;
     int64_t incrementer = size;
     const size_t abundSize = abund.size();
-    const size_t eligibleIndexSize = eligibleIndexes.size();
+    // const size_t eligibleIndexSize = eligibleIndexes.size();
     std::vector<int64_t> counter(abundSize, 0);
+    std::vector<size_t> indexes = RandomizationMethods::GetRandomVectorWithoutReplacement(eligibleAbundances,
+        size, sum);
     while(grandTotal <= size) {
         const int64_t currentSize = incrementer;
-        for(int64_t i = 0; i < currentSize; i++) {
-            const size_t index = RandomizationMethods::GetRandomNumberIndex(eligibleAbundances, abundSize, sum - i);
+        for(const auto& index : indexes) {
             abund[eligibleIndexes[index]]--;
             counter[eligibleIndexes[index]]++;
         }
@@ -39,6 +40,8 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
         }
         incrementer = size - grandTotal;
         grandTotal = 0;
+        indexes = RandomizationMethods::GetRandomVectorWithoutReplacement(eligibleAbundances,
+            incrementer, sum);
     }
     //Set counter size to 0 if they do not pass the threshold
     for(auto& num : counter) {

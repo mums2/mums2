@@ -40,3 +40,7 @@ rarefaction <- function(community_matrix, size, threshold){
   return(RarefactionCalculation(community_matrix, size, threshold))
 }
 
+#' @export
+test_sample_without_replacement <- function(samples, weights, to_pull){
+  Test(samples, weights, to_pull)
+}
