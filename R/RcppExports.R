@@ -21,6 +21,14 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
+SomePaper <- function(V, m, weights) {
+    .Call(`_mums2_SomePaper`, V, m, weights)
+}
+
+Test <- function(samples, weights, sizeToPull, sum) {
+    .Call(`_mums2_Test`, samples, weights, sizeToPull, sum)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
