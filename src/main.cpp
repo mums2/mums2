@@ -41,15 +41,20 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
     for(int i = 0; i < row; i++) {
         Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
         std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
-        std::vector<int64_t> eVectorIndexes;
-        std::vector<int64_t> eVectorAbundances;
-        eVectorAbundances.reserve(communityVector.size());
-        eVectorIndexes.reserve(communityVector.size());
-        for(size_t j = 0; j < communityVector.size(); j++) {
+        size_t communityVectorSize = communityVector.size();
+        std::vector<int64_t> eligibleIndexes;
+        std::vector<int64_t> eligibleAbundances;
+        std::vector<int64_t> abundanceRanges(1,0);
+        abundanceRanges.reserve(communityVectorSize);
+        eligibleAbundances.reserve(communityVectorSize);
+        eligibleIndexes.reserve(communityVectorSize);
+        int count = 1;
+        for(size_t j = 0; j < communityVectorSize; j++) {
             int64_t val = communityVector[j];
             if(val > 0) {
-                eVectorIndexes.emplace_back(j);
-                eVectorAbundances.emplace_back(val);
+                eligibleIndexes.emplace_back(j);
+                eligibleAbundances.emplace_back(val);
+                abundanceRanges.emplace_back(abundanceRanges[count++ - 1] + val);
             }
         }
         // Rcpp::Rcout << communityVector << std::endl;
@@ -63,7 +68,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         //                                          DF09    0
 
         const auto results = rarefaction.Rarefy(indexToName, communityVector,
-            eVectorIndexes, eVectorAbundances, size, threshold);
+                                                eligibleIndexes, eligibleAbundances, abundanceRanges, size, threshold);
         for(int j = 0; j < col; j++) {
             resultantMatrix(i, j) = results[j];
         }
@@ -169,15 +174,14 @@ Rcpp::NumericVector SomePaper(int V, int m, const std::vector<double>& weights) 
 std::vector<size_t> Test(const std::vector<int>& samples, const std::vector<int>& weights, const int sizeToPull,
     const int sum) {
     std::vector<size_t> indexes(sizeToPull);
-    std::vector<int> ranges(samples.size());
-    ranges[0] = weights[0];
+    std::vector<int> ranges(weights.size() + 1, 0);
     for(int i = 1; i < ranges.size(); i++) {
-        ranges[i] = ranges[i - 1] + weights[i];
+        ranges[i] = ranges[i - 1] + weights[i - 1];
     }
     for(int i = 0; i < sizeToPull; i++) {
         int randomNum = R::runif(0, sum - i);
-        const size_t index = std::lower_bound(ranges.begin(),
-            ranges.end(), randomNum) - ranges.begin();
+        const size_t index = (std::upper_bound(ranges.begin(),
+            ranges.end(), randomNum) - ranges.begin()) - 1;
         indexes[i] = index;
         ranges[index]--;
     }

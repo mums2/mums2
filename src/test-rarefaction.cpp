@@ -21,10 +21,11 @@ context("Test Rarefaction") {
         const Rcpp::Function setSeed = base["set.seed"];
         setSeed(2);
         Rarefaction rarefaction;
-        std::vector<int64_t> v = {1, 2, 3, 4, 5, 6};
+        std::vector<int64_t> abundances = {1, 2, 3, 4, 5, 6};
         std::vector<int64_t> eligbile = {0, 1, 2, 3, 4, 5};
-        const auto vec = rarefaction.Rarefy({}, v,
-                eligbile, v, 10, 2);
+        std::vector<int64_t> abundanceRanges = {0, 1, 3, 6, 10, 15, 21};
+        const auto vec = rarefaction.Rarefy({}, abundances,
+                eligbile, abundanceRanges, abundances, 10, 2);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
         std::vector<int64_t> expected = {0, 0, 3, 0, 3, 4};
         expect_true(sum == 10);
