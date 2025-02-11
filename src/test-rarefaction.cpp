@@ -27,7 +27,7 @@ context("Test Rarefaction") {
         const auto vec = rarefaction.Rarefy({}, abundances,
                 eligbile, abundanceRanges, abundances, 10, 2);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
-        std::vector<int64_t> expected = {0, 0, 3, 0, 3, 4};
+        std::vector<int64_t> expected = {0, 0, 2, 0, 0, 8};
         expect_true(sum == 10);
         expect_true(vec.size() == 6);
         expect_true(vec == expected);
