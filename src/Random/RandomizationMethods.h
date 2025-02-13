@@ -13,7 +13,15 @@ public:
     RandomizationMethods() = default;
     ~RandomizationMethods() = default;
     static std::vector<size_t> GetRandomVectorWithoutReplacement(
-        std::vector<int64_t> &weightRanges, int64_t sizeToPull, int64_t sum);
+        const std::vector<int64_t> &weightRanges, int64_t sizeToPull, int64_t sum);
+private:
+    struct CountIndexPair {
+        int64_t index;
+        int64_t abundance;
+        bool operator<(const CountIndexPair& other) const {
+            return abundance < other.abundance;
+        }
+    };
 };
 
 
