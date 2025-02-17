@@ -21,8 +21,8 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
-GetRandomVectorWithoutReplacement <- function(weightRanges, sizeToPull, sum) {
-    .Call(`_mums2_GetRandomVectorWithoutReplacement`, weightRanges, sizeToPull, sum)
+UpdatedValue <- function(weightRanges, sizeToPull, sum) {
+    .Call(`_mums2_UpdatedValue`, weightRanges, sizeToPull, sum)
 }
 
 squareRootNormalize <- function(vec) {

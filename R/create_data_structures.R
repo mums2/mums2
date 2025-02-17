@@ -17,6 +17,10 @@ create_community_matrix <- function(cluster_object) {
 }
 
 #' @export
+#' @title Create Count Table
+#' @description
+#' Creats a count table based on your peak table
+#' 
 create_count_table <- function(peak_table) {
   sample_cols <- colnames(peak_table)[5:ncol(peak_table)]
     

@@ -83,16 +83,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetRandomVectorWithoutReplacement
-std::vector<size_t> GetRandomVectorWithoutReplacement(std::vector<int64_t>& weightRanges, const int64_t sizeToPull, const int64_t sum);
-RcppExport SEXP _mums2_GetRandomVectorWithoutReplacement(SEXP weightRangesSEXP, SEXP sizeToPullSEXP, SEXP sumSEXP) {
+// UpdatedValue
+std::vector<size_t> UpdatedValue(const std::vector<int64_t>& weightRanges, const int64_t sizeToPull, const int64_t sum);
+RcppExport SEXP _mums2_UpdatedValue(SEXP weightRangesSEXP, SEXP sizeToPullSEXP, SEXP sumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<int64_t>& >::type weightRanges(weightRangesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int64_t>& >::type weightRanges(weightRangesSEXP);
     Rcpp::traits::input_parameter< const int64_t >::type sizeToPull(sizeToPullSEXP);
     Rcpp::traits::input_parameter< const int64_t >::type sum(sumSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetRandomVectorWithoutReplacement(weightRanges, sizeToPull, sum));
+    rcpp_result_gen = Rcpp::wrap(UpdatedValue(weightRanges, sizeToPull, sum));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -146,7 +146,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
-    {"_mums2_GetRandomVectorWithoutReplacement", (DL_FUNC) &_mums2_GetRandomVectorWithoutReplacement, 3},
+    {"_mums2_UpdatedValue", (DL_FUNC) &_mums2_UpdatedValue, 3},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

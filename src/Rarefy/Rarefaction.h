@@ -11,7 +11,10 @@
 class Rarefaction {
 public:
     std::vector<int64_t> Rarefy(const std::vector<int> &feature, std::vector<int64_t> &abund, const std::vector<int64_t> &eligibleIndexes,
-                                const std::vector<int64_t> &eligibleAbundances, std::vector<int64_t> &abundanceRanges, int64_t size, int64_t threshold);
+                                const std::vector<int64_t> &eligibleAbundances, const std::vector<int64_t> &abundanceRanges, int64_t size, int64_t threshold);
+    std::vector<int64_t> Rarefy2(const std::vector<int64_t> &, const std::vector<int64_t> &,
+                                std::vector<int64_t> &eligibleAbundances, int64_t size, int64_t
+                                 threshold);
 };
 
 

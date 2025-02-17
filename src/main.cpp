@@ -40,16 +40,15 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         std::vector<int64_t> eligibleIndexes;
         std::vector<int64_t> eligibleAbundances;
         std::vector<int64_t> abundanceRanges(1,0);
-        abundanceRanges.reserve(communityVectorSize);
+       // abundanceRanges.reserve(communityVectorSize);
         eligibleAbundances.reserve(communityVectorSize);
         eligibleIndexes.reserve(communityVectorSize);
-        int count = 1;
         for(size_t j = 0; j < communityVectorSize; j++) {
             int64_t val = communityVector[j];
             if(val > 0) {
                 eligibleIndexes.emplace_back(j);
                 eligibleAbundances.emplace_back(val);
-                abundanceRanges.emplace_back(abundanceRanges[count++ - 1] + val);
+               // abundanceRanges.emplace_back(abundanceRanges[count++ - 1] + val);
             }
         }
         // Rcpp::Rcout << communityVector << std::endl;
@@ -62,11 +61,19 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         // Species1  0      1                       FD39    1
         //                                          DF09    0
 
-        const auto results = rarefaction.Rarefy(indexToName, communityVector,
-                                                eligibleIndexes, eligibleAbundances, abundanceRanges, size, threshold);
-        for(int j = 0; j < col; j++) {
-            resultantMatrix(i, j) = results[j];
+        // const auto results = rarefaction.Rarefy(indexToName, communityVector,
+        //
+        //                                         eligibleIndexes, eligibleAbundances, abundanceRanges, size, threshold);
+        // This will return a vector of the size of eligibileIndexes, so when we assemble it
+        // We can use that to our advantage
+        const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes, eligibleAbundances,
+            size, threshold);
+        for(const auto& index : eligibleIndexes) {
+            resultantMatrix(i, index) = results[index];
         }
+        // for(int j = 0; j < col; j++) {
+        //     resultantMatrix(i, j) = results[j];
+        // }
     }
     Rcpp::rownames(resultantMatrix) = samples;
     return resultantMatrix;
@@ -90,21 +97,32 @@ Rcpp::NumericMatrix FasterAvgDist(const Rcpp::NumericMatrix& communityMatrix, co
     return diversity;
 }
 
+struct CountIndexPair {
+    int64_t index;
+    int64_t abundance;
+    bool operator<(const CountIndexPair& other) const {
+        return abundance < other.abundance;
+    }
+};
 // [[Rcpp::export]]
-std::vector<size_t> GetRandomVectorWithoutReplacement(std::vector<int64_t> &weightRanges,
+std::vector<size_t> UpdatedValue(const std::vector<int64_t> &weightRanges,
     const int64_t sizeToPull, const int64_t sum) {
+    std::set<CountIndexPair> vals;
+    for(int i = 0; i < weightRanges.size(); i++) {
+        vals.insert(CountIndexPair{i,weightRanges[i]});
+    }
     std::vector<size_t> indexes(sizeToPull);
-    const size_t size = weightRanges.size();
     for(int i = 0; i < sizeToPull; i++) {
-        const auto randomNum = static_cast<int64_t>(R::runif(0, static_cast<double>(sum - i)));
-        const size_t index = (std::upper_bound(weightRanges.begin(),
-            weightRanges.end(), randomNum) - weightRanges.begin()) - 1;
-        indexes[i] = index;
-        weightRanges[index]--;
-        if(index < size - 1) {
-            weightRanges[index + 1]--;
-        }
-
+        const CountIndexPair randomNum{-1,
+            static_cast<int64_t>(R::runif(0, static_cast<double>(sum - i)))};
+        // const auto randomNum = static_cast<int64_t>(R::runif(0, static_cast<double>(sum - i)));
+        const auto val = vals.upper_bound(randomNum);
+        const CountIndexPair updatedPair{val->index , val->abundance - 1};
+        // std::cout << val->index << " " << val->abundance << std::endl;
+        indexes[i] = val->index;
+        vals.erase(val);
+        vals.insert(updatedPair);
     }
     return indexes;
 }
+
