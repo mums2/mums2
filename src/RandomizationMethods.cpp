@@ -4,6 +4,7 @@
 #include <Rcpp.h>
 #include "Random/RandomizationMethods.h"
 #include <algorithm>
+#include <set>
 // Have to deal with ranges overlapping...How to properly do this
 std::vector<size_t> RandomizationMethods::GetRandomVectorWithoutReplacement(std::set<CountIndexPair> &weightRanges,
     const int64_t sizeToPull, const int64_t sum) {
