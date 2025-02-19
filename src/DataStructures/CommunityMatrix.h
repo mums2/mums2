@@ -10,14 +10,26 @@
 
 class CommunityMatrix {
 public:
-    explicit CommunityMatrix(const NumericMatrix& matrix);
-    ~CommunityMatrix();
+    explicit CommunityMatrix(const Rcpp::NumericMatrix& matrix);
+    ~CommunityMatrix() = default;
     void InitializeMatrix();
+    const Rcpp::NumericMatrix& GetCommunityMatrix() const {return communityMatrix;}
+    const std::vector<int64_t>& GetCommunityMatrixByRow(int row) const;
+    std::vector<std::vector<int64_t>> GetRowAbundances() const {return rowAbundance;}
+    const std::vector<std::vector<int64_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
+    const std::vector<int64_t>& GetSums() const {return sums;}
+    const int& GetRow() const {return row;}
+    const int& GetColumn() const {return col;}
 
 private:
-    NumericMatrix communityMatrix{};
+    int row;
+    int col;
+    Rcpp::NumericMatrix communityMatrix;
+    std::vector<int64_t> sums;
     std::vector<std::vector<int64_t>> rowAbundance; // or abundances. The index represents the row number
     std::vector<std::vector<int64_t>> eligibleRowIndexes; // The values in the row that do not have 0 abundance
+
+
 
 };
 

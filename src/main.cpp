@@ -5,6 +5,8 @@
 #include <Rcpp.h>
 #include <cstdint>
 #include <numeric>
+
+#include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
@@ -66,8 +68,9 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         //                                         eligibleIndexes, eligibleAbundances, abundanceRanges, size, threshold);
         // This will return a vector of the size of eligibileIndexes, so when we assemble it
         // We can use that to our advantage
+        const int64_t sum = std::accumulate(eligibleAbundances.begin(), eligibleAbundances.end(), 0LL);
         const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes, eligibleAbundances,
-            size, threshold);
+                                                 size, sum, threshold);
         for(const auto& index : eligibleIndexes) {
             resultantMatrix(i, index) = results[index];
         }
@@ -104,25 +107,46 @@ struct CountIndexPair {
         return abundance < other.abundance;
     }
 };
+
 // [[Rcpp::export]]
-std::vector<size_t> UpdatedValue(const std::vector<int64_t> &weightRanges,
-    const int64_t sizeToPull, const int64_t sum) {
-    std::set<CountIndexPair> vals;
-    for(int i = 0; i < weightRanges.size(); i++) {
-        vals.insert(CountIndexPair{i,weightRanges[i]});
-    }
-    std::vector<size_t> indexes(sizeToPull);
-    for(int i = 0; i < sizeToPull; i++) {
-        const CountIndexPair randomNum{-1,
-            static_cast<int64_t>(R::runif(0, static_cast<double>(sum - i)))};
-        // const auto randomNum = static_cast<int64_t>(R::runif(0, static_cast<double>(sum - i)));
-        const auto val = vals.upper_bound(randomNum);
-        const CountIndexPair updatedPair{val->index , val->abundance - 1};
-        // std::cout << val->index << " " << val->abundance << std::endl;
-        indexes[i] = val->index;
-        vals.erase(val);
-        vals.insert(updatedPair);
-    }
-    return indexes;
+SEXP CreateCommunityMatrix(Rcpp::NumericMatrix communityMatrix) {
+    auto* matrix = new CommunityMatrix(communityMatrix);
+    matrix->InitializeMatrix();
+    return Rcpp::XPtr<CommunityMatrix>(matrix);
 }
 
+// [[Rcpp::export]]
+SEXP GetCommunityMatrix(SEXP communityMatrix) {
+    const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
+    return matrix.get()->GetCommunityMatrix();
+}
+
+
+
+
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix RarefactionCalculation2(const SEXP& communityMatrix, const int64_t size,
+    const int64_t threshold) {
+    const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
+    const int row = matrix.get()->GetRow();
+    const int col = matrix.get()->GetColumn();
+    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
+    Rarefaction rarefaction;
+    const std::vector<std::vector<int64_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
+    std::vector<std::vector<int64_t>> eligibleAbundances = matrix.get()->GetRowAbundances();
+    const std::vector<int64_t>& sums = matrix.get()->GetSums();
+    Rcpp::NumericMatrix resultantMatrix(row, col);
+    for(int i = 0; i < row; i++) {
+        const std::vector<int64_t>& communityVector = matrix.get()->GetCommunityMatrixByRow(i);
+        const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes[i], eligibleAbundances[i],
+                                                 size, sums[i], threshold);
+
+        for(const auto& index : eligibleIndexes[i]) {
+            resultantMatrix(i, index) = results.at(index);
+        }
+
+    }
+    Rcpp::rownames(resultantMatrix) = samples;
+    return resultantMatrix;
+}

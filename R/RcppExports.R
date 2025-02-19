@@ -21,8 +21,16 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
-UpdatedValue <- function(weightRanges, sizeToPull, sum) {
-    .Call(`_mums2_UpdatedValue`, weightRanges, sizeToPull, sum)
+CreateCommunityMatrix <- function(communityMatrix) {
+    .Call(`_mums2_CreateCommunityMatrix`, communityMatrix)
+}
+
+GetCommunityMatrix <- function(communityMatrix) {
+    .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
+}
+
+RarefactionCalculation2 <- function(communityMatrix, size, threshold) {
+    .Call(`_mums2_RarefactionCalculation2`, communityMatrix, size, threshold)
 }
 
 squareRootNormalize <- function(vec) {
