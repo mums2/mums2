@@ -9,6 +9,8 @@ CommunityMatrix::CommunityMatrix(const Rcpp::NumericMatrix &matrix) :communityMa
 
 
 void CommunityMatrix::InitializeMatrix() {
+    int64_t max = 0;
+    size_t index;
     row = communityMatrix.nrow();
     col = communityMatrix.ncol();
     rowAbundance = std::vector<std::vector<int64_t>>(row);
@@ -30,6 +32,11 @@ void CommunityMatrix::InitializeMatrix() {
                 eligibleRowIndexes[i].emplace_back(j);
                 rowAbundance[i].emplace_back(val);
             }
+        }
+        int64_t sum = std::accumulate(communityVector.begin(), communityVector.end(), 0LL);
+        if (sum > max) {
+            max = sum;
+            index = i;
         }
     }
 

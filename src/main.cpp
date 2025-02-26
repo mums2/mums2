@@ -5,6 +5,7 @@
 #include <Rcpp.h>
 #include <cstdint>
 #include <numeric>
+#include <algorithm>
 
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
@@ -24,6 +25,17 @@ Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, co
     delete diversity;
     return results;
 }
+
+
+/* TODO
+    We are going to pay the price of generating a vector of a size of 1billion.
+    Do that when we create the community matrix.
+    This vector will have a size of 1 -> the sum of the LARGEST row.
+    Therefore, for rows that are smaller than it, it may miss the values a few times.
+    So when we past the values to a function, we have to create an offset map. So we know
+    Which value was chosen. This allows us to not have to copy the matrix over (saving time and space)
+*/
+
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityMatrix, const int64_t size,
@@ -66,7 +78,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const Rcpp::NumericMatrix& communityM
         // const auto results = rarefaction.Rarefy(indexToName, communityVector,
         //
         //                                         eligibleIndexes, eligibleAbundances, abundanceRanges, size, threshold);
-        // This will return a vector of the size of eligibileIndexes, so when we assemble it
+        // This will return a vector of the size of eligibile Indexes, so when we assemble it
         // We can use that to our advantage
         const int64_t sum = std::accumulate(eligibleAbundances.begin(), eligibleAbundances.end(), 0LL);
         const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes, eligibleAbundances,
