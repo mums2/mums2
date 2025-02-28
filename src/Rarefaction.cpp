@@ -67,22 +67,52 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
 
 std::vector<int64_t> Rarefaction::Rarefy2(const std::vector<int64_t>& abundance,
     const std::vector<int64_t>& eligibleIndex,
-    std::vector<int64_t>& eligibleAbundances,
+    std::vector<int64_t>& shuffledVector,
+    const std::vector<int64_t>& eligibleRanges,
     const int64_t size, const int64_t sum,
     const int64_t threshold) {
 
     if(eligibleIndex.empty()) return abundance;
     if(sum <= size) return abundance;
-    const size_t vectorSize = eligibleAbundances.size();
+    const size_t vectorSize = abundance.size();
     int64_t grandTotal = 0;
     int64_t incrementer = size;
-    std::vector<int64_t> counter(abundance.size(), 0);
-    std::vector<size_t> indexes = RandomizationMethods::GetRandomIndexVector(eligibleAbundances, incrementer,
-                                                                             sum, vectorSize);
+
+    std::vector<int64_t> counter(vectorSize, 0);
+    std::deque<std::pair<size_t, size_t>> indexSwap;
+    // std::vector<size_t> indexes (shuffledVector.begin(), shuffledVector.begin()  + size);
+    // std::vector<bool> hasChosen(shuffledVector.size(), false);
+    size_t currentIndex = 0;
     while(grandTotal <= size) {
-        for(const auto& index : indexes) {
-            counter[eligibleIndex[index]]++;
+        // const auto startTime2 = std::chrono::steady_clock::now();
+        const auto maxValue = incrementer + currentIndex;
+        for(size_t i = currentIndex; i < maxValue; i++) {
+            const auto randomIndex = static_cast<size_t>(R::runif(i, sum));
+            const auto number = shuffledVector[randomIndex];
+            std::swap(shuffledVector[randomIndex], shuffledVector[i]);
+            indexSwap.emplace_front(i, randomIndex);
+            if(number >= sum) continue;
+
+            // if(hasChosen[number]) continue;
+            // hasChosen[number] = true;
+            const size_t index = std::upper_bound(eligibleRanges.begin(),
+                eligibleRanges.end(), number) - eligibleRanges.begin();
+            counter[eligibleIndex[index - 1]]++;
         }
+        // const auto endTime2 = std::chrono::steady_clock::now();
+        // const auto time = std::chrono::duration_cast<std::chrono::microseconds>(endTime2-startTime2).count();
+        // Rcpp::Rcout << "It took: " << time << " microseconds to finish an iteration of the loop" << std::endl;
+        if(currentIndex <= 0) currentIndex += size;
+        else currentIndex += incrementer;
+        // for(const auto& number : indexes) {
+        //     if(number >= sum) continue;
+        //     if(hasChosen[number]) continue;
+        //     hasChosen[number] = true;
+        //     const size_t index = std::upper_bound(eligibleRanges.begin(),
+        //         eligibleRanges.end(), number) - eligibleRanges.begin();
+        //     counter[eligibleIndex[index - 1]]++;
+        // }
+        // may need to make an early exit
         for(const auto& abund : counter) {
             const auto value = abund;
             if(value >= threshold) {
@@ -94,14 +124,23 @@ std::vector<int64_t> Rarefaction::Rarefy2(const std::vector<int64_t>& abundance,
         }
 
         incrementer = size - grandTotal;
-        indexes = RandomizationMethods::GetRandomIndexVector(eligibleAbundances, incrementer,
-                                                             sum, vectorSize);
+        // indexes = std::vector<size_t>(shuffledVector.begin() + currentIndex,
+        //     shuffledVector.begin() + currentIndex + incrementer);
+        // currentIndex += incrementer;
         grandTotal = 0;
     }
     for(auto& value : counter) {
         if(value < threshold)
             value = 0;
     }
+    while(!indexSwap.empty()) {
+        const auto pair = indexSwap.front();
+        indexSwap.pop_front();
+        std::swap(shuffledVector[pair.first],shuffledVector[pair.second]);
+    }
+    // for(const auto pair : indexSwap) {
+    //     std::swap(shuffledVector[pair.first],shuffledVector[pair.second]);
+    // }
     return counter;
 }
 

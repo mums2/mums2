@@ -13,6 +13,10 @@ CalculateDiversity <- function(abundances, diversityIndex) {
     .Call(`_mums2_CalculateDiversity`, abundances, diversityIndex)
 }
 
+CalculateDiversityCommunityObject <- function(communityMatrix, diversityIndex) {
+    .Call(`_mums2_CalculateDiversityCommunityObject`, communityMatrix, diversityIndex)
+}
+
 RarefactionCalculation <- function(communityMatrix, size, threshold) {
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
 }
@@ -29,8 +33,32 @@ GetCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
 }
 
+ShuffleVectorNoConversion <- function(vec) {
+    invisible(.Call(`_mums2_ShuffleVectorNoConversion`, vec))
+}
+
+ShuffleVectorConversion <- function(vec) {
+    invisible(.Call(`_mums2_ShuffleVectorConversion`, vec))
+}
+
+ShuffleWithRandomNumbers <- function(vec) {
+    .Call(`_mums2_ShuffleWithRandomNumbers`, vec)
+}
+
 RarefactionCalculation2 <- function(communityMatrix, size, threshold) {
     .Call(`_mums2_RarefactionCalculation2`, communityMatrix, size, threshold)
+}
+
+randomShuffle2 <- function(a) {
+    invisible(.Call(`_mums2_randomShuffle2`, a))
+}
+
+RarefactionCalculationFisherYates <- function(communityMatrix, size, threshold) {
+    .Call(`_mums2_RarefactionCalculationFisherYates`, communityMatrix, size, threshold)
+}
+
+FasterAvgDist2 <- function(communityMatrix, index, size, threshold, iterations = 1000L) {
+    .Call(`_mums2_FasterAvgDist2`, communityMatrix, index, size, threshold, iterations)
 }
 
 squareRootNormalize <- function(vec) {

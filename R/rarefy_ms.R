@@ -53,3 +53,10 @@ test_sample_without_replacement <- function(samples, weights, to_pull){
 rarefaction_with_object <- function(community_matrix, size, threshold){
   return(RarefactionCalculation2(community_matrix, size, threshold))
 }
+#' Rarefy Fishers
+#'
+#' @export
+#' @examples
+rarefaction_with_fishers <- function(community_matrix, size, threshold){
+  return(RarefactionCalculationFisherYates(community_matrix, size, threshold))
+}
