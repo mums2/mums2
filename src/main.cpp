@@ -242,16 +242,11 @@ Rcpp::NumericMatrix RarefactionCalculationFisherYates(const SEXP& communityMatri
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rarefaction rarefaction;
     std::vector<std::vector<int64_t>>& allIndexes = matrix.get()->GetAllIndexes();
-    // const auto shuffleStartTime = std::chrono::steady_clock::now();
-    // //randomShuffle2(allIndexes);
     const std::vector<std::vector<int64_t>>& abundanceRanges  = matrix.get()->GetAbundanceRanges();
     const std::vector<std::vector<int64_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     std::vector<std::vector<int64_t>> eligibleAbundances = matrix.get()->GetRowAbundances();
     const std::vector<int64_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
-    // const auto endTime = std::chrono::steady_clock::now();
-    // const auto time = std::chrono::duration_cast<std::chrono::milliseconds>(endTime-startTime).count();
-    // Rcpp::Rcout << "Initialization Time: " << time << " Milliseconds " << std::endl;
     for(int i = 0; i < row; i++) {
         const std::vector<int64_t> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
         const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes[i], allIndexes[i],
