@@ -88,16 +88,16 @@ std::vector<int64_t> Rarefaction::Rarefy2(const std::vector<int64_t>& abundance,
         const auto maxValue = incrementer + currentIndex;
         for(size_t i = currentIndex; i < maxValue; i++) {
             const auto randomIndex = static_cast<size_t>(R::runif(i, sum));
-            const auto number = shuffledVector[randomIndex];
+            const auto index = shuffledVector[randomIndex];
             std::swap(shuffledVector[randomIndex], shuffledVector[i]);
             indexSwap.emplace_front(i, randomIndex);
-            if(number >= sum) continue;
+            // if(number >= sum) continue;
 
             // if(hasChosen[number]) continue;
             // hasChosen[number] = true;
-            const size_t index = std::upper_bound(eligibleRanges.begin(),
-                eligibleRanges.end(), number) - eligibleRanges.begin();
-            counter[eligibleIndex[index - 1]]++;
+            // const size_t index = std::upper_bound(eligibleRanges.begin(),
+            //     eligibleRanges.end(), number) - eligibleRanges.begin();
+            counter[eligibleIndex[index]]++;
         }
         // const auto endTime2 = std::chrono::steady_clock::now();
         // const auto time = std::chrono::duration_cast<std::chrono::microseconds>(endTime2-startTime2).count();

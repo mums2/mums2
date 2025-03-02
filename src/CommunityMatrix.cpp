@@ -9,13 +9,12 @@ CommunityMatrix::CommunityMatrix(const Rcpp::NumericMatrix &matrix) :communityMa
 
 
 void CommunityMatrix::InitializeMatrix() {
-    int64_t max = 0;
-    size_t index = 0;
+
     row = communityMatrix.nrow();
     col = communityMatrix.ncol();
     rowAbundance = std::vector<std::vector<int64_t>>(row);
     eligibleRowIndexes = std::vector<std::vector<int64_t>>(row);
-    abundanceRanges = std::vector<std::vector<int64_t>>(row);
+    // abundanceRanges = std::vector<std::vector<int64_t>>(row);
     allIndexes = std::vector<std::vector<int64_t>>(row);
     sums = std::vector<int64_t>(row);
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
@@ -26,27 +25,27 @@ void CommunityMatrix::InitializeMatrix() {
         Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
         std::vector<int64_t> communityVector = Rcpp::as<std::vector<int64_t>>(community);
         const size_t size = communityVector.size();
-        abundanceRanges[i].reserve(size + 1);
-        abundanceRanges[i].emplace_back(0);
+        // abundanceRanges[i].reserve(size + 1);
+        // abundanceRanges[i].emplace_back(0);
         eligibleRowIndexes[i].reserve(size);
         rowAbundance[i].reserve(size);
         sums[i] = std::accumulate(communityVector.begin(), communityVector.end(), 0LL);
         allIndexes[i] = std::vector<int64_t>(sums[i]);
-        std::iota(allIndexes[i].begin(), allIndexes[i].end(), 0);
-        int count = 1;
+        // std::iota(allIndexes[i].begin(), allIndexes[i].end(), 0);
+        size_t index = 0;
+        int64_t currentPosition = 0;
         for(size_t j = 0; j < size; j++) {
             int64_t val = communityVector[j];
             if(val > 0) {
                 eligibleRowIndexes[i].emplace_back(j);
                 rowAbundance[i].emplace_back(val);
-                abundanceRanges[i].emplace_back(abundanceRanges[i][count++ - 1] + val);
+                // abundanceRanges[i].emplace_back(abundanceRanges[i][count++ - 1] + val);
+                for (size_t k = 0; k < val; k++) {
+                    allIndexes[i][index++] = currentPosition;
+                }
+                currentPosition++;
             }
         }
-        if (sums[i] > max) {
-            max = sums[i];
-            index = i;
-        }
-
     }
 }
 

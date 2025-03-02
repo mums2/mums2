@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
+#include <chrono>
 
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
