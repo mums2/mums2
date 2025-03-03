@@ -199,6 +199,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// TestRowAcessNoCopy
+void TestRowAcessNoCopy(Rcpp::NumericMatrix& matrix);
+RcppExport SEXP _mums2_TestRowAcessNoCopy(SEXP matrixSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type matrix(matrixSEXP);
+    TestRowAcessNoCopy(matrix);
+    return R_NilValue;
+END_RCPP
+}
+// TestRowAcessCopy
+void TestRowAcessCopy(Rcpp::NumericMatrix& matrix);
+RcppExport SEXP _mums2_TestRowAcessCopy(SEXP matrixSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type matrix(matrixSEXP);
+    TestRowAcessCopy(matrix);
+    return R_NilValue;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -259,6 +279,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_randomShuffle2", (DL_FUNC) &_mums2_randomShuffle2, 1},
     {"_mums2_RarefactionCalculationFisherYates", (DL_FUNC) &_mums2_RarefactionCalculationFisherYates, 3},
     {"_mums2_FasterAvgDist2", (DL_FUNC) &_mums2_FasterAvgDist2, 5},
+    {"_mums2_TestRowAcessNoCopy", (DL_FUNC) &_mums2_TestRowAcessNoCopy, 1},
+    {"_mums2_TestRowAcessCopy", (DL_FUNC) &_mums2_TestRowAcessCopy, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

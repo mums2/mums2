@@ -61,6 +61,14 @@ FasterAvgDist2 <- function(communityMatrix, index, size, threshold, iterations =
     .Call(`_mums2_FasterAvgDist2`, communityMatrix, index, size, threshold, iterations)
 }
 
+TestRowAcessNoCopy <- function(matrix) {
+    invisible(.Call(`_mums2_TestRowAcessNoCopy`, matrix))
+}
+
+TestRowAcessCopy <- function(matrix) {
+    invisible(.Call(`_mums2_TestRowAcessCopy`, matrix))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

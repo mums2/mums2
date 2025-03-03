@@ -9,6 +9,13 @@ diversity <- function(community_matrix, diversity_index) {
   CalculateDiversity(community_matrix, diversity_index)
 }
 
+#' @title diversity_object
+#' @export
+#' @description diversity
+diversity_object <- function(community_object, diversity_index){
+  CalculateDiversityCommunityObject(community_object, diversity_index)
+}
+
 #' @title avgDist
 #' @export
 #' @description avgdist

@@ -283,5 +283,13 @@ Rcpp::NumericMatrix FasterAvgDist2(const SEXP& communityMatrix, const std::strin
     return diversity;
 }
 
+// [[Rcpp::export]]
+void TestRowAcessNoCopy(Rcpp::NumericMatrix& matrix) {
+    Rcpp::NumericMatrix::Row row = matrix(1, Rcpp::_);
+}
 
-
+// [[Rcpp::export]]
+void TestRowAcessCopy(Rcpp::NumericMatrix& matrix) {
+    Rcpp::NumericVector abundance = matrix(1, Rcpp::_);
+    std::vector<double> diversities = Rcpp::as<std::vector<double>>(abundance);
+}
