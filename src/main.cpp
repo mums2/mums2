@@ -6,13 +6,10 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
-
-
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
-
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
@@ -41,7 +38,6 @@ Rcpp::NumericMatrix CalculateDiversityCommunityObject(const SEXP& communityMatri
     return results;
 }
 
-
 // [[Rcpp::export]]
 SEXP CreateCommunityMatrix(Rcpp::NumericMatrix communityMatrix) {
     auto* matrix = new CommunityMatrix(communityMatrix);
@@ -55,7 +51,6 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
-
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const int64_t size,
     const int64_t threshold) {
@@ -63,7 +58,6 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const in
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
-
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rarefaction rarefaction;
     std::vector<std::vector<int64_t>>& allIndexes = matrix.get()->GetAllIndexes();
@@ -84,7 +78,6 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const in
     Rcpp::rownames(resultantMatrix) = samples;
     return resultantMatrix;
 }
-
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
