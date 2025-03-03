@@ -17,7 +17,8 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::v
     if(eligibleIndexes.empty()) return abund;
     // O(N)
     int64_t sum = std::accumulate(abund.begin(), abund.end(), 0LL);
-    if (sum <= size) return abund;
+    if (sum <= size) 
+        return abund;
 
     std::set<RandomizationMethods::CountIndexPair> vals;
     // O(N)
@@ -73,7 +74,14 @@ std::vector<int64_t> Rarefaction::Rarefy2(const std::vector<int64_t>& abundance,
     const int64_t threshold) {
 
     if(eligibleIndex.empty()) return abundance;
-    if(sum <= size) return abundance;
+    int64_t aboveThresholdSum = 0;
+    for(const auto& abund : abundance) {
+        if(abund >= threshold)
+            aboveThresholdSum += abund;
+    }
+    if(sum <= size || aboveThresholdSum <= size)
+        return abundance;
+
     const size_t vectorSize = abundance.size();
     int64_t grandTotal = 0;
     int64_t incrementer = size;
