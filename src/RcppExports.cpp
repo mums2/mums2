@@ -43,18 +43,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CalculateDiversity
-Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex);
-RcppExport SEXP _mums2_CalculateDiversity(SEXP abundancesSEXP, SEXP diversityIndexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type abundances(abundancesSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type diversityIndex(diversityIndexSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateDiversity(abundances, diversityIndex));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CalculateDiversityCommunityObject
 Rcpp::NumericMatrix CalculateDiversityCommunityObject(const SEXP& communityMatrix, const std::string& diversityIndex);
 RcppExport SEXP _mums2_CalculateDiversityCommunityObject(SEXP communityMatrixSEXP, SEXP diversityIndexSEXP) {
@@ -164,7 +152,6 @@ RcppExport SEXP run_testthat_tests(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
-    {"_mums2_CalculateDiversity", (DL_FUNC) &_mums2_CalculateDiversity, 2},
     {"_mums2_CalculateDiversityCommunityObject", (DL_FUNC) &_mums2_CalculateDiversityCommunityObject, 2},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},

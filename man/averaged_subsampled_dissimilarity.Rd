@@ -2,10 +2,10 @@
 % Please edit documentation in R/diversity_metrics.R
 \name{averaged_subsampled_dissimilarity}
 \alias{averaged_subsampled_dissimilarity}
-\title{avgDist}
+\title{avgDist with Community object}
 \usage{
 averaged_subsampled_dissimilarity(
-  community_matrix,
+  community_object,
   size,
   threshold,
   diversity_index = "bray",

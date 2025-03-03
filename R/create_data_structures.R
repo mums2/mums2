@@ -23,7 +23,6 @@ create_community_matrix <- function(cluster_object) {
 #' 
 create_count_table <- function(peak_table) {
   sample_cols <- colnames(peak_table)[5:ncol(peak_table)]
-    
   count_table <- data.frame(Representative_Sequence = 1:nrow(peak_table))
   count_table$sum <- rowSums(peak_table[, .SD, .SDcols = sample_cols])
   count_table <- cbind(count_table, peak_table[, .SD, .SDcols = sample_cols])
@@ -33,21 +32,3 @@ create_count_table <- function(peak_table) {
   return(count_table)
  }
 
-#' @export
-#' @title community
-#' @description
-#' Takes the shared dataframe from clustur and converts it into a community matrix object
-#' 
-create_community_matrix_object <- function(cluster_object) {
-  df <- get_abundance(cluster_object)
-  samples <- unique(df$samples)
-  combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
-
-  for(i in 2:length(samples)) {
-    combined_df <- cbind(combined_df, data.frame(abund = df[which(df$samples == samples[[i]]), ]$abundance))
-  }
-
-  combined_df <- t(as.matrix(combined_df))
-  rownames(combined_df) <- samples
-  return(CreateCommunityMatrix(combined_df))
-}

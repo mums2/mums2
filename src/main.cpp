@@ -6,14 +6,14 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
-#include <chrono>
+
 
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
-#include "Random/RandomizationMethods.h"
-// [[Rcpp::export]]
+
+
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
     std::transform(index.begin(), index.end(), index.begin(), tolower);
@@ -59,7 +59,7 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const int64_t size,
     const int64_t threshold) {
-    //const auto startTime = std::chrono::steady_clock::now();
+
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
@@ -67,15 +67,14 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const in
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rarefaction rarefaction;
     std::vector<std::vector<int64_t>>& allIndexes = matrix.get()->GetAllIndexes();
-    const std::vector<std::vector<int64_t>>& abundanceRanges  = matrix.get()->GetAbundanceRanges();
     const std::vector<std::vector<int64_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     std::vector<std::vector<int64_t>> eligibleAbundances = matrix.get()->GetRowAbundances();
     const std::vector<int64_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
         const std::vector<int64_t> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
-        const auto results = rarefaction.Rarefy2(communityVector, eligibleIndexes[i], allIndexes[i],
-                                                 abundanceRanges[i], size, sums[i], threshold);
+        const auto results = rarefaction.Rarefy(communityVector, eligibleIndexes[i], allIndexes[i],
+                                                 size, sums[i], threshold);
 
         for(const auto& index : eligibleIndexes[i]) {
             resultantMatrix(i, index) = results.at(index);

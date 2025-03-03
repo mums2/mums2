@@ -29,15 +29,15 @@ test_that("rarefy_ms returns the correct total", {
   
   # expect_equal(sum(compare$abund, na.rm = T), sum(compare$abund.dil, na.rm = T))
 })
-test_that("rarefaction returns the correct rowSum totals", {
+test_that("rarefy_ms returns the correct rowSum totals", {
   count_table <- test_path("exttestdata", "final.count_table")
   distances <- test_path("exttestdata", "final.dist")
   final_count <- read_count(count_table)
   final_dist <- read_dist(distances, final_count, 0.03, F)
   final_cluster <- cluster(final_dist, 0.03, "opticlust")
   size <- 400
-  m <- create_community_matrix(final_cluster)
-  resultant_matrix <- rarefaction(m, size, 10)
+  m <- create_community_matrix_object(final_cluster)
+  resultant_matrix <- rarefy_ms(m, size, 10)
   expect_true(all(rowSums(resultant_matrix) >= size))
 
 })
