@@ -62,3 +62,18 @@ test_that("Diversity metric bray works", {
   expect_true(ncol(div) == nrow(div))
   # need to save the results, will wait for actually data
 })
+
+test_that("Test average_subsampled_dissimilarity works", {
+  count_table <- test_path("exttestdata", "final.count_table")
+  distances <- test_path("exttestdata", "final.dist")
+  final_count <- read_count(count_table)
+  final_dist <- read_dist(distances, final_count, 0.03, F)
+  final_cluster <- cluster(final_dist, 0.03, "opticlust")
+  m <- create_community_matrix_object(final_cluster)
+
+  result <- averaged_subsampled_dissimilarity(m, 400, 10, "bray", 100)
+  expect_true("matrix" %in% class(result))
+  expect_true(ncol(result) == nrow(result))
+    # need to save the results, will wait for actually data
+})
+

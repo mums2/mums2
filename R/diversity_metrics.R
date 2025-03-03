@@ -12,5 +12,9 @@ diversity <- function(community_object, diversity_index){
 #' @export
 #' @description avgdist
 averaged_subsampled_dissimilarity <- function(community_object, size, threshold, diversity_index = "bray", iterations = 1000) {
+  if(!("community_object" %in% class(community_object))) {
+    stop("Please ensure the community_object is created from the `create_community_object` function.")
+  }
   return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))
 }
+

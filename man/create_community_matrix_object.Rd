@@ -2,7 +2,7 @@
 % Please edit documentation in R/community_object.R
 \name{create_community_matrix_object}
 \alias{create_community_matrix_object}
-\title{community}
+\title{Create Community Matrix}
 \usage{
 create_community_matrix_object(cluster_object)
 }

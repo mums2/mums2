@@ -1,4 +1,5 @@
 #' @export
+#' @title create community matrix
 #' @description
 #' Takes the shared dataframe from clustur and converts it into a community matrix
 #' 
