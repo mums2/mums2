@@ -32,7 +32,7 @@ class Reference final {
     
     private:
     int index;
-    double precursorMz;
+    // double precursorMz;
     std::vector<double> mz;
     std::vector<double> intensity;
     Spectra spectra;

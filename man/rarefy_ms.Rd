@@ -4,11 +4,10 @@
 \alias{rarefy_ms}
 \title{Rarefy MS1 Feature Table}
 \usage{
-rarefy_ms(data, size, threshold)
+rarefy_ms(community_object, size, threshold)
 }
 \arguments{
-\item{data}{A \code{tibble} or \code{data.frame} where each row represets an MS1
-feature in a sample. The columns \code{mz} and \code{abund} are expected.}
+\item{community_object}{A \code{community_object}}
 
 \item{size}{The desired total sample intensity to subsample to.}
 
@@ -16,7 +15,7 @@ feature in a sample. The columns \code{mz} and \code{abund} are expected.}
 must be >= this value to be retained.}
 }
 \value{
-A \code{tibble} or \code{data.frame} of rarefied feature intensities.
+A \code{matrix} of rarefied feature intensities.
 }
 \description{
 \code{rarefy_ms()} performs a single subsampling of MS1 features in sample.
@@ -34,6 +33,6 @@ sample1 <- tibble::tibble(
    mz = seq(100, 1000, by = 100),
    abund = round(runif(10, 1000, 5e5)))
 
-rarefy_ms(sample1, 25000, 1000)
+
 
 }

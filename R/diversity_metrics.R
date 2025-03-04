@@ -1,10 +1,20 @@
-
-#' @description
+#' @title diversity_object
 #' @export
-diversity <- function(community_matrix, diversity_index) {
-  if(!("matrix" %in% class(community_matrix))) {
-    stop("Please ensure the community_matrix is a matrix")
+#' @description diversity
+diversity <- function(community_object, diversity_index){
+  if(!("community_object" %in% class(community_object))) {
+    stop("Please ensure the community_object is created from the `create_community_object` function.")
   }
-  # Checks for diversity_index on the c++ side
-  CalculateDiversity(community_matrix, diversity_index)
+  CalculateDiversityCommunityObject(community_object, diversity_index)
 }
+
+#' @title avgDist with Community object
+#' @export
+#' @description avgdist
+averaged_subsampled_dissimilarity <- function(community_object, size, threshold, diversity_index = "bray", iterations = 1000) {
+  if(!("community_object" %in% class(community_object))) {
+    stop("Please ensure the community_object is created from the `create_community_object` function.")
+  }
+  return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))
+}
+

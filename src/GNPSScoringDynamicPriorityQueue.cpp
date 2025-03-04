@@ -54,7 +54,7 @@ std::unordered_map<int, std::unordered_set<int>> GNPSScoringDynamicPriorityQueue
     std::unordered_map<int, std::unordered_set<int>> indexMap;
     totalSizeOfIndexMap = 0;
     // Iterate over
-    for(int i = 0; i < mzVector.size(); i++)
+    for(size_t i = 0; i < mzVector.size(); i++)
     {
         const double highBounds = mzVector[i] + adjTolerance - shift;
         const double lowBounds = mzVector[i]  - adjTolerance - shift;
@@ -106,7 +106,7 @@ double GNPSScoringDynamicPriorityQueue::ScoreMatches(
         usedPeakTwo.insert(indexTwo);
         totalScore += score;
         numberOfPeakMatches ++;
-        if(numberOfPeakMatches >= countOfSpectraOne)
+        if(numberOfPeakMatches >= static_cast<int>(countOfSpectraOne))
             break;
         std::pop_heap(queue.begin(), queue.end(), CompareScores());
     }

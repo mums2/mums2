@@ -21,14 +21,19 @@ context("Test Rarefaction") {
         const Rcpp::Function setSeed = base["set.seed"];
         setSeed(2);
         Rarefaction rarefaction;
-        std::vector<int64_t> v = {1, 2, 3, 4, 5, 6};
-        std::vector<int64_t> eligbile = {0, 1, 2, 3, 4, 5};
-        const auto vec = rarefaction.Rarefy({}, v,
-                eligbile, v, 10, 2);
+        std::vector<int64_t> abundances = {3, 2, 1, 8};
+        std::vector<int64_t> availableIndexes = {0, 0, 0, 1, 1,
+            2, 3, 3, 3, 3, 3, 3, 3, 3};
+        const std::vector<int64_t> eligible = {0, 1, 2, 3};
+        const int64_t size = 10;
+        const int64_t threshold = 2;
+        const int64_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
+        const auto vec = rarefaction.Rarefy(abundances,
+                eligible, availableIndexes, size, currentSum, threshold);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
-        std::vector<int64_t> expected = {0, 0, 3, 0, 3, 4};
-        expect_true(sum == 10);
-        expect_true(vec.size() == 6);
+        std::vector<int64_t> expected = {2, 2, 0, 6};
+        expect_true(sum == size);
+        expect_true(vec.size() == 4);
         expect_true(vec == expected);
     }
 

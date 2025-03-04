@@ -7,44 +7,63 @@
 #include <numeric>
 #include <unordered_map>
 
-#include "Random/RandomizationMethods.h"
+std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int64_t>& abundance,
+    const std::vector<int64_t>& eligibleIndex,
+    std::vector<int64_t>& availableIndexValues,
+    const int64_t size, const int64_t sum,
+    const int64_t threshold) {
 
-std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int> &feature, std::vector<int64_t> &abund,
-                                    const std::vector<int64_t>& eligibleIndexes,
-                                    const std::vector<int64_t>& eligibleAbundances,
-                                    const int64_t size, const int64_t threshold) {
-    if(eligibleIndexes.empty()) return abund;
-    int64_t sum = std::accumulate(abund.begin(), abund.end(), 0LL);
+    if(eligibleIndex.empty()) return abundance;
+    int64_t aboveThresholdSum = 0;
+    for(const auto& abund : abundance) {
+        if(abund >= threshold)
+            aboveThresholdSum += abund;
+    }
+    if(sum <= size || aboveThresholdSum <= size)
+        return abundance;
+
+    const size_t vectorSize = abundance.size();
     int64_t grandTotal = 0;
     int64_t incrementer = size;
-    const size_t abundSize = abund.size();
-    const size_t eligibleIndexSize = eligibleIndexes.size();
-    std::vector<int64_t> counter(abundSize, 0);
+
+    std::vector<int64_t> counter(vectorSize, 0);
+    std::deque<std::pair<size_t, size_t>> indexSwap;
+
+    size_t currentIndex = 0;
     while(grandTotal <= size) {
-        const int64_t currentSize = incrementer;
-        for(int64_t i = 0; i < currentSize; i++) {
-            const size_t index = RandomizationMethods::GetRandomNumberIndex(eligibleAbundances, abundSize, sum - i);
-            abund[eligibleIndexes[index]]--;
-            counter[eligibleIndexes[index]]++;
+
+        const auto maxValue = incrementer + currentIndex;
+        for(size_t i = currentIndex; i < maxValue; i++) {
+            const auto randomIndex = static_cast<size_t>(R::runif(i, sum));
+            const auto index = availableIndexValues[randomIndex];
+            std::swap(availableIndexValues[randomIndex], availableIndexValues[i]);
+            indexSwap.emplace_front(i, randomIndex);
+            counter[eligibleIndex[index]]++;
         }
-        sum -= currentSize;
-        for(size_t i = 0; i < abundSize; i++) {
-            const auto value = counter[i];
-            if(value < threshold)
-                continue;
-            grandTotal += value;
+        if(currentIndex <= 0) currentIndex += size;
+        else currentIndex += incrementer;
+
+        for(const auto& abund : counter) {
+            const auto value = abund;
+            if(value >= threshold) {
+                grandTotal += value;
+            }
         }
         if(grandTotal >= size) {
             break;
         }
+
         incrementer = size - grandTotal;
         grandTotal = 0;
     }
-    //Set counter size to 0 if they do not pass the threshold
-    for(auto& num : counter) {
-        if(num < threshold) {
-            num = 0;
-        }
+    for(auto& value : counter) {
+        if(value < threshold)
+            value = 0;
+    }
+    while(!indexSwap.empty()) {
+        const auto pair = indexSwap.front();
+        indexSwap.pop_front();
+        std::swap(availableIndexValues[pair.first],availableIndexValues[pair.second]);
     }
     return counter;
 }

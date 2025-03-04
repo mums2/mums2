@@ -15,6 +15,7 @@
 #' @importFrom dplyr rename_all
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
+#' @importFrom massdatabase read_msp_data
 #' @importFrom massdataset create_mass_dataset
 #' @importFrom msentropy msentropy_similarity
 #' @importFrom Rcpp sourceCpp

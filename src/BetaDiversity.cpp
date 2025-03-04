@@ -9,7 +9,7 @@
 Rcpp::NumericMatrix BetaDiversity::CalculateDiversity(const Rcpp::NumericMatrix &communityMatrix,
                                                       const std::string &index) {
     const DiversityCalculator* calculator = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(index);
-    const int sampleSize = communityMatrix.nrow();
+    const auto sampleSize = static_cast<size_t>(communityMatrix.nrow());
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rcpp::NumericMatrix brayCurtisMatrix(sampleSize, sampleSize);
 
