@@ -9,13 +9,12 @@
 #'  of samples at diffrent dilutions regardless of the desired
 #'  submsampling `size`.
 #' 
-#' @param data A `tibble` or `data.frame` where each row represets an MS1
-#'  feature in a sample. The columns `mz` and `abund` are expected.
+#' @param community_object A `community_object`
 #' @param size The desired total sample intensity to subsample to.
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
 #' 
-#' @return A `tibble` or `data.frame` of rarefied feature intensities.
+#' @return A `matrix` of rarefied feature intensities.
 #' @export
 #' 
 #' @examples
@@ -25,22 +24,11 @@
 #'    mz = seq(100, 1000, by = 100),
 #'    abund = round(runif(10, 1000, 5e5)))
 #' 
-#' rarefy_ms(sample1, 25000, 1000)
-#' 
-rarefy_ms <- function(data, size, threshold) {
-  rarefyMs(data$mz, data$abund, size, threshold)
-}
-
-
-#' Rarefy 
 #'
-#' @export
-#' @examples
-rarefaction <- function(community_matrix, size, threshold){
-  return(RarefactionCalculation(community_matrix, size, threshold))
-}
-
-#' @export
-test_sample_without_replacement <- function(samples, weights, to_pull){
-  Test(samples, weights, to_pull)
+#' 
+rarefy_ms <- function(community_object, size, threshold) {
+  if(!("community_object" %in% class(community_object))) {
+    stop("Please ensure the community_object is created from the `create_community_object` function.")
+  }
+  return(RarefactionCalculation(community_object, size, threshold))
 }

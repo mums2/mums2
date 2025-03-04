@@ -9,8 +9,16 @@ distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff)
 }
 
-CalculateDiversity <- function(abundances, diversityIndex) {
-    .Call(`_mums2_CalculateDiversity`, abundances, diversityIndex)
+CalculateDiversityCommunityObject <- function(communityMatrix, diversityIndex) {
+    .Call(`_mums2_CalculateDiversityCommunityObject`, communityMatrix, diversityIndex)
+}
+
+CreateCommunityMatrix <- function(communityMatrix) {
+    .Call(`_mums2_CreateCommunityMatrix`, communityMatrix)
+}
+
+GetCommunityMatrix <- function(communityMatrix) {
+    .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
 }
 
 RarefactionCalculation <- function(communityMatrix, size, threshold) {
@@ -19,10 +27,6 @@ RarefactionCalculation <- function(communityMatrix, size, threshold) {
 
 FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 1000L) {
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
-}
-
-GetRandomVectorWithoutReplacement <- function(weightRanges, sizeToPull, sum) {
-    .Call(`_mums2_GetRandomVectorWithoutReplacement`, weightRanges, sizeToPull, sum)
 }
 
 squareRootNormalize <- function(vec) {

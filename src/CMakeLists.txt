@@ -48,7 +48,6 @@ add_executable(mums2 distMs2.cpp
         main.cpp
         DiversityMetricFactory.cpp
         DiversityMetrics/DiversityMetricFactory.h
-        RandomizationMethods.cpp
         Random/RandomizationMethods.h
         Rarefaction.cpp
         Rarefy/Rarefaction.h
@@ -62,5 +61,6 @@ add_executable(mums2 distMs2.cpp
         test-alpha_diversity.cpp
         test-beta_diversity.cpp
         test-rarefaction.cpp
-        test-randomization_methods.cpp
-        test-diversity_metric_function.cpp)
+        test-diversity_metric_function.cpp
+        DataStructures/CommunityMatrix.h
+        CommunityMatrix.cpp)

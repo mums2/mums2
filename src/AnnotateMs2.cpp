@@ -49,7 +49,7 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
     int nQuery = queryList.size();
     int nRef = referenceList.size();
     
-    int nMatches = 0;
+    // int nMatches = 0;
     // for matches
     Rcpp::CharacterVector query_ms1_id;
     Rcpp::CharacterVector query_ms2_id;
@@ -72,7 +72,7 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
             double compScore = factory.CalculateScore(currentQuerySpectra, referenceSpectra);
             
             if (compScore >= minScore) {
-                nMatches += 1;
+                // nMatches += 1;
                 queryList[i].AddToRefComps(refIdx);
                 queryList[i].AddToScores(compScore);
                 
