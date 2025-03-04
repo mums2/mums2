@@ -32,7 +32,7 @@ void CommunityMatrix::InitializeMatrix() {
             if(val > 0) {
                 eligibleRowIndexes[i].emplace_back(j);
                 rowAbundance[i].emplace_back(val);
-                for (size_t k = 0; k < val; k++) {
+                for (int64_t k = 0; k < val; k++) {
                     allIndexes[i][index++] = currentPosition;
                 }
                 currentPosition++;

@@ -223,12 +223,12 @@ double Entropy::CalculateEntropySimilarity(const std::vector<double>& listOneMz,
 
     Rcpp::NumericMatrix mOne(listOneMz.size(), 2);
     Rcpp::NumericMatrix mTwo(listTwoMz.size(), 2);
-    for(int i = 0; i < listOneMz.size(); i++)
+    for(size_t i = 0; i < listOneMz.size(); i++)
     {
         mOne(i , 0) = listOneMz[i];
         mOne(i , 1) = listOneInt[i];
     }
-    for(int i = 0; i < listTwoMz.size(); i++)
+    for(size_t i = 0; i < listTwoMz.size(); i++)
     {
         mTwo(i , 0) = listTwoMz[i];
         mTwo(i , 1) = listTwoInt[i];

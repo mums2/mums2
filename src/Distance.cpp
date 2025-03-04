@@ -15,7 +15,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
 }
 
 void Distance::CalculateDistances(const double prec_threshold, double cutoff, const ScoringFactory& scoreMethod) {
-    const size_t size = spectraList.size();
+    const auto size = static_cast<int>(spectraList.size());
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];
         for(int j = i + 1; j < size; j++){
@@ -24,7 +24,7 @@ void Distance::CalculateDistances(const double prec_threshold, double cutoff, co
             if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) > prec_threshold) {
                 continue;
             }
-            double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra);
+            const double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra);
 
             if ((1 - score) > cutoff) {
                 continue;
