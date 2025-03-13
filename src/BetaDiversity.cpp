@@ -12,17 +12,16 @@ Rcpp::NumericMatrix BetaDiversity::CalculateDiversity(const Rcpp::NumericMatrix 
     const auto sampleSize = static_cast<size_t>(communityMatrix.nrow());
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rcpp::NumericMatrix brayCurtisMatrix(sampleSize, sampleSize);
-
+    Rcpp::List diversityList(2);
     for(size_t i = 0; i < sampleSize; i++) {
-        Rcpp::NumericVector abundance = communityMatrix(i, Rcpp::_);
-        std::vector<double> currentCommunity = Rcpp::as<std::vector<double>>(abundance);
+        // Rcpp::NumericVector abundance = communityMatrix(i, Rcpp::_);
+        diversityList[0] = communityMatrix(i, Rcpp::_);
+        // std::vector<double> currentCommunity = Rcpp::as<std::vector<double>>(abundance);
         for(size_t j = i; j < sampleSize; j++) {
             if(j == i) continue;
-            Rcpp::NumericVector tempCommunity = communityMatrix(j, Rcpp::_);
-            const std::vector<double> otherCommunity = Rcpp::as<std::vector<double>>(tempCommunity);
-            const double result = calculator->Calculate({std::vector<double>(currentCommunity.begin(),
-                currentCommunity.end()),
-                    std::vector<double>(otherCommunity.begin(),otherCommunity.end())});
+            diversityList[1] = communityMatrix(j, Rcpp::_);
+            // const std::vector<double> otherCommunity = Rcpp::as<std::vector<double>>(tempCommunity);
+            const double result = calculator->Calculate(diversityList);
             brayCurtisMatrix(i,j) += result;
             brayCurtisMatrix(j,i) += result;
         }

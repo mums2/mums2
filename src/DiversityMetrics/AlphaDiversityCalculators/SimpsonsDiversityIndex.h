@@ -9,7 +9,7 @@
 
 class SimpsonsDiversityIndex final : public DiversityCalculator {
 public:
-    double Calculate(const std::vector<std::vector<double>> &) const override;
+    double Calculate(const Rcpp::List &) const override;
     ~SimpsonsDiversityIndex() override = default;
 };
 

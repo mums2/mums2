@@ -14,8 +14,8 @@ Rcpp::NumericMatrix AlphaDiversity::CalculateDiversity(const Rcpp::NumericMatrix
     Rcpp::NumericMatrix results(1, size);
     for(int i = 0; i < size; i++) {
         Rcpp::NumericVector abundance = communityMatrix(i, Rcpp::_);
-        std::vector<double> diversities = Rcpp::as<std::vector<double>>(abundance);
-        results(0, i) = calculator->Calculate({diversities});
+        Rcpp::List diversities = Rcpp::List::create(abundance);
+        results(0, i) = calculator->Calculate(diversities);
     }
     Rcpp::colnames(results) = samples;
     delete calculator;

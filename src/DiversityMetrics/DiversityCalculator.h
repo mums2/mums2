@@ -5,13 +5,13 @@
 #ifndef DIVERSITYCALCULATOR_H
 #define DIVERSITYCALCULATOR_H
 #include <vector>
-
+#include <Rcpp.h>
 
 class DiversityCalculator {
 public:
 
     virtual ~DiversityCalculator() = default;
-    virtual double Calculate(const std::vector<std::vector<double>>&) const = 0;
+    virtual double Calculate(const Rcpp::List&) const = 0;
 };
 
 

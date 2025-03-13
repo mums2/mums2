@@ -10,7 +10,7 @@
 class MothurShannonCalculator final : DiversityCalculator {
 public:
     ~MothurShannonCalculator() override;
-    double Calculate(const std::vector<std::vector<double>> &) const override;
+    double Calculate(const Rcpp::List &) const override;
 };
 
 
