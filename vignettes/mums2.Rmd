@@ -1,0 +1,143 @@
+---
+title: "mums2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mums2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(mums2)
+library(mpactr)
+library(clustur)
+```
+
+# Import
+```{r import_data}
+example()
+squid_data <- import_data(mums2::example("squid_peak_table.csv"), 
+  mums2::example("squid_meta_data.csv"), "None")
+```
+
+# Filter
+```{r  R.options=list(max.print=15)}
+  squid_filter <- squid_data  |> 
+    filter_mispicked_ions(ringwin = 0.8,
+      isowin = 0.01,
+      trwin = 0.01,
+      max_iso_shift = 3,
+      merge_peaks = TRUE, 
+      merge_method = "sum")
+  get_peak_table(squid_filter)
+```
+
+# Preprocess ms2 data
+```{r  R.options=list(max.print=15)}
+  mass_data_set <- convert_mpactr_object_to_mass_data_set(squid_filter)
+    mass_data_set <- massdataset::mutate_ms2(
+    path = system.file(package = "mums2", mustWork = TRUE),
+    object = mass_data_set, 
+    polarity = "negative",
+    ms1.ms2.match.mz.tol = 100,
+    ms1.ms2.match.rt.tol = 150
+  )
+
+  mass_data_set@ms2_data
+  
+```
+
+# Normalize
+```{r  R.options=list(max.print=15)}
+  mass_data_set <- mass_data_set %>%
+    massdataset::activate_mass_dataset("expression_data") %>%
+    normalize_ms("rel_abund")
+  mass_data_set@expression_data
+```
+
+# Annotations
+
+```{r  R.options=list(max.print=15)}
+  dat <- readRDS(example("demo_massdataset"))
+  dat_sub_200 <- dat %>%
+    massdataset::activate_mass_dataset("variable_info") %>%
+    massdataset::slice_head(n = 200)
+
+  psu_msmls <- massdatabase::read_msp_data(example("PSU-MSMLS.msp"),
+                                          source = "gnps")
+
+  annotations <- annotate_ms2(mass_data_set, psu_msmls,
+                              gnps_params(0.5), 2, .2)
+  annotations
+```
+
+# Scoring/Distance
+```{r  R.options=list(max.print=15)}
+ dist <- dist_ms2(mass_data_set, 0.3, 2, gnps_params(0.5))
+ dist
+```
+
+# Omus (Clustering)
+```{r  R.options=list(max.print=15)}
+sparse_matrix <- create_sparse_matrix(dist$i, dist$j, dist$dist)
+
+  # Create Count Table 
+  peak_table <- get_peak_table(squid_filter)
+  count_table <- create_count_table(peak_table)
+
+  # Create Distance Object
+  dist <- read_dist(sparse_matrix, count_table, 0.3, F)
+
+  # Cluster Data
+  cluster_results <- cluster(dist, 0.2, "opticlust")
+  cluster_results
+
+```
+
+# Create the community object/matrix
+```{r  R.options=list(max.print=15)}
+  # Create community object
+  community_obj <- create_community_matrix_object(cluster_results)
+  get_community_matrix(community_obj)
+```
+
+# Run the diversity metrics
+## Rarefaction
+```{r  R.options=list(max.print=15)}
+  # Rarefacton
+  rarefy_new <- rarefy_ms(community_obj, 4000, 100)
+  rarefy_new
+```
+
+
+## Alpha Diversity
+```{r  R.options=list(max.print=15)}
+  # Calculate Alpha Diversity
+  shannon_diversity <- diversity(community_obj, "shannon")
+  simpson_diversity <- diversity(community_obj, "simpson")
+  shannon_diversity
+  simpson_diversity
+
+```
+
+## Beta Diversity
+```{r}
+  #Calculate Beta Diversity
+  braycurits <- diversity(community_obj, "bray")
+  braycurits
+```
+
+## Average Subsampled Dissimilarity
+```{r average_subsampled_dissimilarity}
+  # Avg dist
+  avg <- averaged_subsampled_dissimilarity(community_obj, 4000, 100, "bray", 100)
+  avg
+```
