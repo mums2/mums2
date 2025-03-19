@@ -21,9 +21,10 @@ library(mpactr)
 library(clustur)
 ```
 
+
+
 # Import
 ```{r import_data}
-example()
 squid_data <- import_data(mums2::example("squid_peak_table.csv"), 
   mums2::example("squid_meta_data.csv"), "None")
 ```
@@ -106,7 +107,8 @@ sparse_matrix <- create_sparse_matrix(dist$i, dist$j, dist$dist)
 ```{r  R.options=list(max.print=15)}
   # Create community object
   community_obj <- create_community_matrix_object(cluster_results)
-  get_community_matrix(community_obj)
+  mat <- get_community_matrix(community_obj)
+  mat[, 1:10]
 ```
 
 # Run the diversity metrics
@@ -114,7 +116,7 @@ sparse_matrix <- create_sparse_matrix(dist$i, dist$j, dist$dist)
 ```{r  R.options=list(max.print=15)}
   # Rarefacton
   rarefy_new <- rarefy_ms(community_obj, 4000, 100)
-  rarefy_new
+  rarefy_new[1:10, 1:10]
 ```
 
 
