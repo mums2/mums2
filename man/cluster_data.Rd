@@ -6,6 +6,14 @@
 \usage{
 cluster_data(distance_df, peak_table, cluster_method = "opticlust")
 }
+\arguments{
+\item{distance_df}{a distance df that was generated from the \code{distMs2()} function}
+
+\item{peak_table}{your peak table}
+
+\item{cluster_method}{a cluster method, there are five methods to choose from:
+furthest, nearest, weighted, average, and opticlust. opticlust is the default}
+}
 \description{
 Clusters the data together
 }

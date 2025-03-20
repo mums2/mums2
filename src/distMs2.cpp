@@ -12,7 +12,3 @@ Rcpp::DataFrame  distMS2(const Rcpp::List spectraDataList, const Rcpp::List para
 
     return dist;
 }
-
-int main() {
-  return 0;
-}

@@ -162,7 +162,20 @@ get_variable_info <- function(ft, sample_info) {
 
 
 #' @export
+#' @title Conversion mpactr objec to mass data set
+#' @description
+#' This function converts and mpactr object to a mass data set. Since
+#' we use mpactr to import and filter data, we are also able to transform
+#' the object into a mass data set for further usage
+#' 
+#' @param mpactr_object An mpactr object that was gnerated when you
+#' imported your peak table and meta data.
+#' 
 convert_mpactr_object_to_mass_data_set <- function(mpactr_object) {
+  if(!("filter_pactr" %in% class(mpactr_object))){
+    stop("mpactr_object is the correct object, ensure it was created
+    from the mpactr package. ")
+  }
   dt <- as.data.table(get_peak_table(mpactr_object))
   meta <- get_meta_data(mpactr_object)
   # Get variable info

@@ -91,3 +91,18 @@ test_that("get_variable_info returns tidymass formatted table", {
   expect_s3_class(vi, "data.frame")
 
 })
+
+test_that("mpactr_object properly converts to a massdataset", {
+  peak_table_path <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
+  meta_data_path <- mpactr::example_path("cultures_metaboscape_metadata.csv" )
+  mpact_data <- import_data(peak_table_path, meta_data_path, "Metaboscape")
+  data_set <- convert_mpactr_object_to_mass_data_set(mpact_data)
+  expect_s4_class(data_set, "mass_dataset")
+})
+
+test_that("conversion to massdataset to fail from wrong input", {
+  peak_table_path <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
+  meta_data_path <- mpactr::example_path("cultures_metaboscape_metadata.csv" )
+  mpact_data <- import_data(peak_table_path, meta_data_path, "Metaboscape")
+  expect_error(convert_mpactr_object_to_mass_data_set(c()))
+})

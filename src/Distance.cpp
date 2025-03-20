@@ -6,7 +6,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
     std::vector<std::string> name =  Rcpp::as<std::vector<std::string>>(data["id"]);
     Rcpp::List mzInts = data["spectra"];
     
-    const int n = pmz.size();
+    const size_t n = pmz.size();
     for(int i = 0; i < n; i++){
         Rcpp::DataFrame specDataFrame = Rcpp::wrap(mzInts[i]);
         Spectra spec(name[i], specDataFrame["mz"], specDataFrame["intensity"], pmz[i]);
@@ -14,7 +14,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
     }
 }
 
-void Distance::CalculateDistances(const double prec_threshold, double cutoff, const ScoringFactory& scoreMethod) {
+void Distance::CalculateDistances(const double prec_threshold, const double cutoff, const ScoringFactory& scoreMethod) {
     const auto size = static_cast<int>(spectraList.size());
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];
@@ -37,7 +37,7 @@ void Distance::CalculateDistances(const double prec_threshold, double cutoff, co
 } 
 
 Rcpp::DataFrame Distance::ExtractMatrix() {
-    int len = sparseMatrix.size();
+    const int len = static_cast<int>(sparseMatrix.size());
     Rcpp::IntegerVector i(len);
     Rcpp::IntegerVector j(len);
     Rcpp::NumericVector dist(len);

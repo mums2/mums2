@@ -31,7 +31,6 @@ test_that("Diversity metric shannon works", {
   samples <- rownames(m)
   div <- diversity(m, "shannon")
   expect_true("matrix" %in% class(div))
-  # need to save the results, will wait for actually data
 })
 
 
@@ -45,7 +44,6 @@ test_that("Diversity metric simpson works", {
   samples <- rownames(m)
   div <- diversity(m, "simpson")
   expect_true("matrix" %in% class(div))
-  # need to save the results, will wait for actually data
 })
 
 
@@ -60,7 +58,6 @@ test_that("Diversity metric bray works", {
   div <- diversity(m, "bray")
   expect_true("matrix" %in% class(div))
   expect_true(ncol(div) == nrow(div))
-  # need to save the results, will wait for actually data
 })
 
 test_that("Test average_subsampled_dissimilarity works", {
@@ -74,6 +71,14 @@ test_that("Test average_subsampled_dissimilarity works", {
   result <- averaged_subsampled_dissimilarity(m, 400, 10, "bray", 100)
   expect_true("matrix" %in% class(result))
   expect_true(ncol(result) == nrow(result))
-    # need to save the results, will wait for actually data
 })
 
+test_that("Test average_subsampled_dissimilarity errors when
+          given the wrong community object", {
+  count_table <- test_path("exttestdata", "final.count_table")
+  distances <- test_path("exttestdata", "final.dist")
+  final_count <- read_count(count_table)
+  final_dist <- read_dist(distances, final_count, 0.03, F)
+  final_cluster <- cluster(final_dist, 0.03, "opticlust")
+  expect_error(averaged_subsampled_dissimilarity(final_cluster, 400, 10, "bray", 100))
+})

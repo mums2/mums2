@@ -29,7 +29,8 @@ Imports:
     Rcpp,
     tibble,
     data.table,
-    massdatabase
+    massdatabase,
+    mpactr
 Suggests: 
     knitr,
     rmarkdown,
