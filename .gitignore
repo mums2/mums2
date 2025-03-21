@@ -209,7 +209,6 @@ Profiler/
 /.quarto/
 .Rproj.user
 
-.Rproj.user
 .Rhistory
 .Rdata
 .httr-oauth
