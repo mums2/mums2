@@ -21,7 +21,7 @@ create_community_matrix <- function(cluster_object) {
 #' @title Create Count Table
 #' @description
 #' Creats a count table based on your peak table
-#' 
+#' @param peak_table your peak table data frame, generated from the mpactr object
 create_count_table <- function(peak_table) {
   sample_cols <- colnames(peak_table)[5:ncol(peak_table)]
   count_table <- data.frame(Representative_Sequence = 1:nrow(peak_table))

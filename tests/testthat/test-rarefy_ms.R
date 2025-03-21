@@ -41,3 +41,7 @@ test_that("rarefy_ms returns the correct rowSum totals", {
   expect_true(all(rowSums(resultant_matrix) >= size))
 
 })
+
+test_that("rarefy_ms errors when given an incorrect object", {
+  expect_error(rarefy_ms(c(), 100, 10))
+})

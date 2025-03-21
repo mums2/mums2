@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^\.vscode$
+^src/cmake-build-debug/Makefile$
+^src/\.idea$

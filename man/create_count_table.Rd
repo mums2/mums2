@@ -6,6 +6,9 @@
 \usage{
 create_count_table(peak_table)
 }
+\arguments{
+\item{peak_table}{your peak table data frame, generated from the mpactr object}
+}
 \description{
 Creats a count table based on your peak table
 }
