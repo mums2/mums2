@@ -2,7 +2,7 @@
 #' @title create community matrix
 #' @description
 #' Takes the shared dataframe from clustur and converts it into a community matrix
-#' 
+#' @param cluster_object the result of the `cluster_data()` function. 
 create_community_matrix <- function(cluster_object) {
   df <- get_abundance(cluster_object)
   samples <- unique(df$samples)

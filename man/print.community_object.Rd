@@ -6,6 +6,11 @@
 \usage{
 \method{print}{community_object}(x, ...)
 }
+\arguments{
+\item{x}{the object created from the \code{create_community_object()} function.}
+
+\item{...}{other parameters that are included in the print function.}
+}
 \description{
 3 function for print the community object
 }
