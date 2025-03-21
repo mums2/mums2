@@ -6,6 +6,12 @@
 \usage{
 diversity(community_object, diversity_index)
 }
+\arguments{
+\item{community_object}{the object created from the \code{create_community_object()} function.}
+
+\item{diversity_index}{the diversity index you wish to calculate diversity, the three options are
+shannon, simpson, and bray.}
+}
 \description{
 diversity
 }

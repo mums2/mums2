@@ -6,6 +6,9 @@
 \usage{
 create_community_matrix_object(cluster_object)
 }
+\arguments{
+\item{cluster_object}{the result of the \code{cluster_data()} function.}
+}
 \description{
 Takes the shared dataframe from clustur and converts it into a community matrix object
 }

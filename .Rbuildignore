@@ -4,3 +4,5 @@
 ^\.vscode$
 ^src/cmake-build-debug/Makefile$
 ^src/\.idea$
+^src/cmake-build-debug$
+^\.idea$

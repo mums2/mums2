@@ -6,6 +6,9 @@
 \usage{
 get_community_matrix(community_object)
 }
+\arguments{
+\item{community_object}{the object created from the \code{create_community_object()} function.}
+}
 \description{
 Returns the community \code{matrix} or the data that you used to create the object.
 }

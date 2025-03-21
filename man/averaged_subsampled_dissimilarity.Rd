@@ -12,6 +12,19 @@ averaged_subsampled_dissimilarity(
   iterations = 1000
 )
 }
+\arguments{
+\item{community_object}{the object created from the \code{create_community_object()} function.}
+
+\item{size}{the size you wish to rarefy your diversity matrix to.}
+
+\item{threshold}{the threshold you want your species to reach before it is included
+in the rarefaction sum.}
+
+\item{diversity_index}{the diversity index you wish to calculate diversity, the three options are
+shannon, simpson, and bray.}
+
+\item{iterations}{the amount of times you wish to run your alpha or beta diversity metrics.}
+}
 \description{
 avgdist
 }
