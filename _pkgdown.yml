@@ -1,0 +1,43 @@
+url: https://www.mums2.org/mums2/
+template:
+  bootstrap: 5
+  bootswatch: sandstone
+  font_scale: 0.8
+reference:
+- title: Data Structures
+  contents:
+  - convert_mpactr_object_to_mass_data_set
+  - create_count_table
+  - convert_metaboscape2mass_dataset
+- title: Normalize
+  contents:
+  - normalize_ms
+- title: Annotation
+  contents:
+  - annotate_ms2
+- title: Scoring
+  contents:
+  - dist_ms2
+  - gnps_params
+  - spec_entropy_params
+  - score_ms2
+- title: Cluster
+  contents: cluster_data
+- title: Diversity Metrics
+  contents:
+  - rarefy_ms
+  - diversity
+  - averaged_subsampled_dissimilarity
+- title: Community Object
+  contents:
+  - create_community_matrix
+  - create_community_matrix_object
+  - print.community_object
+  - get_community_matrix
+- title: Mass Spectrometry Data Extractions
+  contents:
+  - get_peaks_data
+  - create_peaks_data
+- title: Example Data
+  contents:
+  - example
