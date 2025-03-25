@@ -14,13 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# mums2
-// TODO Move to Getting Started
-mums2 is a package that was created to supply a collection of metabolomic analysis tools. This package will supply tools to quantify Mass spectrometry (MS) feature abundance, analysis untargeted metabolites, and find similarities in metabolomic data all while ensuring it is open source. As of current we support importation and filteration of mass spectrometry (MS1) feature tables, annotations, scoring of ms2 spectra, clustering, alpha and beta diversity calculations, and average subsampled distance calculations using rarefaction. We are using the mpactR package our team created to import and filter ms1 data. This allows us to import a number of differentially formatted peak tables and run numerous filters on the data to ensure for high-quality data. In addition to mpactR, our team created clustur, a package that has integrated the mothur clustering algorithms inside of an R package. Therefore, we can easily incorapte these algorithms inside of our package to cluster data MS data. In order to anaylsis ms2 data, we are using the `tidymass` package. This allows us to match ms1 features to ms2 features. We have a created a simple converter for users to easily transform there data into a tidymass (massdataset) object aswell (`convert_mpactr_object_to_mass_data_set`). 
-
-Once we have preprocessed all of our data (filtered and added a ms2 spectra), we can annotate ms2 spectra given a reference database. Using supporting functions for `tidymass` we are able to created a simplistic function to allow users to annotate their data. This will give user an idea about the compounds or metabolites inside of their spectra. To support scoring/distance calculations or spectra similarity, we have implemeted a `dist_ms2()` function. This function uses two methods to score spectra, GNPS (Global Naturee Products Social Molecular Networking) or Spectral Entropy. GNPS uses a cosine scoring algorith to calculate the similarity between two spectra [Cosine Score Paper](10.1016/1044-0305(94)87009-8). In order to ensure a user could run through our pipeline in a resonable amount of time, we modified the algorithm to make it much more efficent than that of gnps. We have confirmed our results to be identical as it still uses the same algorithm. The other algorithm that we have implemented is Spectral Entropy. Spectral entropy uses a different algorithm to compute similarity between spectras (and more to be found [here](https://www.nature.com/articles/s41592-021-01331-z)), but the results are comparable to that of GNPS' method. 
-
-Following this
 ```{r setup}
 library(mums2)
 library(mpactr)
