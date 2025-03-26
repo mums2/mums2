@@ -168,7 +168,7 @@ get_variable_info <- function(ft, sample_info) {
 #' we use mpactr to import and filter data, we are also able to transform
 #' the object into a mass data set for further usage
 #' 
-#' @param mpactr_object An mpactr object that was gnerated when you
+#' @param mpactr_object An mpactr object that was generated when you
 #' imported your peak table and meta data.
 #' 
 convert_mpactr_object_to_mass_data_set <- function(mpactr_object) {

@@ -11,11 +11,9 @@ filter_peak_table <- function(mpactr_object, params) {
 }
 
 # Filter dispatch functions
+
 #' @export
-#' @title filter mispicked ions wrapper
-#' @description filter mispicked ions
-#' @param mpactr_object the object generated from the `import_all_data()` function.
-#' @param params the list of arguments generated from calling one of these functions: `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. 
+#' @rdname filter_peak_table
 filter_peak_table.filter_mispicked_ions <- function(mpactr_object, params) {
   return(filter_mispicked_ions(mpactr_object = mpactr_object,
   ringwin = params$ringwin, isowin = params$isowin,
@@ -26,10 +24,7 @@ filter_peak_table.filter_mispicked_ions <- function(mpactr_object, params) {
 }
 
 #' @export
-#' @title filter group wrapper
-#' @description filter group
-#' @param mpactr_object the object generated from the `import_all_data()` function.
-#' @param params the list of arguments generated from calling one of these functions: `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. 
+#' @rdname filter_peak_table
 filter_peak_table.filter_group <- function(mpactr_object, params) {
   return(filter_group(mpactr_object = mpactr_object, group_threshold = params$group_threshold,
   group_to_remove = params$group_to_remove, remove_ions = params$remove_ions,
@@ -37,20 +32,14 @@ filter_peak_table.filter_group <- function(mpactr_object, params) {
 }
 
 #' @export
-#' @title filter cv wrapper
-#' @description filter cv
-#' @param mpactr_object the object generated from the `import_all_data()` function.
-#' @param params the list of arguments generated from calling one of these functions: `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. 
+#' @rdname filter_peak_table
 filter_peak_table.filter_cv <- function(mpactr_object, params) {
   return(filter_cv(mpactr_object = mpactr_object, cv_threshold = params$cv_threshold,
   cv_param = params$cv_param, copy_object = params$copy_object))
 }
 
 #' @export
-#' @title filter insource ions wrapper
-#' @description filter insource ions
-#' @param mpactr_object the object generated from the `import_all_data()` function.
-#' @param params the list of arguments generated from calling one of these functions: `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. 
+#' @rdname filter_peak_table
 filter_peak_table.filter_insource_ions <- function(mpactr_object, params) {
   return(filter_insource_ions(mpactr_object = mpactr_object,
                               cluster_threshold = params$cluster_threshold,

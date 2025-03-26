@@ -2,9 +2,21 @@
 % Please edit documentation in R/filter.R
 \name{filter_peak_table}
 \alias{filter_peak_table}
+\alias{filter_peak_table.filter_mispicked_ions}
+\alias{filter_peak_table.filter_group}
+\alias{filter_peak_table.filter_cv}
+\alias{filter_peak_table.filter_insource_ions}
 \title{Filter Peak Table}
 \usage{
 filter_peak_table(mpactr_object, params)
+
+\method{filter_peak_table}{filter_mispicked_ions}(mpactr_object, params)
+
+\method{filter_peak_table}{filter_group}(mpactr_object, params)
+
+\method{filter_peak_table}{filter_cv}(mpactr_object, params)
+
+\method{filter_peak_table}{filter_insource_ions}(mpactr_object, params)
 }
 \arguments{
 \item{mpactr_object}{the mpactr_object is an object generated from the \code{import_all_data()} function. This is how we begin our pipeline.}

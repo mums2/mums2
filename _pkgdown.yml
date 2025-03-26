@@ -4,11 +4,25 @@ template:
   bootswatch: sandstone
   font_scale: 0.8
 reference:
+- title: Import Data
+  contents: 
+  - import_all_data
 - title: Data Structures
   contents:
   - convert_mpactr_object_to_mass_data_set
   - create_count_table
   - convert_metaboscape2mass_dataset
+- title: Filters
+  contents:
+  - filter_peak_table
+  - filter_mispicked_ions_parameters
+  - filter_group_parameters
+  - filter_cv_parameters
+  - filter_insource_ions_parameters
+  - filter_peak_table.filter_mispicked_ions
+  - filter_peak_table.filter_group
+  - filter_peak_table.filter_cv
+  - filter_peak_table.filter_insource_ions
 - title: Normalize
   contents:
   - normalize_ms
