@@ -1,13 +1,17 @@
 # Base Filter Function
 
 #' @export
+#' @title filter peak table
+#' @description filter data based on mpactr filters
 filter_peak_table <- function(params) {
-  return(UseMethod("filter"))
+  return(UseMethod("filter_peak_table"))
 }
 
 # Filter dispatch functions
 #' @export
-filter.filter_mispicked_ions <- function(params) {
+#' @title filter mispicked ions wrapper
+#' @description filter mispicked ions
+filter_peak_table.filter_mispicked_ions <- function(params) {
   return(filter_mispicked_ions(mpactr_object = params$mpactr_object,
   ringwin = params$ringwin, isowin = params$isowin,
   trwin = params$trwin, max_iso_shift = params$max_iso_shift,
@@ -17,20 +21,26 @@ filter.filter_mispicked_ions <- function(params) {
 }
 
 #' @export
-filter.filter_group <- function(params, ...) {
+#' @title filter group wrapper
+#' @description filter group
+filter_peak_table.filter_group <- function(params) {
   return(filter_group(mpactr_object = params$mpactr_object, group_threshold = params$group_threshold,
   group_to_remove = params$group_to_remove, remove_ions = params$remove_ions,
   copy_object = params$copy_object))
 }
 
 #' @export
-filter.filter_cv <- function(params) {
+#' @title filter cv wrapper
+#' @description filter cv
+filter_peak_table.filter_cv <- function(params) {
   return(filter_cv(mpactr_object = params$mpactr_object, cv_threshold = params$cv_threshold,
   cv_param = params$cv_param, copy_object = params$copy_object))
 }
 
 #' @export
-filter.filter_insource_ions <- function(params) {
+#' @title filter insource ions wrapper
+#' @description filter insource ions
+filter_peak_table.filter_insource_ions <- function(params) {
   return(filter_insource_ions(mpactr_object = params$mpactr_object,
                               cluster_threshold = params$cluster_threshold,
                               copy_object = params$copy_object))
@@ -50,7 +60,7 @@ filter_mispicked_ions_parameters <- function(mpactr_object, ringwin = 0.5, isowi
   return(params)
 }
 
-filer_group_parameters <- function(mpactr_object, group_threshold = 0.01, group_to_remove,
+filter_group_parameters <- function(mpactr_object, group_threshold = 0.01, group_to_remove,
                                    remove_ions = TRUE, copy_object = FALSE) {
   params <- list(mpactr_object = mpactr_object, group_threshold = group_threshold,
     group_to_remove = group_to_remove, remove_ions = remove_ions,

@@ -179,7 +179,7 @@ convert_mpactr_object_to_mass_data_set <- function(mpactr_object) {
   dt <- as.data.table(get_peak_table(mpactr_object))
   meta <- get_meta_data(mpactr_object)
   # Get variable info
-  variable_info <- dt[ , -c(unique(meta$Injection),"kmd"), with = FALSE]
+  variable_info <- dt[ , c("Compound", "mz", "rt"), with = FALSE]
   names(variable_info) <- c("variable_id", "mz", "rt")
    #sample_info
   sample_info <- data.frame(sample_id = meta$Injection, injection.order = 1:nrow(meta), class = meta$Sample_Code, 

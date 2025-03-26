@@ -36,12 +36,10 @@ After you import the data we are able to filter the data using filters including
 `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on mpactR's website).
 ```{r  R.options=list(max.print=15)}
   squid_filter <- squid_data  |> 
-    filter_mispicked_ions(ringwin = 0.8,
-      isowin = 0.01,
-      trwin = 0.01,
-      max_iso_shift = 3,
-      merge_peaks = TRUE, 
-      merge_method = "sum")
+  filter_peak_table(filter_mispicked_ions_parameters(mpactr_object = dat))
+  filter_peak_table(filter_cv_parameters(mpactr_object = dat, cv_threshold = 0.2, cv_param = "mean"))
+  filter_peak_table(filter_group_parameters(mpactr_object = dat, group_threshold = 0.1, "Blanks"))
+  filter_peak_table(filter_insource_ions_parameters(mpactr_object = dat))
   get_peak_table(squid_filter)
 ```
 
