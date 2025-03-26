@@ -2,10 +2,18 @@
 % Please edit documentation in R/filter.R
 \name{filter_peak_table}
 \alias{filter_peak_table}
-\title{filter peak table}
+\title{Filter Peak Table}
 \usage{
 filter_peak_table(mpactr_object, params)
 }
+\arguments{
+\item{mpactr_object}{the mpactr_object is an object generated from the \code{import_all_data()} function. This is how we begin our pipeline.}
+
+\item{params}{the list of arguments generated from calling one of these functions: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}.}
+}
+\value{
+a \code{mpactr} object that has been filter based on the supplied parameters.
+}
 \description{
-filter data based on mpactr filters
+This function is a wrapper for all of mpactr's filter functions. When called with a list of paramters that was generated from one of the following functions, it will call the subsequent filter: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}. You can also find more information on these functions in\code{mpactr} documentation.
 }

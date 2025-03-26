@@ -4,11 +4,11 @@
 \alias{create_count_table}
 \title{Create Count Table}
 \usage{
-create_count_table(peak_table)
+create_count_table(mass_data_set)
 }
 \arguments{
-\item{peak_table}{your peak table data frame, generated from the mpactr object}
+\item{mass_data_set}{your mass data set object.}
 }
 \description{
-Creats a count table based on your peak table
+Creats a count table based with you mass data set.
 }

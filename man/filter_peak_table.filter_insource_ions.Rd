@@ -6,6 +6,11 @@
 \usage{
 \method{filter_peak_table}{filter_insource_ions}(mpactr_object, params)
 }
+\arguments{
+\item{mpactr_object}{the object generated from the \code{import_all_data()} function.}
+
+\item{params}{the list of arguments generated from calling one of these functions: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}.}
+}
 \description{
 filter insource ions
 }
