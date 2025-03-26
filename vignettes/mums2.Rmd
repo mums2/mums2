@@ -52,14 +52,13 @@ Once we filter our data, we have to transform the data in a data-friendly object
 massdataset. From there we can run all of the avaliable methods that are included in massdataset, in our case, we can use `mutate_ms2()`. Mutate ms2 matches ms1 features that have a ms2 peak to the ms2 spectra supplied. It then adds the information to the object, allow us to research more about the data.
 ```{r  R.options=list(max.print=15)}
   mass_data_set <- convert_mpactr_object_to_mass_data_set(squid_filter)
-    mass_data_set <- massdataset::mutate_ms2(
-    path = system.file(package = "mums2", mustWork = TRUE),
-    object = mass_data_set, 
-    polarity = "negative",
+  
+  mass_data_set <- add_ms2(mass_data_set = mass_data_set, 
+    path = system.file(package = "mums2", mustWork = TRUE), 
+    polarity = "negative", column = "hilic",
     ms1.ms2.match.mz.tol = 100,
     ms1.ms2.match.rt.tol = 150
   )
-
   mass_data_set@ms2_data
   
 ```

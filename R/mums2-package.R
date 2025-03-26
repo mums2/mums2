@@ -20,6 +20,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom massdatabase read_msp_data
 #' @importFrom massdataset create_mass_dataset
+#' @importFrom massdataset mutate_ms2
 #' @importFrom mpactr filter_cv
 #' @importFrom mpactr filter_group
 #' @importFrom mpactr filter_insource_ions

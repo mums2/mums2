@@ -12,6 +12,9 @@ reference:
   - convert_mpactr_object_to_mass_data_set
   - create_count_table
   - convert_metaboscape2mass_dataset
+- title: Mass Data Set Helpers
+  contents: 
+  - add_ms2
 - title: Filters
   contents:
   - filter_peak_table
