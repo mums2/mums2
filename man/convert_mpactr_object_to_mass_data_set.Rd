@@ -7,7 +7,7 @@
 convert_mpactr_object_to_mass_data_set(mpactr_object)
 }
 \arguments{
-\item{mpactr_object}{An mpactr object that was gnerated when you
+\item{mpactr_object}{An mpactr object that was generated when you
 imported your peak table and meta data.}
 }
 \description{

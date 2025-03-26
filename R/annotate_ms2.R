@@ -66,7 +66,7 @@
 #' # annotate features in a `mass_dataset` object.
 #' \dontrun{
 #' annotate_ms2(dat, msmls, precursor_tolerance = 2,
-#'    gnps_param(frag_tolerance = 0.5, min_score = .7)}
+#'    gnps_param(frag_tolerance = 0.5, min_score = .7))}
 #' @name annotate_ms2
 NULL
 
