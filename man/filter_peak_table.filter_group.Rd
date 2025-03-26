@@ -4,7 +4,7 @@
 \alias{filter_peak_table.filter_group}
 \title{filter group wrapper}
 \usage{
-\method{filter_peak_table}{filter_group}(params)
+\method{filter_peak_table}{filter_group}(mpactr_object, params)
 }
 \description{
 filter group

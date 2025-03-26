@@ -4,7 +4,7 @@
 \alias{filter_peak_table}
 \title{filter peak table}
 \usage{
-filter_peak_table(params)
+filter_peak_table(mpactr_object, params)
 }
 \description{
 filter data based on mpactr filters

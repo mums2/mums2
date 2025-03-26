@@ -4,7 +4,7 @@
 \alias{filter_peak_table.filter_insource_ions}
 \title{filter insource ions wrapper}
 \usage{
-\method{filter_peak_table}{filter_insource_ions}(params)
+\method{filter_peak_table}{filter_insource_ions}(mpactr_object, params)
 }
 \description{
 filter insource ions

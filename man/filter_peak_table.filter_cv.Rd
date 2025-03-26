@@ -4,7 +4,7 @@
 \alias{filter_peak_table.filter_cv}
 \title{filter cv wrapper}
 \usage{
-\method{filter_peak_table}{filter_cv}(params)
+\method{filter_peak_table}{filter_cv}(mpactr_object, params)
 }
 \description{
 filter cv

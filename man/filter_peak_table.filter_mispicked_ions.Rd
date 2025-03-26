@@ -4,7 +4,7 @@
 \alias{filter_peak_table.filter_mispicked_ions}
 \title{filter mispicked ions wrapper}
 \usage{
-\method{filter_peak_table}{filter_mispicked_ions}(params)
+\method{filter_peak_table}{filter_mispicked_ions}(mpactr_object, params)
 }
 \description{
 filter mispicked ions
