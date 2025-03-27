@@ -24,6 +24,7 @@ create_community_matrix <- function(cluster_object) {
 #' @param mass_data_set your mass data set object.
 create_count_table <- function(mass_data_set) {
   samples <- mass_data_set@expression_data
-  return(data.frame(Representative_Sequence = rownames(samples), total = rowSums(samples), samples))
+  return(data.frame(Representative_Sequence = rownames(samples), 
+                    total = rowSums(samples), samples, check.names = FALSE))
   }
 
