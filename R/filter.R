@@ -18,7 +18,7 @@ filter_peak_table.filter_mispicked_ions <- function(mpactr_object, params) {
   return(filter_mispicked_ions(mpactr_object = mpactr_object,
   ringwin = params$ringwin, isowin = params$isowin,
   trwin = params$trwin, max_iso_shift = params$max_iso_shift,
-  merge_peaks = params$merge_peaks, merge_method = parms$merge_method,
+  merge_peaks = params$merge_peaks, merge_method = params$merge_method,
   copy_object = params$copy_object
   ))
 }

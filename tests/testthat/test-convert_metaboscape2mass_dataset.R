@@ -93,16 +93,16 @@ test_that("get_variable_info returns tidymass formatted table", {
 })
 
 test_that("mpactr_object properly converts to a massdataset", {
-  peak_table_path <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
-  meta_data_path <- mpactr::example_path("cultures_metaboscape_metadata.csv" )
-  mpact_data <- import_data(peak_table_path, meta_data_path, "Metaboscape")
+  mpact_data <- import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"), 
+                          meta_data = test_path("exttestdata", "meta_data.csv"), 
+                          format = "Progenesis")
   data_set <- convert_mpactr_object_to_mass_data_set(mpact_data)
   expect_s4_class(data_set, "mass_dataset")
 })
 
 test_that("conversion to massdataset to fail from wrong input", {
-  peak_table_path <- mpactr::example_path("cultures_metaboscape_peaktable.csv")
-  meta_data_path <- mpactr::example_path("cultures_metaboscape_metadata.csv" )
-  mpact_data <- import_data(peak_table_path, meta_data_path, "Metaboscape")
+  mpact_data <- import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"), 
+                          meta_data = test_path("exttestdata", "meta_data.csv"), 
+                          format = "Progenesis")
   expect_error(convert_mpactr_object_to_mass_data_set(c()))
 })
