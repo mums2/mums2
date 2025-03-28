@@ -9,10 +9,10 @@ cluster_data(distance_df, mass_data_set, cluster_method = "opticlust")
 \arguments{
 \item{distance_df}{a distance df that was generated from the \code{distMs2()} function}
 
+\item{mass_data_set}{your mass data set object}
+
 \item{cluster_method}{a cluster method, there are five methods to choose from:
 furthest, nearest, weighted, average, and opticlust. opticlust is the default}
-
-\item{peak_table}{your peak table}
 }
 \description{
 Clusters the data together

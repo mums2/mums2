@@ -3,7 +3,7 @@
 #' @description
 #' Clusters the data together
 #' @param distance_df a distance df that was generated from the `distMs2()` function
-#' @param peak_table your peak table
+#' @param mass_data_set your mass data set object
 #' @param cluster_method a cluster method, there are five methods to choose from:
 #' furthest, nearest, weighted, average, and opticlust. opticlust is the default
 #' 
