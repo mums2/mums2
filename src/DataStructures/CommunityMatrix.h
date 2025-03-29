@@ -14,12 +14,12 @@ public:
     ~CommunityMatrix() = default;
     void InitializeMatrix();
     const Rcpp::NumericMatrix& GetCommunityMatrix() const {return communityMatrix;}
-    std::vector<int64_t> GetCommunityMatrixByRow(int row) const;
-    std::vector<std::vector<int64_t>> GetRowAbundances() const {return rowAbundance;}
-    const std::vector<std::vector<int64_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
-    std::vector<std::vector<int64_t>>& GetAllIndexes() {return allIndexes;}
+    std::vector<uint> GetCommunityMatrixByRow(int row) const;
+    std::vector<std::vector<uint>> GetRowAbundances() const {return rowAbundance;}
+    const std::vector<std::vector<uint>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
+    std::vector<std::vector<uint>>& GetAllIndexes() {return allIndexes;}
 
-    const std::vector<int64_t>& GetSums() const {return sums;}
+    const std::vector<uint>& GetSums() const {return sums;}
     const int& GetRow() const {return row;}
     const int& GetColumn() const {return col;}
 
@@ -27,10 +27,10 @@ private:
     int row = 0;
     int col = 0;
     Rcpp::NumericMatrix communityMatrix;
-    std::vector<int64_t> sums;
-    std::vector<std::vector<int64_t>> rowAbundance; // or abundances. The index represents the row number
-    std::vector<std::vector<int64_t>> eligibleRowIndexes; // The values in the row that do not have 0 abundance
-    std::vector<std::vector<int64_t>> allIndexes;
+    std::vector<uint> sums;
+    std::vector<std::vector<uint>> rowAbundance; // or abundances. The index represents the row number
+    std::vector<std::vector<uint>> eligibleRowIndexes; // The values in the row that do not have 0 abundance
+    std::vector<std::vector<uint>> allIndexes;
 
 
 

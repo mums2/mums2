@@ -78,28 +78,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // RarefactionCalculation
-Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const int64_t size, const int64_t threshold);
+Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint size, const uint threshold);
 RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
-    Rcpp::traits::input_parameter< const int64_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int64_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const uint >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint >::type threshold(thresholdSEXP);
     rcpp_result_gen = Rcpp::wrap(RarefactionCalculation(communityMatrix, size, threshold));
     return rcpp_result_gen;
 END_RCPP
 }
 // FasterAvgDist
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const int64_t size, const int64_t threshold, const int iterations);
+Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint size, const uint threshold, const int iterations);
 RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< const int64_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const int64_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const uint >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, iterations));
     return rcpp_result_gen;
