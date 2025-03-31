@@ -52,21 +52,21 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint size,
-    const uint threshold) {
+Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
+    const uint32_t threshold) {
 
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rarefaction rarefaction;
-    std::vector<std::vector<uint>>& allIndexes = matrix.get()->GetAllIndexes();
-    const std::vector<std::vector<uint>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
-    std::vector<std::vector<uint>> eligibleAbundances = matrix.get()->GetRowAbundances();
-    const std::vector<uint>& sums = matrix.get()->GetSums();
+    std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
+    const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
+    std::vector<std::vector<uint32_t>> eligibleAbundances = matrix.get()->GetRowAbundances();
+    const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
-        const std::vector<uint> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
+        const std::vector<uint32_t> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
         const auto results = rarefaction.Rarefy(communityVector, eligibleIndexes[i], allIndexes[i],
                                                  size, sums[i], threshold);
 
@@ -81,7 +81,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
-    const uint size, const uint threshold, const int iterations = 1000) {
+    const uint32_t size, const uint32_t threshold, const int iterations = 1000) {
     const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
 
@@ -97,4 +97,10 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     Rcpp::rownames(diversity) = samples;
 
     return diversity;
+}
+
+// [[Rcpp::export]]
+void SizeOfCommunityObject(const SEXP& communityMatrix) {
+    const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
+    communityObject->SeeSizes();
 }

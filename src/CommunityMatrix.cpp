@@ -12,27 +12,27 @@ void CommunityMatrix::InitializeMatrix() {
 
     row = communityMatrix.nrow();
     col = communityMatrix.ncol();
-    rowAbundance = std::vector<std::vector<uint>>(row);
-    eligibleRowIndexes = std::vector<std::vector<uint>>(row);
-    allIndexes = std::vector<std::vector<uint>>(row);
-    sums = std::vector<uint>(row);
+    rowAbundance = std::vector<std::vector<uint32_t>>(row);
+    eligibleRowIndexes = std::vector<std::vector<uint32_t>>(row);
+    allIndexes = std::vector<std::vector<uint32_t>>(row);
+    sums = std::vector<uint32_t>(row);
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
         Rcpp::NumericVector community = communityMatrix(i, Rcpp::_);
-        std::vector<uint> communityVector = Rcpp::as<std::vector<uint>>(community);
+        std::vector<uint32_t> communityVector = Rcpp::as<std::vector<uint32_t>>(community);
         const size_t size = communityVector.size();
         eligibleRowIndexes[i].reserve(size);
         rowAbundance[i].reserve(size);
         sums[i] = std::accumulate(communityVector.begin(), communityVector.end(), 0LL);
-        allIndexes[i] = std::vector<uint>(sums[i]);
+        allIndexes[i] = std::vector<uint32_t>(sums[i]);
         size_t index = 0;
-        uint currentPosition = 0;
+        uint32_t currentPosition = 0;
         for(size_t j = 0; j < size; j++) {
-            uint val = communityVector[j];
+            uint32_t val = communityVector[j];
             if(val > 0) {
                 eligibleRowIndexes[i].emplace_back(j);
                 rowAbundance[i].emplace_back(val);
-                for (uint k = 0; k < val; k++) {
+                for (uint32_t k = 0; k < val; k++) {
                     allIndexes[i][index++] = currentPosition;
                 }
                 currentPosition++;
@@ -41,8 +41,8 @@ void CommunityMatrix::InitializeMatrix() {
     }
 }
 
-std::vector<uint> CommunityMatrix::GetCommunityMatrixByRow(const int row) const {
+std::vector<uint32_t> CommunityMatrix::GetCommunityMatrixByRow(const int row) const {
     Rcpp::NumericVector community = communityMatrix(row, Rcpp::_);
-    const std::vector<uint> communityVector = Rcpp::as<std::vector<uint>>(community);
+    const std::vector<uint32_t> communityVector = Rcpp::as<std::vector<uint32_t>>(community);
     return communityVector;
 }

@@ -29,6 +29,10 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
+SizeOfCommunityObject <- function(communityMatrix) {
+    invisible(.Call(`_mums2_SizeOfCommunityObject`, communityMatrix))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
