@@ -75,15 +75,15 @@ Using massdatasset and massdatabase users can annotate their current massdataset
   psu_msmls <- massdatabase::read_msp_data(example("PSU-MSMLS.msp"),
                                           source = "gnps")
 
-  annotations <- annotate_ms2(mass_data_set, psu_msmls,
-                              gnps_params(0.5), 2, .2)
+  annotations <- annotate_ms2(query = mass_data_set, reference = psu_msmls,
+                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2)
   annotations
 ```
 
 # Scoring/Distance
 We have implemented a scoring and/or distance algorithm that allows you to generate a score between two different features. We can use that score to cluster the data based on closeness.
 ```{r  R.options=list(max.print=15)}
- dist <- dist_ms2(mass_data_set, 0.3, 2, gnps_params(0.5))
+ dist <- dist_ms2(data = mass_data_set, cutoff = 0.3, precursor_thresh = 2, score_params = gnps_params(0.5))
  dist
 ```
 
@@ -91,7 +91,7 @@ We have implemented a scoring and/or distance algorithm that allows you to gener
 Once we have generated a distance matrix, we can use that matrix to cluster our data using the clustur package (more information can be found on the clustur website). clustur is an R package that contains the clusturing algorithms from mothur (a software that is used to anaylsis microbial ecology).
 ```{r  R.options=list(max.print=15)}
 
-  cluster_results <- cluster_data(dist, mass_data_set, "opticlust")
+  cluster_results <- cluster_data(distance_df = dist, mass_data_set = mass_data_set, cluster_method = "opticlust")
   cluster_results
 
 ```
@@ -110,7 +110,7 @@ Once you clustered your data, you have to transform it into a data-usable format
 Once you create your community object, we can finally compute the diversity metrics on our data. Below this you can see the `rarefaction()` function.
 ```{r  R.options=list(max.print=15)}
   # Rarefacton
-  rarefy_new <- rarefy_ms(community_obj, 4000, 100)
+  rarefy_new <- rarefy_ms(community_object = community_obj, size = 4000, threshold = 100)
   rarefy_new[1:10, 1:10]
 ```
 
@@ -119,8 +119,8 @@ Once you create your community object, we can finally compute the diversity metr
 You can also compute the alpha diversity. We currently only support shannon, and simpsons diversity.
 ```{r  R.options=list(max.print=15)}
   # Calculate Alpha Diversity
-  shannon_diversity <- diversity(community_obj, "shannon")
-  simpson_diversity <- diversity(community_obj, "simpson")
+  shannon_diversity <- diversity(community_object = community_obj, diversity_index = "shannon")
+  simpson_diversity <- diversity(community_object = community_obj, diversity_index = "simpson")
   shannon_diversity
   simpson_diversity
 
@@ -130,7 +130,7 @@ You can also compute the alpha diversity. We currently only support shannon, and
 Beta diversity is also included inside of this package, however, we only support bray curtis.
 ```{r}
   #Calculate Beta Diversity
-  braycurits <- diversity(community_obj, "bray")
+  braycurits <- diversity(community_object = community_obj, diversity_index = "bray")
   braycurits[1,]
 ```
 
@@ -138,7 +138,7 @@ Beta diversity is also included inside of this package, however, we only support
 Finally you can average the diversity metrics using the `average_subsampled_diversity()` function. This allows you to run the rarefaction and diversity command n number of times. This will generate a average distance matrix. This allows you to ensure that your rare species were included inside of the analysis. 
 ```{r average_subsampled_dissimilarity}
   # Avg dist
-  avg <- averaged_subsampled_dissimilarity(community_obj, 4000, 100, "bray", 100)
+  avg <- averaged_subsampled_dissimilarity(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
   avg
 ```
 
