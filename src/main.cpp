@@ -98,9 +98,3 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
 
     return diversity;
 }
-
-// [[Rcpp::export]]
-void SizeOfCommunityObject(const SEXP& communityMatrix) {
-    const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
-    communityObject->SeeSizes();
-}

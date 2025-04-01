@@ -7,7 +7,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
     Rcpp::List mzInts = data["spectra"];
     
     const size_t n = pmz.size();
-    for(int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         Rcpp::DataFrame specDataFrame = Rcpp::wrap(mzInts[i]);
         Spectra spec(name[i], specDataFrame["mz"], specDataFrame["intensity"], pmz[i]);
         spectraList.emplace_back(spec);
