@@ -7,14 +7,14 @@
 #include <numeric>
 #include <unordered_map>
 
-std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int64_t>& abundance,
-    const std::vector<int64_t>& eligibleIndex,
-    std::vector<int64_t>& availableIndexValues,
-    const int64_t size, const int64_t sum,
-    const int64_t threshold) {
+std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance,
+    const std::vector<uint32_t>& eligibleIndex,
+    std::vector<uint32_t>& availableIndexValues,
+    const uint32_t size, const uint32_t sum,
+    const uint32_t threshold) {
 
     if(eligibleIndex.empty()) return abundance;
-    int64_t aboveThresholdSum = 0;
+    uint32_t aboveThresholdSum = 0;
     for(const auto& abund : abundance) {
         if(abund >= threshold)
             aboveThresholdSum += abund;
@@ -23,10 +23,10 @@ std::vector<int64_t> Rarefaction::Rarefy(const std::vector<int64_t>& abundance,
         return abundance;
 
     const size_t vectorSize = abundance.size();
-    int64_t grandTotal = 0;
-    int64_t incrementer = size;
+    uint32_t grandTotal = 0;
+    uint32_t incrementer = size;
 
-    std::vector<int64_t> counter(vectorSize, 0);
+    std::vector<uint32_t> counter(vectorSize, 0);
     std::deque<std::pair<size_t, size_t>> indexSwap;
 
     size_t currentIndex = 0;
