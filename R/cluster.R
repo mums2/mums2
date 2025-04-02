@@ -18,6 +18,7 @@ cluster_data <- function(distance_df, mass_data_set, cluster_method = "opticlust
   dist <- read_dist(sparse_matrix, count_table, 0.3, F)
 
   # Cluster Data
+  # results <- cluster(dist, 0.2, cluster_method)
   return(cluster(dist, 0.2, cluster_method))
 
 }
