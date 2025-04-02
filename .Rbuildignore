@@ -2,3 +2,14 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^\.vscode$
+^src/cmake-build-debug/Makefile$
+^src/\.idea$
+^src/cmake-build-debug$
+^\.idea$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^doc$
+^Meta$
+^README\.Rmd$
+^CMakeLists\.txt$

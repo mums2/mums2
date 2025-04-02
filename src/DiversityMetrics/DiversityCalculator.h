@@ -1,0 +1,19 @@
+//
+// Created by gregj on 12/3/2024.
+//
+
+#ifndef DIVERSITYCALCULATOR_H
+#define DIVERSITYCALCULATOR_H
+#include <vector>
+#include <Rcpp.h>
+
+class DiversityCalculator {
+public:
+
+    virtual ~DiversityCalculator() = default;
+    virtual double Calculate(const Rcpp::List&) const = 0;
+};
+
+
+
+#endif //DIVERSITYCALCULATOR_H

@@ -1,0 +1,43 @@
+# create a mass_dataset object from TidyMass demo data
+# https://www.tidymass.org/tidymass/articles/demo_data.html
+
+# first step: download data from the link above.
+
+# library(tidymass)
+library(massprocesser)
+
+process_data(
+  path = "~/Desktop/TidyMass_demo/data/mzxml_ms1_data/POS",
+  polarity = "positive",
+  ppm = 10,
+  peakwidth = c(10, 60),
+  threads = 4,
+  output_tic = FALSE,
+  output_bpc = FALSE,
+  output_rt_correction_plot = FALSE,
+  min_fraction = 0.5,
+  group_for_figure = "QC"
+)
+
+load("~/Desktop/TidyMass_demo/data/mzxml_ms1_data/POS/Result/object")
+object
+
+
+load("~/Desktop/TidyMass_demo/data/mzxml_ms1_data/POS/Result/intermediate_data/xdata2")
+
+plot <- massprocesser::plot_adjusted_rt(object = xdata2,
+                                        group_for_figure = "QC",
+                                        interactive = TRUE)
+plot # looks nothing like the demo...
+
+# add MS2 to mass_dataset class
+object_pos2 <- massdataset::mutate_ms2(
+  object = object,
+  column = "rp",
+  polarity = "positive",
+  ms1.ms2.match.mz.tol = 10,
+  ms1.ms2.match.rt.tol = 15,
+  path = "~/Desktop/TidyMass_demo/data/mgf_ms2_data/POS"
+)
+
+saveRDS(object_pos2, here::here("tests/testthat/exttest-data/demo_massdataset"))

@@ -1,0 +1,149 @@
+---
+title: "mums2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mums2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mums2)
+library(mpactr)
+library(clustur)
+```
+
+
+
+# Import
+To import data inside of mums2, we are using the mpactR package. mpactR allows us to import three different types of formats: Metaboscape, Progensis,
+and its own output. From there we can conduct a number of analysis on the data.
+```{r import_data}
+
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                              meta_data = mums2::example("squid_meta_data.csv"), 
+                              format = "None")
+
+```
+
+
+# Filter
+After you import the data we are able to filter the data using filters including in mpactR. There are four different filters included in mpactR, 
+`check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on mpactR's website).
+```{r  R.options=list(max.print=15)}
+  squid_filter <- squid_data |>
+    filter_peak_table(filter_mispicked_ions_parameters()) |>
+    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+    filter_peak_table(filter_insource_ions_parameters())
+  get_peak_table(squid_filter)
+```
+
+
+# Preprocess ms2 data
+Once we filter our data, we have to transform the data in a data-friendly object for further analysis. We opted to use the packages from tidy-mass to accomplish this. Specifically, massdatabase and massdataset. Using our built in conversion function, we can convert any mpactr object to a 
+massdataset. From there we can run all of the avaliable methods that are included in massdataset, in our case, we can use `mutate_ms2()`. Mutate ms2 matches ms1 features that have a ms2 peak to the ms2 spectra supplied. It then adds the information to the object, allow us to research more about the data.
+```{r  R.options=list(max.print=15)}
+  mass_data_set <- convert_mpactr_object_to_mass_data_set(squid_filter)
+  
+  mass_data_set <- add_ms2(mass_data_set = mass_data_set, 
+    path = system.file(package = "mums2", mustWork = TRUE), 
+    polarity = "negative", column = "hilic",
+    ms1.ms2.match.mz.tol = 100,
+    ms1.ms2.match.rt.tol = 150
+  )
+  mass_data_set@ms2_data
+  
+```
+
+
+# Annotations
+Using massdatasset and massdatabase users can annotate their current massdataset data by supplying there own annotated databse.
+```{r  R.options=list(max.print=15)}
+  dat <- readRDS(example("demo_massdataset"))
+  dat_sub_200 <- dat %>%
+    massdataset::activate_mass_dataset("variable_info") %>%
+    massdataset::slice_head(n = 200)
+
+  psu_msmls <- massdatabase::read_msp_data(example("PSU-MSMLS.msp"),
+                                          source = "gnps")
+
+  annotations <- annotate_ms2(query = mass_data_set, reference = psu_msmls,
+                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2)
+  annotations
+```
+
+# Scoring/Distance
+We have implemented a scoring and/or distance algorithm that allows you to generate a score between two different features. We can use that score to cluster the data based on closeness.
+```{r  R.options=list(max.print=15)}
+ dist <- dist_ms2(data = mass_data_set, cutoff = 0.3, precursor_thresh = 2, score_params = gnps_params(0.5))
+ dist
+```
+
+# OMUs (Clustering)
+Once we have generated a distance matrix, we can use that matrix to cluster our data using the clustur package (more information can be found on the clustur website). clustur is an R package that contains the clusturing algorithms from mothur (a software that is used to anaylsis microbial ecology).
+```{r  R.options=list(max.print=15)}
+
+  cluster_results <- cluster_data(distance_df = dist, mass_data_set = mass_data_set, cluster_method = "opticlust")
+  cluster_results
+
+```
+
+# Create the community object/matrix
+Once you clustered your data, you have to transform it into a data-usable format. We have supplied the `create_community_object()` function for this purpose.
+```{r  R.options=list(max.print=15)}
+  # Create community object
+  community_obj <- create_community_matrix_object(cluster_results)
+  mat <- get_community_matrix(community_obj)
+
+  # You can also do this without clustering
+  community_obj_no_cluster <- create_community_matrix_object(mass_data_set)
+  mat[, 1:10]
+```
+
+# Run the diversity metrics
+## Rarefaction
+Once you create your community object, we can finally compute the diversity metrics on our data. Below this you can see the `rarefaction()` function.
+```{r  R.options=list(max.print=15)}
+  # Rarefacton
+  rarefy_new <- rarefy_ms(community_object = community_obj, size = 4000, threshold = 100)
+  rarefy_new[1:10, 1:10]
+```
+
+
+## Alpha Diversity
+You can also compute the alpha diversity. We currently only support shannon, and simpsons diversity.
+```{r  R.options=list(max.print=15)}
+  # Calculate Alpha Diversity
+  shannon_diversity <- diversity(community_object = community_obj, diversity_index = "shannon")
+  simpson_diversity <- diversity(community_object = community_obj, diversity_index = "simpson")
+  shannon_diversity
+  simpson_diversity
+
+```
+
+## Beta Diversity
+Beta diversity is also included inside of this package, however, we only support bray curtis.
+```{r}
+  #Calculate Beta Diversity
+  braycurits <- diversity(community_object = community_obj, diversity_index = "bray")
+  braycurits[1,]
+```
+
+## Average Subsampled Dissimilarity
+Finally you can average the diversity metrics using the `average_subsampled_diversity()` function. This allows you to run the rarefaction and diversity command n number of times. This will generate a average distance matrix. This allows you to ensure that your rare species were included inside of the analysis. 
+```{r average_subsampled_dissimilarity}
+  # Avg dist
+  avg <- averaged_subsampled_dissimilarity(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
+  # Avg dist without clustering
+  avg_no_cluster <- averaged_subsampled_dissimilarity(community_object = community_obj_no_cluster, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
+  avg
+```
+
