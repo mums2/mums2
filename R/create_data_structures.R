@@ -20,10 +20,11 @@ create_community_matrix <- function(cluster_object) {
 #' @export
 #' @title Create Count Table
 #' @description
-#' Creats a count table based with you mass data set.
+#' Creats a count table based with you mass data sets ms2 matches.
 #' @param mass_data_set your mass data set object.
 create_count_table <- function(mass_data_set) {
-  samples <- mass_data_set@expression_data
+  ms2_matches <- mass_data_set@ms2_data[[1]]@variable_id
+  samples <- mass_data_set@expression_data[which(rownames(mass_data_set@expression_data) %in% ms2_matches), ]
   return(data.frame(Representative_Sequence = rownames(samples), 
                     total = rowSums(samples), samples, check.names = FALSE))
   }

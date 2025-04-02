@@ -10,5 +10,5 @@ create_count_table(mass_data_set)
 \item{mass_data_set}{your mass data set object.}
 }
 \description{
-Creats a count table based with you mass data set.
+Creats a count table based with you mass data sets ms2 matches.
 }

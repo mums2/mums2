@@ -102,6 +102,9 @@ Once you clustered your data, you have to transform it into a data-usable format
   # Create community object
   community_obj <- create_community_matrix_object(cluster_results)
   mat <- get_community_matrix(community_obj)
+
+  # You can also do this without clustering
+  community_obj_no_cluster <- create_community_matrix_object(mass_data_set)
   mat[, 1:10]
 ```
 
@@ -139,6 +142,8 @@ Finally you can average the diversity metrics using the `average_subsampled_dive
 ```{r average_subsampled_dissimilarity}
   # Avg dist
   avg <- averaged_subsampled_dissimilarity(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
+  # Avg dist without clustering
+  avg_no_cluster <- averaged_subsampled_dissimilarity(community_object = community_obj_no_cluster, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
   avg
 ```
 

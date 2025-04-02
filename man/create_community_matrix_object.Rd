@@ -2,13 +2,19 @@
 % Please edit documentation in R/community_object.R
 \name{create_community_matrix_object}
 \alias{create_community_matrix_object}
+\alias{create_community_matrix_object.mass_dataset}
+\alias{create_community_matrix_object.list}
 \title{Create Community Matrix}
 \usage{
-create_community_matrix_object(cluster_object)
+create_community_matrix_object(data)
+
+\method{create_community_matrix_object}{mass_dataset}(data)
+
+\method{create_community_matrix_object}{list}(data)
 }
 \arguments{
-\item{cluster_object}{the result of the \code{cluster_data()} function.}
+\item{cluster_object}{the result of the \code{cluster_data()} function, or just a massdataset created from \code{convert_metaboscape2mass_dataset()} or \code{convert_mpactr_object_to_mass_data_set()}.}
 }
 \description{
-Takes the shared dataframe from clustur and converts it into a community matrix object
+Takes the shared dataframe from clustur or a massdataset and converts it into a community matrix object
 }
