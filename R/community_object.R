@@ -2,7 +2,7 @@
 #' @title Create Community Matrix
 #' @description
 #' Takes the shared dataframe from clustur or a massdataset and converts it into a community matrix object
-#' @param cluster_object the result of the `cluster_data()` function, or just a massdataset created from `convert_metaboscape2mass_dataset()` or `convert_mpactr_object_to_mass_data_set()`.
+#' @param data the result of the `cluster_data()` function, or just a massdataset created from `convert_metaboscape2mass_dataset()` or `convert_mpactr_object_to_mass_data_set()`.
 create_community_matrix_object <- function(data) {
   return(UseMethod("create_community_matrix_object", data))
 }
@@ -11,7 +11,6 @@ create_community_matrix_object <- function(data) {
 #' @rdname create_community_matrix_object
 create_community_matrix_object.mass_dataset <- function(data)
 {
-  print("peak table method")
   samples <- colnames(data@expression_data)
   ms2_matches <- data@ms2_data[[1]]@variable_id
   filtered_data <- data@expression_data[which(rownames(data@expression_data) %in% ms2_matches), ]
@@ -26,7 +25,6 @@ create_community_matrix_object.mass_dataset <- function(data)
 #' @rdname create_community_matrix_object
 create_community_matrix_object.list <- function(data)
 {
-  print("Clustur method")
   df <- get_abundance(data)
   samples <- unique(df$samples)
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)
