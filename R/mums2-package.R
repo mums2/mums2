@@ -29,6 +29,10 @@
 #' @importFrom mpactr get_peak_table
 #' @importFrom mpactr import_data
 #' @importFrom msentropy msentropy_similarity
+#' @importFrom mzR close
+#' @importFrom mzR header
+#' @importFrom mzR openMSfile
+#' @importFrom mzR peaks
 #' @importFrom Rcpp sourceCpp
 #' @importFrom tibble column_to_rownames
 #' @useDynLib mums2, .registration = TRUE
