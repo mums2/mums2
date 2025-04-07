@@ -33,6 +33,10 @@ Read <- function(path) {
     .Call(`_mums2_Read`, path)
 }
 
+Diffs <- function(vec, value) {
+    .Call(`_mums2_Diffs`, vec, value)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }
