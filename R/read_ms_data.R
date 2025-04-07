@@ -10,6 +10,9 @@ read_mzml_mzxml <- function(file) {
   file_reader <- openMSfile(file)
   mass_spec_data <- header(file_reader, 
                            1:length(peaks(file_reader)))[c("seqNum", "msLevel", "basePeakMZ", "retentionTime")]
+  mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
+  mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
+  
   mass_spec_data <- mass_spec_data[mass_spec_data$msLevel == 2, ]
   peak_data <- vector("list", nrow(mass_spec_data))
   for(i in seq_along(peak_data)) {

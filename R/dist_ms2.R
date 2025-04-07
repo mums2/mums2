@@ -43,7 +43,8 @@ dist_ms2 <- function(data, cutoff, precursor_thresh, score_params) {
 #' @method dist_ms2 mass_dataset
 #' @export
 dist_ms2.mass_dataset <- function(data, cutoff, precursor_thresh, score_params) {
-  data_list <- list("pmz" = data@ms2_data[[1]]@ms2_mz,
+  data <- mass_data_set
+  data_list2 <- list("pmz" = data@ms2_data[[1]]@ms2_mz,
                     "id" = data@ms2_data[[1]]@variable_id,
                     "spectra" = lapply(data@ms2_data[[1]]@ms2_spectra,
                                        as.data.frame))
@@ -52,6 +53,20 @@ dist_ms2.mass_dataset <- function(data, cutoff, precursor_thresh, score_params) 
 
   return(dist)
 }
+
+#' @method dist_ms2 mass_data
+#' @export
+dist_ms2.mass_data <- function(data, cutoff, precursor_thresh, score_params) {
+  data <- matches
+  data_list <- list("pmz" = data$ms2_matches$mz,
+                    "id" = data$ms2_matches$mz1_compound_id,
+                    "spectra" = data$ms2_data$peak_data[data$ms2_matches$spectra_index])
+
+  dist <- distMS2(data_list, score_params, precursor_thresh, cutoff)
+
+  return(dist)
+}
+
 
 
 # is_same_scan <- function(spectra_1, spectra_2) {
