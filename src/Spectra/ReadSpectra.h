@@ -11,7 +11,7 @@
 
 class ReadSpectra {
 public:
-    bool ReadMGF(std::string filePath);
+    Rcpp::List ReadMGF(const std::string &filePath);
 
 };
 

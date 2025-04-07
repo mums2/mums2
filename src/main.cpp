@@ -10,6 +10,7 @@
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
+#include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
@@ -97,4 +98,10 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     Rcpp::rownames(diversity) = samples;
 
     return diversity;
+}
+
+// [[Rcpp::export]]
+Rcpp::List Read(const std::string& path) {
+    ReadSpectra spectra;
+    return(spectra.ReadMGF(path));
 }
