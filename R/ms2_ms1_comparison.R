@@ -24,17 +24,20 @@ ms2_ms1_compare <- function(ms2_data, mpactr_object, mz_tolerance, rt_tolerance)
   matched_peaks <- length(which(lapply(result, length) > 0))
   print(paste0(matched_peaks, "/", len, " peaks have an MS2 spectra."))
 
-  resultant_mat <- matrix(0, nrow = matched_peaks, ncol = 4)
-  colnames(resultant_mat) <- c("mz", "rt", "mz1_compound_id", "spectra_index")
+  resultant_mat <- matrix(0, nrow = matched_peaks, ncol = 5)
+  colnames(resultant_mat) <- c("mz", "rt", "mz1_compound_id", "spectra_index", "ms2_spectrum_id")
   rowIndex <- 1
   for(i in seq_along(1:length(result))) {
     if(length(result[[i]]) <= 0)
         next
-    index <- which.max(mz2[result[[i]]])
-    resultant_mat[rowIndex, 1] <- mz2[result[[i]][[index]]]
-    resultant_mat[rowIndex, 2] <- rt2[result[[i]][[index]]]
+    index <- result[[i]][which.max(mz2[result[[i]]])]
+    mz <- mz2[index]
+    rt <- rt2[index]
+    resultant_mat[rowIndex, 1] <- mz
+    resultant_mat[rowIndex, 2] <- rt
     resultant_mat[rowIndex, 3] <- ms1_compounds[[i]]
-    resultant_mat[rowIndex, 4] <- spectra_index[result[[i]][[index]]]
+    resultant_mat[rowIndex, 4] <- spectra_index[index]
+    resultant_mat[rowIndex, 5] <- paste0("mz",mz,"rt",rt)
     rowIndex <- rowIndex + 1 
   }
   match_df <- as.data.frame(resultant_mat)

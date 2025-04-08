@@ -93,6 +93,22 @@ annotate_ms2.mass_dataset <- function(query, reference, score_params,
   return(annotations)
 }
 
+#' @method annotate_ms2 mass_data
+#' @export
+annotate_ms2.mass_data <- function(query, reference, score_params,
+  precursor_tolerance, min_score) {
+  ms2 <- query$ms2_matches
+  matches <- AnnotateMs2Features(ms2$mz1_compound_id, ms2$ms2_spectrum_id,
+                                 ms2$mz, ms2$rt, 
+                                 query$ms2_data$peak_data[query$ms2_matches$spectra_index],
+                                 reference, score_params, precursor_tolerance,
+                                 min_score)
+
+annotations <- add_annotations(matches, reference)
+
+return(annotations)
+}
+
 #' @importFrom stats setNames
 add_annotations <- function(matches, reference) {
   ref_info <- data.frame()
