@@ -7,7 +7,7 @@
 read_mgf(file)
 }
 \arguments{
-\item{file}{the object path of your mgf file}
+\item{file}{the file path of your mgf file}
 }
 \description{
 Reader function mgf files

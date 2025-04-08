@@ -101,7 +101,13 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
 }
 
 // [[Rcpp::export]]
-Rcpp::List Read(const std::string& path) {
+Rcpp::List ReadMgf(const std::string& path) {
     ReadSpectra spectra;
     return(spectra.ReadMGF(path));
+}
+
+// [[Rcpp::export]]
+Rcpp::List ReadMsp(const std::string& path) {
+    ReadSpectra spectra;
+    return(spectra.ReadMSP(path));
 }

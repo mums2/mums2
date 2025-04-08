@@ -12,6 +12,7 @@
 class ReadSpectra {
 public:
     Rcpp::List ReadMGF(const std::string &filePath);
+    Rcpp::List ReadMSP(const std::string &filePath);
 
 };
 

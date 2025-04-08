@@ -1,7 +1,7 @@
 #' @title Read mzml and mzXML files
 #' @export
 #' @description Reader function for mzml and mzXML files
-#' @param file the object path of your mzml/mzXML file
+#' @param file the file path of your mzml/mzXML file
 read_mzml_mzxml <- function(file) {
   extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
   if(!(tolower(extension) %in% c("mzml", "mzxml"))) {
@@ -27,15 +27,23 @@ read_mzml_mzxml <- function(file) {
 #' @title Read mgf files
 #' @export
 #' @description Reader function mgf files
-#' @param file the object path of your mgf file
+#' @param file the file path of your mgf file
 read_mgf <- function(file) {
   extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
   if(tolower(extension) != "mgf") {
     stop(paste0("Please ensure the input file is a .mgf, it is currently a .", extension))
   }
-  result_data_list <- Read(file)
+  result_data_list <- ReadMgf(file)
   filtered_df <- data.frame(SpectraIndex = 1:nrow(result_data_list$ms2_table),
                             result_data_list$ms2_table[c("PEPMASS", "RTINMINUTES")])
   colnames(filtered_df) <- c("SpectraIndex", "basePeakMZ", "retentionTime")
   return(list(mass_spec_data = filtered_df, peak_data = result_data_list$mzIntensityList)) 
+}
+
+#' @title Read msp files
+#' @export
+#' @description Reader function msp files
+#' @param file the file path of your msp file
+read_msp <- function(msp_file) {
+  return(ReadMsp(msp_file))
 }

@@ -7,7 +7,7 @@
 read_mzml_mzxml(file)
 }
 \arguments{
-\item{file}{the object path of your mzml/mzXML file}
+\item{file}{the file path of your mzml/mzXML file}
 }
 \description{
 Reader function for mzml and mzXML files

@@ -105,14 +105,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Read
-Rcpp::List Read(const std::string& path);
-RcppExport SEXP _mums2_Read(SEXP pathSEXP) {
+// ReadMgf
+Rcpp::List ReadMgf(const std::string& path);
+RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(Read(path));
+    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ReadMsp
+Rcpp::List ReadMsp(const std::string& path);
+RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -168,7 +179,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
-    {"_mums2_Read", (DL_FUNC) &_mums2_Read, 1},
+    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
+    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
