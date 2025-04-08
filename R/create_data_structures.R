@@ -21,11 +21,13 @@ create_community_matrix <- function(cluster_object) {
 #' @title Create Count Table
 #' @description
 #' Creats a count table based with you mass data sets ms2 matches.
-#' @param mass_data_set your mass data set object.
-create_count_table <- function(mass_data_set) {
-  ms2_matches <- mass_data_set@ms2_data[[1]]@variable_id
-  samples <- mass_data_set@expression_data[which(rownames(mass_data_set@expression_data) %in% ms2_matches), ]
-  return(data.frame(Representative_Sequence = rownames(samples), 
-                    total = rowSums(samples), samples, check.names = FALSE))
-  }
-
+#' @param ms2_match_data your ms2-ms1 match data created from `ms2_ms1_compare()`
+#' @param mpactr_obj your mpactr object that was created from `import_all_data()`.
+create_count_table <- function(ms2_match_data, mpactr_obj) {
+  ms2_matches_compounds <- ms2_match_data$ms2_matches$mz1_compound_id
+  peak_table <- get_peak_table(mpactr_obj)[ ,-c(2, 3, 4)]
+  peak_table$cor <- NULL
+  samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
+  return(data.frame(Representative_Sequence = samples$Compound, 
+                    total = rowSums(samples[,-1]), samples[,-1], check.names = FALSE))
+}

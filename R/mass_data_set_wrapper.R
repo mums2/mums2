@@ -8,8 +8,7 @@
 #' @param column the column type of your data, can choose between "rp" or "hilic".
 #' @param ms1.ms2.match.mz.tol your mz (mass to charge ratio) tolerance for matching ms1 and ms2.
 #' @param ms1.ms2.match.rt.tol your retention time tolerance for ms1 and s2 matching.
-add_ms2 <- function(mass_data_set, path, polarity, column, ms1.ms2.match.mz.tol = 15, ms1.ms2.match.rt.tol = 30) {
-  browser()
+add_ms2 <- function(mass_data_set, path, polarity, column, ms1.ms2.match.mz.tol = 15, ms1.ms2.match.rt.tol = 30) {4
   return(mutate_ms2(
     object = mass_data_set, 
     path = path,
