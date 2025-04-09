@@ -4,16 +4,16 @@
 \alias{ms2_ms1_compare}
 \title{Match your ms1 spectra to a ms2}
 \usage{
-ms2_ms1_compare(ms2_data, mpactr_object, mz_tolerance, rt_tolerance)
+ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 }
 \arguments{
-\item{ms2_data}{the created object from \code{read_mzml_mzxml()} or \code{read_mgf()}}
+\item{ms2_files}{a list of either \emph{all} mgf files, mzml, or mzxml files.}
+
+\item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
 
 \item{mz_tolerance}{your mass-charge ratio tolerance}
 
 \item{rt_tolerance}{your retention time tolerance}
-
-\item{ms1_peak_table}{your ms1 peak_table that is created from \code{import_all_data()}}
 }
 \description{
 We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt

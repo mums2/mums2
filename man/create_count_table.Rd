@@ -4,12 +4,10 @@
 \alias{create_count_table}
 \title{Create Count Table}
 \usage{
-create_count_table(ms2_match_data, mpactr_obj)
+create_count_table(ms2_match_data)
 }
 \arguments{
 \item{ms2_match_data}{your ms2-ms1 match data created from \code{ms2_ms1_compare()}}
-
-\item{mpactr_obj}{your mpactr object that was created from \code{import_all_data()}.}
 }
 \description{
 Creats a count table based with you mass data sets ms2 matches.
