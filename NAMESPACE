@@ -3,6 +3,7 @@
 S3method(annotate_ms2,mass_data)
 S3method(annotate_ms2,mass_dataset)
 S3method(create_community_matrix_object,list)
+S3method(create_community_matrix_object,mass_data)
 S3method(create_community_matrix_object,mass_dataset)
 S3method(dist_ms2,mass_data)
 S3method(dist_ms2,mass_dataset)

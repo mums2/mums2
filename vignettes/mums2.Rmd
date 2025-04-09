@@ -78,6 +78,7 @@ Using massdatasset and massdatabase users can annotate their current massdataset
   annotations <- annotate_ms2(query = mass_data_set, reference = psu_msmls,
                               score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2)
   annotations
+  massdataset::mutate_ms2
 ```
 
 # Scoring/Distance
@@ -105,6 +106,7 @@ Once you clustered your data, you have to transform it into a data-usable format
 
   # You can also do this without clustering
   community_obj_no_cluster <- create_community_matrix_object(mass_data_set)
+  mat2 <- get_community_matrix(community_obj_no_cluster)
   mat[, 1:10]
 ```
 

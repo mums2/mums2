@@ -3,12 +3,15 @@
 \name{create_community_matrix_object}
 \alias{create_community_matrix_object}
 \alias{create_community_matrix_object.mass_dataset}
+\alias{create_community_matrix_object.mass_data}
 \alias{create_community_matrix_object.list}
 \title{Create Community Matrix}
 \usage{
 create_community_matrix_object(data)
 
 \method{create_community_matrix_object}{mass_dataset}(data)
+
+\method{create_community_matrix_object}{mass_data}(data)
 
 \method{create_community_matrix_object}{list}(data)
 }

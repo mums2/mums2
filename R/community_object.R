@@ -11,15 +11,32 @@ create_community_matrix_object <- function(data) {
 #' @rdname create_community_matrix_object
 create_community_matrix_object.mass_dataset <- function(data)
 {
-  samples <- colnames(data@expression_data)
-  ms2_matches <- data@ms2_data[[1]]@variable_id
-  filtered_data <- data@expression_data[which(rownames(data@expression_data) %in% ms2_matches), ]
+
+  samples <- colnames(mass_data_set@expression_data)
+  ms2_matches <- mass_data_set@ms2_data[[1]]@variable_id
+  filtered_data <- mass_data_set@expression_data[which(rownames(mass_data_set@expression_data) %in% ms2_matches), ]
   matrix <- as.matrix(t(filtered_data))
   rownames(matrix) <- samples
   community_matrix <- CreateCommunityMatrix(matrix)
   class(community_matrix) <- c(class(community_matrix), "community_object")
   return(community_matrix)
 }
+
+#' @export
+#' @rdname create_community_matrix_object
+create_community_matrix_object.mass_data <- function(data)
+{
+  samples <- data$samples
+  ms2_matches <-  data$ms2_matches$ms1_compound_id
+  filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches), ][, ..samples]
+  matrix <- as.matrix(t(filtered_data))
+  rownames(matrix) <- samples
+  community_matrix <- CreateCommunityMatrix(matrix)
+  class(community_matrix) <- c(class(community_matrix), "community_object")
+  return(community_matrix)
+}
+
+
 
 #' @export
 #' @rdname create_community_matrix_object

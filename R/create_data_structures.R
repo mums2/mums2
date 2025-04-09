@@ -24,7 +24,7 @@ create_community_matrix <- function(cluster_object) {
 #' @param ms2_match_data your ms2-ms1 match data created from `ms2_ms1_compare()`
 #' @param mpactr_obj your mpactr object that was created from `import_all_data()`.
 create_count_table <- function(ms2_match_data, mpactr_obj) {
-  ms2_matches_compounds <- ms2_match_data$ms2_matches$mz1_compound_id
+  ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
   peak_table <- get_peak_table(mpactr_obj)[ ,-c(2, 3, 4)]
   peak_table$cor <- NULL
   samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]

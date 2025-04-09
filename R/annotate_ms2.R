@@ -98,9 +98,9 @@ annotate_ms2.mass_dataset <- function(query, reference, score_params,
 annotate_ms2.mass_data <- function(query, reference, score_params,
   precursor_tolerance, min_score) {
   ms2 <- query$ms2_matches
-  matches <- AnnotateMs2Features(ms2$mz1_compound_id, ms2$ms2_spectrum_id,
+  matches <- AnnotateMs2Features(ms2$ms1_compound_id, ms2$ms2_spectrum_id,
                                  ms2$mz, ms2$rt, 
-                                 query$ms2_data$peak_data[query$ms2_matches$spectra_index],
+                                 query$peak_data,
                                  reference, score_params, precursor_tolerance,
                                  min_score)
 
