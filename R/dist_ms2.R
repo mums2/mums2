@@ -57,7 +57,6 @@ dist_ms2.mass_dataset <- function(data, cutoff, precursor_thresh, score_params) 
 #' @method dist_ms2 mass_data
 #' @export
 dist_ms2.mass_data <- function(data, cutoff, precursor_thresh, score_params) {
-  data <- matches
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)

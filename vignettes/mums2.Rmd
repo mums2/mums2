@@ -79,7 +79,7 @@ We have implemented a scoring and/or distance algorithm that allows you to gener
 Once we have generated a distance matrix, we can use that matrix to cluster our data using the clustur package (more information can be found on the clustur website). clustur is an R package that contains the clusturing algorithms from mothur (a software that is used to anaylsis microbial ecology).
 ```{r  R.options=list(max.print=15)}
 
-  cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data, cluster_method = "opticlust")
+  cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data, mpactr_object = squid_filter, cluster_method = "opticlust")
   cluster_results
 
 ```
