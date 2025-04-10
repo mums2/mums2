@@ -17,18 +17,15 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     while(std::getline(spectraData,  line)) {
         if(line.find("BEGIN IONS") != std::string::npos) continue;
         if(line.find("END IONS") != std::string::npos) { // ending
-            // std::vector<double> tmpMz;
-            // tmpMz.insert(tmpMz.end(), std::make_move_iterator(mz.begin()), std::make_move_iterator(mz.end()));
-            // std::vector<double> tmpInt;
-            // tmpInt.insert(tmpInt.end(), std::make_move_iterator(intensity.begin()), std::make_move_iterator(intensity.end()));
-            // spectraTables.emplace_front(MapUnordedMapToSpectraTable(map,tmpMz, tmpInt));
+
             mzContainer.emplace_back(mz);
             intensityContainer.emplace_back(intensity);
             mz.clear();
             intensity.clear();
             continue;
         }
-        if(line.find('=') != std::string::npos) { // headers and/or metadata
+        if(line.find("PEPMASS") != std::string::npos || line.find("RTINMINUTES") != std::string::npos ||
+            line.find("RTINSECONDS") != std::string::npos) { // headers and/or metadata
             std::vector<std::string> values;
             std::string delimiter = "=";
             const auto pos = line.find(delimiter);
@@ -37,7 +34,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
             map[valueName].emplace_back(value);
             continue;
         }
-        if(line.find(' ') != std::string::npos) { // peak mz/intensities
+        if(line.find('=') == std::string::npos && line.find(' ') != std::string::npos) { // peak mz/intensities
             std::vector<std::string> values;
             std::string delimiter = " ";
             const auto pos = line.find(delimiter);

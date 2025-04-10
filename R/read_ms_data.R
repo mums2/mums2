@@ -58,9 +58,11 @@ read_mgf <- function(file) {
     print(paste0("Reading: ", file, " ..."))
     result_data_list <- ReadMgf(file)
     row_length <- nrow(result_data_list$ms2_table)
+    columns <- colnames(result_data_list$ms2_table)
+    rt_type <- which(columns %in% c("RTINMINUTES", "RTINSECONDS"))
     filtered_df <- data.frame(SpectraIndex = 1:row_length,
                               file = rep(file, time = row_length),
-                              result_data_list$ms2_table[c("PEPMASS", "RTINMINUTES")])
+                              result_data_list$ms2_table[c("PEPMASS", columns[rt_type])])
     colnames(filtered_df) <- c("SpectraIndex", "file", "basePeakMZ", "retentionTime")
    
     all_data$mass_spec_data <- rbind(all_data$mass_spec_data, filtered_df)

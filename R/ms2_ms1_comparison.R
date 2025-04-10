@@ -15,6 +15,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
   else {
     ms2_data <- read_mgf(ms2_files)
   }
+
   mz2 <- as.numeric(ms2_data$mass_spec_data$basePeakMZ)
   rt2 <- as.numeric(ms2_data$mass_spec_data$retentionTime)
   spectra_index <- ms2_data$mass_spec_data$SpectraIndex
