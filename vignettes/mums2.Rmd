@@ -48,8 +48,7 @@ After you import the data we are able to filter the data using filters including
 
 
 # Preprocess ms2 data
-Once we filter our data, we have to transform the data in a data-friendly object for further analysis. We opted to use the packages from tidy-mass to accomplish this. Specifically, massdatabase and massdataset. Using our built in conversion function, we can convert any mpactr object to a 
-massdataset. From there we can run all of the avaliable methods that are included in massdataset, in our case, we can use `mutate_ms2()`. Mutate ms2 matches ms1 features that have a ms2 peak to the ms2 spectra supplied. It then adds the information to the object, allow us to research more about the data.
+Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 and ms2 peaks. Our `ms2_ms1_compare()` function reads a list of mgf files and matches them with a ms1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that ms2 spectra files are very memory intensive, they can be anywhere from 1mb to 100gbs. Therefore, depending on how big your file is, do not expect this function to be overly fast.  
 ```{r  R.options=list(max.print=15)}
   matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 100, 150)
   matched_data
@@ -58,7 +57,7 @@ massdataset. From there we can run all of the avaliable methods that are include
 
 
 # Annotations
-Using massdatasset and massdatabase users can annotate their current massdataset data by supplying there own annotated databse.
+We are also able annotate our matched_ms1_ms1 object. By using an msp file as a reference and using a specified scoring algorithm(whether it be a cosine squared algorith or anything else) we can compute similairty between peaks in the msp file and generate annotations. 
 ```{r  R.options=list(max.print=15)}
 
   psu_msmls <- read_msp(example("PSU-MSMLS.msp"))

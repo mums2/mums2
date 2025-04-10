@@ -46,3 +46,7 @@ std::vector<uint32_t> CommunityMatrix::GetCommunityMatrixByRow(const int row) co
     const std::vector<uint32_t> communityVector = Rcpp::as<std::vector<uint32_t>>(community);
     return communityVector;
 }
+
+Rcpp::CharacterVector CommunityMatrix::GetSampleNames() {
+    return Rcpp::rownames(communityMatrix);
+}

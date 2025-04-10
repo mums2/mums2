@@ -52,7 +52,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     }
     Rcpp::List mzIntensityList(spectraPeaks);
     for (int i = 0; i < spectraPeaks; i++) {
-        mzIntensityList[i] = Rcpp::DataFrame::create(Rcpp::Named("mz") = mzContainer.front(),
+        mzIntensityList[i] = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
         Rcpp::Named("intensity") = intensityContainer.front());
         intensityContainer.pop_front();
         mzContainer.pop_front();

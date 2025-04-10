@@ -21,6 +21,7 @@ public:
     const std::vector<std::vector<uint32_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
     std::vector<std::vector<uint32_t>>& GetAllIndexes() {return allIndexes;}
 
+    Rcpp::CharacterVector GetSampleNames();
     const std::vector<uint32_t>& GetSums() const {return sums;}
     const int& GetRow() const {return row;}
     const int& GetColumn() const {return col;}
