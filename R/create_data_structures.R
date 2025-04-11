@@ -17,11 +17,7 @@ create_community_matrix <- function(cluster_object) {
   return(combined_df)
 }
 
-#' @export
-#' @title Create Count Table
-#' @description
-#' Creats a count table based with you mass data sets ms2 matches.
-#' @param ms2_match_data your ms2-ms1 match data created from `ms2_ms1_compare()`
+# Helper function for creating count tables
 create_count_table <- function(ms2_match_data) {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
   peak_table <- ms2_match_data$ms1_data[ ,-c(2, 3, 4)]

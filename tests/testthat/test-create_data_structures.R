@@ -3,12 +3,21 @@ test_that("test that we can create a community matrix", {
   distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(results)
-  mat <- get_community_matrix(communiy_object)
+  mat <- create_community_matrix(results)
   expect_true("matrix" %in% class(mat))
   expect_true(all(mat == get_community_matrix(communiy_object)))
   expect_true(nrow(mat) == 21)
   expect_true(ncol(mat) == 214)
 })
+
+test_that("test that create a community matrix errors when given wrong inputs", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  results <- cluster_data(distances, dat,  0.3, "opticlust")
+  communiy_object <- create_community_matrix_object(results)
+  expect_error(create_community_matrix(communiy_object))
+})
+
 
 test_that("test that we create a proper count table", {
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))

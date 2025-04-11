@@ -11,7 +11,7 @@
 #'  or `"spectral_entropy"`. A sparse matrix is returned.
 #'
 #'
-#' @param data An object containing MA2 data.
+#' @param data the object generated from `ms2_ms1_compare()`.
 #' @param cutoff The maximum distance value (`numeric`) to store a pairwise
 #'  comparison. The default of .3 corresponds to a cosine score of .7,
 #'  meaning pairs with a score of .7 or higher will be stored in the matrix.
@@ -38,20 +38,6 @@
 #' dat_sub_dist <- dist_ms2(dat_sub, 0.3, 2, gnps_params(0.5))}
 dist_ms2 <- function(data, cutoff, precursor_thresh, score_params) {
   UseMethod("dist_ms2", data)
-}
-
-#' @method dist_ms2 mass_dataset
-#' @export
-dist_ms2.mass_dataset <- function(data, cutoff, precursor_thresh, score_params) {
-  data <- mass_data_set
-  data_list2 <- list("pmz" = data@ms2_data[[1]]@ms2_mz,
-                    "id" = data@ms2_data[[1]]@variable_id,
-                    "spectra" = lapply(data@ms2_data[[1]]@ms2_spectra,
-                                       as.data.frame))
-
-  dist <- distMS2(data_list, score_params, precursor_thresh, cutoff)
-
-  return(dist)
 }
 
 #' @method dist_ms2 mass_data

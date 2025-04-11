@@ -5,9 +5,14 @@ test_that("read_mgf will read an mgf data properly", {
   expect_true(length(mgf_data$peak_data[[1]]) == nrow(mgf_data$mass_spec_data)) 
 })
 
+test_that("read_mgf will read an mgf will fail if file has the wrong extension", {
+  expect_error(read_mgf(test_path("exttestdata", "matched_data.RDS")))
+})
+
 test_that("read_msp will read an msp data properly", {
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data", "PSU-MSMLS.msp"))
   expect_true(length(psu_msmls_data) == 576)
   expect_true(class(psu_msmls_data) %in% "list")
 })
+
 

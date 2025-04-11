@@ -21,17 +21,3 @@ test_that("annotate_ms_featrues returns the correct annotations in the
             expect_true(nrow(annotations) > 0)
             expect_s3_class(annotations, "data.frame")
 })
-
-############################################
-###             Helper funs              ###
-############################################
-
-test_that("get_ref_precursor works correctly", {
-  dir <- "exttestdata/database_data"
-  file <- "psu_msmls_oneref"
-  single_ref <- readRDS(test_path(dir, file))
-
-  pmz <- get_ref_precursor(single_ref)
-
-  expect_equal(pmz, 148.061)
-})

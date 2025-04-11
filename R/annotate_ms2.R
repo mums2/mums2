@@ -25,12 +25,11 @@
 #'
 #' @return A `data.frame` with all comparisons with scores above the threshold.
 #'  Information for the query scan include `query_ms1_id` (the variable_id
-#'  for features in expression_data of the `mass_dataset` object)
+#'  for features in expression_data of the `mass_data` object)
 #'  `"query_ms2_id"` (the `ms2_spectrum_id` in the `query`
 #'  object), `"query_mz"` (the precursor mz for the scan), and `"query_rt"`
 #'  (the retention time for the scan). `query_mz` and `query_rt` are derived
-#'  from the ms2 scan data and not the ms1 variable info slot of the
-#'  `mass_dataset` object. A column (`"ref_idx`) is included to report the
+#'  from the ms2 matches data. A column (`"ref_idx`) is included to report the
 #'  location for the matching reference molecule in `"reference"`. Scores
 #'  are reported in the `"score"` column. Annotation information is returned
 #'  given the information provided in the reference used as input.
@@ -40,57 +39,11 @@
 #' @usage annotate_ms2(query, reference, score_params,
 #' precursor_tolerance, min_score)
 #'
-#' @examples
-#' # annotating with one reference database:
-#' # download your database of choice
-#' \dontrun{
-#' massdatabase::download_gnps_spectral_library(
-#'    gnps_library = "PSU-MSMLS", path = ".")
-#' psu_msmls <- read_msp_data_gnps(file = "PSU-MSMLS.msp")
-#'}
-#' # annotate features in a `mass_dataset` object.
-#' \dontrun{
-#' annotate_ms2(dat, psu_msmls, precursor_tolerance = 2,
-#'     gnps_param(frag_tolerance = 0.5), min_score = .7)}
-#'
-#' # annotating with multiple reference databases:
-#' \dontrun{
-#' massdatabase::download_gnps_spectral_library(
-#'    gnps_library = "PSU-MSMLS", path = ".")
-#' massdatabase::download_gnps_spectral_library(
-#'    gnps_library = "GNPS-MSMLS", path = ".")
-#'
-#' msmls <- read_msp_data_gnps(file = c("PSU-MSMLS.msp",
-#'    "GNPS-MSMLS.msp"))}
-#'
-#' # annotate features in a `mass_dataset` object.
-#' \dontrun{
-#' annotate_ms2(dat, msmls, precursor_tolerance = 2,
-#'    gnps_param(frag_tolerance = 0.5, min_score = .7))}
-#' @name annotate_ms2
-NULL
-
 #' @export
 #' @rdname annotate_ms2
 annotate_ms2 <- function(query, reference, score_params,
                          precursor_tolerance, min_score) {
   UseMethod("annotate_ms2", query)
-}
-
-#' @method annotate_ms2 mass_dataset
-#' @importFrom stats setNames
-#' @export
-annotate_ms2.mass_dataset <- function(query, reference, score_params,
-                                      precursor_tolerance, min_score) {
-  ms2 <- query@ms2_data[[1]]
-  matches <- AnnotateMs2Features(ms2@variable_id, ms2@ms2_spectrum_id,
-                                 ms2@ms2_mz, ms2@ms2_rt, ms2@ms2_spectra,
-                                 reference, score_params, precursor_tolerance,
-                                 min_score)
-
-  annotations <- add_annotations(matches, reference)
-
-  return(annotations)
 }
 
 #' @method annotate_ms2 mass_data

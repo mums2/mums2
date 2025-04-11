@@ -6,6 +6,12 @@ test_that("test that we can create a communiy object", {
   expect_true("community_object" %in% class(communiy_object))
 })
 
+test_that("test that we can create a communiy object without clustering", {
+  ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  communiy_object <- create_community_matrix_object(ms2_match_data)
+  expect_true("community_object" %in% class(communiy_object))
+})
+
 test_that("Test that get community object returns a community matrix", {
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, gnps_params(0.5))

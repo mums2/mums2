@@ -7,7 +7,7 @@
 read_msp(msp_file)
 }
 \arguments{
-\item{file}{the file path of your msp file}
+\item{msp_file}{the file path of your msp file}
 }
 \description{
 Reader function msp files

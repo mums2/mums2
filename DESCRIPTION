@@ -25,14 +25,13 @@ Imports:
     clustur,
     dplyr,
     magrittr,
-    massdataset,
     msentropy,
     Rcpp,
     tibble,
     data.table,
-    massdatabase,
     mpactr,
-    mzR
+    mzR,
+    utils
 Suggests: 
     knitr,
     rmarkdown,

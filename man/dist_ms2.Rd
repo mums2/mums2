@@ -7,7 +7,7 @@
 dist_ms2(data, cutoff, precursor_thresh, score_params)
 }
 \arguments{
-\item{data}{An object containing MA2 data.}
+\item{data}{the object generated from \code{ms2_ms1_compare()}.}
 
 \item{cutoff}{The maximum distance value (\code{numeric}) to store a pairwise
 comparison. The default of .3 corresponds to a cosine score of .7,

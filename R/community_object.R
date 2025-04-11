@@ -2,24 +2,9 @@
 #' @title Create Community Matrix
 #' @description
 #' Takes the shared dataframe from clustur or a massdataset and converts it into a community matrix object
-#' @param data the result of the `cluster_data()` function, or just a massdataset created from `convert_metaboscape2mass_dataset()` or `convert_mpactr_object_to_mass_data_set()`.
+#' @param data the result of the `cluster_data()` function, or just a mass_data object created from `ms2_ms1_compare()`.
 create_community_matrix_object <- function(data) {
   return(UseMethod("create_community_matrix_object", data))
-}
-
-#' @export
-#' @rdname create_community_matrix_object
-create_community_matrix_object.mass_dataset <- function(data)
-{
-
-  samples <- colnames(mass_data_set@expression_data)
-  ms2_matches <- mass_data_set@ms2_data[[1]]@variable_id
-  filtered_data <- mass_data_set@expression_data[which(rownames(mass_data_set@expression_data) %in% ms2_matches), ]
-  matrix <- as.matrix(t(filtered_data))
-  rownames(matrix) <- samples
-  community_matrix <- CreateCommunityMatrix(matrix)
-  class(community_matrix) <- c(class(community_matrix), "community_object")
-  return(community_matrix)
 }
 
 #' @export
@@ -28,7 +13,7 @@ create_community_matrix_object.mass_data <- function(data)
 {
   samples <- data$samples
   ms2_matches <-  data$ms2_matches$ms1_compound_id
-  filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches), ][, ..samples]
+  filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches), ][, samples, with = FALSE]
   matrix <- as.matrix(t(filtered_data))
   rownames(matrix) <- samples
   community_matrix <- CreateCommunityMatrix(matrix)
