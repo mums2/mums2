@@ -8,7 +8,7 @@ annotate_ms2(query, reference, score_params,
 precursor_tolerance, min_score)
 }
 \arguments{
-\item{query}{A \code{mass_dataset} object containing ms2 data.}
+\item{query}{The object generated from \code{ms2_ms1_compare()}.}
 
 \item{reference}{A list of reference data downloaded from
 \href{https://massdatabase.tidymass.org}{massdatabase}.
@@ -35,7 +35,7 @@ are reported in the \code{"score"} column. Annotation information is returned
 given the information provided in the reference used as input.
 }
 \description{
-Annotate query LC-MS/MS features in a \code{mass_dataset} object given a
+Annotate query LC-MS/MS features in a \code{mass_data} object given a
 reference list.
 
 \code{annotate_ms2()} allows for annotation of mass spectrometry features.

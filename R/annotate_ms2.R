@@ -1,6 +1,6 @@
 #' Annotate LC-MS/MS features
 #' @description
-#' Annotate query LC-MS/MS features in a `mass_dataset` object given a
+#' Annotate query LC-MS/MS features in a `mass_data` object given a
 #' reference list.
 #'
 #' `annotate_ms2()` allows for annotation of mass spectrometry features.
@@ -13,7 +13,7 @@
 #' respectively.
 #'
 #'
-#' @param query A `mass_dataset` object containing ms2 data.
+#' @param query The object generated from `ms2_ms1_compare()`.
 #' @param reference A list of reference data downloaded from
 #'  \href{https://massdatabase.tidymass.org}{massdatabase}.
 #' for more information about this class.
