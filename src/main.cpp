@@ -59,7 +59,9 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
-    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
+    const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
+    const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
+
     Rarefaction rarefaction;
     std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
@@ -76,7 +78,8 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
         }
 
     }
-    Rcpp::rownames(resultantMatrix) = samples;
+    Rcpp::rownames(resultantMatrix) = rowNames;
+    Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
 }
 

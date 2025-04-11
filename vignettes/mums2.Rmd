@@ -57,7 +57,7 @@ Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 an
 
 
 # Annotations
-We are also able annotate our matched_ms1_ms1 object. By using an msp file as a reference and using a specified scoring algorithm(whether it be a cosine squared algorith or anything else) we can compute similairty between peaks in the msp file and generate annotations. 
+We are also able annotate our matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm(whether it be a cosine squared algorith or anything else) we can compute similairty between peaks in the msp file and generate annotations. 
 ```{r  R.options=list(max.print=15)}
 
   psu_msmls <- read_msp(example("PSU-MSMLS.msp"))

@@ -10,6 +10,8 @@ CommunityMatrix::CommunityMatrix(const Rcpp::NumericMatrix &matrix) :communityMa
 
 void CommunityMatrix::InitializeMatrix() {
 
+    rowNames = Rcpp::rownames(communityMatrix);
+    colNames = Rcpp::colnames(communityMatrix);
     row = communityMatrix.nrow();
     col = communityMatrix.ncol();
     rowAbundance = std::vector<std::vector<uint32_t>>(row);
