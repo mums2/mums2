@@ -21,12 +21,7 @@ formatted peak tables and run numerous filters on the data to ensure for
 high-quality data. In addition to mpactR, our team created clustur, a
 package that has integrated the mothur clustering algorithms inside of
 an R package. Therefore, we can easily incorapte these algorithms inside
-of our package to cluster data MS data. In order to anaylsis ms2 data,
-we are using the “tidymass” package. This allows us to match ms1
-features to ms2 features. We have a created a simple converter for users
-to easily transform there data into a tidymass (massdataset) object
-aswell (`convert_mpactr_object_to_mass_data_set()`, you can also use the
-`add_ms2()` function to add a ms2 spectrum).
+of our package to cluster data MS data.
 
 Users are able to import and filter their data using the function
 wrappers we have created for mpactr. To import data we have created a
@@ -38,19 +33,22 @@ function you supply. And are four paramters functions:
 `filter_mispicked_ions_parameters()`, `filter_group_parameters()`,
 `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. Each
 one of these paramter functions have identical parameters to that of the
-mpactr function. Once we have preprocessed all of our data (filtered
-added a ms2 spectra, and have converted our mpactr (or mpactr filtered
-object) to a massdataset using
-`convert_mpactr_object_to_mass_data_set()`), we can annotate ms2 spectra
-given a reference database. Using supporting functions for “tidymass” we
-were able to created a simplistic function to allow users to annotate
-their data. This will give user an idea about the compounds or
-metabolites inside of their spectra. To support scoring/distance
-calculations or spectra similarity, we have implemeted a `dist_ms2()`
-function. This function uses two methods to score spectra, GNPS (Global
-Natural Products Social Molecular Networking) or Spectral Entropy. GNPS
-uses a cosine scoring algorith to calculate the similarity between two
-spectra [Cosine Score
+mpactr function. Following this, we can match ms2 data to our
+corresponding ms1 peaks using the `ms2_ms1_compare()` function. This
+fuction will take your mpact object and ms2 files (.mgf/mzml/mxzml, but
+we HIGHLY recommend the use of .mgf files for there smaller memory
+footprint) as input, read the ms2 files, and match them to the ms1 peaks
+using the mass-charge ratio (mz) and retention time (rt) (It also allows
+you to control the mz and rt tolerance). Afer your match your ms2 data,
+you can annotate a ms2 spectra given a reference database. Using the
+`read_msp()` function, we were able to create another simplistic
+function to allow users to annotate their data. This will give user an
+idea about the compounds or metabolites inside of their spectra. To
+support scoring/distance calculations or spectra similarity, we have
+implemeted a `dist_ms2()` function. This function uses two methods to
+score spectra, GNPS (Global Natural Products Social Molecular
+Networking) or Spectral Entropy. GNPS uses a cosine scoring algorith to
+calculate the similarity between two spectra [Cosine Score
 Paper](https://doi.org/10.1016/1044-0305(94)87009-8). In order to ensure
 a user could run through our pipeline in a resonable amount of time, we
 modified the algorithm to make it much more efficent than that of gnps.

@@ -29,6 +29,14 @@ FasterAvgDist <- function(communityMatrix, index, size, threshold, iterations = 
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, iterations)
 }
 
+ReadMgf <- function(path) {
+    .Call(`_mums2_ReadMgf`, path)
+}
+
+ReadMsp <- function(path) {
+    .Call(`_mums2_ReadMsp`, path)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

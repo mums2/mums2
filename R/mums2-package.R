@@ -18,9 +18,6 @@
 #' @importFrom dplyr rename_all
 #' @importFrom dplyr select
 #' @importFrom magrittr %>%
-#' @importFrom massdatabase read_msp_data
-#' @importFrom massdataset create_mass_dataset
-#' @importFrom massdataset mutate_ms2
 #' @importFrom mpactr filter_cv
 #' @importFrom mpactr filter_group
 #' @importFrom mpactr filter_insource_ions
@@ -29,8 +26,13 @@
 #' @importFrom mpactr get_peak_table
 #' @importFrom mpactr import_data
 #' @importFrom msentropy msentropy_similarity
+#' @importFrom mzR close
+#' @importFrom mzR header
+#' @importFrom mzR openMSfile
+#' @importFrom mzR peaks
 #' @importFrom Rcpp sourceCpp
 #' @importFrom tibble column_to_rownames
+#' @importFrom utils tail
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
 NULL

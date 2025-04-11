@@ -21,13 +21,19 @@ public:
     const std::vector<std::vector<uint32_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
     std::vector<std::vector<uint32_t>>& GetAllIndexes() {return allIndexes;}
 
+    Rcpp::CharacterVector GetSampleNames();
     const std::vector<uint32_t>& GetSums() const {return sums;}
     const int& GetRow() const {return row;}
     const int& GetColumn() const {return col;}
+    const Rcpp::CharacterVector& GetRowNames() const {return rowNames;}
+    const Rcpp::CharacterVector& GetColumnNames() const {return colNames;}
+
 
 private:
     int row = 0;
     int col = 0;
+    Rcpp::CharacterVector rowNames;
+    Rcpp::CharacterVector colNames;
     Rcpp::NumericMatrix communityMatrix;
     std::vector<uint32_t> sums;
     std::vector<std::vector<uint32_t>> rowAbundance; // or abundances. The index represents the row number

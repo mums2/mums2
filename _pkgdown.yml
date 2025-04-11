@@ -7,14 +7,12 @@ reference:
 - title: Import Data
   contents: 
   - import_all_data
-- title: Data Structures
-  contents:
-  - convert_mpactr_object_to_mass_data_set
-  - create_count_table
-  - convert_metaboscape2mass_dataset
-- title: Mass Data Set Helpers
+- title: Add Ms2 Data
   contents: 
-  - add_ms2
+  - ms2_ms1_compare
+- title: Mass Spectrometry Data Readers
+  contents:
+  - read_msp
 - title: Filters
   contents:
   - filter_peak_table
@@ -26,9 +24,6 @@ reference:
   - filter_peak_table.filter_group
   - filter_peak_table.filter_cv
   - filter_peak_table.filter_insource_ions
-- title: Normalize
-  contents:
-  - normalize_ms
 - title: Annotation
   contents:
   - annotate_ms2
@@ -37,7 +32,6 @@ reference:
   - dist_ms2
   - gnps_params
   - spec_entropy_params
-  - score_ms2
 - title: Cluster
   contents: cluster_data
 - title: Diversity Metrics
@@ -51,10 +45,6 @@ reference:
   - create_community_matrix_object
   - print.community_object
   - get_community_matrix
-- title: Mass Spectrometry Data Extractions
-  contents:
-  - get_peaks_data
-  - create_peaks_data
 - title: Example Data
   contents:
   - example
