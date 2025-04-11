@@ -24,7 +24,7 @@ read_mzml_mzxml <- function(file) {
     mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
     mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
     mass_spec_data$file <- rep(file, times = peak_length)
-    
+    mass_spec_data$SpectraIndex <- 1:peak_length
     mass_spec_data <- mass_spec_data[mass_spec_data$msLevel == 2, ]
    
     peak_data <- vector("list", nrow(mass_spec_data))

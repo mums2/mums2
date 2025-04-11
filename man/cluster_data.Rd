@@ -4,12 +4,19 @@
 \alias{cluster_data}
 \title{Cluster}
 \usage{
-cluster_data(distance_df, ms2_match_data, cluster_method = "opticlust")
+cluster_data(
+  distance_df,
+  ms2_match_data,
+  cutoff = 0.3,
+  cluster_method = "opticlust"
+)
 }
 \arguments{
 \item{distance_df}{a distance df that was generated from the \code{distMs2()} function}
 
 \item{ms2_match_data}{your mass data set object}
+
+\item{cutoff}{the cutoff value you wish to cluster to.}
 
 \item{cluster_method}{a cluster method, there are five methods to choose from:
 furthest, nearest, weighted, average, and opticlust. opticlust is the default}
