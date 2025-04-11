@@ -10,6 +10,7 @@
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
+#include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
@@ -58,7 +59,9 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
-    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
+    const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
+    const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
+
     Rarefaction rarefaction;
     std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
@@ -75,26 +78,54 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
         }
 
     }
-    Rcpp::rownames(resultantMatrix) = samples;
+    Rcpp::rownames(resultantMatrix) = rowNames;
+    Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
+Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const int iterations = 1000) {
-    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
+    const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
 
-    Rcpp::NumericMatrix diversity = CalculateDiversity(RarefactionCalculation(communityObject,
+    Rcpp::NumericMatrix diversityMatrix = CalculateDiversity(RarefactionCalculation(communityObject,
         size, threshold), index);
     for(int i = 1; i < iterations; i++) {
         Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityObject,
             size, threshold);
-        diversity += CalculateDiversity(rarefyMatrix, index);
+        diversityMatrix += CalculateDiversity(rarefyMatrix, index);
     }
-    diversity = diversity/iterations;
-    Rcpp::colnames(diversity) = samples;
-    Rcpp::rownames(diversity) = samples;
+    diversityMatrix = diversityMatrix/iterations;
+    Rcpp::colnames(diversityMatrix) = samples;
+    Rcpp::rownames(diversityMatrix) = samples;
+    const int sampleSize = std::pow(samples.size(), 2);
+    Rcpp::CharacterVector firstSample(sampleSize);
+    Rcpp::CharacterVector otherSample(sampleSize);
+    Rcpp::NumericVector diversityResults(sampleSize);
+    int currentIndex = 0;
+    for(int i = 0; i < samples.size(); i++) {
+        for(int j = 0; j < samples.size(); j++) {
+            firstSample[currentIndex] = samples[i];
+            otherSample[currentIndex] = samples[j];
+            diversityResults[currentIndex++] = diversityMatrix(i, j);
+        }
+    }
 
-    return diversity;
+    return Rcpp::DataFrame::create(Rcpp::Named("firstSample") = firstSample,
+        Rcpp::Named("otherSample") = otherSample,
+        Rcpp::Named("diversity") = diversityResults);
 }
+
+// [[Rcpp::export]]
+Rcpp::List ReadMgf(const std::string& path) {
+    ReadSpectra spectra;
+    return(spectra.ReadMGF(path));
+}
+
+// [[Rcpp::export]]
+Rcpp::List ReadMsp(const std::string& path) {
+    ReadSpectra spectra;
+    return(spectra.ReadMSP(path));
+}
+

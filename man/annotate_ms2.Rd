@@ -6,11 +6,9 @@
 \usage{
 annotate_ms2(query, reference, score_params,
 precursor_tolerance, min_score)
-
-annotate_ms2(query, reference, score_params, precursor_tolerance, min_score)
 }
 \arguments{
-\item{query}{A \code{mass_dataset} object containing ms2 data.}
+\item{query}{The object generated from \code{ms2_ms1_compare()}.}
 
 \item{reference}{A list of reference data downloaded from
 \href{https://massdatabase.tidymass.org}{massdatabase}.
@@ -27,18 +25,17 @@ annotation. Comparisons with scores below this value will not be reported.}
 \value{
 A \code{data.frame} with all comparisons with scores above the threshold.
 Information for the query scan include \code{query_ms1_id} (the variable_id
-for features in expression_data of the \code{mass_dataset} object)
+for features in expression_data of the \code{mass_data} object)
 \code{"query_ms2_id"} (the \code{ms2_spectrum_id} in the \code{query}
 object), \code{"query_mz"} (the precursor mz for the scan), and \code{"query_rt"}
 (the retention time for the scan). \code{query_mz} and \code{query_rt} are derived
-from the ms2 scan data and not the ms1 variable info slot of the
-\code{mass_dataset} object. A column (\verb{"ref_idx}) is included to report the
+from the ms2 matches data. A column (\verb{"ref_idx}) is included to report the
 location for the matching reference molecule in \code{"reference"}. Scores
 are reported in the \code{"score"} column. Annotation information is returned
 given the information provided in the reference used as input.
 }
 \description{
-Annotate query LC-MS/MS features in a \code{mass_dataset} object given a
+Annotate query LC-MS/MS features in a \code{mass_data} object given a
 reference list.
 
 \code{annotate_ms2()} allows for annotation of mass spectrometry features.
@@ -49,32 +46,4 @@ spectral scoring methods. Currently scoring methods \code{"gnps"} and
 chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
 created with notur functions \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}},
 respectively.
-}
-\examples{
-# annotating with one reference database:
-# download your database of choice
-\dontrun{
-massdatabase::download_gnps_spectral_library(
-   gnps_library = "PSU-MSMLS", path = ".")
-psu_msmls <- read_msp_data_gnps(file = "PSU-MSMLS.msp")
-}
-# annotate features in a `mass_dataset` object.
-\dontrun{
-annotate_ms2(dat, psu_msmls, precursor_tolerance = 2,
-    gnps_param(frag_tolerance = 0.5), min_score = .7)}
-
-# annotating with multiple reference databases:
-\dontrun{
-massdatabase::download_gnps_spectral_library(
-   gnps_library = "PSU-MSMLS", path = ".")
-massdatabase::download_gnps_spectral_library(
-   gnps_library = "GNPS-MSMLS", path = ".")
-
-msmls <- read_msp_data_gnps(file = c("PSU-MSMLS.msp",
-   "GNPS-MSMLS.msp"))}
-
-# annotate features in a `mass_dataset` object.
-\dontrun{
-annotate_ms2(dat, msmls, precursor_tolerance = 2,
-   gnps_param(frag_tolerance = 0.5, min_score = .7))}
 }
