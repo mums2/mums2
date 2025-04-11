@@ -11,7 +11,6 @@ create_community_matrix_object <- function(data) {
 #' @rdname create_community_matrix_object
 create_community_matrix_object.mass_data <- function(data)
 {
-  data <- matched_data
   samples <- data$samples
   ms2_matches <-  data$ms2_matches$ms1_compound_id
   filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches), ][, samples, with = FALSE]
@@ -29,7 +28,6 @@ create_community_matrix_object.mass_data <- function(data)
 #' @rdname create_community_matrix_object
 create_community_matrix_object.list <- function(data)
 {
-  data <- cluster_results
   df <- data$abundance
   samples <- unique(df$samples)
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]), ]$abundance)

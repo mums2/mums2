@@ -12,9 +12,7 @@ reference:
   - ms2_ms1_compare
 - title: Mass Spectrometry Data Readers
   contents:
-  - read_mgf
   - read_msp
-  - read_mzml_mzxml
 - title: Filters
   contents:
   - filter_peak_table

@@ -1,7 +1,3 @@
-#' @title Read mzml and mzXML files
-#' @export
-#' @description Reader function for mzml and mzXML files
-#' @param file the file path of your mzml/mzXML file
 read_mzml_mzxml <- function(file) {
   file_list <- unique(as.list(file))
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
@@ -39,10 +35,6 @@ read_mzml_mzxml <- function(file) {
 
 }
 
-#' @title Read mgf files
-#' @export
-#' @description Reader function mgf files
-#' @param file the file path of your mgf file
 read_mgf <- function(file) {
   file_list <- unique(as.list(file))
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
