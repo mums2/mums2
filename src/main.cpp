@@ -128,4 +128,3 @@ Rcpp::List ReadMsp(const std::string& path) {
     ReadSpectra spectra;
     return(spectra.ReadMSP(path));
 }
-

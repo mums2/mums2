@@ -5,6 +5,9 @@
 #include "Spectra/ReadSpectra.h"
 
 #include "Spectra/MetaDataValuePair.h"
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 
 Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::ifstream spectraData(filePath);
@@ -14,7 +17,19 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::list<double> mz;
     std::list<double> intensity;
     std::unordered_map<std::string, std::vector<std::string>> map;
+
+    spectraData.unsetf(std::ios_base::skipws);
+    // count the newlines with an algorithm specialized for counting:
+    unsigned long line_count = std::count(
+        std::istream_iterator<char>(spectraData),
+        std::istream_iterator<char>(),
+        '\n');
+    Progress p(line_count, true);
+    spectraData.clear();
+    spectraData.seekg(0);
+    spectraData.setf(std::ios_base::skipws);
     while(std::getline(spectraData,  line)) {
+        p.increment();
         if(line.find("BEGIN IONS") != std::string::npos) continue;
         if(line.find("END IONS") != std::string::npos) { // ending
 
@@ -71,7 +86,18 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     std::list<double> intensity;
     std::list<std::list<MetaDataValuePair>> metaDataKeyContainer;
     std::list<MetaDataValuePair> metaDataKeys;
+    spectraData.unsetf(std::ios_base::skipws);
+    // count the newlines with an algorithm specialized for counting:
+    unsigned long line_count = std::count(
+        std::istream_iterator<char>(spectraData),
+        std::istream_iterator<char>(),
+        '\n');
+    Progress p(line_count, true);
+    spectraData.clear();
+    spectraData.seekg(0);
+    spectraData.setf(std::ios_base::skipws);
     while(std::getline(spectraData,  line)) {
+        p.increment();
         if(line.empty()) { // end of the current block
             mzContainer.emplace_back(mz);
             intensityContainer.emplace_back(intensity);
