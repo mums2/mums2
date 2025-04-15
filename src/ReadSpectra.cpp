@@ -25,9 +25,8 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         std::istream_iterator<char>(),
         '\n');
     Progress p(line_count, true);
-    spectraData.clear();
-    spectraData.seekg(0);
-    spectraData.setf(std::ios_base::skipws);
+    spectraData.close();
+    spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
         p.increment();
         if(line.find("BEGIN IONS") != std::string::npos) continue;
@@ -93,9 +92,8 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         std::istream_iterator<char>(),
         '\n');
     Progress p(line_count, true);
-    spectraData.clear();
-    spectraData.seekg(0);
-    spectraData.setf(std::ios_base::skipws);
+    spectraData.close();
+    spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
         p.increment();
         if(line.empty()) { // end of the current block
@@ -105,11 +103,10 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
             metaDataKeys.clear();
             mz.clear();
             intensity.clear();
-            long long len = spectraData.tellg();
             getline(spectraData, line);
-            if (!line.empty())
-                spectraData.seekg(len ,std::ios_base::beg);
-            continue;
+            if (line.empty())
+                continue;
+
         }
         if(line.find(':') != std::string::npos) { // headers and/or metadata
             std::vector<std::string> values;
@@ -139,7 +136,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     Rcpp::List mspList(spectraPeaks);
 
     for (int i = 0; i < spectraPeaks; i++) {
-        Rcpp::DataFrame peaksDf = Rcpp::DataFrame::create(Rcpp::Named("mz") = mzContainer.front(),
+        Rcpp::List peaksDf = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
             Rcpp::Named("intensity") = intensityContainer.front());
 
         size_t counter = 0;
@@ -151,7 +148,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
             keys[counter] = value.key;
             values[counter++] = value.value;
         }
-        Rcpp::DataFrame metaData = Rcpp::DataFrame::create(Rcpp::Named("key") = keys,
+        Rcpp::List metaData = Rcpp::List::create(Rcpp::Named("key") = keys,
             Rcpp::Named("value") = values);
         mspList[i] = Rcpp::List::create(Rcpp::Named("info") = metaData,
             Rcpp::Named("spec") = peaksDf);
