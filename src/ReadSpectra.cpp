@@ -139,14 +139,21 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         Rcpp::List peaksDf = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
             Rcpp::Named("intensity") = intensityContainer.front());
 
-        size_t counter = 0;
         const std::list<MetaDataValuePair> keyPairs = metaDataKeyContainer.front();
-        const size_t size = keyPairs.size();
-        std::vector<std::string> keys(size);
-        std::vector<std::string> values(size);
+        std::unordered_map<std::string, std::vector<std::list<std::string>::iterator>> duplicateNames;
+        std::list<std::string> keys;
+        // std::list<std::string>::iterator k = keys.begin();
+        std::list<std::string> values;
         for (const auto& value : metaDataKeyContainer.front()) {
-            keys[counter] = value.key;
-            values[counter++] = value.value;
+            if (!duplicateNames[value.key].empty()) {
+                // We have a duplicate, we now need to combine the values
+                const auto firstFoundIndex = duplicateNames[value.key][0];
+                firstFoundIndex->append(";" + value.value);
+                continue;
+            }
+            keys.emplace_back(value.key);
+            values.emplace_back(value.value);
+            duplicateNames[value.key].emplace_back(--values.end());
         }
         Rcpp::List metaData = Rcpp::List::create(Rcpp::Named("key") = keys,
             Rcpp::Named("value") = values);

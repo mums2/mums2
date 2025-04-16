@@ -42,14 +42,14 @@
 #' @export
 #' @rdname annotate_ms2
 annotate_ms2 <- function(query, reference, score_params,
-                         precursor_tolerance, min_score) {
+                         precursor_tolerance, min_score, cluster_data = NULL) {
   UseMethod("annotate_ms2", query)
 }
 
 #' @method annotate_ms2 mass_data
 #' @export
 annotate_ms2.mass_data <- function(query, reference, score_params,
-  precursor_tolerance, min_score) {
+  precursor_tolerance, min_score, cluster_data = NULL) {
   ms2 <- query$ms2_matches
   matches <- AnnotateMs2Features(ms2$ms1_compound_id, ms2$ms2_spectrum_id,
                                  ms2$mz, ms2$rt, 
@@ -57,19 +57,38 @@ annotate_ms2.mass_data <- function(query, reference, score_params,
                                  reference, score_params, precursor_tolerance,
                                  min_score)
 
-annotations <- add_annotations(matches, reference)
+  annotations <- add_annotations(matches, reference)
+  if(!is.null(cluster_data)) {
+    list_data <- clustur::split_clusters_to_list(cluster_data)
+    annotations$OMU <- rep("", times = nrow(annotations))
+    annotaion_omus <- lapply(list_data, function(x)  which(annotations$query_ms1_id %in% x))
+  
+    for(i in seq_along(annotaion_omus)){
+      if(length(annotaion_omus[[i]]) <= 0){
+        next
+      }
+      annotations$OMU[annotaion_omus[[i]]] <- names(annotaion_omus[i])
+    }                           
+  }
 
-return(annotations)
+  return(annotations)
 }
 
 #' @importFrom stats setNames
 add_annotations <- function(matches, reference) {
-  ref_info <- data.frame()
+
+  if(length(reference) <= 0) {
+    return()
+  }
+  ref_info <- data.frame(matrix(ncol = length(reference[[1]]$info$key), nrow = 0))
+  names(ref_info) <- reference[[1]]$info$key # Set initial names
 
   for (ref_idx in matches$ref_idx) {
-    new_ann <- stats::setNames(data.frame(t(reference[[ref_idx]]$info[, -1])),
-                               reference[[ref_idx]]$info[, 1])
+    new_ann <- stats::setNames(data.frame(t(reference[[ref_idx]]$info$value)),
+                               reference[[ref_idx]]$info$key)
 
+    new_ann[setdiff(names(ref_info), names(new_ann))] <- NA
+    ref_info[setdiff(names(new_ann), names(ref_info))] <- NA
     ref_info <- rbind(ref_info, new_ann)
   }
 
@@ -77,3 +96,13 @@ add_annotations <- function(matches, reference) {
 
   return(matches)
 }
+
+# df1 <- data.frame(a = c(1:5), b = c(6:10))
+# df2 <- data.frame(a = c(11:15), b = c(16:20), c = LETTERS[1:5])
+
+# rbind(df1, df2)
+# df1[setdiff(names(df2), names(df1))] <- NA
+# df2[setdiff(names(df1), names(df2))] <- NA
+# a <- data.frame(matrix(ncol = 4, nrow = 0))
+# names(a) <- c("a", "a", "b", "b")
+# paste(as.list(new_ann[,duplicated(colnames(new_ann))]), collapse = ';')
