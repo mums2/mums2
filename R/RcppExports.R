@@ -37,6 +37,10 @@ ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
 }
 
+DotProduct <- function(x, y) {
+    .Call(`_mums2_DotProduct`, x, y)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

@@ -128,3 +128,12 @@ Rcpp::List ReadMsp(const std::string& path) {
     ReadSpectra spectra;
     return(spectra.ReadMSP(path));
 }
+
+// [[Rcpp::export]]
+double DotProduct(Rcpp::NumericVector x, Rcpp::NumericVector y) {
+    double result = 0;
+    for (int i = 0; i < x.length(); i++) {
+        result += x[i] * y[i];
+    }
+    return result;
+}
