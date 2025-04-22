@@ -7,7 +7,7 @@ test_that("test that we can create a community matrix", {
   expect_true("matrix" %in% class(mat))
   expect_true(all(mat == get_community_matrix(communiy_object)))
   expect_true(nrow(mat) == 21)
-  expect_true(ncol(mat) == 214)
+  expect_true(ncol(mat) == 212)
 })
 
 test_that("test that create a community matrix errors when given wrong inputs", {

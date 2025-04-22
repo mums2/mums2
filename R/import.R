@@ -26,12 +26,25 @@ change_rt_to_seconds_or_minutes <- function(mpactr_object, rt_type = "seconds") 
   }
   print(paste0("Changing rt values to ",rt_type))
   peak_table <- get_peak_table(squid_data)
-  if(rt_type == "seconds") {
-    peak_table$rt <- peak_table$rt * 60
+  colnames(peak_table)
+
+  if(rt_type == "seconds" && !("RTINSECONDS" %in% colnames(peak_table))) {
+   
+    column_index <- c(which(colnames(peak_table) == "rt"), which(colnames(peak_table) == "RTINMINUTES"))
+    if(length(column_index) <= 0) {
+      stop("There are no colnames that are equal to rt or RTINMINUTES")
+    }
+    peak_table[[column_index]] <- peak_table[[column_index]] * 60
+    colnames(peak_table)[column_index] = "RTINSECONDS"
     mpactr_object$mpactr_data$set_peak_table(peak_table)
   }
-  if(rt_type == "minutes") {
-    peak_table$rt <- peak_table$rt/60
+  if(rt_type == "minutes" && !("RTINMINUTES" %in% colnames(peak_table))) {
+    column_index <- c(which(colnames(peak_table) == "rt"), which(colnames(peak_table) == "RTINSECONDS"))
+    if(length(column_index) <= 0) {
+      stop("There are no colnames that are equal to rt or RTINSECONDS")
+    }
+    peak_table[[column_index]] <- peak_table[[column_index]] / 60
+    colnames(peak_table)[column_index] = "RTINMINUTES"
     mpactr_object$mpactr_data$set_peak_table(peak_table)
   }
   return(mpactr_object)

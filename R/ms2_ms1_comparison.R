@@ -46,7 +46,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
   for(i in seq_along(1:length(result))) {
     if(length(result[[i]]) <= 0)
         next
-    
+
     index <- result[[i]][which.max(mz2[result[[i]]])]
     mz <- mz2[index]
     rt <- rt2[index]
@@ -68,9 +68,6 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
   return(result)
 }
 
-dot_product <- function(x, y) {
-  return(DotProduct(x,y))
-}
 
 
 ms2_ms1_compare2 <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance) {
@@ -91,7 +88,10 @@ ms2_ms1_compare2 <- function(ms2_files, mpactr_object, mz_tolerance, rt_toleranc
 
   ms1_peak_table <- get_peak_table(mpactr_object)
   mz1 <- ms1_peak_table$mz
-  rt1 <- ms1_peak_table$rt
+  rt_index <- c(which(colnames(ms1_peak_table) == "rt"), 
+                which(colnames(ms1_peak_table) == "RTINMINUTES"),
+                which(colnames(ms1_peak_table) == "RTINSECONDS"))
+  rt1 <- ms1_peak_table[[rt_index]]
   ms1_compounds <- ms1_peak_table$Compound
   len <- length(ms1_compounds)
   result <- CompareMS2Ms1(mz2, mz1, rt2, rt1, mz_tolerance, rt_tolerance)
@@ -106,6 +106,7 @@ ms2_ms1_compare2 <- function(ms2_files, mpactr_object, mz_tolerance, rt_toleranc
     if(result[[i]] < 0) {
       next
     }
+
     index <- result[[i]]
     mz <- mz2[index]
     rt <- rt2[index]
