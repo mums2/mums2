@@ -19,19 +19,19 @@ BugReports: https://github.com/mums2/mums2/issues
 biocViews:
 LinkingTo: 
     Rcpp,
-    testthat
+    testthat,
+    RcppProgress
 Imports: 
     cli,
     clustur,
-    dplyr,
-    magrittr,
     msentropy,
     Rcpp,
     tibble,
     data.table,
     mpactr,
     mzR,
-    utils
+    utils,
+    RcppProgress
 Suggests: 
     knitr,
     rmarkdown,

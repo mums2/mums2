@@ -60,11 +60,11 @@ Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 an
 We are also able annotate our matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm(whether it be a cosine squared algorith or anything else) we can compute similairty between peaks in the msp file and generate annotations. 
 ```{r  R.options=list(max.print=15)}
 
-  psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
 
+  psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+ 
   annotations <- annotate_ms2(query = matched_data, reference = psu_msmls,
                               score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2)
-  annotations
 ```
 
 # Scoring/Distance
@@ -80,6 +80,15 @@ Once we have generated a distance matrix, we can use that matrix to cluster our 
 
   cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
   cluster_results
+
+```
+
+# Clusters and Annotations
+After you have clustered your data together, you can add the OMU the feature resides in to your annotation table for a more accurate data frame.
+
+```{r}
+ annotations <- annotate_ms2(query = matched_data, reference = psu_msmls,
+                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, cluster_results)
 
 ```
 
@@ -127,11 +136,11 @@ Beta diversity is also included inside of this package, however, we only support
 
 ## Average Subsampled Dissimilarity
 Finally you can average the diversity metrics using the `average_subsampled_diversity()` function. This allows you to run the rarefaction and diversity command n number of times. This will generate a average distance matrix. This allows you to ensure that your rare species were included inside of the analysis. 
-```{r average_subsampled_dissimilarity}
+```{r dist_shared}
   # Avg dist
-  avg <- averaged_subsampled_dissimilarity(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
+  avg <- dist_shared(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
   # Avg dist without clustering
-  avg_no_cluster <- averaged_subsampled_dissimilarity(community_object = community_obj_no_cluster, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
+  avg_no_cluster <- dist_shared(community_object = community_obj_no_cluster, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
   avg
 ```
 

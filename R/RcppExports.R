@@ -37,6 +37,10 @@ ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
 }
 
+CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
+    .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

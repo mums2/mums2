@@ -19,7 +19,7 @@ void AnnotateMs2::createQueryList(std::vector<std::string> variableId, std::vect
           }
 
 void AnnotateMs2::createRefList(Rcpp::List reference) {
-    
+
     int n = reference.length();
 
     for (int i = 0; i < n; i++) {
@@ -36,10 +36,16 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
         // }
         
         std::vector<std::string> infoValues = Rcpp::as<std::vector<std::string>>(info["value"]);
-        double pmz = std::stod(infoValues[pmzPos[0]]);
+        double pmz = -1;
+        const int pmzIndex = pmzPos[0];
+        const std::string& value = infoValues[pmzIndex];
+        if (pmzIndex != -1 && !value.empty() && value != "NA") { // Meaning the value was found
+            pmz = std::stod(value);
+        }
+
         
-        Reference reference(i, pmz, spectra["mz"], spectra["intensity"]);
-        referenceList.emplace_back(reference); 
+        Reference referenceData(i, pmz, spectra["mz"], spectra["intensity"]);
+        referenceList.emplace_back(referenceData);
     }
     
     Rcpp::Rcout << "added " << referenceList.size() << " references for annotation." << std::endl;
