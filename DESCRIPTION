@@ -24,7 +24,6 @@ LinkingTo:
 Imports: 
     cli,
     clustur,
-    dplyr,
     msentropy,
     Rcpp,
     tibble,

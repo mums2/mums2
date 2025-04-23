@@ -93,6 +93,5 @@ add_annotations <- function(matches, reference) {
   }
 
   matches <- cbind(matches, ref_info)
-
-  return(matches)
+  return(matches[order(matches$score, decreasing = T), ])
 }

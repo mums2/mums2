@@ -16,5 +16,5 @@ ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 \item{rt_tolerance}{your retention time tolerance}
 }
 \description{
-We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt
+We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
 }
