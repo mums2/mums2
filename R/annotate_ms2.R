@@ -96,13 +96,3 @@ add_annotations <- function(matches, reference) {
 
   return(matches)
 }
-
-# df1 <- data.frame(a = c(1:5), b = c(6:10))
-# df2 <- data.frame(a = c(11:15), b = c(16:20), c = LETTERS[1:5])
-
-# rbind(df1, df2)
-# df1[setdiff(names(df2), names(df1))] <- NA
-# df2[setdiff(names(df1), names(df2))] <- NA
-# a <- data.frame(matrix(ncol = 4, nrow = 0))
-# names(a) <- c("a", "a", "b", "b")
-# paste(as.list(new_ann[,duplicated(colnames(new_ann))]), collapse = ';')

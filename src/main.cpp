@@ -148,8 +148,6 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
         Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2);
         Rcpp::NumericVector rtError = Rcpp::abs(currentRt1 - rt2);
         double bestDotProduct = 0;
-        double otherMz = 0;
-        double otherRt = 0;
         for (int j = 0; j < mzError.size(); j++) { // Pick score with the closest dotProduct value
             if (mzError[j] > mzThreshold || rtError[j] > rtThreshold) continue; // Over the threshold
             
@@ -160,8 +158,6 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
             if (dotProduct < bestDotProduct) continue;
             resultsIndexes[i] = j + 1; // To match with R indexes add 1
             bestDotProduct = dotProduct;
-            otherMz = mz2[j];
-            otherRt = rt2[j];
             if (bestDotProduct >= 1) break; // If they are equal, we should break the loop and move on
         }
         

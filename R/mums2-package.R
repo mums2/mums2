@@ -11,7 +11,6 @@
 #' @importFrom data.table .SD
 #' @importFrom data.table as.data.table
 #' @importFrom data.table data.table
-#' @importFrom magrittr %>%
 #' @importFrom mpactr filter_cv
 #' @importFrom mpactr filter_group
 #' @importFrom mpactr filter_insource_ions

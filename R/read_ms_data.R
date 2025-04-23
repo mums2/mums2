@@ -68,5 +68,6 @@ read_mgf <- function(file) {
 #' @description Reader function msp files
 #' @param msp_file the file path of your msp file
 read_msp <- function(msp_file) {
+  print(paste0("Reading: ", msp_file, " ..."))
   return(ReadMsp(msp_file))
 }
