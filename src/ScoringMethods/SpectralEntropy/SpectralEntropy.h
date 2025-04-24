@@ -45,13 +45,13 @@ float_spec calculate_spectral_entropy(const float_spec *spectrum, int spectrum_l
  *
  * @return The unweighted entropy similarity of the two spectra.
  */
-float calculate_unweighted_entropy_similarity(
+double calculate_unweighted_entropy_similarity(
     float_spec *peaks_a, int peaks_a_len,
     float_spec *peaks_b, int peaks_b_len,
-    float ms2_tolerance_in_da, float ms2_tolerance_in_ppm,
+    double ms2_tolerance_in_da, double ms2_tolerance_in_ppm,
     bool clean_spectra,
-    float min_mz, float max_mz,
-    float noise_threshold,
+    double min_mz, double max_mz,
+    double noise_threshold,
     int max_peak_num);
 
 /** Calculate entropy similarity for two spectra.
@@ -77,13 +77,13 @@ float calculate_unweighted_entropy_similarity(
  *
  * @return The entropy similarity of the two spectra.
  */
-float calculate_entropy_similarity(
+double calculate_entropy_similarity(
     float_spec *peaks_a, int peaks_a_len,
     float_spec *peaks_b, int peaks_b_len,
-    float ms2_tolerance_in_da, float ms2_tolerance_in_ppm,
+    double ms2_tolerance_in_da, double ms2_tolerance_in_ppm,
     bool clean_spectra,
-    float min_mz, float max_mz,
-    float noise_threshold,
+    double min_mz, double max_mz,
+    double noise_threshold,
     int max_peak_num);
 
 // Apply weight to a spectrum by spectral entropy.

@@ -10,7 +10,8 @@ change_rt_to_seconds_or_minutes(mpactr_object, rt_type = "seconds")
 \item{mpactr_object}{The object created from \code{import_all_data()}
 file.}
 
-\item{meta_data}{The rt time you want to convert to, the options are minutes or seconds.}
+\item{rt_type}{how you want to convert your retention time, your options are minutes, or seconds.
+defaults to seconds.}
 }
 \value{
 a modified \code{mpactr} object.

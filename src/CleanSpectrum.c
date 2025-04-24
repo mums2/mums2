@@ -80,7 +80,7 @@ int sort_spectrum_by_mz_and_zero_intensity(float_spec (*spectrum_2d)[2], int spe
 }
 
 int partition(float_spec (*spectrum_2d)[2], int* spectrum_argsort, int low, int high) {
-    float pivot = spectrum_2d[spectrum_argsort[high]][1];
+    double pivot = spectrum_2d[spectrum_argsort[high]][1];
     int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++) {
@@ -110,7 +110,7 @@ void inline calculate_spectrum_argsort(float_spec (*spectrum_2d)[2], int spectru
     quicksort(spectrum_2d, spectrum_argsort, 0, spectrum_len - 1);
 }
 
-bool inline need_centroid(float_spec (*spectrum_2d)[2], int spectrum_len, float min_ms2_difference_in_da, float min_ms2_difference_in_ppm) {
+bool inline need_centroid(float_spec (*spectrum_2d)[2], int spectrum_len, double min_ms2_difference_in_da, double min_ms2_difference_in_ppm) {
     for (int i = 0; i < spectrum_len - 1; i++) {
         if (min_ms2_difference_in_ppm > 0) {
             min_ms2_difference_in_da = spectrum_2d[i + 1][0] * min_ms2_difference_in_ppm * 1e-6;
@@ -123,13 +123,13 @@ bool inline need_centroid(float_spec (*spectrum_2d)[2], int spectrum_len, float 
 }
 
 // Centroid the spectrum, the content in the spectrum will be modified.
-int inline centroid_spectrum(float_spec (*spectrum_2d)[2], int spectrum_length, float min_ms2_difference_in_da, float min_ms2_difference_in_ppm, int* spectrum_argsort) {
+int inline centroid_spectrum(float_spec (*spectrum_2d)[2], int spectrum_length, double min_ms2_difference_in_da, double min_ms2_difference_in_ppm, int* spectrum_argsort) {
     // Calculate the argsort of the spectrum by intensity.
     calculate_spectrum_argsort(spectrum_2d, spectrum_length, spectrum_argsort);
 
     // Centroid the spectrum.
-    float mz_delta_allowed_left = min_ms2_difference_in_da;
-    float mz_delta_allowed_right = min_ms2_difference_in_da;
+    double mz_delta_allowed_left = min_ms2_difference_in_da;
+    double mz_delta_allowed_right = min_ms2_difference_in_da;
 
     for (int i = 0; i < spectrum_length; i++) {
         int idx = spectrum_argsort[i];
@@ -178,9 +178,9 @@ int inline centroid_spectrum(float_spec (*spectrum_2d)[2], int spectrum_length, 
 // The spectrum is a 2D array. spectrum[x][0] is the m/z, spectrum[x][1] is the intensity.
 // The spectrum will be rewritten.
 int clean_spectrum(float_spec* spectrum, int spectrum_length,
-                   float min_mz, float max_mz,
-                   float noise_threshold,
-                   float min_ms2_difference_in_da, float min_ms2_difference_in_ppm,
+                   double min_mz, double max_mz,
+                   double noise_threshold,
+                   double min_ms2_difference_in_da, double min_ms2_difference_in_ppm,
                    int max_peak_num,
                    bool normalize_intensity) {
     float_spec(*spectrum_2d)[2] = (float_spec(*)[2]) & spectrum[0];
