@@ -7,7 +7,7 @@
 #include "../DiversityCalculator.h"
 
 
-class EuclideanDistance final : DiversityCalculator {
+class EuclideanDistance final : public DiversityCalculator {
 public:
     EuclideanDistance() = default;
     ~EuclideanDistance() override = default;
