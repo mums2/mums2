@@ -139,6 +139,7 @@ test_that("Test dist_shared errors when
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   expect_error(dist_shared(result, 400, 10, "bray", 100))
 })
+
 test_that("Test dist_shared errors with wrong index", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
@@ -152,6 +153,9 @@ test_that("Alpha summary returns the proper results for simpsons",{
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(communiy_object, 400, 10, "simpson", 2)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == length(dat$samples))
+  expect_true(nrow(alpha_sum) == 1)
 })
 
 test_that("Alpha summary returns the proper results for shannon",{
@@ -160,5 +164,16 @@ test_that("Alpha summary returns the proper results for shannon",{
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(communiy_object, 400, 10, "shannon", 2)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == length(dat$samples))
+  expect_true(nrow(alpha_sum) == 1)
+})
 
+test_that("Alpha summary fails when given wrong input",{
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  results <- cluster_data(distances, dat,  0.3, "opticlust")
+  communiy_object <- create_community_matrix_object(results)
+  expect_error(alpha_summary(results, 400, 10, "shannon", 2))
+  expect_error(alpha_summary(communiy_object, 400, 10, "bray", 2))
 })
