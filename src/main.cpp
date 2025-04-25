@@ -98,6 +98,7 @@ Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& in
     }
     diversityMatrix = diversityMatrix/iterations;
     Rcpp::colnames(diversityMatrix) = samples;
+    if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
     Rcpp::rownames(diversityMatrix) = samples;
     const int sampleSize = std::pow(samples.size(), 2);
     Rcpp::CharacterVector firstSample(sampleSize);

@@ -35,7 +35,7 @@ DiversityCalculator* DiversityMetricFactory::ChooseDiversityMetricBasedOnName(co
     if(metricIndex == "soren") {
         return new SorensonIndex();
     }
-    if(metricIndex == "morista") {
+    if(metricIndex == "morisita") {
         return new MorisitahornIndex();
     }
     if(metricIndex == "thetayc") {
@@ -52,7 +52,7 @@ Diversity* DiversityMetricFactory::ChooseDiversityBasedOnIndex(const std::string
     indexMap["jaccard"] = "beta";
     indexMap["hamming"] = "beta";
     indexMap["soren"] = "beta";
-    indexMap["morista"] = "beta";
+    indexMap["morisita"] = "beta";
     indexMap["thetayc"] = "beta";
 
     if(indexMap[index] == "alpha") {
