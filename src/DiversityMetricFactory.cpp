@@ -9,9 +9,11 @@
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
 #include "DiversityMetrics/BetaDiversityCalculators/BetaDiversity.h"
 #include "DiversityMetrics/BetaDiversityCalculators/BrayCurtisDissimilarity.h"
-#include "DiversityMetrics/BetaDiversityCalculators/EuclideanDistance.h"
 #include "DiversityMetrics/BetaDiversityCalculators/HammingDistance.h"
 #include "DiversityMetrics/BetaDiversityCalculators/JaccardDistance.h"
+#include "DiversityMetrics/BetaDiversityCalculators/MorisitahornIndex.h"
+#include "DiversityMetrics/BetaDiversityCalculators/SorensonIndex.h"
+#include "DiversityMetrics/BetaDiversityCalculators/ThetaycDissimilarity.h"
 
 DiversityCalculator* DiversityMetricFactory::ChooseDiversityMetricBasedOnName(const std::string &metricIndex) {
 
@@ -27,11 +29,17 @@ DiversityCalculator* DiversityMetricFactory::ChooseDiversityMetricBasedOnName(co
     if(metricIndex == "jaccard") {
         return new JaccardDistance();
     }
-    if(metricIndex == "euclidean") {
-        return new EuclideanDistance();
-    }
     if(metricIndex == "hamming") {
         return new HammingDistance();
+    }
+    if(metricIndex == "soren") {
+        return new SorensonIndex();
+    }
+    if(metricIndex == "morista") {
+        return new MorisitahornIndex();
+    }
+    if(metricIndex == "thetayc") {
+        return new ThetaycDissimilarity();
     }
     return nullptr;
 }
@@ -43,7 +51,9 @@ Diversity* DiversityMetricFactory::ChooseDiversityBasedOnIndex(const std::string
     indexMap["bray"] = "beta";
     indexMap["jaccard"] = "beta";
     indexMap["hamming"] = "beta";
-    indexMap["euclidean"] = "beta";
+    indexMap["soren"] = "beta";
+    indexMap["morista"] = "beta";
+    indexMap["thetayc"] = "beta";
 
     if(indexMap[index] == "alpha") {
         return new AlphaDiversity();

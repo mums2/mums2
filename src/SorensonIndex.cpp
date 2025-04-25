@@ -1,10 +1,10 @@
 //
-// Created by Gregory Johnson on 4/24/25.
+// Created by Gregory Johnson on 4/25/25.
 //
 
-#include "DiversityMetrics/BetaDiversityCalculators/JaccardDistance.h"
+#include "DiversityMetrics/BetaDiversityCalculators/SorensonIndex.h"
 
-double JaccardDistance::Calculate(const Rcpp::List& abundanceVectors) const {
+double SorensonIndex::Calculate(const Rcpp::List& abundanceVectors) const {
     const Rcpp::NumericVector& sampleOne = abundanceVectors[0];
     const Rcpp::NumericVector& sampleTwo = abundanceVectors[1];
     double sharedOmus = 0;
@@ -22,5 +22,5 @@ double JaccardDistance::Calculate(const Rcpp::List& abundanceVectors) const {
         if(firstCurrentOmu > 0) sampleOneOmus++;
         if(secondCurrentOmu > 0) sampleTwoOmus++;
     }
-    return 1 - sharedOmus / (sampleOneOmus + sampleTwoOmus - sharedOmus);
+    return 1 - 2 * sharedOmus / (sampleOneOmus + sampleTwoOmus);
 }
