@@ -127,7 +127,7 @@ You can also compute the alpha diversity. We currently only support shannon, and
 ```
 
 ## Beta Diversity
-Beta diversity is also included inside of this package, however, we only support bray curtis.
+Beta diversity is also included inside of this package, included diversity metrtics: bray, thetayc (Yue and Clayton), jaccard distance, hamming distance, moristia horn distance, and soren distance. 
 ```{r}
   #Calculate Beta Diversity
   braycurits <- diversity(community_object = community_obj, diversity_index = "bray")
