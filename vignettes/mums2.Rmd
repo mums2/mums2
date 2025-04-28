@@ -50,7 +50,7 @@ After you import the data we are able to filter the data using filters including
 # Preprocess ms2 data
 Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 and ms2 peaks. Our `ms2_ms1_compare()` function reads a list of mgf files and matches them with a ms1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that ms2 spectra files are very memory intensive, they can be anywhere from 1mb to 100gbs. Therefore, depending on how big your file is, do not expect this function to be overly fast.  
 ```{r  R.options=list(max.print=15)}
-  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 100, 150)
+  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
   matched_data
   
 ```
@@ -144,3 +144,36 @@ Finally you can average the diversity metrics using the `average_subsampled_dive
   avg
 ```
 
+
+# Visualizations
+## PCOA
+
+We can generate an PCOA plot using the object return from dist_shared:
+
+```{r}
+dist_obj <- community_object_to_distance_object(avg)
+
+pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
+pcoa_points <- as.data.frame(pcoa$points)
+variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
+names(pcoa_points) <- paste0("PCOA", seq(1:2))
+
+library(ggplot2)
+tibble::as.tibble(pcoa_points, rownames = "samples")
+pcoa_points |>
+  tibble::as.tibble(rownames = "samples") |>
+  ggplot(aes(x=PCOA1, y = PCOA2, color = samples)) +
+    geom_point()
+
+```
+
+
+## Hierarchical Clustering
+
+We can also created a hierarchy of data using hclust:
+
+
+```{r}
+hclust_result <- hclust(dist_obj, "complete")
+plot(hclust_result)
+```
