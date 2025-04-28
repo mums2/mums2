@@ -21,3 +21,16 @@ test_that("annotate_ms_featrues returns the correct annotations in the
             expect_true(nrow(annotations) > 0)
             expect_s3_class(annotations, "data.frame")
 })
+
+test_that("annotate_ms_featrues returns the omu where the query is present", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  cluster <- cluster_data(distances, dat,  0.3, "opticlust")
+  psu_msmls <- read_msp(test_path(dir, r_file))
+  annotations <- annotate_ms2(dat, psu_msmls,
+    gnps_params(0.5), 2, .2, cluster)
+  
+  expect_true("OMU" %in% colnames(annotations))
+})

@@ -8,13 +8,13 @@
 #include "ScoringMethods/SpectralEntropy/CleanSpectrum.h"
 
 // Calculate unweighted entropy similarity
-float calculate_unweighted_entropy_similarity(
+double calculate_unweighted_entropy_similarity(
     float_spec* peaks_a, int peaks_a_len,
     float_spec* peaks_b, int peaks_b_len,
-    float ms2_tolerance_in_da, float ms2_tolerance_in_ppm,
+    double ms2_tolerance_in_da, double ms2_tolerance_in_ppm,
     bool clean_spectra,
-    float min_mz, float max_mz,
-    float noise_threshold,
+    double min_mz, double max_mz,
+    double noise_threshold,
     int max_peak_num) {
     float_spec(*spec_a_2d)[2] = (float_spec(*)[2])peaks_a;
     float_spec(*spec_b_2d)[2] = (float_spec(*)[2])peaks_b;
@@ -38,7 +38,7 @@ float calculate_unweighted_entropy_similarity(
     float_spec similarity = 0;
 
     while (a < peaks_a_len && b < peaks_b_len) {
-        float mass_delta_da = spec_a_2d[a][0] - spec_b_2d[b][0];
+        double mass_delta_da = spec_a_2d[a][0] - spec_b_2d[b][0];
         if (ms2_tolerance_in_ppm > 0) {
             ms2_tolerance_in_da = ms2_tolerance_in_ppm * spec_a_2d[a][0] * 1e-6;
         }
@@ -68,13 +68,13 @@ float calculate_unweighted_entropy_similarity(
 }
 
 // Calculate entropy similarity
-float calculate_entropy_similarity(
+double calculate_entropy_similarity(
     float_spec* peaks_a, int peaks_a_len,
     float_spec* peaks_b, int peaks_b_len,
-    float ms2_tolerance_in_da, float ms2_tolerance_in_ppm,
+    double ms2_tolerance_in_da, double ms2_tolerance_in_ppm,
     bool clean_spectra,
-    float min_mz, float max_mz,
-    float noise_threshold,
+    double min_mz, double max_mz,
+    double noise_threshold,
     int max_peak_num) {
     if (__DEBUG__ENTROPY_SIMILARTY__) {
         print_spectrum("spec_query:\n", (float_spec(*)[2])peaks_a, peaks_a_len);

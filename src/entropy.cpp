@@ -93,9 +93,9 @@ double Entropy::r_calculate_spectral_entropy(const Rcpp::NumericMatrix peaks) {
 //'                max_peak_num = 100, normalize_intensity = TRUE)
 //'
 Rcpp::NumericMatrix Entropy::r_clean_spectrum(const Rcpp::NumericMatrix peaks,
-                                    const float min_mz, const float max_mz,
-                                    const float noise_threshold,
-                                    const float min_ms2_difference_in_da, const float min_ms2_difference_in_ppm,
+                                    const double min_mz, const double max_mz,
+                                    const double noise_threshold,
+                                    const double min_ms2_difference_in_da, const double min_ms2_difference_in_ppm,
                                     const int max_peak_num,
                                     const bool normalize_intensity) {
     Rcpp::NumericVector peaks_vec = convert_matrix_to_vector(peaks);
@@ -143,10 +143,10 @@ Rcpp::NumericMatrix Entropy::r_clean_spectrum(const Rcpp::NumericMatrix peaks,
 //'
 double Entropy::r_calculate_unweighted_entropy_similarity(const Rcpp::NumericMatrix peaks_a,
                                                 const Rcpp::NumericMatrix peaks_b,
-                                                const float ms2_tolerance_in_da, const float ms2_tolerance_in_ppm,
+                                                const double ms2_tolerance_in_da, const double ms2_tolerance_in_ppm,
                                                 const bool clean_spectra,
-                                                const float min_mz, const float max_mz,
-                                                const float noise_threshold,
+                                                const double min_mz, const double max_mz,
+                                                const double noise_threshold,
                                                 const int max_peak_num) {
     Rcpp::NumericVector peaks_a_vec = convert_matrix_to_vector(peaks_a);
     int peaks_a_len = peaks_a_vec.size() / 2;
@@ -195,10 +195,10 @@ double Entropy::r_calculate_unweighted_entropy_similarity(const Rcpp::NumericMat
 //'
 double Entropy::r_calculate_entropy_similarity(const Rcpp::NumericMatrix peaks_a,
                                     const Rcpp::NumericMatrix peaks_b,
-                                    const float ms2_tolerance_in_da, const float ms2_tolerance_in_ppm,
+                                    const double ms2_tolerance_in_da, const double ms2_tolerance_in_ppm,
                                     const bool clean_spectra,
-                                    const float min_mz, const float max_mz,
-                                    const float noise_threshold,
+                                    const double min_mz, const double max_mz,
+                                    const double noise_threshold,
                                     const int max_peak_num) {
     Rcpp::NumericVector peaks_a_vec = convert_matrix_to_vector(peaks_a);
     int peaks_a_len = peaks_a_vec.size() / 2;

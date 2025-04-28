@@ -19,5 +19,5 @@ cluster_data <- function(distance_df, ms2_match_data, cutoff = 0.3, cluster_meth
   dist <- read_dist(sparse_matrix, count_table, cutoff, FALSE)
 
   # Cluster Data
-  return(cluster(dist, 0.2, cluster_method, bin_column_name_to = "omu"))
+  return(cluster(dist, cutoff, cluster_method, bin_column_name_to = "omu"))
 }

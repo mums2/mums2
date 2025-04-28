@@ -23,8 +23,8 @@ class Utils {
             return s;
         }
 
-        std::vector<int> my_grep(std::vector<std::string> x, std::string pattern) {
-            int n = x.size();
+        std::vector<int> my_grep(const std::vector<std::string>& x, const std::string& pattern) {
+            const int n = static_cast<int>(x.size());
 
             std::vector<int> out;
             
@@ -36,7 +36,8 @@ class Utils {
                 
                 out.push_back(i);
             } 
-            
+            if (out.empty())
+                out.push_back(-1);
             return out;
  
         }

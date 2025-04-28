@@ -1,6 +1,6 @@
 #' @title Match your ms1 spectra to a ms2
 #' @export
-#' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt
+#' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
 #' @param ms2_files a list of either *all* mgf files, mzml, or mzxml files. 
 #' @param mpactr_object your mpactr object creatd from `import_all_data()`
 #' @param mz_tolerance your mass-charge ratio tolerance
@@ -23,16 +23,14 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
 
   ms1_peak_table <- get_peak_table(mpactr_object)
   mz1 <- ms1_peak_table$mz
-  rt1 <- ms1_peak_table$rt
+  rt_index <- c(which(colnames(ms1_peak_table) == "rt"), 
+                which(colnames(ms1_peak_table) == "RTINMINUTES"),
+                which(colnames(ms1_peak_table) == "RTINSECONDS"))
+  rt1 <- ms1_peak_table[[rt_index]]
   ms1_compounds <- ms1_peak_table$Compound
   len <- length(ms1_compounds)
-  result <- vector("list", len)
-  for(i in seq_along(1:len)) {
-    mz_error <- abs(mz1[[i]] - mz2) * 1e6 / mz1[[i]] 
-    rt_err <- abs(rt1[[i]] - rt2) / rt1[[i]]
-    result[[i]] <- which(mz_error <= mz_tolerance & rt_err <= rt_tolerance)
-  }
-  matched_peaks <- length(which(lapply(result, length) > 0))
+  result <- CompareMS2Ms1(mz2, mz1, rt2, rt1, mz_tolerance, rt_tolerance)
+  matched_peaks <- length(which(result != -1))
   print(paste0(matched_peaks, "/", len, " peaks have an MS2 spectra."))
 
   resultant_mat <- matrix(0, nrow = matched_peaks, ncol = 5)
@@ -40,9 +38,11 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
   colnames(resultant_mat) <- c("mz", "rt", "ms1_compound_id", "spectra_index", "ms2_spectrum_id")
   row_index <- 1
   for(i in seq_along(1:length(result))) {
-    if(length(result[[i]]) <= 0)
-        next
-    index <- result[[i]][which.max(mz2[result[[i]]])]
+    if(result[[i]] < 0) {
+      next
+    }
+
+    index <- result[[i]]
     mz <- mz2[index]
     rt <- rt2[index]
     resultant_mat[row_index, 1] <- mz
@@ -53,6 +53,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance
     ms2_peaks[[row_index]] <- ms2_data$peak_data[[files[index]]][[spectra_index[index]]]
     row_index <- row_index + 1 
   }
+  
   match_df <- as.data.frame(resultant_mat)
   match_df$mz <- as.numeric(match_df$mz)
   match_df$rt <- as.numeric(match_df$rt)

@@ -11,7 +11,7 @@
 // typedef int bool;  // or #define bool int
 #ifdef SPEC_TYPE
 #else
-typedef float float_spec;
+typedef double float_spec;
 #endif
 // static_assert(sizeof(float_spec) == 4);
 
@@ -44,9 +44,9 @@ typedef float float_spec;
      * @return int The length of the cleaned peaks.
     */
     int clean_spectrum(float_spec* peaks, int peaks_length,
-                       float min_mz, float max_mz,
-                       float noise_threshold,
-                       float min_ms2_difference_in_da, float min_ms2_difference_in_ppm,
+                       double min_mz, double max_mz,
+                       double noise_threshold,
+                       double min_ms2_difference_in_da, double min_ms2_difference_in_ppm,
                        int max_peak_num,
                        bool normalize_intensity);
 
@@ -58,8 +58,8 @@ typedef float float_spec;
     void sort_spectrum_by_mz(float_spec (*spectrum_2d)[2], int spectrum_len);
     int sort_spectrum_by_mz_and_zero_intensity(float_spec (*spectrum_2d)[2], int spectrum_len);
     void calculate_spectrum_argsort(float_spec (*spectrum_2d)[2], int spectrum_len, int* spectrum_argsort);
-    bool need_centroid(float_spec (*spectrum_2d)[2], int spectrum_len, float min_ms2_difference_in_da, float min_ms2_difference_in_ppm);
+    bool need_centroid(float_spec (*spectrum_2d)[2], int spectrum_len, double min_ms2_difference_in_da, double min_ms2_difference_in_ppm);
     int compare_by_mz(const void* a, const void* b);
     int compare_by_mz_with_zero_intensity(const void* a, const void* b);
     // Centroid the spectrum, the content in the spectrum will be modified.
-    int centroid_spectrum(float_spec (*spectrum_2d)[2], int peaks_length, float min_ms2_difference_in_da, float min_ms2_difference_in_ppm, int* spectrum_argsort);
+    int centroid_spectrum(float_spec (*spectrum_2d)[2], int peaks_length, double min_ms2_difference_in_da, double min_ms2_difference_in_ppm, int* spectrum_argsort);

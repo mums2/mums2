@@ -127,6 +127,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CompareMS2Ms1
+Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::NumericVector& mz1, const Rcpp::NumericVector& rt2, const Rcpp::NumericVector& rt1, const double mzThreshold, const double rtThreshold);
+RcppExport SEXP _mums2_CompareMS2Ms1(SEXP mz2SEXP, SEXP mz1SEXP, SEXP rt2SEXP, SEXP rt1SEXP, SEXP mzThresholdSEXP, SEXP rtThresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz2(mz2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz1(mz1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt2(rt2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt1(rt1SEXP);
+    Rcpp::traits::input_parameter< const double >::type mzThreshold(mzThresholdSEXP);
+    Rcpp::traits::input_parameter< const double >::type rtThreshold(rtThresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(CompareMS2Ms1(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// VectorizedSubtract
+Rcpp::NumericVector VectorizedSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y);
+RcppExport SEXP _mums2_VectorizedSubtract(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(VectorizedSubtract(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// NormalSubtract
+Rcpp::NumericVector NormalSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y);
+RcppExport SEXP _mums2_NormalSubtract(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(NormalSubtract(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -181,6 +221,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 5},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
+    {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
+    {"_mums2_VectorizedSubtract", (DL_FUNC) &_mums2_VectorizedSubtract, 2},
+    {"_mums2_NormalSubtract", (DL_FUNC) &_mums2_NormalSubtract, 2},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
