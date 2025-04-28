@@ -21,7 +21,7 @@ diversity <- function(community_object, diversity_index){
 #' @param diversity_index the diversity index you wish to calculate diversity, the two options are bray.
 #' @param iterations the amount of times you wish to run your diversity metrics.
 dist_shared <- function(community_object, size, threshold, diversity_index = "bray", iterations = 1000) {
-  diversity_index_list <- c("bray")
+  diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
   }

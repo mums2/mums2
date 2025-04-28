@@ -98,6 +98,7 @@ Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& in
     }
     diversityMatrix = diversityMatrix/iterations;
     Rcpp::colnames(diversityMatrix) = samples;
+    if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
     Rcpp::rownames(diversityMatrix) = samples;
     const int sampleSize = std::pow(samples.size(), 2);
     Rcpp::CharacterVector firstSample(sampleSize);
@@ -165,3 +166,15 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     return resultsIndexes;
 }
 
+// [[Rcpp::export]]
+Rcpp::NumericVector VectorizedSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
+    return x - y;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector NormalSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
+    for(int i = 0; i < x.size(); i++) {
+        x[i] = x[i] - y[i];
+    }
+    return x;
+}

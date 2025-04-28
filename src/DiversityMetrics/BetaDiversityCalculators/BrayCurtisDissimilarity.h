@@ -7,7 +7,7 @@
 #include "../DiversityCalculator.h"
 
 
-class BrayCurtisDissimilarity final : public DiversityCalculator{
+class BrayCurtisDissimilarity final : public DiversityCalculator {
 public:
     BrayCurtisDissimilarity() = default;
     ~BrayCurtisDissimilarity() override = default;

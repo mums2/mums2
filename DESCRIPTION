@@ -30,8 +30,7 @@ Imports:
     data.table,
     mpactr,
     mzR,
-    utils,
-    RcppProgress
+    utils
 Suggests: 
     knitr,
     rmarkdown,
