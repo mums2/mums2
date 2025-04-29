@@ -2,12 +2,13 @@
 #include <Rcpp.h>
 
 //[[Rcpp::export]]
-Rcpp::DataFrame  distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, double precursor_thresh, double cutoff){
+Rcpp::DataFrame  distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters,
+    const double precursor_thresh, const double cutoff, const int minPeaks){
 
     Distance distance;
     distance.CreateSpectraList(spectraDataList);
     const ScoringFactory factory(parameters);
-    distance.CalculateDistances(precursor_thresh, cutoff, factory);
+    distance.CalculateDistances(precursor_thresh, cutoff, factory, minPeaks);
     Rcpp::DataFrame dist = distance.ExtractMatrix();
 
     return dist;
