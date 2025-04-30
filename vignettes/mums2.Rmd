@@ -177,12 +177,47 @@ pcoa_points |>
 
 ```
 
+Without clustering
+
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+dist_obj_no_cluster <- community_object_to_distance_object(avg_no_cluster)
+
+pcoa <- cmdscale(dist_obj_no_cluster, k = 2, eig = T, add = T)
+pcoa_points <- as.data.frame(pcoa$points)
+variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
+names(pcoa_points) <- paste0("PCOA", seq(1:2))
+pcoa_points$Samples <- rownames(pcoa_points)
+
+meta_data <- get_meta_data(squid_filter)
+for(i in 1:nrow(pcoa_points)) {
+  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
+  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[i]]
+  
+}
+
+
+pcoa_points |>
+  ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
+    geom_point() +
+    theme(
+      legend.text = element_text(size = 10), 
+      legend.title = element_text(size = 15)
+    )
+
+```
 
 ## Hierarchical Clustering
 
 Another way to visualize your data is by using hclust or Hierarchical Clustering. Hierarchical clustering generates a tree of distances to show the similarities between the samples.
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
+par(cex=0.6, mar=c(5, 8, 4, 1))
+plot(hclust_result)
+```
+
+Graph Without Clustering
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+hclust_result <- hclust(dist_obj_no_cluster, "complete")
 par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
