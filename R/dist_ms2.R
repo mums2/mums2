@@ -19,21 +19,23 @@
 #'  difference in precursor mz less than or equal to this value will be scored.
 #' @param score_params Parameters for scoring method to be applied.
 #'  See [gnps_params()] and [spec_entropy_params()] for more details.
+#' @param min_peaks the minimum number of peaks that need to be present before
+#' you compare the ms2 spectra.
 #'
 #' @return A sparse matrix of class `"data.frame"`
 #' @export
-dist_ms2 <- function(data, cutoff, precursor_thresh, score_params) {
+dist_ms2 <- function(data, cutoff, precursor_thresh, score_params, min_peaks = 6) {
   UseMethod("dist_ms2", data)
 }
 
 #' @method dist_ms2 mass_data
 #' @export
-dist_ms2.mass_data <- function(data, cutoff, precursor_thresh, score_params) {
+dist_ms2.mass_data <- function(data, cutoff, precursor_thresh, score_params, min_peaks = 6) {
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)
 
-  dist <- distMS2(data_list, score_params, precursor_thresh, cutoff)
+  dist <- distMS2(data_list, score_params, precursor_thresh, cutoff, min_peaks)
 
   return(dist)
 }

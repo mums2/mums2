@@ -75,7 +75,8 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
             
             int refIdx = referenceList[j].getIndex();
             Spectra referenceSpectra = referenceList[refIdx].GetSpectra();
-            double compScore = factory.CalculateScore(currentQuerySpectra, referenceSpectra);
+            double compScore = factory.CalculateScore(currentQuerySpectra,
+                referenceSpectra, minPeaks);
             
             if (compScore >= minScore) {
                 // nMatches += 1;
