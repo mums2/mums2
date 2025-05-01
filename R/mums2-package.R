@@ -24,6 +24,7 @@
 #' @importFrom mzR openMSfile
 #' @importFrom mzR peaks
 #' @importFrom Rcpp sourceCpp
+#' @importFrom stats as.dist
 #' @importFrom tibble column_to_rownames
 #' @importFrom utils tail
 #' @useDynLib mums2, .registration = TRUE

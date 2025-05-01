@@ -10,7 +10,7 @@ double ScoreMs2(std::string name1, std::vector<double> mz1, std::vector<double> 
     Spectra firstSpectra(name1, mz1, intensity1, precursorMz1);
     Spectra secondSpectra(name2, mz2, intensity2, precursorMz2);
     
-    double score = factory.CalculateScore(firstSpectra, secondSpectra);
+    double score = factory.CalculateScore(firstSpectra, secondSpectra, 6);
 
     return score;
 }

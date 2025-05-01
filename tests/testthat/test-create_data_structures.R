@@ -1,6 +1,6 @@
 test_that("test that we can create a community matrix", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5), min_peaks = 0)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(results)
   mat <- create_community_matrix(results)
@@ -12,7 +12,7 @@ test_that("test that we can create a community matrix", {
 
 test_that("test that create a community matrix errors when given wrong inputs", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5), min_peaks = 0)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(results)
   expect_error(create_community_matrix(communiy_object))

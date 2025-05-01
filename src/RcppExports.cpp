@@ -11,8 +11,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // AnnotateMs2Features
-Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore);
-RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP) {
+Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore, const int minPeaks);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP, SEXP minPeaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,21 +25,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type parameters(parametersSEXP);
     Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
     Rcpp::traits::input_parameter< double >::type minScore(minScoreSEXP);
-    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore));
+    Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore, minPeaks));
     return rcpp_result_gen;
 END_RCPP
 }
 // distMS2
-Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, double precursor_thresh, double cutoff);
-RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP) {
+Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks);
+RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type spectraDataList(spectraDataListSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type parameters(parametersSEXP);
-    Rcpp::traits::input_parameter< double >::type precursor_thresh(precursor_threshSEXP);
-    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
-    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff));
+    Rcpp::traits::input_parameter< const double >::type precursor_thresh(precursor_threshSEXP);
+    Rcpp::traits::input_parameter< const double >::type cutoff(cutoffSEXP);
+    Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
+    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -212,8 +214,8 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
-    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 4},
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
+    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 5},
     {"_mums2_CalculateDiversityCommunityObject", (DL_FUNC) &_mums2_CalculateDiversityCommunityObject, 2},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},

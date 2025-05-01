@@ -4,7 +4,7 @@
 \alias{dist_ms2}
 \title{Calculate pairwise distance between MS/MS features.}
 \usage{
-dist_ms2(data, cutoff, precursor_thresh, score_params)
+dist_ms2(data, cutoff, precursor_thresh, score_params, min_peaks = 6)
 }
 \arguments{
 \item{data}{the object generated from \code{ms2_ms1_compare()}.}
@@ -18,6 +18,9 @@ difference in precursor mz less than or equal to this value will be scored.}
 
 \item{score_params}{Parameters for scoring method to be applied.
 See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
+
+\item{min_peaks}{the minimum number of peaks that need to be present before
+you compare the ms2 spectra.}
 }
 \value{
 A sparse matrix of class \code{"data.frame"}

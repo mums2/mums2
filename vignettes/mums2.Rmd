@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(mums2)
+library(ggplot2)
 library(mpactr)
-library(clustur)
 ```
 
 
@@ -43,14 +43,14 @@ After you import the data we are able to filter the data using filters including
     filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
     filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
     filter_peak_table(filter_insource_ions_parameters())
-  get_peak_table(squid_filter)
+  squid_filter
 ```
 
 
 # Preprocess ms2 data
 Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 and ms2 peaks. Our `ms2_ms1_compare()` function reads a list of mgf files and matches them with a ms1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that ms2 spectra files are very memory intensive, they can be anywhere from 1mb to 100gbs. Therefore, depending on how big your file is, do not expect this function to be overly fast.  
 ```{r  R.options=list(max.print=15)}
-  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 100, 150)
+  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
   matched_data
   
 ```
@@ -64,13 +64,13 @@ We are also able annotate our matched_ms1_ms2 object. By using an msp file as a 
   psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
  
   annotations <- annotate_ms2(query = matched_data, reference = psu_msmls,
-                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2)
+                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, min_peaks = 0)
 ```
 
 # Scoring/Distance
 We have implemented a scoring and/or distance algorithm that allows you to generate a score between two different features. We can use that score to cluster the data based on closeness.
 ```{r  R.options=list(max.print=15)}
- dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2, score_params = gnps_params(0.5))
+ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2, score_params = gnps_params(0.5), min_peaks = 0)
  dist
 ```
 
@@ -88,7 +88,7 @@ After you have clustered your data together, you can add the OMU the feature res
 
 ```{r}
  annotations <- annotate_ms2(query = matched_data, reference = psu_msmls,
-                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, cluster_results)
+                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, min_peaks = 0, cluster_results)
 
 ```
 
@@ -136,7 +136,7 @@ Beta diversity is also included inside of this package, included diversity metrt
 
 ## Average Subsampled Dissimilarity
 Finally you can average the diversity metrics using the `average_subsampled_diversity()` function. This allows you to run the rarefaction and diversity command n number of times. This will generate a average distance matrix. This allows you to ensure that your rare species were included inside of the analysis. 
-```{r dist_shared}
+```{r  R.options=list(max.print=15)}
   # Avg dist
   avg <- dist_shared(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
   # Avg dist without clustering
@@ -144,3 +144,80 @@ Finally you can average the diversity metrics using the `average_subsampled_dive
   avg
 ```
 
+
+# Visualizations
+## PCOA
+PCoA or Princple coordinate analysis is a statistical technique used to show similiarities or disimilarities in your data. PCA or Principle component analysis uses dimension reduction techniques to look for similiarities or variance inside data. These two method perform similiar metric, but PCA can only be performed on euclidean distances. PCOA can be performed using a multitude of distance calculations (such as bray curtis or jaccard distance). In ecology, because there are numerous ways to calculate diversity between species, pcoa allows us to visualize differences between samples.
+
+There are a few steps needed to calculate a pcoa in R. To start, you have to create a dist object or distance matrix. Using our `community_object_to_distance_object()` function, we can transform your distances that were generated from the `dist_shared()` function into a distance matrix. Once your distance matrix is created, we can conduct a pcoa or Classical Multidimensional Scaling(MDS) using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+dist_obj <- community_object_to_distance_object(avg)
+
+pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
+pcoa_points <- as.data.frame(pcoa$points)
+variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
+names(pcoa_points) <- paste0("PCOA", seq(1:2))
+pcoa_points$Samples <- rownames(pcoa_points)
+
+meta_data <- get_meta_data(squid_filter)
+for(i in 1:nrow(pcoa_points)) {
+  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
+  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[i]]
+  
+}
+
+
+pcoa_points |>
+  ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
+    geom_point() +
+    theme(
+      legend.text = element_text(size = 10), 
+      legend.title = element_text(size = 15)
+    )
+
+```
+
+Without clustering
+
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+dist_obj_no_cluster <- community_object_to_distance_object(avg_no_cluster)
+
+pcoa <- cmdscale(dist_obj_no_cluster, k = 2, eig = T, add = T)
+pcoa_points <- as.data.frame(pcoa$points)
+variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
+names(pcoa_points) <- paste0("PCOA", seq(1:2))
+pcoa_points$Samples <- rownames(pcoa_points)
+
+meta_data <- get_meta_data(squid_filter)
+for(i in 1:nrow(pcoa_points)) {
+  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
+  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[i]]
+  
+}
+
+
+pcoa_points |>
+  ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
+    geom_point() +
+    theme(
+      legend.text = element_text(size = 10), 
+      legend.title = element_text(size = 15)
+    )
+
+```
+
+## Hierarchical Clustering
+
+Another way to visualize your data is by using hclust or Hierarchical Clustering. Hierarchical clustering generates a tree of distances to show the similarities between the samples.
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+hclust_result <- hclust(dist_obj, "complete")
+par(cex=0.6, mar=c(5, 8, 4, 1))
+plot(hclust_result)
+```
+
+Graph Without Clustering
+```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+hclust_result <- hclust(dist_obj_no_cluster, "complete")
+par(cex=0.6, mar=c(5, 8, 4, 1))
+plot(hclust_result)
+```

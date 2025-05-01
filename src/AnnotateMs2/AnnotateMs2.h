@@ -9,19 +9,20 @@
 #include "../ScoringMethods/ScoringFactory.h"
 
 class AnnotateMs2 {
-    public:
-        AnnotateMs2() = default;
-        ~AnnotateMs2() = default;
-        void createQueryList(std::vector<std::string> variableId, std::vector<std::string> ms2Id, 
-          std::vector<float> ms2Mz, std::vector<float> ms2Rt, Rcpp::List ms2Spectra);
-        void createRefList(Rcpp::List reference);
-        Rcpp::DataFrame getMatches(double threshold, const ScoringFactory& factory, double minScore);
-        
+public:
+    AnnotateMs2(const int minPeaks):minPeaks(minPeaks) {}
+    ~AnnotateMs2() = default;
+    void createQueryList(std::vector<std::string> variableId, std::vector<std::string> ms2Id,
+      std::vector<float> ms2Mz, std::vector<float> ms2Rt, Rcpp::List ms2Spectra);
+    void createRefList(Rcpp::List reference);
+    Rcpp::DataFrame getMatches(double threshold, const ScoringFactory& factory, double minScore);
 
-        
-    private:
-        std::vector<Query> queryList;
-        std::vector<Reference> referenceList;
+
+
+private:
+    std::vector<Query> queryList;
+    std::vector<Reference> referenceList;
+    int minPeaks = 0;
 };
 
 #endif //ANNOTATEMS2

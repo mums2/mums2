@@ -9,7 +9,7 @@ test_that("annotate_ms_featrues returns the correct annotations in the
             psu_msmls <- read_msp(test_path(dir, r_file))
 
             annotations <- annotate_ms2(dat, psu_msmls,
-                                        gnps_params(0.5), 2, .2)
+                                        gnps_params(0.5), 2, .2, min_peaks = 0)
 
             colnames <- c("query_ms1_id", "query_ms2_id", "query_mz",
                           "query_rt", "ref_idx", "score", "NAME", "PRECURSORMZ",
@@ -30,7 +30,7 @@ test_that("annotate_ms_featrues returns the omu where the query is present", {
   cluster <- cluster_data(distances, dat,  0.3, "opticlust")
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
-    gnps_params(0.5), 2, .2, cluster)
+    gnps_params(0.5), 2, .2, min_peaks = 0, cluster)
   
   expect_true("OMU" %in% colnames(annotations))
 })
