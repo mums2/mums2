@@ -41,12 +41,8 @@ CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
     .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
 }
 
-VectorizedSubtract <- function(x, y) {
-    .Call(`_mums2_VectorizedSubtract`, x, y)
-}
-
-NormalSubtract <- function(x, y) {
-    .Call(`_mums2_NormalSubtract`, x, y)
+GetMolecularFormula <- function(formula) {
+    invisible(.Call(`_mums2_GetMolecularFormula`, formula))
 }
 
 squareRootNormalize <- function(vec) {

@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
+
+#include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
@@ -167,14 +169,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector VectorizedSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    return x - y;
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector NormalSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    for(int i = 0; i < x.size(); i++) {
-        x[i] = x[i] - y[i];
-    }
-    return x;
+void GetMolecularFormula(const std::string& formula) {
+    const MolecularFormula molecularFormula(formula);
+    Rcpp::Rcout << molecularFormula.GetMolecularFormula() << std::endl;
 }
