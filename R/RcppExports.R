@@ -45,6 +45,10 @@ GetMolecularFormula <- function(formula) {
     invisible(.Call(`_mums2_GetMolecularFormula`, formula))
 }
 
+SubtractMolecularFormula <- function(formula, otherFormula) {
+    .Call(`_mums2_SubtractMolecularFormula`, formula, otherFormula)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

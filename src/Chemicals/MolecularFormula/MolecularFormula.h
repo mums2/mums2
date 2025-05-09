@@ -7,15 +7,20 @@
 #include <vector>
 #include <string>
 #include "../PeriodicElements/Element.h"
+#include <unordered_map>
 
 
 class MolecularFormula {
 public:
     explicit MolecularFormula(const std::string& molecularFormula);
-    const std::vector<Element>& GetElements() {return elements;}
-    std::string GetMolecularFormula() const;
+    MolecularFormula(const std::unordered_map<std::string, int>&,
+        const std::vector<std::string>&);
+    int GetAtomsForElement(const std::string&) const;
+    [[nodiscard]] std::string GetMolecularFormula() const;
+    MolecularFormula operator-(const MolecularFormula& other) const;
 private:
-    std::vector<Element> elements;
+    std::unordered_map<std::string, int> chemicalAtomMap;
+    std::vector<std::string> chemicalAtomNamesOrder;
 };
 
 
