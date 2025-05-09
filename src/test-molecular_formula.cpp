@@ -38,13 +38,13 @@ context("Molecular Formula") {
     test_that("We can subtract molecular formulas and get a resultant difference") {
         const MolecularFormula molecularFormula("C6H12O6");
         const MolecularFormula otherFormula("C20H15O7N3");
-        const MolecularFormula difference = molecularFormula - otherFormula;
-        expect_true(difference.GetMolecularFormula() == "C14H3ON3");
+        const std::string difference = molecularFormula - otherFormula;
+        expect_true(difference == "C14H3ON3");
 
         const MolecularFormula molecularFormula2("C6H12O6");
         const MolecularFormula otherFormula2("C3H2");
-        const MolecularFormula difference2 = molecularFormula2 - otherFormula2;
-        expect_true(difference2.GetMolecularFormula() == "C3H10O6");
+        const std::string difference2 = molecularFormula2 - otherFormula2;
+        expect_true(difference2 == "C3H10O6");
     }
 
     test_that("We can check if formulas are subformulas of another") {

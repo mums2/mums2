@@ -63,32 +63,32 @@ std::string MolecularFormula::GetMolecularFormula() const {
     return formula;
 }
 
-MolecularFormula MolecularFormula::operator-(const MolecularFormula &other) const {
-    std::unordered_map<std::string, int> newElementMap;
+std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     std::vector<std::string> tempElementNamesOrder;
     std::unordered_set<std::string> uniqueElementNames;
-    std::vector<std::string> newElementNamesOrder;
+
     for(const auto& element : chemicalAtomNamesOrder) { // First one will have all uniques
         tempElementNamesOrder.emplace_back(element);
         uniqueElementNames.insert(element);
-
     }
     for (const auto& element : other.chemicalAtomNamesOrder) {
         if(uniqueElementNames.find(element) != uniqueElementNames.end()) continue;
         tempElementNamesOrder.emplace_back(element);
         uniqueElementNames.insert(element);
     }
-    size_t count = 0;
-    newElementNamesOrder.reserve(uniqueElementNames.size());
+    std::string formula;
     for(const auto& currentChemicalSymbol : tempElementNamesOrder) {
         const int currentAtoms = GetAtomsForElement(currentChemicalSymbol);
         const int otherAtoms = other.GetAtomsForElement(currentChemicalSymbol);
         const int newAtomAmount = std::abs(currentAtoms - otherAtoms);
         if(newAtomAmount <= 0) continue;
-        newElementMap[currentChemicalSymbol] = newAtomAmount;
-        newElementNamesOrder.emplace_back(currentChemicalSymbol);
+        if(newAtomAmount == 1){
+            formula += currentChemicalSymbol;
+            continue;
+        }
+        formula += (currentChemicalSymbol + std::to_string(newAtomAmount));
     }
-    return MolecularFormula{newElementMap, newElementNamesOrder};
+    return formula;
 }
 
 bool MolecularFormula::CheckIfSubformula(const MolecularFormula &subFormulaCandidate) const {

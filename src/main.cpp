@@ -178,9 +178,7 @@ void GetMolecularFormula(const std::string& formula) {
 std::string SubtractMolecularFormula(const std::string& formula, const std::string& otherFormula) {
     const MolecularFormula molecularFormula(formula);
     const MolecularFormula otherMolecularFormula(otherFormula);
-
-    const MolecularFormula difference = molecularFormula - otherMolecularFormula;
-    return difference.GetMolecularFormula();
+    return molecularFormula - otherMolecularFormula;
 }
 
 // [[Rcpp::export]]
