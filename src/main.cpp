@@ -182,3 +182,10 @@ std::string SubtractMolecularFormula(const std::string& formula, const std::stri
     const MolecularFormula difference = molecularFormula - otherMolecularFormula;
     return difference.GetMolecularFormula();
 }
+
+// [[Rcpp::export]]
+bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormula) {
+    const MolecularFormula molecularFormula(formula);
+    const MolecularFormula otherMolecularFormula(otherFormula);
+    return molecularFormula.CheckIfSubformula(otherMolecularFormula);
+}

@@ -49,6 +49,10 @@ SubtractMolecularFormula <- function(formula, otherFormula) {
     .Call(`_mums2_SubtractMolecularFormula`, formula, otherFormula)
 }
 
+CheckIfSubFormula <- function(formula, otherFormula) {
+    .Call(`_mums2_CheckIfSubFormula`, formula, otherFormula)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

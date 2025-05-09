@@ -167,6 +167,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CheckIfSubFormula
+bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormula);
+RcppExport SEXP _mums2_CheckIfSubFormula(SEXP formulaSEXP, SEXP otherFormulaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type otherFormula(otherFormulaSEXP);
+    rcpp_result_gen = Rcpp::wrap(CheckIfSubFormula(formula, otherFormula));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -224,6 +236,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_GetMolecularFormula", (DL_FUNC) &_mums2_GetMolecularFormula, 1},
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
+    {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

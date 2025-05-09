@@ -64,7 +64,6 @@ std::string MolecularFormula::GetMolecularFormula() const {
 }
 
 MolecularFormula MolecularFormula::operator-(const MolecularFormula &other) const {
-    std::vector<Element> newElements;
     std::unordered_map<std::string, int> newElementMap;
     std::vector<std::string> tempElementNamesOrder;
     std::unordered_set<std::string> uniqueElementNames;
@@ -82,12 +81,30 @@ MolecularFormula MolecularFormula::operator-(const MolecularFormula &other) cons
     size_t count = 0;
     newElementNamesOrder.reserve(uniqueElementNames.size());
     for(const auto& currentChemicalSymbol : tempElementNamesOrder) {
-        int currentAtoms = GetAtomsForElement(currentChemicalSymbol);
-        int otherAtoms = other.GetAtomsForElement(currentChemicalSymbol);
+        const int currentAtoms = GetAtomsForElement(currentChemicalSymbol);
+        const int otherAtoms = other.GetAtomsForElement(currentChemicalSymbol);
         const int newAtomAmount = std::abs(currentAtoms - otherAtoms);
         if(newAtomAmount <= 0) continue;
         newElementMap[currentChemicalSymbol] = newAtomAmount;
         newElementNamesOrder.emplace_back(currentChemicalSymbol);
     }
     return MolecularFormula{newElementMap, newElementNamesOrder};
+}
+
+bool MolecularFormula::CheckIfSubformula(const MolecularFormula &subFormulaCandidate) const {
+    // Cant have more elements than the main formula
+    if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
+    std::unordered_set<std::string> uniqueElementNames;
+    std::vector<std::string> newElementNamesOrder;
+    for(const auto& element : chemicalAtomNamesOrder) { // First one will have all uniques
+        uniqueElementNames.insert(element);
+    }
+    for (const auto& element : subFormulaCandidate.chemicalAtomNamesOrder) {
+        if(uniqueElementNames.find(element) != uniqueElementNames.end()) continue;
+        uniqueElementNames.insert(element);
+    }
+    return std::all_of(uniqueElementNames.begin(), uniqueElementNames.end(),
+        [this, &subFormulaCandidate](const std::string& uniqueElement) {
+            return GetAtomsForElement(uniqueElement) >= subFormulaCandidate.GetAtomsForElement(uniqueElement);
+        });
 }
