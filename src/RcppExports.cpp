@@ -179,6 +179,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// FragmentationTreeTest
+void FragmentationTreeTest(const Rcpp::List& molecularFormulas);
+RcppExport SEXP _mums2_FragmentationTreeTest(SEXP molecularFormulasSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
+    FragmentationTreeTest(molecularFormulas);
+    return R_NilValue;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -237,6 +247,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetMolecularFormula", (DL_FUNC) &_mums2_GetMolecularFormula, 1},
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
+    {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

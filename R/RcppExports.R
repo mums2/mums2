@@ -53,6 +53,10 @@ CheckIfSubFormula <- function(formula, otherFormula) {
     .Call(`_mums2_CheckIfSubFormula`, formula, otherFormula)
 }
 
+FragmentationTreeTest <- function(molecularFormulas) {
+    invisible(.Call(`_mums2_FragmentationTreeTest`, molecularFormulas))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

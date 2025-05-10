@@ -5,6 +5,7 @@
 
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 
+#include <algorithm>
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
@@ -91,7 +92,7 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     return formula;
 }
 
-bool MolecularFormula::CheckIfSubformula(const MolecularFormula &subFormulaCandidate) const {
+bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
     // Cant have more elements than the main formula
     if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
     std::unordered_set<std::string> uniqueElementNames;
@@ -103,8 +104,15 @@ bool MolecularFormula::CheckIfSubformula(const MolecularFormula &subFormulaCandi
         if(uniqueElementNames.find(element) != uniqueElementNames.end()) continue;
         uniqueElementNames.insert(element);
     }
-    return std::all_of(uniqueElementNames.begin(), uniqueElementNames.end(),
-        [this, &subFormulaCandidate](const std::string& uniqueElement) {
-            return GetAtomsForElement(uniqueElement) >= subFormulaCandidate.GetAtomsForElement(uniqueElement);
-        });
+
+    for (const auto& uniqueElement : uniqueElementNames) {
+        int atoms1 = GetAtomsForElement(uniqueElement);
+        int atoms2 = subFormulaCandidate.GetAtomsForElement(uniqueElement);
+        if (GetAtomsForElement(uniqueElement) < subFormulaCandidate.GetAtomsForElement(uniqueElement)) return false;
+    }
+    return true;
+    // return std::all_of(uniqueElementNames.begin(), uniqueElementNames.end(),
+    //     [this, &subFormulaCandidate](const std::string& uniqueElement) {
+    //         return GetAtomsForElement(uniqueElement) >= subFormulaCandidate.GetAtomsForElement(uniqueElement);
+    //     });
 }

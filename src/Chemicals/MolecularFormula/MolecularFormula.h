@@ -17,7 +17,7 @@ public:
     [[nodiscard]] int GetAtomsForElement(const std::string&) const;
     [[nodiscard]] std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
-    bool CheckIfSubformula(const MolecularFormula &subFormulaCandidate) const;
+    bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
 protected:
     std::unordered_map<std::string, int> chemicalAtomMap;
     std::vector<std::string> chemicalAtomNamesOrder;

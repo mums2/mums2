@@ -12,6 +12,7 @@
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
+#include "FragmentationTree/FragmentationTree.h"
 #include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
@@ -185,5 +186,14 @@ std::string SubtractMolecularFormula(const std::string& formula, const std::stri
 bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormula) {
     const MolecularFormula molecularFormula(formula);
     const MolecularFormula otherMolecularFormula(otherFormula);
-    return molecularFormula.CheckIfSubformula(otherMolecularFormula);
+    return molecularFormula.CheckIfOtherIsSubFormula(otherMolecularFormula);
+}
+
+// [[Rcpp::export]]
+void FragmentationTreeTest(const Rcpp::List& molecularFormulas) {
+    FragmentationTree tree;
+    for (size_t i = 0; i < molecularFormulas.size(); i++) {
+        const std::vector<std::string> decomps = Rcpp::as<std::vector<std::string>>(molecularFormulas[i]);
+        tree.AddMolecularFormulasToGraph(decomps, i);
+    }
 }
