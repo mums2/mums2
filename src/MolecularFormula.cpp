@@ -10,19 +10,20 @@
 #include <unordered_map>
 #include <unordered_set>
 
-MolecularFormula::MolecularFormula(const std::string &molecularFormula) {
-    const size_t size = molecularFormula.size();
+MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
+    const char* formula = molecularFormula.get_cstring();
+    const size_t size = std::strlen(formula);
     std::string chemicalSymbol;
     std::string amountOfAtoms;
     bool hasCheckedAtomAmount = false;
     for (size_t i = 0; i < size; i++) {
-        if (!std::isdigit(molecularFormula[i])) {
+        if (!std::isdigit(formula[i])) {
             //If you have checked to see how many atoms there are or
             //The chemical does not have a lowercase letter, then the chemical before
             // Is standalone and only has 1 atom.
             // or it has checked the atoms and the chemical before has been created
             if(!chemicalSymbol.empty()) {
-                if (hasCheckedAtomAmount || !std::islower(molecularFormula[i])) {
+                if (hasCheckedAtomAmount || !std::islower(formula[i])) {
                     if (amountOfAtoms.empty()) amountOfAtoms = "1";
                     chemicalAtomNamesOrder.emplace_back(chemicalSymbol);
                     chemicalAtomMap[chemicalSymbol] = std::stoi(amountOfAtoms);
@@ -33,15 +34,16 @@ MolecularFormula::MolecularFormula(const std::string &molecularFormula) {
             }
             // If you are lowercase, you are apart of the current equation
             // if it is a chemical character
-            chemicalSymbol += molecularFormula[i];
+            chemicalSymbol += formula[i];
             continue;
         }
-        amountOfAtoms += molecularFormula[i];
+        amountOfAtoms += formula[i];
         hasCheckedAtomAmount = true;
     }
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
     chemicalAtomMap[chemicalSymbol] = std::stoi(amountOfAtoms);
     chemicalAtomNamesOrder.emplace_back(chemicalSymbol);
+    delete formula;
 }
 
 MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &elementMap,
@@ -95,24 +97,13 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
 bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
     // Cant have more elements than the main formula
     if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
-    std::unordered_set<std::string> uniqueElementNames;
-    std::vector<std::string> newElementNamesOrder;
-    for(const auto& element : chemicalAtomNamesOrder) { // First one will have all uniques
-        uniqueElementNames.insert(element);
-    }
-    for (const auto& element : subFormulaCandidate.chemicalAtomNamesOrder) {
-        if(uniqueElementNames.find(element) != uniqueElementNames.end()) continue;
-        uniqueElementNames.insert(element);
-    }
-
-    for (const auto& uniqueElement : uniqueElementNames) {
-        int atoms1 = GetAtomsForElement(uniqueElement);
-        int atoms2 = subFormulaCandidate.GetAtomsForElement(uniqueElement);
-        if (GetAtomsForElement(uniqueElement) < subFormulaCandidate.GetAtomsForElement(uniqueElement)) return false;
-    }
-    return true;
-    // return std::all_of(uniqueElementNames.begin(), uniqueElementNames.end(),
-    //     [this, &subFormulaCandidate](const std::string& uniqueElement) {
-    //         return GetAtomsForElement(uniqueElement) >= subFormulaCandidate.GetAtomsForElement(uniqueElement);
-    //     });
+    // for (const auto& element : chemicalAtomMap) {
+    //     int atoms1 = GetAtomsForElement(element.first);
+    //     int atoms2 = subFormulaCandidate.GetAtomsForElement(element.first);
+    //     if (GetAtomsForElement(element.first) < subFormulaCandidate.GetAtomsForElement(element.first)) return false;
+    // }
+    return std::all_of(chemicalAtomMap.begin(), chemicalAtomMap.end(),
+        [this, &subFormulaCandidate](const std::pair<const std::string, int>& element) {
+            return GetAtomsForElement(element.first) >= subFormulaCandidate.GetAtomsForElement(element.first);
+        });
 }

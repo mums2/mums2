@@ -4,30 +4,32 @@
 
 #include "FragmentationTree/FragmentationTree.h"
 
-#include "Chemicals/MolecularFormula/MolecularFormula.h"
 
-void FragmentationTree::AddMolecularFormulasToGraph(const std::vector<std::string>& allIsotopeDecompositions,
-                                                    const int color) {
-    const size_t size = allIsotopeDecompositions.size();
+
+#include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "DiversityMetrics/DiversityMetricFactory.h"
+
+void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector& molecularFormulas,
+    const Rcpp::IntegerVector& color) {
+    const size_t size = molecularFormulas.size();
     for (size_t i = 0; i < size; i++) {
-        const std::string& molecularFormula = allIsotopeDecompositions[i];
+        const Rcpp::String& molecularFormula = molecularFormulas[i];
         MolecularFormula formula(molecularFormula);
-        size_t currentIndex = i + startingIndex;
-        keyToColorMap[currentIndex] = color;
-        keyToMolecularFormulaMap[currentIndex] = molecularFormula;
+        keyToColorMap[i] = color[i];
+        keyToMolecularFormulaMap[i] = molecularFormula;
         for (size_t j = i + 1; j < size; j++) {
-            const std::string& other = allIsotopeDecompositions[j];
-            MolecularFormula currentFormula(allIsotopeDecompositions[j]);
-            const size_t outGoingIndex = j + startingIndex;
+            const Rcpp::String& other = molecularFormulas[j];
+            MolecularFormula currentFormula(molecularFormulas[j]);
             if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
-                graph.AddEdge(currentIndex, outGoingIndex);
+                graph.AddEdge(i, j);
+                //Rcpp::Rcout << molecularFormula.get_cstring() << " -> " << other.get_cstring() << std::endl;
                 continue;
             }
             if (currentFormula.CheckIfOtherIsSubFormula(formula)) {
-                graph.AddEdge(outGoingIndex, currentIndex);
+                graph.AddEdge(j, i);
+                //Rcpp::Rcout << other.get_cstring() << " -> " << molecularFormula.get_cstring() << std::endl;
             }
 
         }
-    }
-    startingIndex += size;
+   }
 }

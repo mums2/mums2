@@ -7,11 +7,11 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-
+#include <Rcpp.h>
 
 class MolecularFormula {
 public:
-    explicit MolecularFormula(const std::string& molecularFormula);
+    explicit MolecularFormula(const Rcpp::String& molecularFormula);
     MolecularFormula(const std::unordered_map<std::string, int>&,
         const std::vector<std::string>&);
     [[nodiscard]] int GetAtomsForElement(const std::string&) const;

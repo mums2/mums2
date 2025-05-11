@@ -192,8 +192,22 @@ bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormu
 // [[Rcpp::export]]
 void FragmentationTreeTest(const Rcpp::List& molecularFormulas) {
     FragmentationTree tree;
-    for (size_t i = 0; i < molecularFormulas.size(); i++) {
-        const std::vector<std::string> decomps = Rcpp::as<std::vector<std::string>>(molecularFormulas[i]);
-        tree.AddMolecularFormulasToGraph(decomps, i);
-    }
+    tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"]);
+
+}
+
+
+// [[Rcpp::export]]
+void test(const Rcpp::CharacterVector& vec) {
+    std::vector<std::string> vecTest = Rcpp::as<std::vector<std::string>>(vec);
+    Rcpp::Rcout << vec[1] << std::endl;
+}
+// [[Rcpp::export]]
+void test2(const std::vector<std::string>& vec) {
+    Rcpp::Rcout << vec[1] << std::endl;
+}
+
+// [[Rcpp::export]]
+void test3(const Rcpp::String& vec) {
+    Rcpp::Rcout << std::strlen(vec.get_cstring());
 }

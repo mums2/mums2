@@ -57,6 +57,18 @@ FragmentationTreeTest <- function(molecularFormulas) {
     invisible(.Call(`_mums2_FragmentationTreeTest`, molecularFormulas))
 }
 
+test <- function(vec) {
+    invisible(.Call(`_mums2_test`, vec))
+}
+
+test2 <- function(vec) {
+    invisible(.Call(`_mums2_test2`, vec))
+}
+
+test3 <- function(vec) {
+    invisible(.Call(`_mums2_test3`, vec))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

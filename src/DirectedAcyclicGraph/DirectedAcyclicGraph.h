@@ -15,7 +15,7 @@ public:
     void AddEdge(size_t key, size_t outGoingKey);
     std::list<size_t> GetEdges(size_t key);
 private:
-    std::unordered_map<size_t,std::list<size_t>> adjacencyList;
+    std::unordered_map<size_t,std::list<size_t>> adjacencyList{};
 };
 
 
