@@ -11,6 +11,7 @@
 
 class MolecularFormula {
 public:
+    MolecularFormula() = default;
     explicit MolecularFormula(const Rcpp::String& molecularFormula);
     MolecularFormula(const std::unordered_map<std::string, int>&,
         const std::vector<std::string>&);

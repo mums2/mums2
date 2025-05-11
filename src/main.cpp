@@ -172,7 +172,6 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
 // [[Rcpp::export]]
 void GetMolecularFormula(const std::string& formula) {
     const MolecularFormula molecularFormula(formula);
-    Rcpp::Rcout << molecularFormula.GetMolecularFormula() << std::endl;
 }
 
 // [[Rcpp::export]]

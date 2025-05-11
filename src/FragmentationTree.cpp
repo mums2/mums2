@@ -11,15 +11,20 @@
 
 void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector& molecularFormulas,
     const Rcpp::IntegerVector& color) {
+
     const size_t size = molecularFormulas.size();
+    std::vector<MolecularFormula> formulas(size);
+    for (size_t i = 0; i < size; i++) {
+        formulas[i] = MolecularFormula(molecularFormulas[i]);
+    }
     for (size_t i = 0; i < size; i++) {
         const Rcpp::String& molecularFormula = molecularFormulas[i];
-        MolecularFormula formula(molecularFormula);
         keyToColorMap[i] = color[i];
         keyToMolecularFormulaMap[i] = molecularFormula;
+        MolecularFormula& formula = formulas[i];
         for (size_t j = i + 1; j < size; j++) {
-            const Rcpp::String& other = molecularFormulas[j];
-            MolecularFormula currentFormula(molecularFormulas[j]);
+            MolecularFormula& currentFormula = formulas[j];
+            // const Rcpp::String other = molecularFormulas[j];
             if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
                 graph.AddEdge(i, j);
                 //Rcpp::Rcout << molecularFormula.get_cstring() << " -> " << other.get_cstring() << std::endl;
