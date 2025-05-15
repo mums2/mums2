@@ -3,12 +3,13 @@
 //
 
 #include "DirectedAcyclicGraph/DirectedAcyclicGraph.h"
-
+#include <Rcpp.h>
 void DirectedAcyclicGraph::AddEdge(const size_t key, const size_t outGoingKey) {
     adjacencyList[key].push_back(outGoingKey);
 }
 
-std::list<size_t> DirectedAcyclicGraph::GetEdges(const size_t key) {
+std::list<size_t> DirectedAcyclicGraph::GetEdges(const size_t key) const {
     if (adjacencyList.find(key) == adjacencyList.end()) return {};
-    return adjacencyList[key];
+    return adjacencyList.at(key);
 }
+

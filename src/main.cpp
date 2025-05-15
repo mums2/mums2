@@ -192,7 +192,7 @@ bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormu
 void FragmentationTreeTest(const Rcpp::List& molecularFormulas) {
     FragmentationTree tree;
     tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"]);
-
+    tree.PrintGraph();
 }
 
 

@@ -43,7 +43,6 @@ MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
     chemicalAtomMap[chemicalSymbol] = std::stoi(amountOfAtoms);
     chemicalAtomNamesOrder.emplace_back(chemicalSymbol);
-    delete formula;
 }
 
 MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &elementMap,
@@ -97,11 +96,6 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
 bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
     // Cant have more elements than the main formula
     if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
-    // for (const auto& element : chemicalAtomMap) {
-    //     int atoms1 = GetAtomsForElement(element.first);
-    //     int atoms2 = subFormulaCandidate.GetAtomsForElement(element.first);
-    //     if (GetAtomsForElement(element.first) < subFormulaCandidate.GetAtomsForElement(element.first)) return false;
-    // }
     return std::all_of(chemicalAtomMap.begin(), chemicalAtomMap.end(),
         [this, &subFormulaCandidate](const std::pair<const std::string, int>& element) {
             return GetAtomsForElement(element.first) >= subFormulaCandidate.GetAtomsForElement(element.first);

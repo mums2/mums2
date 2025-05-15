@@ -10,18 +10,19 @@
 #include <Rcpp.h>
 
 #include "../DirectedAcyclicGraph/DirectedAcyclicGraph.h"
+#include "../DirectedAcyclicGraph/FragmentationNode.h"
 
 
 class FragmentationTree {
 public:
     FragmentationTree() = default;
     void AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas, const Rcpp::IntegerVector &color);
+    void PrintGraph() const;
 
 private:
     // Keys of the same color represent the same mz, int (isotope).
     DirectedAcyclicGraph graph;
-    std::unordered_map<size_t, std::string> keyToMolecularFormulaMap;
-    std::unordered_map<size_t, size_t> keyToColorMap;
+    std::unordered_map<size_t, FragmentationNode> keyToMolecularFormulaMap;
 };
 
 

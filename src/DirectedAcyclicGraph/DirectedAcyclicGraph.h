@@ -13,7 +13,7 @@ class DirectedAcyclicGraph {
 public:
     DirectedAcyclicGraph() = default;
     void AddEdge(size_t key, size_t outGoingKey);
-    std::list<size_t> GetEdges(size_t key);
+    std::list<size_t> GetEdges(size_t key) const;
 private:
     std::unordered_map<size_t,std::list<size_t>> adjacencyList{};
 };

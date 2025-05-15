@@ -97,3 +97,14 @@ add_annotations <- function(matches, reference) {
   matches <- cbind(matches, ref_info)
   return(matches[order(matches$score, decreasing = T), ])
 }
+
+
+#' @export
+#' @title frag
+#' @description
+#' Clusters the data together
+#' @param x data
+#' 
+fragmentation_tree <- function(x) {
+  FragmentationTreeTest(x)
+}
