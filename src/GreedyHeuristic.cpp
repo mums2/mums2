@@ -17,14 +17,24 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     std::list<Vertex> visited;
     double score = 0;
     for (const auto& vertex : vertexes) {
+        // if (std::isnan(vertex.score)) continue;
         const FragmentationNode& node = nodes[vertex.indexChildNode];
         if (hasVisited[node.color][node.index]) continue;
-        visited.emplace_back(vertex);
         hasVisited[node.color][node.index] = true;
+        visited.emplace_back(vertex);
         score += vertex.score;
         // Rcpp::Rcout << vertex.score << std::endl;
     }
     Rcpp::Rcout << "Score: " << score;
+    Print(visited, nodes);
+}
+
+void GreedyHeuristic::Print(const std::list<Vertex>& subtree, const std::vector<FragmentationNode>& nodes) const {
+    DirectedAcyclicGraph graph;
+    for (const auto& vertex : subtree) {
+        graph.AddEdge(vertex.indexParentNode, vertex.indexChildNode);
+    }
+    graph.Print(nodes);
 
 }
 

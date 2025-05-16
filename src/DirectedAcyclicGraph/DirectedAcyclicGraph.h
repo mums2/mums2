@@ -8,12 +8,15 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "FragmentationNode.h"
+
 
 class DirectedAcyclicGraph {
 public:
     DirectedAcyclicGraph() = default;
     void AddEdge(size_t key, size_t outGoingKey);
     [[nodiscard]] std::list<size_t> GetEdges(size_t key) const;
+    void Print(const std::vector<FragmentationNode>&) const;
 private:
     std::vector<std::unordered_set<size_t>> adjacencyListOfParents{};
     std::vector<std::unordered_set<size_t>> adjacencyListOfChildren{};

@@ -13,3 +13,13 @@ std::list<size_t> DirectedAcyclicGraph::GetEdges(const size_t key) const {
     return adjacencyList.at(key);
 }
 
+void DirectedAcyclicGraph::Print(const std::vector<FragmentationNode>& nodes) const {
+    for (const auto& edge :  adjacencyList) {
+        Rcpp:: Rcout << edge.first << ":" << nodes[edge.first].color << "-> ";;
+        for (const auto& outGoingEdges : edge.second) {
+            Rcpp::Rcout << "( "<<outGoingEdges << ": " << nodes[outGoingEdges].color << "), ";
+        }
+        Rcpp::Rcout << "\n";
+    }
+}
+
