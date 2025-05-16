@@ -11,18 +11,28 @@
 
 #include "../DirectedAcyclicGraph/DirectedAcyclicGraph.h"
 #include "../DirectedAcyclicGraph/FragmentationNode.h"
+#include "../DirectedAcyclicGraph/Vertex.h"
 
 
 class FragmentationTree {
 public:
     FragmentationTree() = default;
-    void AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas, const Rcpp::IntegerVector &color);
-    void PrintGraph() const;
+    void AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas,
+        const Rcpp::IntegerVector &color, const Rcpp::IntegerVector& decompositionScores,
+        double parentMass, int amountOfUniqueColors);
+    void SortVertexList();
+    const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
+    const std::vector<Vertex> &GetVertexList() const {return vertexList;}
+    const DirectedAcyclicGraph &GetGraph() const {return graph;}
+    int GetUniqueColors() const {return uniqueColors;}
+
 
 private:
     // Keys of the same color represent the same mz, int (isotope).
+    int uniqueColors;
     DirectedAcyclicGraph graph;
-    std::unordered_map<size_t, FragmentationNode> keyToMolecularFormulaMap;
+    std::vector<FragmentationNode> molecularNodeList;
+    std::vector<Vertex> vertexList;
 };
 
 

@@ -6,15 +6,17 @@
 #define DIRECTEDACYCLICGRAPH_H
 #include <list>
 #include <unordered_map>
-
+#include <unordered_set>
 
 
 class DirectedAcyclicGraph {
 public:
     DirectedAcyclicGraph() = default;
     void AddEdge(size_t key, size_t outGoingKey);
-    std::list<size_t> GetEdges(size_t key) const;
+    [[nodiscard]] std::list<size_t> GetEdges(size_t key) const;
 private:
+    std::vector<std::unordered_set<size_t>> adjacencyListOfParents{};
+    std::vector<std::unordered_set<size_t>> adjacencyListOfChildren{};
     std::unordered_map<size_t,std::list<size_t>> adjacencyList{};
 };
 

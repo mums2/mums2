@@ -13,6 +13,7 @@
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 #include "FragmentationTree/FragmentationTree.h"
+#include "FragmentationTree/GreedyHeuristic.h"
 #include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
@@ -189,10 +190,13 @@ bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormu
 }
 
 // [[Rcpp::export]]
-void FragmentationTreeTest(const Rcpp::List& molecularFormulas) {
+void FragmentationTreeTest(const Rcpp::List& molecularFormulas,
+    const double parentMass, const int amountOfColors) {
     FragmentationTree tree;
-    tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"]);
-    tree.PrintGraph();
+    tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
+        molecularFormulas["scores"], parentMass, amountOfColors);
+    GreedyHeuristic greedy;
+    greedy.CalculateHeuristic(tree);
 }
 
 

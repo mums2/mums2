@@ -11,6 +11,12 @@
 #include <unordered_set>
 
 MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
+    chemicalAtomMassMap["C"] = 12.011;
+    chemicalAtomMassMap["H"] = 1.0078;
+    chemicalAtomMassMap["N"] = 14.007;
+    chemicalAtomMassMap["O"] = 15.999;
+    chemicalAtomMassMap["P"] = 30.974;
+    chemicalAtomMassMap["S"] = 32.065;
     const char* formula = molecularFormula.get_cstring();
     const size_t size = std::strlen(formula);
     std::string chemicalSymbol;
@@ -100,4 +106,12 @@ bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormu
         [this, &subFormulaCandidate](const std::pair<const std::string, int>& element) {
             return GetAtomsForElement(element.first) >= subFormulaCandidate.GetAtomsForElement(element.first);
         });
+}
+
+double MolecularFormula::GetMass() const {
+    double mass = 0;
+    for (const auto& element : chemicalAtomMap) {
+        mass += chemicalAtomMassMap.at(element.first) * element.second;
+    }
+    return mass;
 }

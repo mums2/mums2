@@ -8,7 +8,8 @@
 
 struct FragmentationNode {
     int color{};
-    double score{};
+    size_t index{};
     MolecularFormula formula;
 };
+
 #endif //FRAGMENTATIONNODE_H

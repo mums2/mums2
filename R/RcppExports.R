@@ -53,8 +53,8 @@ CheckIfSubFormula <- function(formula, otherFormula) {
     .Call(`_mums2_CheckIfSubFormula`, formula, otherFormula)
 }
 
-FragmentationTreeTest <- function(molecularFormulas) {
-    invisible(.Call(`_mums2_FragmentationTreeTest`, molecularFormulas))
+FragmentationTreeTest <- function(molecularFormulas, parentMass, amountOfColors) {
+    invisible(.Call(`_mums2_FragmentationTreeTest`, molecularFormulas, parentMass, amountOfColors))
 }
 
 test <- function(vec) {

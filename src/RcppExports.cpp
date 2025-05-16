@@ -180,12 +180,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // FragmentationTreeTest
-void FragmentationTreeTest(const Rcpp::List& molecularFormulas);
-RcppExport SEXP _mums2_FragmentationTreeTest(SEXP molecularFormulasSEXP) {
+void FragmentationTreeTest(const Rcpp::List& molecularFormulas, const double parentMass, const int amountOfColors);
+RcppExport SEXP _mums2_FragmentationTreeTest(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP amountOfColorsSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
-    FragmentationTreeTest(molecularFormulas);
+    Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
+    Rcpp::traits::input_parameter< const int >::type amountOfColors(amountOfColorsSEXP);
+    FragmentationTreeTest(molecularFormulas, parentMass, amountOfColors);
     return R_NilValue;
 END_RCPP
 }
@@ -277,7 +279,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetMolecularFormula", (DL_FUNC) &_mums2_GetMolecularFormula, 1},
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
-    {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 1},
+    {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 3},
     {"_mums2_test", (DL_FUNC) &_mums2_test, 1},
     {"_mums2_test2", (DL_FUNC) &_mums2_test2, 1},
     {"_mums2_test3", (DL_FUNC) &_mums2_test3, 1},

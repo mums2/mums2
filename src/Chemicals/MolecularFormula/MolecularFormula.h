@@ -19,9 +19,11 @@ public:
     [[nodiscard]] std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
     bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
+    double GetMass() const;
 protected:
     std::unordered_map<std::string, int> chemicalAtomMap;
     std::vector<std::string> chemicalAtomNamesOrder;
+    std::unordered_map<std::string, double> chemicalAtomMassMap;
 };
 
 
