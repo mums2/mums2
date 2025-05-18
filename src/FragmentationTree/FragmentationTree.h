@@ -23,14 +23,12 @@ public:
     void SortVertexList();
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     const std::vector<Vertex> &GetVertexList() const {return vertexList;}
-    const DirectedAcyclicGraph &GetGraph() const {return graph;}
     int GetUniqueColors() const {return uniqueColors;}
 
 
 private:
     // Keys of the same color represent the same mz, int (isotope).
     int uniqueColors;
-    DirectedAcyclicGraph graph;
     std::vector<FragmentationNode> molecularNodeList;
     std::vector<Vertex> vertexList;
 };

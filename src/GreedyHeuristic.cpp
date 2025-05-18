@@ -10,7 +10,6 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     std::vector<int> usedColors(colors, -1);
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
     const std::vector<Vertex>& vertexes = tree.GetVertexList();
-    const DirectedAcyclicGraph& graph = tree.GetGraph();
     const size_t numVertices = vertexes.size();
     std::vector<std::vector<bool>> hasVisited(colors,
         std::vector<bool>(numVertices, false));
@@ -27,6 +26,7 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     }
     Rcpp::Rcout << "Score: " << score;
     Print(visited, nodes);
+
 }
 
 void GreedyHeuristic::Print(const std::list<Vertex>& subtree, const std::vector<FragmentationNode>& nodes) const {
@@ -35,7 +35,10 @@ void GreedyHeuristic::Print(const std::list<Vertex>& subtree, const std::vector<
         graph.AddEdge(vertex.indexParentNode, vertex.indexChildNode);
     }
     graph.Print(nodes);
-
+    const std::list<size_t> roots = graph.FindRoots();
+    for (const auto& root : roots) {
+        Rcpp::Rcout << "Root: " << root << std::endl;
+    }
 }
 
 /*

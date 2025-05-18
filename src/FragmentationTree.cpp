@@ -28,14 +28,12 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
             if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
                 const MolecularFormula loss = MolecularFormula(formula - currentFormula);
                 const double score = std::log(1 - loss.GetMass()/parentMass) + decompositionScores[j];
-                graph.AddEdge(i, j);
                 vertexList.emplace_back(Vertex{i ,j, score});
                 continue;
             }
             if (currentFormula.CheckIfOtherIsSubFormula(formula)) {
                 const MolecularFormula loss = MolecularFormula(formula - currentFormula);
                 const double score = std::log(1 - loss.GetMass()/parentMass) + decompositionScores[i];
-                graph.AddEdge(j, i);
                 vertexList.emplace_back(Vertex{j ,i, score});
             }
 

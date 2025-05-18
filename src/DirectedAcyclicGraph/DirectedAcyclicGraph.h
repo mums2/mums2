@@ -17,12 +17,11 @@ public:
     void AddEdge(size_t key, size_t outGoingKey);
     [[nodiscard]] std::list<size_t> GetEdges(size_t key) const;
     void Print(const std::vector<FragmentationNode>&) const;
+    std::list<size_t> FindRoots() const;
 private:
-    std::vector<std::unordered_set<size_t>> adjacencyListOfParents{};
-    std::vector<std::unordered_set<size_t>> adjacencyListOfChildren{};
+    std::unordered_map<size_t, size_t> nodeParentCount{};
     std::unordered_map<size_t,std::list<size_t>> adjacencyList{};
 };
-
 
 
 #endif //DIRECTEDACYCLICGRAPH_H
