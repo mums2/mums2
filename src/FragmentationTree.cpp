@@ -20,6 +20,7 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
     for (size_t i = 0; i < size; i++) {
         fragmentationNodes[i] = FragmentationNode{true, color[i], i,
             decompositionScores[i], 0, MolecularFormula(molecularFormulas[i])};
+        fragmentationNodes[i].self = fragmentationNodes[i].formula.GetMolecularFormula();
     }
     for (size_t i = 0; i < size; i++) {
         MolecularFormula& formula = fragmentationNodes[i].formula;
@@ -29,11 +30,15 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
             if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
                 // We only want the subtrees that are roots and have the highest score
                 // const MolecularFormula loss = MolecularFormula(formula - currentFormula);
+                if (fragmentationNodes[j].self == "C2H14N15OS2") {
+                    Rcpp::Rcout << "check;";
+                }
                 const double lossMass = formula.GetLossMass(currentFormula);
                 const double score = std::log(std::abs(1 - lossMass/parentMass)) +
                     fragmentationNodes[j].score;
                 fragmentationNodes[i].subTreeScore += (score + fragmentationNodes[j].subTreeScore);
                 fragmentationNodes[j].isSubtreeRoot = false;
+                fragmentationNodes[j].parentFormula.emplace_back(formula.GetMolecularFormula());
                 continue;
             }
             if (currentFormula.CheckIfOtherIsSubFormula(formula)) {
@@ -43,8 +48,8 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
                     fragmentationNodes[i].score;
                 fragmentationNodes[j].subTreeScore += (score + fragmentationNodes[i].subTreeScore);
                 fragmentationNodes[i].isSubtreeRoot = false;
+                fragmentationNodes[i].parentFormula.emplace_back(formula.GetMolecularFormula());
             }
-
         }
    }
     molecularNodeList = fragmentationNodes;
