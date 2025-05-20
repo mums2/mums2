@@ -4,6 +4,7 @@
 
 #include "DirectedAcyclicGraph/DirectedAcyclicGraph.h"
 #include <Rcpp.h>
+#include <fstream>
 void DirectedAcyclicGraph::AddEdge(const size_t key, const size_t outGoingKey) {
     adjacencyList[key].push_back(outGoingKey);
     nodeParentCount[outGoingKey]++;
@@ -15,21 +16,29 @@ std::list<size_t> DirectedAcyclicGraph::GetEdges(const size_t key) const {
 }
 
 void DirectedAcyclicGraph::Print(const std::vector<FragmentationNode>& nodes) const {
+    std::string output;
     for (const auto& edge :  adjacencyList) {
-        Rcpp:: Rcout << edge.first << ":" << nodes[edge.first].color << "-> ";;
+        // Rcpp:: Rcout << "'" <<edge.first << ":" << nodes[edge.first].color << "' -> ";;
         for (const auto& outGoingEdges : edge.second) {
-            Rcpp::Rcout << "( "<<outGoingEdges << ": " << nodes[outGoingEdges].color << "), ";
+            output += ("'" + nodes[edge.first].formula.GetMolecularFormula() + ":" + std::to_string(nodes[edge.first].color) + "' -> ");
+            output += ("'" + nodes[outGoingEdges].formula.GetMolecularFormula() + ":" +  std::to_string(nodes[outGoingEdges].color) + "'\n");
+            // Rcpp:: Rcout << "'" <<nodes[edge.first].formula << ":" << nodes[edge.first].color << "' -> ";;
+            // Rcpp::Rcout << "'"<<nodes[outGoingEdges].formula << ":" << nodes[outGoingEdges].color << "'\n";
         }
-        Rcpp::Rcout << "\n";
+        //Rcpp::Rcout << "\n";
     }
+    std::ofstream outputFile;
+    outputFile.open("F:\\mums2\\output.txt");
+    outputFile << output;
+    outputFile.close();
 }
 
 std::list<size_t> DirectedAcyclicGraph::FindRoots() const {
     std::list<size_t> roots;
-    for (const auto& count : nodeParentCount) {
-        Rcpp::Rcout << count.first << ":" << count.second << "\n";
-        if (count.second > 0) continue;
-        roots.emplace_back(count.first);
+    for (const auto& edge : adjacencyList) {
+        if (nodeParentCount.find(edge.first) != nodeParentCount.end()) continue;
+        // This is a root, it has no parent node
+        roots.emplace_back(edge.first);
     }
     return roots;
 }

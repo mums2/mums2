@@ -10,6 +10,7 @@ struct FragmentationNode {
     int color{};
     size_t index{};
     MolecularFormula formula;
+    std::vector<int> explainedColors{};
 };
 
 #endif //FRAGMENTATIONNODE_H

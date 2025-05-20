@@ -14,17 +14,40 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     std::vector<std::vector<bool>> hasVisited(colors,
         std::vector<bool>(numVertices, false));
     std::list<Vertex> visited;
+    DirectedAcyclicGraph graph;
     double score = 0;
     for (const auto& vertex : vertexes) {
         // if (std::isnan(vertex.score)) continue;
         const FragmentationNode& node = nodes[vertex.indexChildNode];
         if (hasVisited[node.color][node.index]) continue;
         hasVisited[node.color][node.index] = true;
+        graph.AddEdge(vertex.indexParentNode, vertex.indexChildNode);
         visited.emplace_back(vertex);
         score += vertex.score;
         // Rcpp::Rcout << vertex.score << std::endl;
     }
-    Rcpp::Rcout << "Score: " << score;
+    Rcpp::Rcout << "Score: " << score << std::endl;
+    const std::list<size_t> roots = graph.FindRoots();
+
+    // int maxUniqueColors = 0;
+    // size_t currentMaxIndex = 0;
+    //
+    // for (const auto& root : roots) {
+    //     std::vector<size_t> uniqueColors(colors, -1);
+    //     int amountOfUniqueColors = 0;
+    //     for (const auto& children : graph.GetEdges(root)) {
+    //         if (uniqueColors[nodes[children].color] != -1) continue;
+    //         uniqueColors[nodes[children].color] = 0;
+    //         amountOfUniqueColors++;
+    //     }
+    //     if (amountOfUniqueColors < maxUniqueColors) continue;
+    //     currentMaxIndex = root;
+    //     maxUniqueColors = amountOfUniqueColors;
+    // }
+
+    //Rcpp::Rcout << "Max unique colors: " << maxUniqueColors << std::endl;
+    //Rcpp::Rcout << "Best Formula: " << nodes[currentMaxIndex].formula.GetMolecularFormula() << " Mass: " << nodes[currentMaxIndex].formula.GetMass();
+
     Print(visited, nodes);
 
 }
