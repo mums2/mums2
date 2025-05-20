@@ -7,10 +7,18 @@
 #include "../Chemicals/MolecularFormula/MolecularFormula.h"
 
 struct FragmentationNode {
+    bool isSubtreeRoot = true;
     int color{};
     size_t index{};
+    double score{};
+    double subTreeScore{};
     MolecularFormula formula;
     std::vector<int> explainedColors{};
 };
 
+struct CompareFragmentationNodes {
+    bool operator()(FragmentationNode const& s1, FragmentationNode const & s2) const {
+        return s1.score > s2.score;
+    }
+};
 #endif //FRAGMENTATIONNODE_H

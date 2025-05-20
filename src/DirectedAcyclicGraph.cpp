@@ -18,12 +18,11 @@ std::list<size_t> DirectedAcyclicGraph::GetEdges(const size_t key) const {
 void DirectedAcyclicGraph::Print(const std::vector<FragmentationNode>& nodes) const {
     std::string output;
     for (const auto& edge :  adjacencyList) {
-        // Rcpp:: Rcout << "'" <<edge.first << ":" << nodes[edge.first].color << "' -> ";;
         for (const auto& outGoingEdges : edge.second) {
-            output += ("'" + nodes[edge.first].formula.GetMolecularFormula() + ":" + std::to_string(nodes[edge.first].color) + "' -> ");
-            output += ("'" + nodes[outGoingEdges].formula.GetMolecularFormula() + ":" +  std::to_string(nodes[outGoingEdges].color) + "'\n");
-            // Rcpp:: Rcout << "'" <<nodes[edge.first].formula << ":" << nodes[edge.first].color << "' -> ";;
-            // Rcpp::Rcout << "'"<<nodes[outGoingEdges].formula << ":" << nodes[outGoingEdges].color << "'\n";
+            output += ("'" + nodes[edge.first].formula.GetMolecularFormula() + ":" +
+                std::to_string(nodes[edge.first].color) + "' -> ");
+            output += ("'" + nodes[outGoingEdges].formula.GetMolecularFormula() + ":" +
+                std::to_string(nodes[outGoingEdges].color) + "'\n");
         }
         //Rcpp::Rcout << "\n";
     }

@@ -18,9 +18,8 @@ class FragmentationTree {
 public:
     FragmentationTree() = default;
     void AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas,
-        const Rcpp::IntegerVector &color, const Rcpp::IntegerVector& decompositionScores,
+        const Rcpp::IntegerVector &color, const Rcpp::NumericVector& decompositionScores,
         double parentMass, int amountOfUniqueColors);
-    void SortVertexList();
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     const std::vector<Vertex> &GetVertexList() const {return vertexList;}
     int GetUniqueColors() const {return uniqueColors;}

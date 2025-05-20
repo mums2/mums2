@@ -196,7 +196,7 @@ void FragmentationTreeTest(const Rcpp::List& molecularFormulas,
     tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
         molecularFormulas["scores"], parentMass, amountOfColors);
     GreedyHeuristic greedy;
-    greedy.CalculateHeuristic(tree);
+   // greedy.CalculateHeuristic(tree);
 }
 
 
@@ -213,4 +213,20 @@ void test2(const std::vector<std::string>& vec) {
 // [[Rcpp::export]]
 void test3(const Rcpp::String& vec) {
     Rcpp::Rcout << std::strlen(vec.get_cstring());
+}
+
+
+#include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
+#include <Rcpp.h>
+
+// [[Rcpp::export]]
+SEXP start_profiler(const SEXP& str) {
+    ProfilerStart(Rcpp::as<const char*>(str));
+    return R_NilValue;
+}
+
+// [[Rcpp::export]]
+SEXP stop_profiler() {
+    ProfilerStop();
+    return R_NilValue;
 }

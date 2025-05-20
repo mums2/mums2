@@ -69,6 +69,14 @@ test3 <- function(vec) {
     invisible(.Call(`_mums2_test3`, vec))
 }
 
+start_profiler <- function(str) {
+    .Call(`_mums2_start_profiler`, str)
+}
+
+stop_profiler <- function() {
+    .Call(`_mums2_stop_profiler`)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

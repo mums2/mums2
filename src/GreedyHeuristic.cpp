@@ -5,7 +5,6 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 
 void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
-    tree.SortVertexList();
     const int colors = tree.GetUniqueColors();
     std::vector<int> usedColors(colors, -1);
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
@@ -24,7 +23,6 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
         graph.AddEdge(vertex.indexParentNode, vertex.indexChildNode);
         visited.emplace_back(vertex);
         score += vertex.score;
-        // Rcpp::Rcout << vertex.score << std::endl;
     }
     Rcpp::Rcout << "Score: " << score << std::endl;
     const std::list<size_t> roots = graph.FindRoots();
