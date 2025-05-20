@@ -5,27 +5,22 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 
 void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
-    const int colors = tree.GetUniqueColors();
-    std::vector<int> usedColors(colors, -1);
+    tree.SortFragmentationNodes();
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
-    const std::vector<Vertex>& vertexes = tree.GetVertexList();
-    const size_t numVertices = vertexes.size();
-    std::vector<std::vector<bool>> hasVisited(colors,
-        std::vector<bool>(numVertices, false));
-    std::list<Vertex> visited;
-    DirectedAcyclicGraph graph;
-    double score = 0;
-    for (const auto& vertex : vertexes) {
-        // if (std::isnan(vertex.score)) continue;
-        const FragmentationNode& node = nodes[vertex.indexChildNode];
-        if (hasVisited[node.color][node.index]) continue;
-        hasVisited[node.color][node.index] = true;
-        graph.AddEdge(vertex.indexParentNode, vertex.indexChildNode);
-        visited.emplace_back(vertex);
-        score += vertex.score;
+    // If there is no subRoot, (which shouldn't be possible since there should not be circular sub-molecules)
+    // then choose the highest score
+    size_t candidateIndex = 0;
+    for (const auto& node : nodes) {
+        candidateIndex++;
+        if (!node.isSubtreeRoot || node.color != 0) continue;
+        candidateIndex--;
+        break;
     }
-    Rcpp::Rcout << "Score: " << score << std::endl;
-    const std::list<size_t> roots = graph.FindRoots();
+    if (candidateIndex >= nodes.size()) Rcpp::stop("GreedyHeuristic: node index out of bounds");
+    const FragmentationNode& candidate = nodes[candidateIndex];
+    Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
+    Rcpp::Rcout << "Formula: " << candidate.formula.GetMolecularFormula() << std::endl;
+    Rcpp::Rcout << "Color: " << candidate.color << std::endl;
 
     // int maxUniqueColors = 0;
     // size_t currentMaxIndex = 0;
@@ -46,7 +41,7 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     //Rcpp::Rcout << "Max unique colors: " << maxUniqueColors << std::endl;
     //Rcpp::Rcout << "Best Formula: " << nodes[currentMaxIndex].formula.GetMolecularFormula() << " Mass: " << nodes[currentMaxIndex].formula.GetMass();
 
-    Print(visited, nodes);
+    // Print(visited, nodes);
 
 }
 

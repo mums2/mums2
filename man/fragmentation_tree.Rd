@@ -4,10 +4,12 @@
 \alias{fragmentation_tree}
 \title{frag}
 \usage{
-fragmentation_tree(x)
+fragmentation_tree(list_of_mz_int, parent_mass)
 }
 \arguments{
-\item{x}{data}
+\item{list_of_mz_int}{data}
+
+\item{parent_mass}{data}
 }
 \description{
 Clusters the data together

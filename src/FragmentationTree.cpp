@@ -28,16 +28,18 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
             MolecularFormula& currentFormula = fragmentationNodes[j].formula;
             if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
                 // We only want the subtrees that are roots and have the highest score
-                const MolecularFormula loss = MolecularFormula(formula - currentFormula);
-                const double score = std::log(std::abs(1 - loss.GetMass()/parentMass)) +
+                // const MolecularFormula loss = MolecularFormula(formula - currentFormula);
+                const double lossMass = formula.GetLossMass(currentFormula);
+                const double score = std::log(std::abs(1 - lossMass/parentMass)) +
                     fragmentationNodes[j].score;
                 fragmentationNodes[i].subTreeScore += (score + fragmentationNodes[j].subTreeScore);
                 fragmentationNodes[j].isSubtreeRoot = false;
                 continue;
             }
             if (currentFormula.CheckIfOtherIsSubFormula(formula)) {
-                const MolecularFormula loss = MolecularFormula(formula - currentFormula);
-                const double score = std::log(std::abs(1 - loss.GetMass()/parentMass)) +
+                // const MolecularFormula loss = MolecularFormula(formula - currentFormula);
+                const double lossMass = formula.GetLossMass(currentFormula);
+                const double score = std::log(std::abs(1 - lossMass/parentMass)) +
                     fragmentationNodes[i].score;
                 fragmentationNodes[j].subTreeScore += (score + fragmentationNodes[i].subTreeScore);
                 fragmentationNodes[i].isSubtreeRoot = false;
@@ -46,5 +48,9 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
         }
    }
     molecularNodeList = fragmentationNodes;
+}
+
+void FragmentationTree::SortFragmentationNodes() {
+    std::sort(molecularNodeList.begin(), molecularNodeList.end(), CompareFragmentationNodes());
 }
 

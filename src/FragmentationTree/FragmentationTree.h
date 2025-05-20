@@ -23,6 +23,7 @@ public:
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     const std::vector<Vertex> &GetVertexList() const {return vertexList;}
     int GetUniqueColors() const {return uniqueColors;}
+    void SortFragmentationNodes();
 
 
 private:

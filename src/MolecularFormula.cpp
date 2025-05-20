@@ -17,6 +17,12 @@ MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
     chemicalAtomMassMap["O"] = 15.999;
     chemicalAtomMassMap["P"] = 30.974;
     chemicalAtomMassMap["S"] = 32.065;
+    chemicalAtomMap["C"] = 0;
+    chemicalAtomMap["H"] = 0;
+    chemicalAtomMap["N"] = 0;
+    chemicalAtomMap["O"] = 0;
+    chemicalAtomMap["P"] = 0;
+    chemicalAtomMap["S"] = 0;
     const char* formula = molecularFormula.get_cstring();
     const size_t size = std::strlen(formula);
     std::string chemicalSymbol;
@@ -55,8 +61,11 @@ MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &e
     const std::vector<std::string> &elementNamesOrder):chemicalAtomMap(elementMap),
 chemicalAtomNamesOrder(elementNamesOrder) {}
 
+double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
+    return std::abs(GetMass() - other.GetMass());
+}
+
 int MolecularFormula::GetAtomsForElement(const std::string &chemicalElement) const {
-    if(chemicalAtomMap.find(chemicalElement) == chemicalAtomMap.end()) return 0;
     return chemicalAtomMap.at(chemicalElement);
 }
 

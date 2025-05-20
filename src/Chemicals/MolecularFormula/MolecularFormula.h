@@ -15,6 +15,7 @@ public:
     explicit MolecularFormula(const Rcpp::String& molecularFormula);
     MolecularFormula(const std::unordered_map<std::string, int>&,
         const std::vector<std::string>&);
+    double GetLossMass(const MolecularFormula& other) const;
     [[nodiscard]] int GetAtomsForElement(const std::string&) const;
     [[nodiscard]] std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;

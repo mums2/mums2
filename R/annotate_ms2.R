@@ -103,8 +103,27 @@ add_annotations <- function(matches, reference) {
 #' @title frag
 #' @description
 #' Clusters the data together
-#' @param x data
-#' 
-fragmentation_tree <- function(x) {
-  FragmentationTreeTest(x)
+#' @param list_of_mz_int data
+#' @param parent_mass data
+fragmentation_tree <- function(list_of_mz_int, parent_mass) {
+  decompList <- vector("list", length(list_of_mz_int$mz))
+  for(i in seq_along(list_of_mz_int$mz)){
+    decompList[[i]] <- Rdisop::decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
+  }
+  full_data <- c()
+  color_count <- 1
+  for(i in seq_along(decompList)){
+    if(is.null(decompList[[i]])) {
+      next
+    }
+    full_data$score <- append(full_data$score, decompList[[i]]$score)
+    full_data$formula <- append(full_data$formula, decompList[[i]]$formula)
+    full_data$color <- c(full_data$color, rep(color_count, length(decompList[[i]]$score)))
+    color_count <- color_count + 1
+  }
+  parent_decomp <- Rdisop::decomposeMass(parent_mass_scl)
+  full_data$score <- append(parent_decomp$score, full_data$score)
+  full_data$formula <- append(parent_decomp$formula, full_data$formula)
+  full_data$color <- append(rep(0, length(parent_decomp$score)), full_data$color)
+  FragmentationTreeTest(full_data, parent_mass, length(unique(full_data$color)))
 }
