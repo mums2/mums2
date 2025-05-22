@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // AnnotateMs2Features
-Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore, const int minPeaks);
+Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore, const size_t minPeaks);
 RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP, SEXP minPeaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -25,7 +25,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type parameters(parametersSEXP);
     Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
     Rcpp::traits::input_parameter< double >::type minScore(minScoreSEXP);
-    Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
     rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore, minPeaks));
     return rcpp_result_gen;
 END_RCPP
@@ -180,15 +180,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // FragmentationTreeTest
-void FragmentationTreeTest(const Rcpp::List& molecularFormulas, const double parentMass, const int amountOfColors);
+std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas, const double parentMass, const int amountOfColors);
 RcppExport SEXP _mums2_FragmentationTreeTest(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP amountOfColorsSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
     Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
     Rcpp::traits::input_parameter< const int >::type amountOfColors(amountOfColorsSEXP);
-    FragmentationTreeTest(molecularFormulas, parentMass, amountOfColors);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(FragmentationTreeTest(molecularFormulas, parentMass, amountOfColors));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Test
+std::string Test();
+RcppExport SEXP _mums2_Test() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(Test());
+    return rcpp_result_gen;
 END_RCPP
 }
 // squareRootNormalize
@@ -250,6 +261,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
     {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 3},
+    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

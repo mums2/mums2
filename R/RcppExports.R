@@ -54,7 +54,11 @@ CheckIfSubFormula <- function(formula, otherFormula) {
 }
 
 FragmentationTreeTest <- function(molecularFormulas, parentMass, amountOfColors) {
-    invisible(.Call(`_mums2_FragmentationTreeTest`, molecularFormulas, parentMass, amountOfColors))
+    .Call(`_mums2_FragmentationTreeTest`, molecularFormulas, parentMass, amountOfColors)
+}
+
+Test <- function() {
+    .Call(`_mums2_Test`)
 }
 
 squareRootNormalize <- function(vec) {

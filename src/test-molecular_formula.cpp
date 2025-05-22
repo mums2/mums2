@@ -33,7 +33,7 @@ context("Molecular Formula") {
         expect_true(molecularFormula.GetAtomsForElement("C") == 6);
         expect_true(molecularFormula.GetAtomsForElement("H") == 12);
         expect_true(molecularFormula.GetAtomsForElement("O") == 6);
-        expect_true(molecularFormula.GetAtomsForElement("Fl") == 0);
+        expect_error(molecularFormula.GetAtomsForElement("Fl") == 0);
     }
     test_that("We can subtract molecular formulas and get a resultant difference") {
         const MolecularFormula molecularFormula("C6H12O6");

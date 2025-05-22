@@ -190,11 +190,16 @@ bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormu
 }
 
 // [[Rcpp::export]]
-void FragmentationTreeTest(const Rcpp::List& molecularFormulas,
+std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
     const double parentMass, const int amountOfColors) {
     FragmentationTree tree;
     tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
         molecularFormulas["score"], parentMass, amountOfColors);
     GreedyHeuristic greedy;
-    greedy.CalculateHeuristic(tree);
+    return greedy.CalculateHeuristic(tree);
+}
+
+// [[Rcpp::export]]
+std::string Test() {
+    return "a";
 }

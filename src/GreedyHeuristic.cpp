@@ -4,7 +4,7 @@
 
 #include "FragmentationTree/GreedyHeuristic.h"
 
-void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
+std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     tree.SortFragmentationNodes();
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
     // If there is no subRoot, (which shouldn't be possible since there should not be circular sub-molecules)
@@ -12,15 +12,16 @@ void GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     size_t candidateIndex = 0;
     for (const auto& node : nodes) {
         candidateIndex++;
-        if (!node.isSubtreeRoot || node.color != 0) continue;
+        if (node.color != 0) continue;
         candidateIndex--;
         break;
     }
     if (candidateIndex >= nodes.size()) Rcpp::stop("GreedyHeuristic: node index out of bounds");
     const FragmentationNode& candidate = nodes[candidateIndex];
-    Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
-    Rcpp::Rcout << "Formula: " << candidate.formula.GetMolecularFormula() << std::endl;
-    Rcpp::Rcout << "Color: " << candidate.color << std::endl;
+    return candidate.formula.GetMolecularFormula();
+    // Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
+    // Rcpp::Rcout << "Formula: " << candidate.formula.GetMolecularFormula() << std::endl;
+    // Rcpp::Rcout << "Color: " << candidate.color << std::endl;
 
     // int maxUniqueColors = 0;
     // size_t currentMaxIndex = 0;

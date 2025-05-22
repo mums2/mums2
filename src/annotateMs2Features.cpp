@@ -7,7 +7,7 @@
 Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, 
           const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra,
           const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore,
-          const int minPeaks) {
+          const size_t minPeaks) {
 
     const ScoringFactory factory(parameters);
     AnnotateMs2 annotateMs2(minPeaks);

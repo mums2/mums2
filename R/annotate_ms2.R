@@ -105,7 +105,14 @@ add_annotations <- function(matches, reference) {
 #' Clusters the data together
 #' @param list_of_mz_int data
 #' @param parent_mass data
-fragmentation_tree <- function(list_of_mz_int, parent_mass) {
+fragmentation_tree <- function(fragmentation_parameters) {
+  list_of_mz_int <- fragmentation_parameters$peaks
+  parent_mass <- fragmentation_parameters$parent_mass
+  parent_decomp <- Rdisop::decomposeMass(parent_mass)
+  valid_parent_indexes <- which(parent_decomp$valid == "Valid")
+  if(length(valid_parent_indexes) == 1) {
+    return(parent_decomp$formula[valid_parent_indexes])
+  }
   decompList <- vector("list", length(list_of_mz_int$mz))
   for(i in seq_along(list_of_mz_int$mz)){
     decompList[[i]] <- Rdisop::decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
@@ -116,14 +123,17 @@ fragmentation_tree <- function(list_of_mz_int, parent_mass) {
     if(is.null(decompList[[i]])) {
       next
     }
-    full_data$score <- append(full_data$score, decompList[[i]]$score)
-    full_data$formula <- append(full_data$formula, decompList[[i]]$formula)
-    full_data$color <- c(full_data$color, rep(color_count, length(decompList[[i]]$score)))
+    valid_indexes <- which(decompList[[i]]$valid == "Valid")
+    scores <- head(decompList[[i]]$score[valid_indexes], 1000)
+    full_data$score <- append(full_data$score, scores)
+    full_data$formula <- append(full_data$formula, head(decompList[[i]]$formula[valid_indexes], 1000))
+    full_data$color <- c(full_data$color, rep(color_count, length(scores)))
     color_count <- color_count + 1
   }
-  parent_decomp <- Rdisop::decomposeMass(parent_mass)
-  full_data$score <- append(parent_decomp$score, full_data$score)
-  full_data$formula <- append(parent_decomp$formula, full_data$formula)
-  full_data$color <- append(rep(0, length(parent_decomp$score)), full_data$color)
-  FragmentationTreeTest(full_data, parent_mass, length(unique(full_data$color)))
+  scores <- head(parent_decomp$score[valid_parent_indexes], 1000)
+  full_data$score <- append(scores, full_data$score)
+  full_data$formula <- append(head(parent_decomp$formula[valid_parent_indexes], 1000), full_data$formula)
+  full_data$color <- append(rep(0, length(scores)), full_data$color)
+  res <- FragmentationTreeTest(full_data, parent_mass, length(unique(full_data$color)))
+  return(list(x = 1, y = res))
 }

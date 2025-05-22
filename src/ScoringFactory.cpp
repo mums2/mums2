@@ -20,7 +20,7 @@ ScoringFactory::ScoringFactory(const Rcpp::List &parameters) {
 }
 
 double ScoringFactory::CalculateScore(const Spectra& firstSpectra, const Spectra& secondSpectra,
-    const int minPeaks) const {
+    const size_t minPeaks) const {
     // If there are not enough peaks, we return 0. As we cannot properly score
     if(firstSpectra.mz.size() < minPeaks || secondSpectra.mz.size() < minPeaks) return 0;
     return currentScoringAlgorithm->CalculateScore(firstSpectra, secondSpectra);
