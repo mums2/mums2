@@ -168,15 +168,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CheckIfSubFormula
-bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormula);
+void CheckIfSubFormula(const std::string& formula, const std::string& otherFormula);
 RcppExport SEXP _mums2_CheckIfSubFormula(SEXP formulaSEXP, SEXP otherFormulaSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type formula(formulaSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type otherFormula(otherFormulaSEXP);
-    rcpp_result_gen = Rcpp::wrap(CheckIfSubFormula(formula, otherFormula));
-    return rcpp_result_gen;
+    CheckIfSubFormula(formula, otherFormula);
+    return R_NilValue;
 END_RCPP
 }
 // FragmentationTreeTest
@@ -189,16 +188,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
     Rcpp::traits::input_parameter< const int >::type amountOfColors(amountOfColorsSEXP);
     rcpp_result_gen = Rcpp::wrap(FragmentationTreeTest(molecularFormulas, parentMass, amountOfColors));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test
-std::string Test();
-RcppExport SEXP _mums2_Test() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(Test());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -261,7 +250,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
     {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 3},
-    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},

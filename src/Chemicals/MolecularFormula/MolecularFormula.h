@@ -13,18 +13,21 @@ class MolecularFormula {
 public:
     MolecularFormula() = default;
     explicit MolecularFormula(const Rcpp::String& molecularFormula);
-    MolecularFormula(const std::unordered_map<std::string, int>&,
-        const std::vector<std::string>&);
-    double GetLossMass(const MolecularFormula& other) const;
-    [[nodiscard]] int GetAtomsForElement(const std::string&) const;
+    // MolecularFormula(const std::unordered_map<std::string, int>&,
+    //     const std::vector<std::string>&);
+    [[nodiscard]] double GetLossMass(const MolecularFormula& other) const;
+    [[nodiscard]] int GetAtomsForElement(const char&) const;
     [[nodiscard]] std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
-    bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
-    double GetMass() const;
+    [[nodiscard]] int CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
+    [[nodiscard]] double GetMass() const;
 protected:
-    std::unordered_map<std::string, int> chemicalAtomMap;
-    std::vector<std::string> chemicalAtomNamesOrder;
-    std::unordered_map<std::string, double> chemicalAtomMassMap;
+
+    std::vector<int> chemicalAtomAmounts;
+    static std::vector<char> chemicalAtomNamesOrder;
+    static std::vector<double> chemicalAtomMassVector;
+private:
+    size_t ConvertASCIIElementToIndex(int num) const;
 };
 
 

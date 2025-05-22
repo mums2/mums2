@@ -17,29 +17,29 @@ context("Molecular Formula") {
         bool result = molecularFormula.GetMolecularFormula() == "C6H12O6";
         expect_true(result);
         const MolecularFormula molecularFormula2("C20H15O7N3");
-        result = molecularFormula2.GetMolecularFormula() == "C20H15O7N3";
+        result = molecularFormula2.GetMolecularFormula() == "C20H15N3O7";
         expect_true(result);
 
-        std::unordered_map<std::string, int> map {{"C", 6}, {"H", 12}, {"O", 6}};
-        std::vector<std::string> namesOrder {"C", "H", "O"};
-        MolecularFormula formula(map, namesOrder);
-        result = formula.GetMolecularFormula() == "C6H12O6";
-        expect_true(result);
+        // std::unordered_map<std::string, int> map {{"C", 6}, {"H", 12}, {"O", 6}};
+        // std::vector<std::string> namesOrder {"C", "H", "O"};
+        // MolecularFormula formula(map, namesOrder);
+        // result = formula.GetMolecularFormula() == "C6H12O6";
+        // expect_true(result);
 
 
     }
     test_that("Get Atoms returns proper amount of atoms or 0 if not found") {
         const MolecularFormula molecularFormula("C6H12O6");
-        expect_true(molecularFormula.GetAtomsForElement("C") == 6);
-        expect_true(molecularFormula.GetAtomsForElement("H") == 12);
-        expect_true(molecularFormula.GetAtomsForElement("O") == 6);
-        expect_error(molecularFormula.GetAtomsForElement("Fl") == 0);
+        expect_true(molecularFormula.GetAtomsForElement('C') == 6);
+        expect_true(molecularFormula.GetAtomsForElement('H') == 12);
+        expect_true(molecularFormula.GetAtomsForElement('O') == 6);
+        expect_error(molecularFormula.GetAtomsForElement('A') == 0);
     }
     test_that("We can subtract molecular formulas and get a resultant difference") {
         const MolecularFormula molecularFormula("C6H12O6");
         const MolecularFormula otherFormula("C20H15O7N3");
         const std::string difference = molecularFormula - otherFormula;
-        expect_true(difference == "C14H3ON3");
+        expect_true(difference == "C14H3N3O");
 
         const MolecularFormula molecularFormula2("C6H12O6");
         const MolecularFormula otherFormula2("C3H2");

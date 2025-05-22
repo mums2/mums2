@@ -10,22 +10,16 @@
 #include <unordered_map>
 #include <unordered_set>
 
+
+std::vector<double> MolecularFormula::chemicalAtomMassVector = {12.011,
+    1.0078, 14.007, 15.999, 30.974, 32.065}; // C H N O P S
+std::vector<char> MolecularFormula::chemicalAtomNamesOrder = {'C', 'H', 'N', 'O', 'P', 'S'};
+
 MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
-    chemicalAtomMassMap["C"] = 12.011;
-    chemicalAtomMassMap["H"] = 1.0078;
-    chemicalAtomMassMap["N"] = 14.007;
-    chemicalAtomMassMap["O"] = 15.999;
-    chemicalAtomMassMap["P"] = 30.974;
-    chemicalAtomMassMap["S"] = 32.065;
-    chemicalAtomMap["C"] = 0;
-    chemicalAtomMap["H"] = 0;
-    chemicalAtomMap["N"] = 0;
-    chemicalAtomMap["O"] = 0;
-    chemicalAtomMap["P"] = 0;
-    chemicalAtomMap["S"] = 0;
+    chemicalAtomAmounts = std::vector<int>(6, 0);
     const char* formula = molecularFormula.get_cstring();
     const size_t size = std::strlen(formula);
-    std::string chemicalSymbol;
+    char chemicalSymbol = ' ';
     std::string amountOfAtoms;
     bool hasCheckedAtomAmount = false;
     for (size_t i = 0; i < size; i++) {
@@ -34,93 +28,102 @@ MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
             //The chemical does not have a lowercase letter, then the chemical before
             // Is standalone and only has 1 atom.
             // or it has checked the atoms and the chemical before has been created
-            if(!chemicalSymbol.empty()) {
+            if(chemicalSymbol != ' ') {
                 if (hasCheckedAtomAmount || !std::islower(formula[i])) {
                     if (amountOfAtoms.empty()) amountOfAtoms = "1";
-                    chemicalAtomNamesOrder.emplace_back(chemicalSymbol);
-                    chemicalAtomMap[chemicalSymbol] = std::stoi(amountOfAtoms);
+                    chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalSymbol)] = std::stoi(amountOfAtoms);
                     hasCheckedAtomAmount = false;
-                    chemicalSymbol = "";
+                    chemicalSymbol = ' ';
                     amountOfAtoms = "";
                 }
             }
-            // If you are lowercase, you are apart of the current equation
+            // Only elements are CHNOPS
             // if it is a chemical character
-            chemicalSymbol += formula[i];
+            chemicalSymbol = formula[i];
             continue;
         }
         amountOfAtoms += formula[i];
         hasCheckedAtomAmount = true;
     }
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
-    chemicalAtomMap[chemicalSymbol] = std::stoi(amountOfAtoms);
-    chemicalAtomNamesOrder.emplace_back(chemicalSymbol);
+    chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalSymbol)] = std::stoi(amountOfAtoms);
 }
 
-MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &elementMap,
-    const std::vector<std::string> &elementNamesOrder):chemicalAtomMap(elementMap),
-chemicalAtomNamesOrder(elementNamesOrder) {}
+// MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &elementMap,
+//     const std::vector<std::string> &elementNamesOrder):chemicalAtomMap(elementMap),
+// chemicalAtomNamesOrder(elementNamesOrder) {}
 
 double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
     return std::abs(GetMass() - other.GetMass());
 }
 
-int MolecularFormula::GetAtomsForElement(const std::string &chemicalElement) const {
-    return chemicalAtomMap.at(chemicalElement);
+int MolecularFormula::GetAtomsForElement(const char &chemicalElement) const {
+    //return chemicalAtomMap.at(chemicalElement);
+    return chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalElement)];
 }
 
 std::string MolecularFormula::GetMolecularFormula() const {
     std::string formula;
     for (const auto& element : chemicalAtomNamesOrder) {
+
+        const int amountOfAtoms = GetAtomsForElement(element);
+        if (amountOfAtoms <= 0) continue;
         formula += element;
-        const int amountOfAtoms = chemicalAtomMap.at(element);
-        if (amountOfAtoms <= 1) continue;
+        if (amountOfAtoms == 1) continue;
         formula += std::to_string(amountOfAtoms) ;
     }
     return formula;
 }
 
 std::string MolecularFormula::operator-(const MolecularFormula &other) const {
-    std::vector<std::string> tempElementNamesOrder;
-    std::unordered_set<std::string> uniqueElementNames;
-
-    for(const auto& element : chemicalAtomNamesOrder) { // First one will have all uniques
-        tempElementNamesOrder.emplace_back(element);
-        uniqueElementNames.insert(element);
-    }
-    for (const auto& element : other.chemicalAtomNamesOrder) {
-        if(uniqueElementNames.find(element) != uniqueElementNames.end()) continue;
-        tempElementNamesOrder.emplace_back(element);
-        uniqueElementNames.insert(element);
-    }
     std::string formula;
-    for(const auto& currentChemicalSymbol : tempElementNamesOrder) {
-        const int currentAtoms = GetAtomsForElement(currentChemicalSymbol);
-        const int otherAtoms = other.GetAtomsForElement(currentChemicalSymbol);
-        const int newAtomAmount = std::abs(currentAtoms - otherAtoms);
-        if(newAtomAmount <= 0) continue;
-        if(newAtomAmount == 1){
-            formula += currentChemicalSymbol;
-            continue;
-        }
-        formula += (currentChemicalSymbol + std::to_string(newAtomAmount));
+    for (const auto& element : chemicalAtomNamesOrder) {
+        const int atoms = std::abs(chemicalAtomAmounts[ConvertASCIIElementToIndex(element)] -
+            other.chemicalAtomAmounts[ConvertASCIIElementToIndex(element)]);
+        if (atoms <= 0) continue;
+        formula += element;
+        if (atoms == 1) continue;
+        formula += std::to_string(atoms);
     }
     return formula;
 }
 
-bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
-    // Cant have more elements than the main formula
+int MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
     if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
-    return std::all_of(chemicalAtomMap.begin(), chemicalAtomMap.end(),
-        [this, &subFormulaCandidate](const std::pair<const std::string, int>& element) {
-            return GetAtomsForElement(element.first) >= subFormulaCandidate.GetAtomsForElement(element.first);
-        });
+    bool thisFormula = true;
+    bool otherFormula = true;
+    for (const auto& element : chemicalAtomNamesOrder) {
+        if (!thisFormula && !otherFormula) return 0; // Neither is a subformula
+        if (GetAtomsForElement(element) == subFormulaCandidate.GetAtomsForElement(element)) continue;
+        if (GetAtomsForElement(element) > subFormulaCandidate.GetAtomsForElement(element)) otherFormula = false;
+        else thisFormula = false;
+    }
+    // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
+    // are subformulas of eachother
+    // But we only represent the first formula with the link so its not cyclic
+    if (thisFormula) return 1;
+    // if it reached this far, the only option is that the other formula is true so we return a 2
+    return 2;
+
 }
 
 double MolecularFormula::GetMass() const {
     double mass = 0;
-    for (const auto& element : chemicalAtomMap) {
-        mass += chemicalAtomMassMap.at(element.first) * element.second;
+    for (size_t i = 0; i < chemicalAtomAmounts.size(); i++) {
+        mass += chemicalAtomAmounts[i] * chemicalAtomMassVector[i];
     }
     return mass;
+}
+
+size_t MolecularFormula::ConvertASCIIElementToIndex(int num) const {
+    if (num == 67) return 0; // C
+    if (num == 72) return 1; // H
+    if (num == 78) return 2; // N
+    if (num == 79) return 3; // O
+    if (num == 80) return 4; // P
+    if (num == 83) return 5; // S
+    //if 83 which it all it can be
+    // We screen before-hand and the alphabet only contains CHNOPS
+    Rcpp::stop("Chemical Element is Not CHNOPS");
+    return -1; // error
 }

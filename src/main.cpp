@@ -183,10 +183,12 @@ std::string SubtractMolecularFormula(const std::string& formula, const std::stri
 }
 
 // [[Rcpp::export]]
-bool CheckIfSubFormula(const std::string& formula, const std::string& otherFormula) {
+void CheckIfSubFormula(const std::string& formula, const std::string& otherFormula) {
     const MolecularFormula molecularFormula(formula);
     const MolecularFormula otherMolecularFormula(otherFormula);
-    return molecularFormula.CheckIfOtherIsSubFormula(otherMolecularFormula);
+    const bool res1 = molecularFormula.CheckIfOtherIsSubFormula(otherMolecularFormula);
+    const bool res2 = otherMolecularFormula.CheckIfOtherIsSubFormula(molecularFormula);
+    //Rcpp::Rcout << res1 << " " << res2 << "\n";
 }
 
 // [[Rcpp::export]]
@@ -197,9 +199,4 @@ std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
         molecularFormulas["score"], parentMass, amountOfColors);
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
-}
-
-// [[Rcpp::export]]
-std::string Test() {
-    return "a";
 }
