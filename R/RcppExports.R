@@ -57,6 +57,14 @@ FragmentationTreeTest <- function(molecularFormulas, parentMass, amountOfColors)
     .Call(`_mums2_FragmentationTreeTest`, molecularFormulas, parentMass, amountOfColors)
 }
 
+FragmentationTreeTest2 <- function(molecularFormulas, parentMass, numberOfThreads) {
+    .Call(`_mums2_FragmentationTreeTest2`, molecularFormulas, parentMass, numberOfThreads)
+}
+
+test <- function(threads, vecSize) {
+    invisible(.Call(`_mums2_test`, threads, vecSize))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

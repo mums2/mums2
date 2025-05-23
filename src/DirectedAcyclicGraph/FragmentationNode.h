@@ -4,11 +4,23 @@
 
 #ifndef FRAGMENTATIONNODE_H
 #define FRAGMENTATIONNODE_H
+#include <utility>
+
 #include "../Chemicals/MolecularFormula/MolecularFormula.h"
 
 struct FragmentationNode {
+    FragmentationNode() = default;
+    FragmentationNode(const int color, const int index, const double score, const double sub_tree_score,
+        MolecularFormula formula)
+        : color(color),
+          index(index),
+          score(score),
+          subTreeScore(sub_tree_score),
+          formula(std::move(formula)) {
+    }
+
     int color{};
-    size_t index{};
+    int index{};
     double score{};
     double subTreeScore{};
     MolecularFormula formula;

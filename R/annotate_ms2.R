@@ -141,3 +141,48 @@ fragmentation_tree <- function(list_of_mz_int, parent_mass) {
   }
   return(res)
 }
+
+
+#' @export
+#' @title frag
+#' @description
+#' Clusters the data together
+#' @param list_of_mz_int data
+#' @param parent_mass data
+#' @param num_threads data
+fragmentation_tree2 <- function(list_of_mz_int, parent_mass, num_threads = detectCores()/2) {
+  parent_decomp <- Rdisop::decomposeMass(parent_mass)
+  valid_parent_indexes <- which(parent_decomp$valid == "Valid")
+  if(length(valid_parent_indexes) == 1) {
+    return(parent_decomp$formula[valid_parent_indexes])
+  }
+  decompList <- vector("list", length(list_of_mz_int$mz))
+  for(i in seq_along(list_of_mz_int$mz)){
+    if(parent_mass < list_of_mz_int$mz[[i]]){
+      next
+    }
+    decompList[[i]] <- Rdisop::decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
+  }
+  full_data <- c()
+  color_count <- 1
+  for(i in seq_along(decompList)){
+    if(is.null(decompList[[i]])) {
+      next
+    }
+    valid_indexes <- which(decompList[[i]]$valid == "Valid")
+    scores <- head(decompList[[i]]$score[valid_indexes], 1000)
+    full_data$score <- append(full_data$score, scores)
+    full_data$formula <- append(full_data$formula, head(decompList[[i]]$formula[valid_indexes], 1000))
+    full_data$color <- c(full_data$color, rep(color_count, length(scores)))
+    color_count <- color_count + 1
+  }
+  scores <- head(parent_decomp$score[valid_parent_indexes], 1000)
+  full_data$score <- append(scores, full_data$score)
+  full_data$formula <- append(head(parent_decomp$formula[valid_parent_indexes], 1000), full_data$formula)
+  full_data$color <- append(rep(0, length(scores)), full_data$color)
+  res <- FragmentationTreeTest2(full_data, parent_mass, num_threads)
+  if(res == ""){
+    return(parent_decomp$formula[[1]])
+  }
+  return(res)
+}

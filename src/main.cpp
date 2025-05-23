@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
-
+#include <RcppThread.h>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
@@ -196,8 +196,38 @@ std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
     const double parentMass, const int amountOfColors) {
     FragmentationTree tree;
     tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
-        molecularFormulas["score"], parentMass, amountOfColors);
+        molecularFormulas["score"], parentMass);
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
 }
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
+// [[Rcpp::export]]
+std::string FragmentationTreeTest2(const Rcpp::List& molecularFormulas,
+    const double parentMass, const int numberOfThreads) {
+    const int size = molecularFormulas.size();
+    FragmentationTree tree(molecularFormulas, parentMass);
+    // for (int i = 0; i < size; i++) {
+    //     tree.AddMolecularFormulaToGraph(i);
+    // }
+    RcppThread::parallelFor(0, size, [&tree](int i) {
+        tree.AddMolecularFormulaToGraph(i);
+    }, numberOfThreads, numberOfThreads);
+    GreedyHeuristic greedy;
+    return greedy.CalculateHeuristic(tree);
+}
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
+// [[Rcpp::export]]
+void test(const size_t threads, const int vecSize) {
+    std::vector<int> x(vecSize);
+    RcppThread::parallelFor(0, x.size(), [&](int i) {
+        x[i] = i;
+    }, threads);
+}
+
+
+
 

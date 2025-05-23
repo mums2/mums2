@@ -23,6 +23,7 @@
 #' @importFrom mzR header
 #' @importFrom mzR openMSfile
 #' @importFrom mzR peaks
+#' @importFrom parallel detectCores
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats as.dist
 #' @importFrom tibble column_to_rownames
