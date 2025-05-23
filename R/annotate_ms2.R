@@ -115,6 +115,9 @@ fragmentation_tree <- function(fragmentation_parameters) {
   }
   decompList <- vector("list", length(list_of_mz_int$mz))
   for(i in seq_along(list_of_mz_int$mz)){
+    if(parent_mass < list_of_mz_int$mz[[i]]){
+      next
+    }
     decompList[[i]] <- Rdisop::decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
   }
   full_data <- c()
@@ -135,5 +138,8 @@ fragmentation_tree <- function(fragmentation_parameters) {
   full_data$formula <- append(head(parent_decomp$formula[valid_parent_indexes], 1000), full_data$formula)
   full_data$color <- append(rep(0, length(scores)), full_data$color)
   res <- FragmentationTreeTest(full_data, parent_mass, length(unique(full_data$color)))
-  return(list(x = 1, y = res))
+  if(res == ""){
+    return(parent_decomp$formula[[1]])
+  }
+  return(res)
 }

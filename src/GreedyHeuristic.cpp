@@ -16,7 +16,10 @@ std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
         candidateIndex--;
         break;
     }
-    if (candidateIndex >= nodes.size()) Rcpp::stop("GreedyHeuristic: node index out of bounds");
+    if (candidateIndex >= nodes.size()) {
+        Rcpp::warning("GreedyHeuristic: node index out of bounds, returning first valid result. ");
+        return "";
+    }
     const FragmentationNode& candidate = nodes[candidateIndex];
     return candidate.formula.GetMolecularFormula();
     // Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
