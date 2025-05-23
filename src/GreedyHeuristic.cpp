@@ -21,6 +21,7 @@ std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
         return "";
     }
     const FragmentationNode& candidate = nodes[candidateIndex];
+    Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
     return candidate.formula.GetMolecularFormula();
     // Rcpp::Rcout << "Score: " << candidate.subTreeScore << std::endl;
     // Rcpp::Rcout << "Formula: " << candidate.formula.GetMolecularFormula() << std::endl;

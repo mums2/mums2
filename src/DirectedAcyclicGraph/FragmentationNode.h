@@ -12,6 +12,7 @@ struct FragmentationNode {
     double score{};
     double subTreeScore{};
     MolecularFormula formula;
+    std::list<int> parentIndexes;
 };
 
 struct CompareFragmentationNodes {

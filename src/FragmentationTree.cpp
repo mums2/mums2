@@ -26,20 +26,20 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
             MolecularFormula& currentFormula = fragmentationNodes[j].formula;
             // Nodes with similar fragmentation colors should never be a subformula
             if (fragmentationNodes[j].color == fragmentationNodes[i].color) continue;
-            int parentIndex = i;
-            int childIndex = j;
             int res = formula.CheckIfOtherIsSubFormula(currentFormula);
             if (res == 0) continue;
             if (res == 2) { // meaning parentFormula is a subformula of the child
-                parentIndex = j;
-                childIndex = i;
+                fragmentationNodes[i].parentIndexes.emplace_back(j);
+                continue;
             }
-            const double lossMass = formula.GetLossMass(currentFormula);
-            const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-                fragmentationNodes[childIndex].score + fragmentationNodes[childIndex].subTreeScore;
-            fragmentationNodes[childIndex].subTreeScore = fragmentationNodes[parentIndex].subTreeScore;
-            fragmentationNodes[parentIndex].subTreeScore += score;
-
+             const double lossMass = formula.GetLossMass(currentFormula);
+             const double score = std::log(std::abs(1 - lossMass/parentMass)) +
+                 fragmentationNodes[j].score + fragmentationNodes[j].subTreeScore;
+            fragmentationNodes[i].subTreeScore += score;
+        }
+        for (const auto& parentIndex:  fragmentationNodes[i].parentIndexes) {
+            fragmentationNodes[parentIndex].subTreeScore += (fragmentationNodes[i].subTreeScore +
+                fragmentationNodes[parentIndex].score);
         }
    }
     molecularNodeList = fragmentationNodes;
