@@ -17,9 +17,8 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
     const size_t size = molecularFormulas.size();
     std::vector<FragmentationNode> fragmentationNodes(size);
     for (size_t i = 0; i < size; i++) {
-        fragmentationNodes[i] = FragmentationNode{true, color[i], i,
+        fragmentationNodes[i] = FragmentationNode{color[i], i,
             decompositionScores[i], 0, MolecularFormula(molecularFormulas[i])};
-        fragmentationNodes[i].self = fragmentationNodes[i].formula.GetMolecularFormula();
     }
     for (size_t i = 0; i < size; i++) {
         MolecularFormula& formula = fragmentationNodes[i].formula;
@@ -38,32 +37,9 @@ void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &mo
             const double lossMass = formula.GetLossMass(currentFormula);
             const double score = std::log(std::abs(1 - lossMass/parentMass)) +
                 fragmentationNodes[childIndex].score + fragmentationNodes[childIndex].subTreeScore;
+            fragmentationNodes[childIndex].subTreeScore = fragmentationNodes[parentIndex].subTreeScore;
             fragmentationNodes[parentIndex].subTreeScore += score;
-            fragmentationNodes[childIndex].isSubtreeRoot = false;
-            fragmentationNodes[childIndex].parentFormula.emplace_back(formula.GetMolecularFormula());
 
-
-
-            // if (formula.CheckIfOtherIsSubFormula(currentFormula)) {
-            //     // We only want the subtrees that are roots and have the highest score
-            //     // const MolecularFormula loss = MolecularFormula(formula - currentFormula);
-            //     const double lossMass = formula.GetLossMass(currentFormula);
-            //     const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-            //         fragmentationNodes[j].score;
-            //     fragmentationNodes[i].subTreeScore += (score + fragmentationNodes[j].subTreeScore);
-            //     fragmentationNodes[j].isSubtreeRoot = false;
-            //     fragmentationNodes[j].parentFormula.emplace_back(formula.GetMolecularFormula());
-            //     continue;
-            // }
-            // if (currentFormula.CheckIfOtherIsSubFormula(formula)) {
-            //     // const MolecularFormula loss = MolecularFormula(formula - currentFormula);
-            //     const double lossMass = formula.GetLossMass(currentFormula);
-            //     const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-            //         fragmentationNodes[i].score;
-            //     fragmentationNodes[j].subTreeScore += (score + fragmentationNodes[i].subTreeScore);
-            //     fragmentationNodes[i].isSubtreeRoot = false;
-            //     fragmentationNodes[i].parentFormula.emplace_back(currentFormula.GetMolecularFormula());
-            // }
         }
    }
     molecularNodeList = fragmentationNodes;

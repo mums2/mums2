@@ -105,9 +105,7 @@ add_annotations <- function(matches, reference) {
 #' Clusters the data together
 #' @param list_of_mz_int data
 #' @param parent_mass data
-fragmentation_tree <- function(fragmentation_parameters) {
-  list_of_mz_int <- fragmentation_parameters$peaks
-  parent_mass <- fragmentation_parameters$parent_mass
+fragmentation_tree <- function(list_of_mz_int, parent_mass) {
   parent_decomp <- Rdisop::decomposeMass(parent_mass)
   valid_parent_indexes <- which(parent_decomp$valid == "Valid")
   if(length(valid_parent_indexes) == 1) {

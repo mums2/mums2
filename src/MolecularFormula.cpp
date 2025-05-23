@@ -89,13 +89,14 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
 }
 
 int MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
-    if (subFormulaCandidate.chemicalAtomNamesOrder.size() > chemicalAtomNamesOrder.size()) return false;
     bool thisFormula = true;
     bool otherFormula = true;
     for (const auto& element : chemicalAtomNamesOrder) {
         if (!thisFormula && !otherFormula) return 0; // Neither is a subformula
-        if (GetAtomsForElement(element) == subFormulaCandidate.GetAtomsForElement(element)) continue;
-        if (GetAtomsForElement(element) > subFormulaCandidate.GetAtomsForElement(element)) otherFormula = false;
+        const int currentAtoms = GetAtomsForElement(element);
+        const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
+        if (currentAtoms == otherAtoms) continue;
+        if (currentAtoms > otherAtoms) otherFormula = false;
         else thisFormula = false;
     }
     // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
@@ -115,7 +116,7 @@ double MolecularFormula::GetMass() const {
     return mass;
 }
 
-size_t MolecularFormula::ConvertASCIIElementToIndex(int num) const {
+size_t MolecularFormula::ConvertASCIIElementToIndex(const int num) {
     if (num == 67) return 0; // C
     if (num == 72) return 1; // H
     if (num == 78) return 2; // N

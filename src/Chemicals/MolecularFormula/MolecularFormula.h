@@ -27,7 +27,7 @@ protected:
     static std::vector<char> chemicalAtomNamesOrder;
     static std::vector<double> chemicalAtomMassVector;
 private:
-    size_t ConvertASCIIElementToIndex(int num) const;
+    static size_t ConvertASCIIElementToIndex(int num);
 };
 
 

@@ -200,3 +200,4 @@ std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
 }
+
