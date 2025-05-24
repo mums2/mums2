@@ -180,9 +180,12 @@ fragmentation_tree2 <- function(list_of_mz_int, parent_mass, num_threads = detec
   full_data$score <- append(scores, full_data$score)
   full_data$formula <- append(head(parent_decomp$formula[valid_parent_indexes], 1000), full_data$formula)
   full_data$color <- append(rep(0, length(scores)), full_data$color)
+  if(length(full_data$score) <= 0) {
+    return(parent_decomp$formula[[1]])
+  }
   res <- FragmentationTreeTest2(full_data, parent_mass, num_threads)
   if(res == ""){
-    return(parent_decomp$formula[[1]])
+    return(parent_decomp$formula[valid_parent_indexes][[1]])
   }
   return(res)
 }

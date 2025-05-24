@@ -213,7 +213,7 @@ std::string FragmentationTreeTest2(const Rcpp::List& molecularFormulas,
     // }
     RcppThread::parallelFor(0, size, [&tree](int i) {
         tree.AddMolecularFormulaToGraph(i);
-    }, numberOfThreads, numberOfThreads);
+    }, numberOfThreads);
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
 }
