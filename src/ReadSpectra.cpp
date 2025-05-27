@@ -9,6 +9,8 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 
+#include "CustomProgressBar/ETAProgressBar.h"
+
 Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::ifstream spectraData(filePath);
     std::string line;
@@ -17,14 +19,14 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::list<double> mz;
     std::list<double> intensity;
     std::unordered_map<std::string, std::vector<std::string>> map;
-
     spectraData.unsetf(std::ios_base::skipws);
     // count the newlines with an algorithm specialized for counting:
     unsigned long line_count = std::count(
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
         '\n');
-    Progress p(line_count, true);
+    ETAProgressBar pb;
+    Progress p(line_count, true, pb);
     spectraData.close();
     spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
@@ -91,7 +93,8 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
         '\n');
-    Progress p(line_count, true);
+    ETAProgressBar pb;
+    Progress p(line_count, true, pb);
     spectraData.close();
     spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
