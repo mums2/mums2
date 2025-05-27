@@ -192,18 +192,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// MolecularFormulaSimilarity
-double MolecularFormulaSimilarity(const Rcpp::NumericVector& predictedFormula, const Rcpp::NumericVector& currentFormula);
-RcppExport SEXP _mums2_MolecularFormulaSimilarity(SEXP predictedFormulaSEXP, SEXP currentFormulaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type predictedFormula(predictedFormulaSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type currentFormula(currentFormulaSEXP);
-    rcpp_result_gen = Rcpp::wrap(MolecularFormulaSimilarity(predictedFormula, currentFormula));
-    return rcpp_result_gen;
-END_RCPP
-}
 // GetMolecularMakeup
 void GetMolecularMakeup(const Rcpp::String& formula);
 RcppExport SEXP _mums2_GetMolecularMakeup(SEXP formulaSEXP) {
@@ -285,7 +273,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
-    {"_mums2_MolecularFormulaSimilarity", (DL_FUNC) &_mums2_MolecularFormulaSimilarity, 2},
     {"_mums2_GetMolecularMakeup", (DL_FUNC) &_mums2_GetMolecularMakeup, 1},
     {"_mums2_GetMolecularSimilarityCorrect", (DL_FUNC) &_mums2_GetMolecularSimilarityCorrect, 2},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <RcppThread.h>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 #include "Chemicals/MolecularFormula/MolecularMakeup.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
@@ -15,6 +16,7 @@
 #include "DiversityMetrics/DiversityMetricFactory.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
+#include "Math/VectorMath.h"
 #include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
@@ -160,7 +162,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
             // Otherwise
             // Check if the similarity score (the dot product) is closer than the last one
             // If so replace
-            double dotProduct = CosineScore({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
+            double dotProduct = VectorMath::CosineScore({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
             if (dotProduct < bestDotProduct) continue;
             resultsIndexes[i] = j + 1; // To match with R indexes add 1
             bestDotProduct = dotProduct;
@@ -199,18 +201,11 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     const double parentMass, const int numberOfThreads) {
     const int size = molecularFormulas.size();
     FragmentationTree tree(molecularFormulas, parentMass);
-    // for (int i = 0; i < size; i++) {
-    //     tree.AddMolecularFormulaToGraph(i);
-    // }
     RcppThread::parallelFor(0, size, [&tree](int i) {
         tree.AddMolecularFormulaToGraph(i);
     }, numberOfThreads);
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
-}
-// [[Rcpp::export]]
-double MolecularFormulaSimilarity(const Rcpp::NumericVector& predictedFormula,  const Rcpp::NumericVector& currentFormula) {
-    return CosineScore(predictedFormula, currentFormula);
 }
 
 // [[Rcpp::export]]
@@ -224,24 +219,5 @@ void GetMolecularMakeup(const Rcpp::String& formula) {
 
 // [[Rcpp::export]]
 double GetMolecularSimilarityCorrect(const Rcpp::String& formula, const Rcpp::String& other) {
-    const MolecularMakeup makeup(formula);
-    const MolecularMakeup otherMolecularMakeup(other);
-    const auto& alphabet = makeup.GetAlphabet();
-    const auto& otherAlphabet =  otherMolecularMakeup.GetAlphabet();
-    std::unordered_set<std::string> uniqueAlphabet;
-    for (const auto& element : alphabet) {
-        uniqueAlphabet.insert(element);
-    }
-    for (const auto& element : otherAlphabet) {
-        uniqueAlphabet.insert(element);
-    }
-    int size = static_cast<int>(uniqueAlphabet.size());
-    Rcpp::NumericVector formulaAtoms(size);
-    Rcpp::NumericVector otherFormulaAtoms(size);
-    int count = 0;
-    for (const auto& element : uniqueAlphabet) {
-        formulaAtoms[count] = makeup.GetAtomsForElement(element);
-        otherFormulaAtoms[count++] = otherMolecularMakeup.GetAtomsForElement(element);
-    }
-    return CosineScore(formulaAtoms, otherFormulaAtoms);
+   return MolecularFormulaSimilarity::ComputeSimilarity(formula, other);
 }

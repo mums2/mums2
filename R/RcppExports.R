@@ -57,10 +57,6 @@ ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThre
     .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
 }
 
-MolecularFormulaSimilarity <- function(predictedFormula, currentFormula) {
-    .Call(`_mums2_MolecularFormulaSimilarity`, predictedFormula, currentFormula)
-}
-
 GetMolecularMakeup <- function(formula) {
     invisible(.Call(`_mums2_GetMolecularMakeup`, formula))
 }
