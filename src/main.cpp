@@ -196,7 +196,7 @@ std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
     const double parentMass, const int amountOfColors) {
     FragmentationTree tree;
     tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
-        molecularFormulas["score"], parentMass);
+        molecularFormulas["score"], molecularFormulas["mass"], parentMass);
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
 }

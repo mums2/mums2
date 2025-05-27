@@ -4,6 +4,7 @@
 
 #ifndef FRAGEMENTATIONTREE_H
 #define FRAGEMENTATIONTREE_H
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -21,7 +22,7 @@ public:
     void Initialize(const Rcpp::List& fragmentationData);
     void AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas,
         const Rcpp::IntegerVector &color, const Rcpp::NumericVector& decompositionScores,
-        double parentMass);
+        const Rcpp::NumericVector& masses, double parentMass);
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     const std::vector<Vertex> &GetVertexList() const {return vertexList;}
     void SortFragmentationNodes();

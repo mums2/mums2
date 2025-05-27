@@ -3,9 +3,6 @@
 //
 
 #include "FragmentationTree/FragmentationTree.h"
-
-#include <mutex>
-
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "DirectedAcyclicGraph/FragmentationNode.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
@@ -19,22 +16,25 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     const Rcpp::StringVector& molecularFormulas = fragmentationData["formula"];
     const Rcpp::IntegerVector& color = fragmentationData["color"];
     const Rcpp::NumericVector& decompositionScores = fragmentationData["score"];
+    const Rcpp::NumericVector& masses = fragmentationData["mass"];
     size = molecularFormulas.size();
     molecularNodeList = std::vector<FragmentationNode>(size);
     for (int i = 0; i < size; i++) {
         molecularNodeList[i] = FragmentationNode(color[i], i,
-            decompositionScores[i], 0, MolecularFormula(molecularFormulas[i]));
+            decompositionScores[i], 0, MolecularFormula(molecularFormulas[i], masses[i]));
     }
 }
 
 void FragmentationTree::AddMolecularFormulasToGraph(const Rcpp::StringVector &molecularFormulas,
-                                                    const Rcpp::IntegerVector &color, const Rcpp::NumericVector& decompositionScores,
+                                                    const Rcpp::IntegerVector &color,
+                                                    const Rcpp::NumericVector& decompositionScores,
+                                                    const Rcpp::NumericVector& masses,
                                                     const double parentMass) {
     const size_t size = molecularFormulas.size();
     std::vector<FragmentationNode> fragmentationNodes(size);
     for (int i = 0; i < size; i++) {
         fragmentationNodes[i] = FragmentationNode(color[i], i,
-            decompositionScores[i], 0, MolecularFormula(molecularFormulas[i]));
+            decompositionScores[i], 0, MolecularFormula(molecularFormulas[i], masses[i]));
     }
     for (int i = 0; i < size; i++) {
         MolecularFormula& formula = fragmentationNodes[i].formula;

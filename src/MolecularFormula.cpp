@@ -15,7 +15,8 @@ std::vector<double> MolecularFormula::chemicalAtomMassVector = {12.011,
     1.0078, 14.007, 15.999, 30.974, 32.065}; // C H N O P S
 std::vector<char> MolecularFormula::chemicalAtomNamesOrder = {'C', 'H', 'N', 'O', 'P', 'S'};
 
-MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula) {
+MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula, const double molecularMass):
+molecularMass(molecularMass) {
     chemicalAtomAmounts = std::vector<int>(6, 0);
     const char* formula = molecularFormula.get_cstring();
     const size_t size = std::strlen(formula);
@@ -109,11 +110,7 @@ int MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormul
 }
 
 double MolecularFormula::GetMass() const {
-    double mass = 0;
-    for (size_t i = 0; i < chemicalAtomAmounts.size(); i++) {
-        mass += chemicalAtomAmounts[i] * chemicalAtomMassVector[i];
-    }
-    return mass;
+    return molecularMass;
 }
 
 size_t MolecularFormula::ConvertASCIIElementToIndex(const int num) {
