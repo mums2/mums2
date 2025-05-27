@@ -4,10 +4,16 @@
 \alias{compute_molecular_formulas}
 \title{frag}
 \usage{
-compute_molecular_formulas(mass_data, num_threads = detectCores())
+compute_molecular_formulas(
+  mass_data,
+  parent_ppm = 3,
+  num_threads = detectCores()
+)
 }
 \arguments{
 \item{mass_data}{your mass_data object}
+
+\item{parent_ppm}{ppm}
 
 \item{num_threads}{data}
 }

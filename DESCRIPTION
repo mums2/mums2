@@ -33,7 +33,8 @@ Imports:
     mzR,
     utils,
     stats,
-    parallel
+    parallel,
+    progress
 Suggests: 
     knitr,
     rmarkdown,

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <RcppThread.h>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "Chemicals/MolecularFormula/MolecularMakeup.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
@@ -134,7 +135,7 @@ Rcpp::List ReadMsp(const std::string& path) {
     return(spectra.ReadMSP(path));
 }
 
-double DotProduct(Rcpp::NumericVector x, Rcpp::NumericVector y) {
+double CosineScore(Rcpp::NumericVector x, Rcpp::NumericVector y) {
     double dotValue = Rcpp::sum(x * y);
     double magnitudeOne = std::sqrt(Rcpp::sum(Rcpp::pow(x, 2)));
     double magnitudeTwo = std::sqrt(Rcpp::sum(Rcpp::pow(y, 2)));
@@ -159,7 +160,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
             // Otherwise
             // Check if the similarity score (the dot product) is closer than the last one
             // If so replace
-            double dotProduct = DotProduct({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
+            double dotProduct = CosineScore({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
             if (dotProduct < bestDotProduct) continue;
             resultsIndexes[i] = j + 1; // To match with R indexes add 1
             bestDotProduct = dotProduct;
@@ -191,20 +192,10 @@ void CheckIfSubFormula(const std::string& formula, const std::string& otherFormu
     //Rcpp::Rcout << res1 << " " << res2 << "\n";
 }
 
-// [[Rcpp::export]]
-std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas,
-    const double parentMass, const int amountOfColors) {
-    FragmentationTree tree;
-    tree.AddMolecularFormulasToGraph(molecularFormulas["formula"], molecularFormulas["color"],
-        molecularFormulas["score"], molecularFormulas["mass"], parentMass);
-    GreedyHeuristic greedy;
-    return greedy.CalculateHeuristic(tree);
-}
-
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
-std::string FragmentationTreeTest2(const Rcpp::List& molecularFormulas,
+std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     const double parentMass, const int numberOfThreads) {
     const int size = molecularFormulas.size();
     FragmentationTree tree(molecularFormulas, parentMass);
@@ -217,17 +208,40 @@ std::string FragmentationTreeTest2(const Rcpp::List& molecularFormulas,
     GreedyHeuristic greedy;
     return greedy.CalculateHeuristic(tree);
 }
-
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
-void test(const size_t threads, const int vecSize) {
-    std::vector<int> x(vecSize);
-    RcppThread::parallelFor(0, x.size(), [&](int i) {
-        x[i] = i;
-    }, threads);
+double MolecularFormulaSimilarity(const Rcpp::NumericVector& predictedFormula,  const Rcpp::NumericVector& currentFormula) {
+    return CosineScore(predictedFormula, currentFormula);
 }
 
+// [[Rcpp::export]]
+void GetMolecularMakeup(const Rcpp::String& formula) {
+    const MolecularMakeup makeup(formula);
+    const auto& alphabet = makeup.GetAlphabet();
+    for (const auto& letter : alphabet) {
+        Rcpp::Rcout << letter << ":" << makeup.GetAtomsForElement(letter) << std::endl;
+    }
+}
 
-
-
+// [[Rcpp::export]]
+double GetMolecularSimilarityCorrect(const Rcpp::String& formula, const Rcpp::String& other) {
+    const MolecularMakeup makeup(formula);
+    const MolecularMakeup otherMolecularMakeup(other);
+    const auto& alphabet = makeup.GetAlphabet();
+    const auto& otherAlphabet =  otherMolecularMakeup.GetAlphabet();
+    std::unordered_set<std::string> uniqueAlphabet;
+    for (const auto& element : alphabet) {
+        uniqueAlphabet.insert(element);
+    }
+    for (const auto& element : otherAlphabet) {
+        uniqueAlphabet.insert(element);
+    }
+    int size = static_cast<int>(uniqueAlphabet.size());
+    Rcpp::NumericVector formulaAtoms(size);
+    Rcpp::NumericVector otherFormulaAtoms(size);
+    int count = 0;
+    for (const auto& element : uniqueAlphabet) {
+        formulaAtoms[count] = makeup.GetAtomsForElement(element);
+        otherFormulaAtoms[count++] = otherMolecularMakeup.GetAtomsForElement(element);
+    }
+    return CosineScore(formulaAtoms, otherFormulaAtoms);
+}

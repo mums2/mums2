@@ -13,14 +13,12 @@ class MolecularFormula {
 public:
     MolecularFormula() = default;
     explicit MolecularFormula(const Rcpp::String& molecularFormula, double molecularMass = 0);
-    // MolecularFormula(const std::unordered_map<std::string, int>&,
-    //     const std::vector<std::string>&);
-    [[nodiscard]] double GetLossMass(const MolecularFormula& other) const;
-    [[nodiscard]] int GetAtomsForElement(const char&) const;
-    [[nodiscard]] std::string GetMolecularFormula() const;
+    double GetLossMass(const MolecularFormula& other) const;
+    int GetAtomsForElement(const char&) const;
+    std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
-    [[nodiscard]] int CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
-    [[nodiscard]] double GetMass() const;
+    int CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
+    double GetMass() const;
 protected:
     double molecularMass;
     std::vector<int> chemicalAtomAmounts;

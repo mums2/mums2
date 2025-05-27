@@ -1,12 +1,13 @@
 
 
 #' @export
-#' @title frag
+#' @title compute_molecular_formulas
 #' @description
 #' Clusters the data together
 #' @param mass_data your mass_data object
+#' @param parent_ppm ppm
 #' @param num_threads data
-compute_molecular_formulas <- function(mass_data, num_threads = detectCores()) {
+compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = detectCores()) {
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)
   pb <- progress_bar$new(
@@ -17,18 +18,31 @@ compute_molecular_formulas <- function(mass_data, num_threads = detectCores()) {
   for(i in seq_along(mass_data$peak_data)) {
     molecular_formula_list[[i]] <- compute_fragmentation_tree(mass_data$peak_data[[i]],
                                                               mass_data$ms2_matches$mz[[i]],
-                                                              num_threads)
+                                                              parent_ppm, num_threads)
     pb$tick()
   }
   return(molecular_formula_list)
 }
 
 
-compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, num_threads) {
-  parent_decomp <- Rdisop::decomposeMass(parent_mass)
+compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, num_threads) {
+  parent_decomp <- Rdisop::decomposeMass(parent_mass, ppm = parent_ppm)
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
+  invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
+  if(length(parent_decomp$formula) < 0) {
+    return(NULL)
+  }
   if(length(valid_parent_indexes) == 1) {
     return(parent_decomp$formula[valid_parent_indexes])
+  }
+  if(length(parent_decomp$formula) == 1) {
+    warning("No valid parent formulas identified, therefore, return an invalid but possible formula.")
+    return(parent_decomp$formula[1])
+  }
+  # worse case scenario, use the invalid indexes to generate a value
+  if(length(valid_parent_indexes) <= 0 && length(invalid_indexes) > 0) {
+    warning("No valid parent formulas identified, therefore, replacing with invalid formulas.")
+    valid_parent_indexes <- invalid_indexes
   }
   decompList <- vector("list", length(list_of_mz_int$mz))
   for(i in seq_along(list_of_mz_int$mz)){
@@ -59,7 +73,7 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, num_threads)
   if(length(full_data$score) <= 0) {
     return(parent_decomp$formula[[1]])
   }
-  res <- FragmentationTreeTest2(full_data, parent_mass, num_threads)
+  res <- ComputeFragmentationTree(full_data, parent_mass, num_threads)
   if(res == ""){
     return(parent_decomp$formula[valid_parent_indexes][[1]])
   }

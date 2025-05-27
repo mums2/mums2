@@ -24,6 +24,7 @@
 #' @importFrom mzR openMSfile
 #' @importFrom mzR peaks
 #' @importFrom parallel detectCores
+#' @importFrom progress progress_bar
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats as.dist
 #' @importFrom tibble column_to_rownames

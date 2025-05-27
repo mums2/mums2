@@ -53,16 +53,20 @@ CheckIfSubFormula <- function(formula, otherFormula) {
     invisible(.Call(`_mums2_CheckIfSubFormula`, formula, otherFormula))
 }
 
-FragmentationTreeTest <- function(molecularFormulas, parentMass, amountOfColors) {
-    .Call(`_mums2_FragmentationTreeTest`, molecularFormulas, parentMass, amountOfColors)
+ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
+    .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
 }
 
-FragmentationTreeTest2 <- function(molecularFormulas, parentMass, numberOfThreads) {
-    .Call(`_mums2_FragmentationTreeTest2`, molecularFormulas, parentMass, numberOfThreads)
+MolecularFormulaSimilarity <- function(predictedFormula, currentFormula) {
+    .Call(`_mums2_MolecularFormulaSimilarity`, predictedFormula, currentFormula)
 }
 
-test <- function(threads, vecSize) {
-    invisible(.Call(`_mums2_test`, threads, vecSize))
+GetMolecularMakeup <- function(formula) {
+    invisible(.Call(`_mums2_GetMolecularMakeup`, formula))
+}
+
+GetMolecularSimilarityCorrect <- function(formula, other) {
+    .Call(`_mums2_GetMolecularSimilarityCorrect`, formula, other)
 }
 
 squareRootNormalize <- function(vec) {

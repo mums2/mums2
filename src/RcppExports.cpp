@@ -179,41 +179,51 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// FragmentationTreeTest
-std::string FragmentationTreeTest(const Rcpp::List& molecularFormulas, const double parentMass, const int amountOfColors);
-RcppExport SEXP _mums2_FragmentationTreeTest(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP amountOfColorsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
-    Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
-    Rcpp::traits::input_parameter< const int >::type amountOfColors(amountOfColorsSEXP);
-    rcpp_result_gen = Rcpp::wrap(FragmentationTreeTest(molecularFormulas, parentMass, amountOfColors));
-    return rcpp_result_gen;
-END_RCPP
-}
-// FragmentationTreeTest2
-std::string FragmentationTreeTest2(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
-RcppExport SEXP _mums2_FragmentationTreeTest2(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
+// ComputeFragmentationTree
+std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
+RcppExport SEXP _mums2_ComputeFragmentationTree(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
     Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(FragmentationTreeTest2(molecularFormulas, parentMass, numberOfThreads));
+    rcpp_result_gen = Rcpp::wrap(ComputeFragmentationTree(molecularFormulas, parentMass, numberOfThreads));
     return rcpp_result_gen;
 END_RCPP
 }
-// test
-void test(const size_t threads, const int vecSize);
-RcppExport SEXP _mums2_test(SEXP threadsSEXP, SEXP vecSizeSEXP) {
+// MolecularFormulaSimilarity
+double MolecularFormulaSimilarity(const Rcpp::NumericVector& predictedFormula, const Rcpp::NumericVector& currentFormula);
+RcppExport SEXP _mums2_MolecularFormulaSimilarity(SEXP predictedFormulaSEXP, SEXP currentFormulaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type predictedFormula(predictedFormulaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type currentFormula(currentFormulaSEXP);
+    rcpp_result_gen = Rcpp::wrap(MolecularFormulaSimilarity(predictedFormula, currentFormula));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetMolecularMakeup
+void GetMolecularMakeup(const Rcpp::String& formula);
+RcppExport SEXP _mums2_GetMolecularMakeup(SEXP formulaSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const size_t >::type threads(threadsSEXP);
-    Rcpp::traits::input_parameter< const int >::type vecSize(vecSizeSEXP);
-    test(threads, vecSize);
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type formula(formulaSEXP);
+    GetMolecularMakeup(formula);
     return R_NilValue;
+END_RCPP
+}
+// GetMolecularSimilarityCorrect
+double GetMolecularSimilarityCorrect(const Rcpp::String& formula, const Rcpp::String& other);
+RcppExport SEXP _mums2_GetMolecularSimilarityCorrect(SEXP formulaSEXP, SEXP otherSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type other(otherSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetMolecularSimilarityCorrect(formula, other));
+    return rcpp_result_gen;
 END_RCPP
 }
 // squareRootNormalize
@@ -274,9 +284,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetMolecularFormula", (DL_FUNC) &_mums2_GetMolecularFormula, 1},
     {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
     {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
-    {"_mums2_FragmentationTreeTest", (DL_FUNC) &_mums2_FragmentationTreeTest, 3},
-    {"_mums2_FragmentationTreeTest2", (DL_FUNC) &_mums2_FragmentationTreeTest2, 3},
-    {"_mums2_test", (DL_FUNC) &_mums2_test, 2},
+    {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
+    {"_mums2_MolecularFormulaSimilarity", (DL_FUNC) &_mums2_MolecularFormulaSimilarity, 2},
+    {"_mums2_GetMolecularMakeup", (DL_FUNC) &_mums2_GetMolecularMakeup, 1},
+    {"_mums2_GetMolecularSimilarityCorrect", (DL_FUNC) &_mums2_GetMolecularSimilarityCorrect, 2},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
