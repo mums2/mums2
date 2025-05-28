@@ -59,7 +59,7 @@ annotate_ms2.mass_data <- function(query, reference, score_params,
 
   ms2 <- query$ms2_matches
   if(is.null(formulas)) {
-    formulas = vector("list", length(ms2$rt))
+    formulas = vector("character", length(ms2$rt))
   }
   matches <- AnnotateMs2Features(ms2$ms1_compound_id, ms2$ms2_spectrum_id,
                                  ms2$mz, ms2$rt, formulas,
