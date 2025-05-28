@@ -30,7 +30,8 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
   invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
   if(length(parent_decomp$formula) < 0) {
-    return(NULL)
+    warning("No valid parent decompositions, returning emptry string.")
+    return("")
   }
   if(length(valid_parent_indexes) == 1) {
     return(parent_decomp$formula[valid_parent_indexes])

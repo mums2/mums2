@@ -56,10 +56,11 @@ annotate_ms2 <- function(query, reference, score_params,
 annotate_ms2.mass_data <- function(query, reference, score_params,
   precursor_tolerance, min_score, min_peaks = 6, chemical_min_score = 0,
   cluster_data = NULL, formulas = NULL) {
+
+  ms2 <- query$ms2_matches
   if(is.null(formulas)) {
     formulas = vector("list", length(ms2$rt))
   }
-  ms2 <- query$ms2_matches
   matches <- AnnotateMs2Features(ms2$ms1_compound_id, ms2$ms2_spectrum_id,
                                  ms2$mz, ms2$rt, formulas,
                                  query$peak_data,

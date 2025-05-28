@@ -33,13 +33,15 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
         Rcpp::DataFrame spectra = Rcpp::wrap(ref[1]);
 
         Utils util;
-        std::vector<std::string> infoValues = Rcpp::as<std::vector<std::string>>(info["value"]);
+        Rcpp::StringVector infoValues = info["value"];
         std::vector<int> pmzPos = util.my_grep(info["key"], "precursormz");
         std::vector<int> formulaIndex = util.my_grep(info["key"], "formula");
 
         std::string formula;
         if (formulaIndex[0] != -1) {
-            formula = infoValues[formulaIndex[0]];
+            Rcpp::String val = infoValues[formulaIndex[0]];
+            if (val != "NA" && val != "NULL")
+                formula = Rcpp::as<std::string>(infoValues[formulaIndex[0]]);
         }
         // need to add stop if precursor is detected more than once - should not happen.
         // if (pmzPos.size() > 1) {
@@ -49,7 +51,7 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
 
         double pmz = -1;
         const int pmzIndex = pmzPos[0];
-        const std::string& value = infoValues[pmzIndex];
+        const std::string& value = Rcpp::as<std::string>(infoValues[pmzIndex]);
         if (pmzIndex != -1 && !value.empty() && value != "NA") { // Meaning the value was found
             pmz = std::stod(value);
         }
@@ -89,12 +91,16 @@ void AnnotateMs2::createRefList(Rcpp::List reference) {
             Spectra referenceSpectra = referenceList[refIdx].GetSpectra();
             const double compScore = factory.CalculateScore(currentQuerySpectra,
                 referenceSpectra, minPeaks);
-            const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(queryList[i].GetFormula(),
-                referenceList[j].GetFormula());
 
 
-            if (compScore >= minScore && chemicalSimilarity >= chemicalMinScore) {
+
+            if (compScore >= minScore) {
                 // nMatches += 1;
+                const auto queryFormula = queryList[i].GetFormula().get_cstring();
+                const auto other = referenceList[j].GetFormula().get_cstring();
+                const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(queryList[i].GetFormula(),
+                referenceList[j].GetFormula());
+                if (chemicalSimilarity < chemicalMinScore) continue;
                 queryList[i].AddToRefComps(refIdx);
                 queryList[i].AddToScores(compScore);
                 formulaSimilarity.push_back(chemicalSimilarity);
