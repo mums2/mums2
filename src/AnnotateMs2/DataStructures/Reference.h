@@ -7,10 +7,10 @@
 
 class Reference final {
     public:
-    Reference(const int index, const double precursorMz, const std::vector<double> &mz,
+    Reference(const int index, const double precursorMz, const Rcpp::String& formula, const std::vector<double> &mz,
           const std::vector<double>& intensity):
-    index(index), spectra("", mz, intensity, precursorMz) {};
-    
+    index(index),formula(formula), spectra("", mz, intensity, precursorMz) {};
+
     int getIndex() const {
         return index;
     }
@@ -18,7 +18,8 @@ class Reference final {
     double getPrecursorMz() const {
         return spectra.precursorMz;
     }
-    
+
+    const Rcpp::String& GetFormula() const {return formula;}
     std::vector<double> getSpecMz() const {
         return spectra.mz;
     }
@@ -33,6 +34,7 @@ class Reference final {
     private:
     int index;
     // double precursorMz;
+    Rcpp::String formula;
     std::vector<double> mz;
     std::vector<double> intensity;
     Spectra spectra;

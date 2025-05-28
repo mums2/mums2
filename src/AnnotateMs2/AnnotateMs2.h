@@ -10,12 +10,14 @@
 
 class AnnotateMs2 {
 public:
-    AnnotateMs2(const size_t minPeaks):minPeaks(minPeaks) {}
+    explicit AnnotateMs2(const size_t minPeaks):minPeaks(minPeaks) {}
     ~AnnotateMs2() = default;
-    void createQueryList(std::vector<std::string> variableId, std::vector<std::string> ms2Id,
-      std::vector<float> ms2Mz, std::vector<float> ms2Rt, Rcpp::List ms2Spectra);
+    void createQueryList(const std::vector<std::string>& variableId, const std::vector<std::string> &ms2Id,
+          const std::vector<float> &ms2Mz, const std::vector<float> &ms2Rt, const Rcpp::StringVector& formulas,
+          const Rcpp::List& ms2Spectra);
     void createRefList(Rcpp::List reference);
-    Rcpp::DataFrame getMatches(double threshold, const ScoringFactory& factory, double minScore);
+    Rcpp::DataFrame getMatches(double threshold, const ScoringFactory& factory, double minScore,
+        double chemicalMinScore);
 
 
 

@@ -2,16 +2,17 @@
 #define QUERY
 
 #include <string>
+#include <utility>
 #include <vector>
 #include "../../Spectra/Spectra.h"
 
 class Query {
     public:
     Query(std::string variableId, std::string ms2Id, const double ms2Mz,
-          const double ms2Rt, const std::vector<double> &mz,
+          const double ms2Rt, const Rcpp::String& formula, const std::vector<double> &mz,
           const std::vector<double> &intensity):
-    variableId(std::move(variableId)), ms2Id(std::move(ms2Id)), ms2Rt(ms2Rt),
-    spectra(variableId, mz, intensity, ms2Mz){};
+    formula(formula), variableId(std::move(variableId)), ms2Id(std::move(ms2Id)),
+    ms2Rt(ms2Rt), spectra(variableId, mz, intensity, ms2Mz){};
     
 
     
@@ -38,7 +39,7 @@ class Query {
     std::string getMs2Id() {
         return ms2Id;
     }
-    
+    const Rcpp::String& GetFormula() const {return formula;}
     double getMs2Pmz() const {
         return spectra.precursorMz;
     }
@@ -56,6 +57,7 @@ class Query {
     }
     
     private:
+    Rcpp::String formula;
     std::string variableId;
     std::string ms2Id;
     double ms2Rt;

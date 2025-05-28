@@ -21,7 +21,7 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = 
                                                               parent_ppm, num_threads)
     pb$tick()
   }
-  return(molecular_formula_list)
+  return(as.character(molecular_formula_list))
 }
 
 

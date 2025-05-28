@@ -2,7 +2,7 @@
 % Please edit documentation in R/fragmentation_tree.R
 \name{compute_molecular_formulas}
 \alias{compute_molecular_formulas}
-\title{frag}
+\title{compute_molecular_formulas}
 \usage{
 compute_molecular_formulas(
   mass_data,

@@ -153,7 +153,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     for (size_t i = 0; i < currentSize; i++) {
         double currentMz1 = mz1[i];
         double currentRt1 = rt1[i];
-        Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2);
+        Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2) * 1e6 / currentMz1;
         Rcpp::NumericVector rtError = Rcpp::abs(currentRt1 - rt2);
         double bestDotProduct = 0;
         for (int j = 0; j < mzError.size(); j++) { // Pick score with the closest dotProduct value

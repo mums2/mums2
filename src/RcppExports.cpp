@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // AnnotateMs2Features
-Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, double minScore, const size_t minPeaks);
-RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP, SEXP minPeaksSEXP) {
+Rcpp::DataFrame AnnotateMs2Features(const std::vector<std::string>& variableId, const std::vector<std::string>& ms2Id, const std::vector<float>& ms2Mz, const std::vector<float>& ms2Rt, const Rcpp::StringVector& formulas, const Rcpp::List& ms2Spectra, const Rcpp::List& reference, const Rcpp::List& parameters, const double precursorThreshold, const double minScore, const double chemicalMinScore, const size_t minPeaks);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP variableIdSEXP, SEXP ms2IdSEXP, SEXP ms2MzSEXP, SEXP ms2RtSEXP, SEXP formulasSEXP, SEXP ms2SpectraSEXP, SEXP referenceSEXP, SEXP parametersSEXP, SEXP precursorThresholdSEXP, SEXP minScoreSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,13 +21,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type ms2Id(ms2IdSEXP);
     Rcpp::traits::input_parameter< const std::vector<float>& >::type ms2Mz(ms2MzSEXP);
     Rcpp::traits::input_parameter< const std::vector<float>& >::type ms2Rt(ms2RtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::StringVector& >::type formulas(formulasSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type ms2Spectra(ms2SpectraSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type reference(referenceSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type parameters(parametersSEXP);
     Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
-    Rcpp::traits::input_parameter< double >::type minScore(minScoreSEXP);
+    Rcpp::traits::input_parameter< const double >::type minScore(minScoreSEXP);
+    Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
     Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, ms2Spectra, reference, parameters, precursorThreshold, minScore, minPeaks));
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(variableId, ms2Id, ms2Mz, ms2Rt, formulas, ms2Spectra, reference, parameters, precursorThreshold, minScore, chemicalMinScore, minPeaks));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -259,7 +261,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 12},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 5},
     {"_mums2_CalculateDiversityCommunityObject", (DL_FUNC) &_mums2_CalculateDiversityCommunityObject, 2},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
