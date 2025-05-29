@@ -96,14 +96,14 @@ Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcp
             query_formula.emplace_back(formulas[index]);
             query_mz.emplace_back(query.GetPrecursorMz());
             query_rt.emplace_back(queryRts[index]);
-            ref_idx.emplace_back(index);
+            ref_idx.emplace_back(ref.GetIndex());
             formulaSimilarity.emplace_back(chemicalComparison);
             score.emplace_back(comparisonScore);
         }
     }
 
 
-    return Rcpp::DataFrame::create(Rcpp::Named("query_ms1_id") = query_ms1_id,
+    Rcpp::DataFrame df = Rcpp::DataFrame::create(Rcpp::Named("query_ms1_id") = query_ms1_id,
                                                 Rcpp::Named("query_ms2_id") = query_ms2_id,
                                                 Rcpp::Named("query_mz") = query_mz,
                                                 Rcpp::Named("query_rt") = query_rt,
@@ -111,4 +111,27 @@ Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcp
                                                 Rcpp::Named("query_formula") = query_formula,
                                                 Rcpp::Named("chemical_similarity") = formulaSimilarity,
                                                 Rcpp::Named("score") = score);
+
+    std::unordered_map<std::string, Rcpp::CharacterVector> uniqueColumns;
+    int rowSize = df.nrow();
+    int count = 0;
+    for (const auto index : ref_idx) {
+        const Rcpp::List& ref = referenceList[index];
+        const Rcpp::List& info = ref["info"];
+        Rcpp::StringVector values = info["value"];
+        Rcpp::CharacterVector headers = info["key"];
+        for (int j = 0; j < headers.size(); j++) {
+            std::string header = Rcpp::as<std::string>(headers[j]);
+            if (uniqueColumns.find(header) == uniqueColumns.end()) {
+                Rcpp::CharacterVector newColumn(rowSize);
+                uniqueColumns[header] = newColumn;
+            }
+            uniqueColumns[header][count] = values[j];
+        }
+        count++;
+    }
+    for (const auto& value : uniqueColumns) {
+        df.push_back(value.second, value.first);
+    }
+    return df;
 }
