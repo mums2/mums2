@@ -5,6 +5,10 @@ AnnotateMs2Features <- function(variableId, ms2Id, ms2Mz, ms2Rt, formulas, ms2Sp
     .Call(`_mums2_AnnotateMs2Features`, variableId, ms2Id, ms2Mz, ms2Rt, formulas, ms2Spectra, reference, parameters, precursorThreshold, minScore, chemicalMinScore, minPeaks)
 }
 
+AnnotateMs2Features2 <- function(queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks) {
+    .Call(`_mums2_AnnotateMs2Features2`, queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
+}
+
 distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks)
 }

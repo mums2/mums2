@@ -15,6 +15,7 @@ void AnnotateMs2::createQueryList(const std::vector<std::string>& variableId, co
 
                   Query query(variableId[i], ms2Id[i], ms2Mz[i], ms2Rt[i],
                       formulas[i], specDf["mz"], specDf["intensity"]);
+                  //Ms1 compound Id, ms2SpectraId, ms2 mz, ms2 rt, formulas, spectra mz, spectra int.
 
                   queryList.emplace_back(query);
               }

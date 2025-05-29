@@ -35,7 +35,7 @@ test_that("annotate_ms_featrues returns the omu where the query is present", {
   expect_true("OMU" %in% colnames(annotations))
 })
 
-test_that("annotate_ms_featrues returns the omu where the query is present", {
+test_that("annotate_ms_featrues returns the correct amount of rows and columns", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
