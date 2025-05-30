@@ -11,7 +11,7 @@
 
 class AnnotationNode {
 public:
-    AnnotationNode():spectra() {}
+    AnnotationNode():spectra("", {}, {}, -1) {}
     AnnotationNode(const Rcpp::NumericVector peakMz,
         const Rcpp::NumericVector peakIntensities,
         const Rcpp::String& formula,

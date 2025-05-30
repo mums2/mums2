@@ -60,7 +60,7 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   if("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
-  annotations <- AnnotateMs2Features2(mass_data$ms2_matches, mass_data$peak_data, reference, scoring_params, 
+  annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data, reference, scoring_params, 
   preds, precursor_tolerance, min_score, chemical_min_score, min_peaks)
 
   if(is.null(cluster_data)){
