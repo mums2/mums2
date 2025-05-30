@@ -29,7 +29,7 @@ struct FragmentationNode {
 
 struct CompareFragmentationNodes {
     bool operator()(FragmentationNode const& s1, FragmentationNode const & s2) const {
-        return s1.score > s2.score;
+        return s1.subTreeScore > s2.subTreeScore;
     }
 };
 #endif //FRAGMENTATIONNODE_H

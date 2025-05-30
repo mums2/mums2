@@ -9,8 +9,7 @@
 
 class GreedyHeuristic {
 public:
-    std::string CalculateHeuristic(FragmentationTree& tree);
-    void Print(const std::list<Vertex>&, const std::vector<FragmentationNode>&) const;
+    static std::string CalculateHeuristic(FragmentationTree& tree);
 };
 
 

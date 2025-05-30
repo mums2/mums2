@@ -65,6 +65,10 @@ GetMolecularSimilarityCorrect <- function(formula, other) {
     .Call(`_mums2_GetMolecularSimilarityCorrect`, formula, other)
 }
 
+test <- function() {
+    .Call(`_mums2_test`)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

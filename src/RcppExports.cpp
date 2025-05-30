@@ -213,6 +213,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test
+std::string test();
+RcppExport SEXP _mums2_test() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test());
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -274,6 +284,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_GetMolecularMakeup", (DL_FUNC) &_mums2_GetMolecularMakeup, 1},
     {"_mums2_GetMolecularSimilarityCorrect", (DL_FUNC) &_mums2_GetMolecularSimilarityCorrect, 2},
+    {"_mums2_test", (DL_FUNC) &_mums2_test, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
