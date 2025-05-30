@@ -25,8 +25,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
         '\n');
-    ETAProgressBar pb;
-    Progress p(line_count, true, pb);
+    Progress p(line_count, true);
     spectraData.close();
     spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
@@ -61,6 +60,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         }
 
     }
+    spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     for (const auto& value : map) {
@@ -73,6 +73,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         intensityContainer.pop_front();
         mzContainer.pop_front();
     }
+
     return Rcpp::List::create(Rcpp::Named("ms2_table") = dataFrame,
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
@@ -93,8 +94,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
         '\n');
-    ETAProgressBar pb;
-    Progress p(line_count, true, pb);
+    Progress p(line_count, true);
     spectraData.close();
     spectraData.open(filePath);
     while(std::getline(spectraData,  line)) {
@@ -134,6 +134,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         intensity.emplace_back(std::stod(intensityValue));
 
     }
+    spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     Rcpp::List mspList(spectraPeaks);
