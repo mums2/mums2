@@ -31,7 +31,7 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
   parent_decomp <- Rdisop::decomposeMass(parent_mass, ppm = parent_ppm)
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
   invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
-  if(length(parent_decomp$formula) < 0) {
+  if(length(parent_decomp$formula) <= 0) {
     warning("No valid parent decompositions, returning emptry string.")
     return("")
   }

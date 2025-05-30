@@ -50,15 +50,15 @@ After you import the data we are able to filter the data using filters including
 # Preprocess ms2 data
 Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 and ms2 peaks. Our `ms2_ms1_compare()` function reads a list of mgf files and matches them with a ms1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that ms2 spectra files are very memory intensive, they can be anywhere from 1mb to 100gbs. Therefore, depending on how big your file is, do not expect this function to be overly fast.  
 ```{r  R.options=list(max.print=15)}
-  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 20, 6)
   matched_data
   
 ```
 
 # Chemical Formula Prediction
 ```{r  R.options=list(max.print=15)}
-  predictions <- compute_molecular_formulas(matched_data, 3, 16)
-  predictions
+  matched_data <- compute_molecular_formulas(matched_data, 3, 16)
+  matched_data$predicted_molecular_formulas
   
 ```
 
@@ -68,9 +68,8 @@ We are also able annotate our matched_ms1_ms2 object. By using an msp file as a 
 
 
   psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
- 
-  annotations <- annotate_ms2(query = matched_data, reference = read_msp("F:\\mums2\\MassBank_NIST.msp"),
-                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, min_peaks = 0, chemical_min_score = .8, formulas = predictions)
+  annotations <- annotate_ms2(matched_data, psu_msmls, gnps_params(0.5), 1000, 0.1, .1)
+  annotations
 ```
 
 # Scoring/Distance
@@ -93,8 +92,8 @@ Once we have generated a distance matrix, we can use that matrix to cluster our 
 After you have clustered your data together, you can add the OMU the feature resides in to your annotation table for a more accurate data frame.
 
 ```{r}
- annotations <- annotate_ms2(query = matched_data, reference = psu_msmls,
-                              score_params = gnps_params(0.5), precursor_tolerance =  2, min_score = .2, min_peaks = 0, cluster_results)
+ annotations <- annotate_ms2(matched_data, psu_msmls, gnps_params(0.5), 1000, 0.1, .1, cluster_results)
+ annotations
 
 ```
 
