@@ -5,21 +5,20 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 
 std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
-    tree.SortFragmentationNodes();
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
+    //Get all nodes of color 0
+    size_t eligibleCandidateCounter = 0;
+    while (nodes[eligibleCandidateCounter].color == 0) {
+        eligibleCandidateCounter++;
+    }
+    std::vector<FragmentationNode> eligibleNodes(nodes.begin(), nodes.begin() + eligibleCandidateCounter);
+    std::sort(eligibleNodes.begin(), eligibleNodes.end(), CompareFragmentationNodes());
     // If there is no subRoot, (which shouldn't be possible since there should not be circular sub-molecules)
     // then choose the highest score
-    size_t candidateIndex = 0;
-    for (const auto& node : nodes) {
-        candidateIndex++;
-        if (node.color != 0) continue;
-        candidateIndex--;
-        break;
-    }
-    if (candidateIndex >= nodes.size()) {
+    if (eligibleNodes.empty()) {
         Rcpp::warning("GreedyHeuristic: node index out of bounds, returning first valid result. ");
         return "";
     }
-    const FragmentationNode& candidate = nodes[candidateIndex];
+    const FragmentationNode& candidate = eligibleNodes[0];
     return candidate.formula.GetMolecularFormula();
 }
