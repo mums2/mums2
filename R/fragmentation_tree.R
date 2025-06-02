@@ -32,7 +32,7 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
   invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
   if(length(parent_decomp$formula) <= 0) {
-    warning("No valid parent decompositions, returning emptry string.")
+    warning("No parent decompositions, returning emptry string.")
     return("")
   }
   if(length(valid_parent_indexes) == 1) {
@@ -68,11 +68,15 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
     full_data$color <- c(full_data$color, rep(color_count, length(scores)))
     color_count <- color_count + 1
   }
+  if(length(full_data$score) <= 0) {
+    return(parent_decomp$formula[[1]])
+  }
   scores <- parent_decomp$score[valid_parent_indexes]
   full_data$score <- append(scores, full_data$score)
   full_data$formula <- append(parent_decomp$formula[valid_parent_indexes], full_data$formula)
   full_data$mass <- append(parent_decomp$exactmass[valid_parent_indexes], full_data$mass)
   full_data$color <- append(rep(0, length(scores)), full_data$color)
+
   if(length(full_data$score) <= 0) {
     return(parent_decomp$formula[[1]])
   }
