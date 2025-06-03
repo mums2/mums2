@@ -27,7 +27,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
   }
   if(!(diversity_index %in% diversity_index_list)){
     stop(paste0("Please ensure your diversity index is one of the following values: ",
-                paste(diversity_index_list, collapse = ' '))
+                paste(diversity_index_list, collapse = ', '))
     )
   }
   return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))
@@ -52,7 +52,7 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
 
   if(!(diversity_index %in% diversity_index_list)){
     stop(paste0("Please ensure your diversity index is one of the following values: ",
-                paste(diversity_index_list, collapse = ' '))
+                paste(diversity_index_list, collapse = ', '))
     )
   }
   return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))

@@ -145,39 +145,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetMolecularFormula
-void GetMolecularFormula(const std::string& formula);
-RcppExport SEXP _mums2_GetMolecularFormula(SEXP formulaSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type formula(formulaSEXP);
-    GetMolecularFormula(formula);
-    return R_NilValue;
-END_RCPP
-}
-// SubtractMolecularFormula
-std::string SubtractMolecularFormula(const std::string& formula, const std::string& otherFormula);
-RcppExport SEXP _mums2_SubtractMolecularFormula(SEXP formulaSEXP, SEXP otherFormulaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type formula(formulaSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type otherFormula(otherFormulaSEXP);
-    rcpp_result_gen = Rcpp::wrap(SubtractMolecularFormula(formula, otherFormula));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CheckIfSubFormula
-void CheckIfSubFormula(const std::string& formula, const std::string& otherFormula);
-RcppExport SEXP _mums2_CheckIfSubFormula(SEXP formulaSEXP, SEXP otherFormulaSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type formula(formulaSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type otherFormula(otherFormulaSEXP);
-    CheckIfSubFormula(formula, otherFormula);
-    return R_NilValue;
-END_RCPP
-}
 // ComputeFragmentationTree
 std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
 RcppExport SEXP _mums2_ComputeFragmentationTree(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
@@ -188,38 +155,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     rcpp_result_gen = Rcpp::wrap(ComputeFragmentationTree(molecularFormulas, parentMass, numberOfThreads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetMolecularMakeup
-void GetMolecularMakeup(const Rcpp::String& formula);
-RcppExport SEXP _mums2_GetMolecularMakeup(SEXP formulaSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::String& >::type formula(formulaSEXP);
-    GetMolecularMakeup(formula);
-    return R_NilValue;
-END_RCPP
-}
-// GetMolecularSimilarityCorrect
-double GetMolecularSimilarityCorrect(const Rcpp::String& formula, const Rcpp::String& other);
-RcppExport SEXP _mums2_GetMolecularSimilarityCorrect(SEXP formulaSEXP, SEXP otherSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::String& >::type formula(formulaSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::String& >::type other(otherSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetMolecularSimilarityCorrect(formula, other));
-    return rcpp_result_gen;
-END_RCPP
-}
-// test
-std::string test();
-RcppExport SEXP _mums2_test() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(test());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -245,25 +180,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ScoreMs2
-double ScoreMs2(std::string name1, std::vector<double> mz1, std::vector<double> intensity1, double precursorMz1, std::string name2, std::vector<double> mz2, std::vector<double> intensity2, double precursorMz2, Rcpp::List parameters);
-RcppExport SEXP _mums2_ScoreMs2(SEXP name1SEXP, SEXP mz1SEXP, SEXP intensity1SEXP, SEXP precursorMz1SEXP, SEXP name2SEXP, SEXP mz2SEXP, SEXP intensity2SEXP, SEXP precursorMz2SEXP, SEXP parametersSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type name1(name1SEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type mz1(mz1SEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type intensity1(intensity1SEXP);
-    Rcpp::traits::input_parameter< double >::type precursorMz1(precursorMz1SEXP);
-    Rcpp::traits::input_parameter< std::string >::type name2(name2SEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type mz2(mz2SEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type intensity2(intensity2SEXP);
-    Rcpp::traits::input_parameter< double >::type precursorMz2(precursorMz2SEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type parameters(parametersSEXP);
-    rcpp_result_gen = Rcpp::wrap(ScoreMs2(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -278,16 +194,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
-    {"_mums2_GetMolecularFormula", (DL_FUNC) &_mums2_GetMolecularFormula, 1},
-    {"_mums2_SubtractMolecularFormula", (DL_FUNC) &_mums2_SubtractMolecularFormula, 2},
-    {"_mums2_CheckIfSubFormula", (DL_FUNC) &_mums2_CheckIfSubFormula, 2},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
-    {"_mums2_GetMolecularMakeup", (DL_FUNC) &_mums2_GetMolecularMakeup, 1},
-    {"_mums2_GetMolecularSimilarityCorrect", (DL_FUNC) &_mums2_GetMolecularSimilarityCorrect, 2},
-    {"_mums2_test", (DL_FUNC) &_mums2_test, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
-    {"_mums2_ScoreMs2", (DL_FUNC) &_mums2_ScoreMs2, 9},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

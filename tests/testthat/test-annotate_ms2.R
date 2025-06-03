@@ -48,3 +48,15 @@ test_that("annotate_ms_featrues returns the correct amount of rows and columns",
   expect_true(nrow(annotations) == 3)
   expect_true(ncol(annotations) == 23)
 })
+
+test_that("annotate_ms_featrues works with predicted molecular formulas", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+  dat <- compute_molecular_formulas(dat)
+  psu_msmls <- read_msp(test_path(dir, r_file))
+  annotations <- annotate_ms2(dat, psu_msmls,
+    gnps_params(0.5), 20, .2, 0, min_peaks = 0)
+  expect_true("query_formula" %in% colnames(annotations))
+})
+

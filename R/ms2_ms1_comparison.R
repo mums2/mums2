@@ -6,7 +6,6 @@
 #' @param mz_tolerance your mass-charge ratio tolerance
 #' @param rt_tolerance your retention time tolerance
 ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance) {
-
   ms2_data <- list()
   extension <- tail(strsplit(as.list(ms2_files)[[1]], split = "\\.")[[1]], 1)
   if(tolower(extension) != "mgf") {

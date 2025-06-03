@@ -76,13 +76,6 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
   full_data$formula <- append(parent_decomp$formula[valid_parent_indexes], full_data$formula)
   full_data$mass <- append(parent_decomp$exactmass[valid_parent_indexes], full_data$mass)
   full_data$color <- append(rep(0, length(scores)), full_data$color)
-
-  if(length(full_data$score) <= 0) {
-    return(parent_decomp$formula[[1]])
-  }
   res <- ComputeFragmentationTree(full_data, parent_mass, num_threads)
-  if(res == ""){
-    return(parent_decomp$formula[valid_parent_indexes][[1]])
-  }
   return(res)
 }

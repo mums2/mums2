@@ -5,12 +5,17 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 
 std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
+    // In worse case scenario, return the first node, which will always
+    // be a node of the parent index
+    const FragmentationNode& backUpNode = tree.GetFragmentationNodes()[0];
     tree.SortFragmentationNodes();
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
     //Get all nodes of color 0
-    size_t eligibleCandidateCounter = 0;
-    for (size_t i = 0; i < nodes.size(); ++i) {
-        if (nodes[i].color != 0) continue;
-        return nodes[i].formula.GetMolecularFormula();
+    for (const auto & node : nodes) {
+        if (node.color != 0) continue;
+        return node.formula.GetMolecularFormula();
     }
+    // Should be unreachable
+    Rcpp::warning("Returning first molecular formula. ");
+    return backUpNode.formula.GetMolecularFormula();
 }

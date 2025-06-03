@@ -41,32 +41,8 @@ CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
     .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
 }
 
-GetMolecularFormula <- function(formula) {
-    invisible(.Call(`_mums2_GetMolecularFormula`, formula))
-}
-
-SubtractMolecularFormula <- function(formula, otherFormula) {
-    .Call(`_mums2_SubtractMolecularFormula`, formula, otherFormula)
-}
-
-CheckIfSubFormula <- function(formula, otherFormula) {
-    invisible(.Call(`_mums2_CheckIfSubFormula`, formula, otherFormula))
-}
-
 ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
     .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
-}
-
-GetMolecularMakeup <- function(formula) {
-    invisible(.Call(`_mums2_GetMolecularMakeup`, formula))
-}
-
-GetMolecularSimilarityCorrect <- function(formula, other) {
-    .Call(`_mums2_GetMolecularSimilarityCorrect`, formula, other)
-}
-
-test <- function() {
-    .Call(`_mums2_test`)
 }
 
 squareRootNormalize <- function(vec) {
@@ -75,9 +51,5 @@ squareRootNormalize <- function(vec) {
 
 scaleNormalize <- function(vec) {
     .Call(`_mums2_scaleNormalize`, vec)
-}
-
-ScoreMs2 <- function(name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters) {
-    .Call(`_mums2_ScoreMs2`, name1, mz1, intensity1, precursorMz1, name2, mz2, intensity2, precursorMz2, parameters)
 }
 

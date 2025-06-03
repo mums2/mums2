@@ -128,20 +128,13 @@ Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& in
 // [[Rcpp::export]]
 Rcpp::List ReadMgf(const std::string& path) {
     ReadSpectra spectra;
-    return(spectra.ReadMGF(path));
+    return spectra.ReadMGF(path);
 }
 
 // [[Rcpp::export]]
 Rcpp::List ReadMsp(const std::string& path) {
     ReadSpectra spectra;
-    return(spectra.ReadMSP(path));
-}
-
-double CosineScore(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    double dotValue = Rcpp::sum(x * y);
-    double magnitudeOne = std::sqrt(Rcpp::sum(Rcpp::pow(x, 2)));
-    double magnitudeTwo = std::sqrt(Rcpp::sum(Rcpp::pow(y, 2)));
-    return dotValue / (magnitudeOne * magnitudeTwo);
+    return spectra.ReadMSP(path);
 }
 
 // [[Rcpp::export]]
@@ -173,27 +166,6 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     return resultsIndexes;
 }
 
-// [[Rcpp::export]]
-void GetMolecularFormula(const std::string& formula) {
-    const MolecularFormula molecularFormula(formula);
-}
-
-// [[Rcpp::export]]
-std::string SubtractMolecularFormula(const std::string& formula, const std::string& otherFormula) {
-    const MolecularFormula molecularFormula(formula);
-    const MolecularFormula otherMolecularFormula(otherFormula);
-    return molecularFormula - otherMolecularFormula;
-}
-
-// [[Rcpp::export]]
-void CheckIfSubFormula(const std::string& formula, const std::string& otherFormula) {
-    const MolecularFormula molecularFormula(formula);
-    const MolecularFormula otherMolecularFormula(otherFormula);
-    const bool res1 = molecularFormula.CheckIfOtherIsSubFormula(otherMolecularFormula);
-    const bool res2 = otherMolecularFormula.CheckIfOtherIsSubFormula(molecularFormula);
-    //Rcpp::Rcout << res1 << " " << res2 << "\n";
-}
-
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
@@ -204,40 +176,5 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     RcppThread::parallelFor(0, size, [&tree](int i) {
         tree.AddMolecularFormulaToGraph(i);
     }, numberOfThreads);
-    return GreedyHeuristic::CalculateHeuristic(tree);
-}
-
-// [[Rcpp::export]]
-void GetMolecularMakeup(const Rcpp::String& formula) {
-    const MolecularMakeup makeup(formula);
-    const auto& alphabet = makeup.GetAlphabet();
-    for (const auto& letter : alphabet) {
-        Rcpp::Rcout << letter << ":" << makeup.GetAtomsForElement(letter) << std::endl;
-    }
-}
-
-// [[Rcpp::export]]
-double GetMolecularSimilarityCorrect(const Rcpp::String& formula, const Rcpp::String& other) {
-   return MolecularFormulaSimilarity::ComputeSimilarity(formula, other);
-}
-
-// [[Rcpp::export]]
-std::string test() {
-    std::vector<double> score{0.3, 0.23, 0.1, 0.3};
-    std::vector<double> mass{155.23, 155.22, 100.8, 120.12};
-    std::vector<int> color{0,0,1,2};
-    std::vector<std::string> formula{"C6H12O6", "C5H24O6", "C2H10", "C4H5O5"};
-    Rcpp::List data = Rcpp::List::create(Rcpp::Named("formula") = formula,
-        Rcpp::Named("mass") = mass,
-        Rcpp::Named("color") = color,
-        Rcpp::Named("score") = score);
-    FragmentationTree tree(data, 155.24);
-
-    tree.AddMolecularFormulaToGraph(0);
-    tree.AddMolecularFormulaToGraph(1);
-    tree.AddMolecularFormulaToGraph(2);
-    tree.AddMolecularFormulaToGraph(3);
-    Rcpp::Rcout << tree.GetFragmentationNodes()[0].subTreeScore << std::endl;
-    Rcpp::Rcout << tree.GetFragmentationNodes()[1].subTreeScore << std::endl;
     return GreedyHeuristic::CalculateHeuristic(tree);
 }
