@@ -27,8 +27,8 @@ test_that("Will return the first valid index if there is only one", {
   dat$ms2_matches <- dat$ms2_matches[1,]
   dat$peak_data <- dat$peak_data[1]
   result <- compute_molecular_formulas(dat, 2)
-  Rdisop::decomposeMass(99)$formula[[2]]
-  expect_equal(result$predicted_molecular_formulas[[1]],  Rdisop::decomposeMass(99)$formula[[2]])
+  decomposeMass(99)$formula[[2]]
+  expect_equal(result$predicted_molecular_formulas[[1]],  decomposeMass(99)$formula[[2]])
 })
 
 
@@ -40,7 +40,7 @@ test_that("Returns the first candidate if there are no children decompositions",
   dat$peak_data[[1]]$mz <- 70
   dat$peak_data[[1]]$intensity <- 10
   result <- compute_molecular_formulas(dat)
-  expected_result <- Rdisop::decomposeMass(150)$formula[[1]]
+  expected_result <- decomposeMass(150)$formula[[1]]
   expect_equal(result$predicted_molecular_formulas[[1]], expected_result)
 })
 

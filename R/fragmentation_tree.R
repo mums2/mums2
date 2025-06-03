@@ -28,7 +28,7 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = 
 
 
 compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, num_threads) {
-  parent_decomp <- Rdisop::decomposeMass(parent_mass, ppm = parent_ppm)
+  parent_decomp <- decomposeMass(parent_mass, ppm = parent_ppm)
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
   invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
   if(length(parent_decomp$formula) <= 0) {
@@ -52,7 +52,7 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
     if(parent_mass < list_of_mz_int$mz[[i]]){
       next
     }
-    decompList[[i]] <- Rdisop::decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
+    decompList[[i]] <- decomposeIsotopes(list_of_mz_int$mz[[i]], list_of_mz_int$intensity[[i]])
   }
   full_data <- c()
   color_count <- 1

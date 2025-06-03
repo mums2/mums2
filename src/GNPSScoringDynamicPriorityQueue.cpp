@@ -77,13 +77,12 @@ std::vector<ScoreValues> GNPSScoringDynamicPriorityQueue::ConstructPriorityQueue
     //std::priority_queue<ScoreValues, std::vector<ScoreValues>, CompareScores> queue;
     std::vector<ScoreValues> score_values_vector(sizeOfHeapArray);
     int count = 0;
-    for(auto&[key, indexes] : map) {
-        const double intensityOneValue = intensitiesOne[key];
-        for(const auto index : indexes) {
+    for(auto& value : map) {
+        const double intensityOneValue = intensitiesOne[value.first];
+        for(const auto index : value.second) {
             const double intensityTwoValue = intensitiesTwo[index];
             const double score = intensityOneValue * intensityTwoValue;
-            score_values_vector[count++] = {key, index,score};
-            //queue.push({key, index,score});
+            score_values_vector[count++] = {value.first, index,score};
         }
     }
     return score_values_vector;
@@ -95,16 +94,16 @@ double GNPSScoringDynamicPriorityQueue::ScoreMatches(
     std::unordered_set<int> usedPeakTwo;
     double totalScore = 0;
     while(!queue.empty()) {
-        auto [indexOne, indexTwo, score] = queue.front();
-        if(usedPeakOne.find(indexOne) != usedPeakOne.end()||
-            usedPeakTwo.find(indexTwo) != usedPeakTwo.end()) {
+        ScoreValues value = queue.front();
+        if(usedPeakOne.find(value.indexOne) != usedPeakOne.end()||
+            usedPeakTwo.find(value.indexTwo) != usedPeakTwo.end()) {
             std::pop_heap(queue.begin(), queue.end(), CompareScores());
             queue.pop_back();
             continue;
         }
-        usedPeakOne.insert(indexOne);
-        usedPeakTwo.insert(indexTwo);
-        totalScore += score;
+        usedPeakOne.insert(value.indexOne);
+        usedPeakTwo.insert(value.indexTwo);
+        totalScore += value.score;
         numberOfPeakMatches ++;
         if(numberOfPeakMatches >= static_cast<int>(countOfSpectraOne))
             break;

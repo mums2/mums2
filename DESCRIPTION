@@ -34,7 +34,8 @@ Imports:
     utils,
     stats,
     parallel,
-    progress
+    progress,
+    Rdisop
 Suggests: 
     knitr,
     rmarkdown,

@@ -30,7 +30,9 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, iterations)
+  result$diversity[is.nan(result$diversity)] <- 0
+  return(result)
 }
 
 

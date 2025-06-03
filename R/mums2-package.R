@@ -26,8 +26,11 @@
 #' @importFrom parallel detectCores
 #' @importFrom progress progress_bar
 #' @importFrom Rcpp sourceCpp
+#' @importFrom Rdisop decomposeIsotopes
+#' @importFrom Rdisop decomposeMass
 #' @importFrom stats as.dist
 #' @importFrom tibble column_to_rownames
+#' @importFrom utils head
 #' @importFrom utils tail
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
