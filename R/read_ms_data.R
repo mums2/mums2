@@ -68,6 +68,10 @@ read_mgf <- function(file) {
 #' @description Reader function msp files
 #' @param msp_file the file path of your msp file
 read_msp <- function(msp_file) {
+  extension <- tail(strsplit(msp_file, split = "\\.")[[1]], 1)
+  if(tolower(extension) != "msp") {
+    stop(paste0("Please ensure the input file is a msp, it is currently a .", extension))
+  }
   print(paste0("Reading: ", msp_file, " ..."))
   return(ReadMsp(msp_file))
 }

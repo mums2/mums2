@@ -6,10 +6,17 @@
 #include <cstdint>
 #include <numeric>
 #include <algorithm>
+#include <RcppThread.h>
+#include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
+#include "Chemicals/MolecularFormula/MolecularMakeup.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
+#include "FragmentationTree/FragmentationTree.h"
+#include "FragmentationTree/GreedyHeuristic.h"
+#include "Math/VectorMath.h"
 #include "Spectra/ReadSpectra.h"
 
 Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& abundances, const std::string& diversityIndex) {
@@ -121,20 +128,13 @@ Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& in
 // [[Rcpp::export]]
 Rcpp::List ReadMgf(const std::string& path) {
     ReadSpectra spectra;
-    return(spectra.ReadMGF(path));
+    return spectra.ReadMGF(path);
 }
 
 // [[Rcpp::export]]
 Rcpp::List ReadMsp(const std::string& path) {
     ReadSpectra spectra;
-    return(spectra.ReadMSP(path));
-}
-
-double DotProduct(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    double dotValue = Rcpp::sum(x * y);
-    double magnitudeOne = std::sqrt(Rcpp::sum(Rcpp::pow(x, 2)));
-    double magnitudeTwo = std::sqrt(Rcpp::sum(Rcpp::pow(y, 2)));
-    return dotValue / (magnitudeOne * magnitudeTwo);
+    return spectra.ReadMSP(path);
 }
 
 // [[Rcpp::export]]
@@ -146,7 +146,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     for (size_t i = 0; i < currentSize; i++) {
         double currentMz1 = mz1[i];
         double currentRt1 = rt1[i];
-        Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2);
+        Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2) * 1e6 / currentMz1;
         Rcpp::NumericVector rtError = Rcpp::abs(currentRt1 - rt2);
         double bestDotProduct = 0;
         for (int j = 0; j < mzError.size(); j++) { // Pick score with the closest dotProduct value
@@ -155,7 +155,7 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
             // Otherwise
             // Check if the similarity score (the dot product) is closer than the last one
             // If so replace
-            double dotProduct = DotProduct({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
+            double dotProduct = VectorMath::CosineScore({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
             if (dotProduct < bestDotProduct) continue;
             resultsIndexes[i] = j + 1; // To match with R indexes add 1
             bestDotProduct = dotProduct;
@@ -166,15 +166,15 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     return resultsIndexes;
 }
 
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
-Rcpp::NumericVector VectorizedSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    return x - y;
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector NormalSubtract(Rcpp::NumericVector x, Rcpp::NumericVector y) {
-    for(int i = 0; i < x.size(); i++) {
-        x[i] = x[i] - y[i];
-    }
-    return x;
+std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
+    const double parentMass, const int numberOfThreads) {
+    const int size = molecularFormulas.size();
+    FragmentationTree tree(molecularFormulas, parentMass);
+    RcppThread::parallelFor(0, size, [&tree](int i) {
+        tree.AddMolecularFormulaToGraph(i);
+    }, numberOfThreads);
+    return GreedyHeuristic::CalculateHeuristic(tree);
 }

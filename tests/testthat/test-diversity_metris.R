@@ -140,11 +140,19 @@ test_that("Test dist_shared errors when
   expect_error(dist_shared(result, 400, 10, "bray", 100))
 })
 
-test_that("Test dist_shared errors with wrong index", {
+test_that("Test dist_shared errors with wrong object", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   expect_error(dist_shared(result, 400, 10, "asad", 100))
+})
+
+test_that("Test dist_shared errors with wrong index", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  result <- cluster_data(distances, dat,  0.3, "opticlust")
+  communiy_object <- create_community_matrix_object(result)
+  expect_error(dist_shared(communiy_object, 400, 10, "asad", 100))
 })
 
 test_that("Alpha summary returns the proper results for simpsons",{

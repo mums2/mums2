@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 struct Spectra final {
+    Spectra() = default;
     Spectra(std::string name, const  std::vector<double>& mz, const  std::vector<double>& intensity, const double precursorMz):name(std::move(name)), 
     mz(mz),intensity(intensity),precursorMz(precursorMz) {};
     std::string name;

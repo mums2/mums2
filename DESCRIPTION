@@ -19,6 +19,7 @@ BugReports: https://github.com/mums2/mums2/issues
 biocViews:
 LinkingTo: 
     Rcpp,
+    RcppThread,
     testthat,
     RcppProgress
 Imports: 
@@ -31,7 +32,9 @@ Imports:
     mpactr,
     mzR,
     utils,
-    stats
+    stats,
+    parallel,
+    progress
 Suggests: 
     knitr,
     rmarkdown,

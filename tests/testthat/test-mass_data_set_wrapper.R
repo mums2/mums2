@@ -25,7 +25,7 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
     filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
     filter_peak_table(filter_insource_ions_parameters())
 
-  mgf_files <- list.files(test_path("exttestdata"), pattern = ".mgf", full.names = TRUE)
-  ms2_matches <- ms2_ms1_compare(mgf_files, data, 100, 150)
+  mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
+  ms2_matches <- ms2_ms1_compare(mzxml_files, data, 100000, 150)
   expect_true(nrow(ms2_matches$ms2_matches) > 0)
 })

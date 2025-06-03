@@ -9,6 +9,8 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 
+#include "CustomProgressBar/ETAProgressBar.h"
+
 Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::ifstream spectraData(filePath);
     std::string line;
@@ -17,7 +19,6 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::list<double> mz;
     std::list<double> intensity;
     std::unordered_map<std::string, std::vector<std::string>> map;
-
     spectraData.unsetf(std::ios_base::skipws);
     // count the newlines with an algorithm specialized for counting:
     unsigned long line_count = std::count(
@@ -59,6 +60,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         }
 
     }
+    spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     for (const auto& value : map) {
@@ -71,6 +73,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         intensityContainer.pop_front();
         mzContainer.pop_front();
     }
+
     return Rcpp::List::create(Rcpp::Named("ms2_table") = dataFrame,
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
@@ -131,6 +134,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         intensity.emplace_back(std::stod(intensityValue));
 
     }
+    spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     Rcpp::List mspList(spectraPeaks);
