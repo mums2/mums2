@@ -11,7 +11,7 @@
 class MolecularFormulaSimilarity {
     public:
     static double ComputeSimilarity(const Rcpp::String& formula, const Rcpp::String& other) {
-        if (formula.get_cstring() == "" || other.get_cstring() == "") return 0;
+        if (formula.get_cstring()[0] == '\0' || other.get_cstring()[0] == '\0') return 0;
         
         const MolecularMakeup makeup(formula);
         const MolecularMakeup otherMolecularMakeup(other);
@@ -24,7 +24,7 @@ class MolecularFormulaSimilarity {
         for (const auto& element : otherAlphabet) {
             uniqueAlphabet.insert(element);
         }
-        int size = static_cast<int>(uniqueAlphabet.size());
+        const int size = static_cast<int>(uniqueAlphabet.size());
         Rcpp::NumericVector formulaAtoms(size);
         Rcpp::NumericVector otherFormulaAtoms(size);
         int count = 0;
