@@ -18,6 +18,7 @@ std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
         }
         if (nodes[i].index < nodes[chosenIndex].index) chosenIndex = i;
     }
+    Rcpp::Rcout << "Chosen Index: " << chosenIndex << std::endl;
     //Get all nodes of color 0
     // for (const auto & node : nodes) {
     //     if (node.color != 0) continue;
