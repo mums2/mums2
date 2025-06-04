@@ -66,7 +66,7 @@ context("Fragmentation Tree") {
         tree.AddMolecularFormulaToGraph(2);
         tree.AddMolecularFormulaToGraph(3);
         tree.SortFragmentationNodes();
-        expect_true(tree.GetFragmentationNodes().front().subTreeScore == 0);
+        expect_true(tree.GetFragmentationNodes().front().subTreeScore > tree.GetFragmentationNodes()[1].subTreeScore);
     }
 
 
