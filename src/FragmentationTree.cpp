@@ -25,7 +25,7 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
 }
 
 void FragmentationTree::SortFragmentationNodes() {
-    std::sort(molecularNodeList.begin(), molecularNodeList.end(), CompareFragmentationNodes());
+    std::stable_sort(molecularNodeList.begin(), molecularNodeList.end(), CompareFragmentationNodes());
 }
 
 void FragmentationTree::CollectResultFromNode(const std::list<int>& parentIndexes, const double subtreeScore,

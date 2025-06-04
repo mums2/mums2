@@ -7,7 +7,6 @@
 std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
     // In worse case scenario, return the first node, which will always
     // be a node of the parent index
-    const FragmentationNode& backUpNode = tree.GetFragmentationNodes()[0];
     tree.SortFragmentationNodes();
     const std::vector<FragmentationNode>& nodes = tree.GetFragmentationNodes();
     //Get all nodes of color 0
@@ -16,6 +15,6 @@ std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
         return node.formula.GetMolecularFormula();
     }
     // Should be unreachable
-    Rcpp::warning("Returning first molecular formula. ");
-    return backUpNode.formula.GetMolecularFormula();
+    Rcpp::warning("Returning empty molecular formula. ");
+    return "";
 }
