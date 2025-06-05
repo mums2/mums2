@@ -14,3 +14,4 @@
 ^README\.Rmd$
 ^CMakeLists\.txt$
 ^src/CMakeLists\.txt$
+^\.github$

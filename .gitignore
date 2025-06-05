@@ -222,3 +222,6 @@ src/CMakeLists.txt
 inst/doc
 
 /Ms2/
+
+MassBank_NIST.msp
+MassBank_RIKEN.msp

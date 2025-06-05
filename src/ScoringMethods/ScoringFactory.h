@@ -10,8 +10,8 @@
 
 class ScoringFactory {
 public:
-    ScoringFactory(const Rcpp::List& parameters);
-    double CalculateScore(const Spectra& firstSpectra, const Spectra& secondSpectra) const;
+    explicit ScoringFactory(const Rcpp::List& parameters);
+    double CalculateScore(const Spectra &firstSpectra, const Spectra &secondSpectra, size_t minPeaks) const;
     ~ScoringFactory() {
         if (currentScoringAlgorithm)
             delete currentScoringAlgorithm;

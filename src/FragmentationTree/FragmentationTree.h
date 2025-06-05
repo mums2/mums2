@@ -1,0 +1,35 @@
+//
+// Created by gregj on 5/10/2025.
+//
+
+#ifndef FRAGEMENTATIONTREE_H
+#define FRAGEMENTATIONTREE_H
+#include <mutex>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <Rcpp.h>
+#include "FragmentationNode.h"
+
+
+class FragmentationTree {
+public:
+    FragmentationTree() = default;
+    FragmentationTree(const Rcpp::List& fragmentationData, double);
+    const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
+    void SortFragmentationNodes();
+    void AddMolecularFormulaToGraph(int currentIndex);
+
+private:
+    void Initialize(const Rcpp::List& fragmentationData);
+    void CollectResultFromNode(const std::list<int>& parentIndexes, double subtreeScore, int index);
+    // Keys of the same color represent the same mz, int (isotope).
+    std::vector<FragmentationNode> molecularNodeList;
+    std::mutex mutexLock;
+    double parentMass;
+    int size;
+};
+
+
+
+#endif //FRAGEMENTATIONTREE_H

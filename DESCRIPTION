@@ -19,6 +19,7 @@ BugReports: https://github.com/mums2/mums2/issues
 biocViews:
 LinkingTo: 
     Rcpp,
+    RcppThread,
     testthat,
     RcppProgress
 Imports: 
@@ -30,11 +31,16 @@ Imports:
     data.table,
     mpactr,
     mzR,
-    utils
+    utils,
+    stats,
+    parallel,
+    progress,
+    Rdisop
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    xml2
+    xml2,
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr

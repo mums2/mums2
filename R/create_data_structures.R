@@ -21,8 +21,10 @@ create_community_matrix <- function(cluster_object) {
 create_count_table <- function(ms2_match_data) {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
   peak_table <- ms2_match_data$ms1_data[ ,-c(2, 3, 4)]
-  peak_table$cor <- NULL
+  if("cor" %in% colnames(peak_table)) {
+    peak_table$cor <- NULL
+  }
   samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
   return(data.frame(Representative_Sequence = samples$Compound, 
                     total = rowSums(samples[,-1]), samples[,-1], check.names = FALSE))
-}
+  }
