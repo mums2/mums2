@@ -1,8 +1,9 @@
 #' @export
-#' @title Convert distance data frame to a distance object
+#' @title Convert distance data frame to a distance object.
 #' @description Converts the object generated from `dist_shared()` to a 
 #' `dist` object.
 #' @param distance_data_frame the object generated from the `dist_shared()` function.
+#' @return a `dist` object.
 community_object_to_distance_object <- function(distance_data_frame) {
   dist_object <- matrix(distance_data_frame$diversity,
          sqrt(nrow(distance_data_frame)), sqrt(nrow(distance_data_frame)))

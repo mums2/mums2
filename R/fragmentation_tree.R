@@ -1,12 +1,16 @@
 
 
 #' @export
-#' @title compute_molecular_formulas
+#' @title Compute Molecular formula
 #' @description
-#' Clusters the data together
-#' @param mass_data your mass_data object
-#' @param parent_ppm ppm
-#' @param num_threads data
+#' De-novo algorithm for computing molecular formulas. Using fragmentation trees we are able to generate
+#' a resultant molecular formula. To ensure efficent we are using a greedy heurstic to generate the resultant formula.
+#' Although this may not always result in the correct prediction, it allows us to efficently calculate a multitude
+#' of chemical formulas.
+#' @param mass_data your mass_data object generated from `ms2_ms1_compare()`
+#' @param parent_ppm the ppm you wish to generate the candidate molecular formulas.
+#' @param num_threads the amount of threads we the algorithm will use. 
+#' @return your mass_data object with an additional `character` vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = detectCores()) {
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)

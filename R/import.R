@@ -1,6 +1,7 @@
 #' @export
 #' @title Import all data
-#' @description This function is a wrapper for the mpactr import_data function. It will import your peak table and meta data and create a mpactr_object.
+#' @description This function is a wrapper for the mpactr import_data function. 
+#' It will import your peak table and meta data and create a mpactr_object.
 #' @param peak_table The file path to your feature table
 #' file.
 #' @param meta_data The file path to your meta_data file or `data.frame`.
