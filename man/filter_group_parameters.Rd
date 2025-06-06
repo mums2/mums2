@@ -31,3 +31,6 @@ a \code{list} object of arguments needed to call the given mpactr function when 
 Creates a list of filter group arguments
 for the \code{filter_peak_table()} function
 }
+\examples{
+filter_group_parameters(group_to_remove = "blank")
+}

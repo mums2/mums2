@@ -19,13 +19,31 @@ filter_peak_table(mpactr_object, params)
 \method{filter_peak_table}{filter_insource_ions}(mpactr_object, params)
 }
 \arguments{
-\item{mpactr_object}{the mpactr_object is an object generated from the \code{import_all_data()} function. This is how we begin our pipeline.}
+\item{mpactr_object}{the mpactr_object is an object generated from the \code{import_all_data()} function.
+This is how we begin our pipeline.}
 
-\item{params}{the list of arguments generated from calling one of these functions: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}.}
+\item{params}{the list of arguments generated from calling one of these functions:
+\code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()},
+and \code{filter_insource_ions_parameters()}.}
 }
 \value{
 a \code{mpactr} object that has been filter based on the supplied parameters.
 }
 \description{
-This function is a wrapper for all of mpactr's filter functions. When called with a list of paramters that was generated from one of the following functions, it will call the subsequent filter: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()}, \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}. You can also find more information on these functions in\code{mpactr} documentation.
+This function is a wrapper for all of mpactr's filter functions.
+When called with a list of paramters that was generated from one of the following functions,
+it will call the subsequent filter: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()},
+\code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}. You can also find more information
+on these functions in\code{mpactr} documentation.
+}
+\examples{
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                            meta_data = mums2::example("squid_meta_data.csv"), 
+                             format = "None")
+
+squid_filter <- squid_data |>
+   filter_peak_table(filter_mispicked_ions_parameters()) |>
+   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_insource_ions_parameters())
 }

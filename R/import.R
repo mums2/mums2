@@ -1,11 +1,16 @@
 #' @export
 #' @title Import all data
-#' @description This function is a wrapper for the mpactr import_data function. It will import your peak table and meta data and create a mpactr_object.
+#' @description This function is a wrapper for the mpactr import_data function. 
+#' It will import your peak table and meta data and create a mpactr_object.
 #' @param peak_table The file path to your feature table
 #' file.
 #' @param meta_data The file path to your meta_data file or `data.frame`.
 #' @param format The expected exported type of your peak table, can be
 #' one of "Progenesis", "Metaboscape", "None".
+#' @examples
+#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#'                              format = "None")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
   return(import_data(peak_table = peak_table,
@@ -15,11 +20,18 @@ import_all_data <- function(peak_table, meta_data, format) {
 
 #' @export
 #' @title Change RT time to minutes or seconds
-#' @description This function will change your ms1 peak table rt time to rt time in seconds or minutes
+#' @description This function will change your ms1 peak table rt time to 
+#' rt time in seconds or minutes. This modification happens in place (or by reference),
+#' so the `mpactr_object` will be updated.
 #' @param mpactr_object The object created from `import_all_data()`
 #' file.
 #' @param rt_type how you want to convert your retention time, your options are minutes, or seconds.
 #' defaults to seconds.
+#' @examples
+#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#'                              format = "None")
+#' change_rt_to_seconds_or_minutes(squid_data, "minutes")
 #' @returns a modified `mpactr` object.
 change_rt_to_seconds_or_minutes <- function(mpactr_object, rt_type = "seconds") {
   if(!("filter_pactr" %in% class(mpactr_object))) {

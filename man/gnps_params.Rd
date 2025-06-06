@@ -25,6 +25,10 @@ compare peaks data, apply a square root normalization to peak intensities,
 align peaks both with and without correction for mass shifts, and calculate
 similarity.
 }
+\examples{
+gnps_params(0.5)
+
+}
 \references{
 Mingxun Wang, Jeremy J. Carver, Vanessa V. Phelan, Laura M. Sanchez,
 Neha Garg, Yao Peng, Don Duy Nguyen et al. "Sharing and community curation

@@ -15,6 +15,23 @@ ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 
 \item{rt_tolerance}{your retention time tolerance}
 }
+\value{
+returns a \code{mass_data} object of all of the matches.
+}
 \description{
 We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
+}
+\examples{
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                            meta_data = mums2::example("squid_meta_data.csv"), 
+                             format = "None")
+
+squid_filter <- squid_data |>
+   filter_peak_table(filter_mispicked_ions_parameters()) |>
+   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_insource_ions_parameters())
+
+
+ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 }

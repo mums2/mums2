@@ -15,7 +15,7 @@ rarefy_ms(community_object, size, threshold)
 must be >= this value to be retained.}
 }
 \value{
-A \code{matrix} of rarefied feature intensities.
+A \code{external_pointer} that references a community matrix of rarefied feature intensities.
 }
 \description{
 \code{rarefy_ms()} performs a single subsampling of MS1 features in sample.
@@ -27,12 +27,27 @@ of samples at diffrent dilutions regardless of the desired
 submsampling \code{size}.
 }
 \examples{
-set.seed(71)
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                            meta_data = mums2::example("squid_meta_data.csv"), 
+                             format = "None")
 
-sample1 <- tibble::tibble(
-   mz = seq(100, 1000, by = 100),
-   abund = round(runif(10, 1000, 5e5)))
+squid_filter <- squid_data |>
+   filter_peak_table(filter_mispicked_ions_parameters()) |>
+   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_insource_ions_parameters())
 
 
+matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+ squid_filter, 2, 6)
+
+dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+ score_params = gnps_params(0.5), min_peaks = 0)
+
+cluster_results <- cluster_data(distance_df = dist,
+ ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
+
+community_object <- create_community_matrix_object(cluster_results)
+rarefy_ms(community_object, 4000, 100)
 
 }

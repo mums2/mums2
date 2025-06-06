@@ -53,6 +53,9 @@ Calculate spectral entropy similarity between two MS2 spectra
 the \code{msentropy} package (Li et al. 2021). For more information about
 parameters, see \code{\link[msentropy:msentropy_similarity]{msentropy::msentropy_similarity()}}.
 }
+\examples{
+spec_entropy_params()
+}
 \references{
 Li, Y., Kind, T., Folz, J. et al. Spectral entropy outperforms MS/MS dot
 product similarity for small-molecule compound identification, Nat Methods
