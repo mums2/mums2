@@ -3,7 +3,7 @@
 #' @description
 #' Takes you mass_data object and creates a community matrix object. This object is used to compute diversity calculations.
 #' @param data the result of the `cluster_data()` function, or just a mass_data object created from `ms2_ms1_compare()`.
-#' @returns a external pointer to an Rcpp object.
+#' @return a external pointer to an Rcpp object.
 create_community_matrix_object <- function(data) {
   return(UseMethod("create_community_matrix_object", data))
 }

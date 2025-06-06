@@ -4,7 +4,7 @@
 #' Using your community_object, we are able to convert it into a community matrix for easier
 #' usability of the object.
 #' @param cluster_object the result of the `cluster_data()` function. 
-#' @returns a `data.frame` object of your community_object.
+#' @return a `data.frame` object of your community_object.
 create_community_matrix <- function(cluster_object) {
   df <- get_abundance(cluster_object)
   samples <- unique(df$samples)
