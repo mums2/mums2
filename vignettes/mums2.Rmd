@@ -182,7 +182,7 @@ pcoa_points |>
 
 ```
 
-Without clustering
+MDS plot without clustering the data.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj_no_cluster <- community_object_to_distance_object(avg_no_cluster)
@@ -220,7 +220,7 @@ par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
 
-Graph Without Clustering
+Hierarchical cluster Without using the clustered data
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj_no_cluster, "complete")
 par(cex=0.6, mar=c(5, 8, 4, 1))
