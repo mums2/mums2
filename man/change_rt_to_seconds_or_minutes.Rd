@@ -17,5 +17,13 @@ defaults to seconds.}
 a modified \code{mpactr} object.
 }
 \description{
-This function will change your ms1 peak table rt time to rt time in seconds or minutes
+This function will change your ms1 peak table rt time to
+rt time in seconds or minutes. This modification happens in place (or by reference),
+so the \code{mpactr_object} will be updated.
+}
+\examples{
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                            meta_data = mums2::example("squid_meta_data.csv"), 
+                             format = "None")
+change_rt_to_seconds_or_minutes(squid_data, "minutes")
 }

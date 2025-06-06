@@ -10,6 +10,21 @@
 #' @param mass_data your mass_data object generated from `ms2_ms1_compare()`
 #' @param parent_ppm the ppm you wish to generate the candidate molecular formulas.
 #' @param num_threads the amount of threads we the algorithm will use. 
+#' @examples
+#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#'                              format = "None")
+#'
+#' squid_filter <- squid_data |>
+#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+#'    filter_peak_table(filter_insource_ions_parameters())
+#'
+#'
+#' matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#'  squid_filter, 2, 6)
+#' compute_molecular_formulas(matched_data)
 #' @return your mass_data object with an additional `character` vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = detectCores()) {
   size <- length(mass_data$peak_data)

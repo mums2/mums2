@@ -21,3 +21,6 @@ a \code{list} object of arguments needed to call the given mpactr function when 
 Creates a list of filter insource ions arguments
 for the \code{filter_peak_table()} function
 }
+\examples{
+filter_insource_ions_parameters()
+}

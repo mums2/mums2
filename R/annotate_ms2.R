@@ -38,7 +38,25 @@
 #'  are reported in the `"score"` column. `query_formula` and `chemical_similarity`
 #'  are also reported. Annotation information is returned
 #'  given the information provided in the reference used as input.
+#' @examples
+#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#'                              format = "None")
 #'
+#' squid_filter <- squid_data |>
+#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+#'    filter_peak_table(filter_insource_ions_parameters())
+#'
+#'
+#'  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#'  squid_filter, 2, 6)
+#'  psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+#'  annotations <- annotate_ms2(mass_data = matched_data, 
+#'    reference = psu_msmls, scoring_params = gnps_params(0.5),
+#'    precursor_tolerance = 1000, 
+#'    min_score =  0.1, chemical_min_score = .1)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params, 
 #'                          precursor_tolerance, min_score, 
