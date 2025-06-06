@@ -14,10 +14,10 @@
 #'
 #'
 #' @param mass_data The object generated from `ms2_ms1_compare()`.
-#' @param reference A list of reference data downloaded from
-#'  \href{https://massdatabase.tidymass.org}{massdatabase}.
-#' for more information about this class.
-#' @param scoring_params Parameters for scoring method to be applied.
+#' @param reference Your reference database generated from the `read_msp()` function.
+#' We currently only support msp files.
+#' @param scoring_params Parameters for scoring method to be applied. This can be either
+#' `gnps_params()` or `spec_entropy_params()`.
 #' @param precursor_tolerance Precursor mz tolerance. MS2 scans with a
 #'  difference in precursor mz less than or equal to this value will be scored.
 #' @param min_score Similarity score threshold to determine a match for
@@ -35,10 +35,28 @@
 #'  (the retention time for the scan). `query_mz` and `query_rt` are derived
 #'  from the ms2 matches data. A column (`"ref_idx`) is included to report the
 #'  location for the matching reference molecule in `"reference"`. Scores
-#'  are reported in the `"score"` column. Annotation information is returned
+#'  are reported in the `"score"` column. `query_formula` and `chemical_similarity`
+#'  are also reported. Annotation information is returned
 #'  given the information provided in the reference used as input.
+#' @examples
+#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#'                              format = "None")
 #'
-#' @importFrom stats setNames
+#' squid_filter <- squid_data |>
+#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+#'    filter_peak_table(filter_insource_ions_parameters())
+#'
+#'
+#'  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#'  squid_filter, 2, 6)
+#'  psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+#'  annotations <- annotate_ms2(mass_data = matched_data, 
+#'    reference = psu_msmls, scoring_params = gnps_params(0.5),
+#'    precursor_tolerance = 1000, 
+#'    min_score =  0.1, chemical_min_score = .1)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params, 
 #'                          precursor_tolerance, min_score, 

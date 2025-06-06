@@ -16,8 +16,10 @@
 #' @param frag_tolerance The mz fragment tolerance threshold for aligning
 #' fragment peaks from two ms2 spectra. GNPS default = 0.5.
 #'
+#' @examples
+#' gnps_params(0.5)
+#' 
 #' @return A parameters list for similarity scoring method "gnps"
-#'
 #' @references
 #' Mingxun Wang, Jeremy J. Carver, Vanessa V. Phelan, Laura M. Sanchez,
 #' Neha Garg, Yao Peng, Don Duy Nguyen et al. "Sharing and community curation
@@ -60,7 +62,8 @@ gnps_params <- function(frag_tolerance) {
 #' calculation. Set to -1 to disable. Defaults to `100`.
 #' @param weighted `logical` whether weighted or unweighted entropy similarity
 #' will be calculated. Defaults to `TRUE`.
-#'
+#' @examples 
+#' spec_entropy_params()
 #' @return A parameters list for similarity scoring method "spectral_entropy"
 #'
 #' @export

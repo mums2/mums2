@@ -23,11 +23,11 @@ annotate_ms2(mass_data, reference, scoring_params,
 \arguments{
 \item{mass_data}{The object generated from \code{ms2_ms1_compare()}.}
 
-\item{reference}{A list of reference data downloaded from
-\href{https://massdatabase.tidymass.org}{massdatabase}.
-for more information about this class.}
+\item{reference}{Your reference database generated from the \code{read_msp()} function.
+We currently only support msp files.}
 
-\item{scoring_params}{Parameters for scoring method to be applied.}
+\item{scoring_params}{Parameters for scoring method to be applied. This can be either
+\code{gnps_params()} or \code{spec_entropy_params()}.}
 
 \item{precursor_tolerance}{Precursor mz tolerance. MS2 scans with a
 difference in precursor mz less than or equal to this value will be scored.}
@@ -52,7 +52,8 @@ object), \code{"query_mz"} (the precursor mz for the scan), and \code{"query_rt"
 (the retention time for the scan). \code{query_mz} and \code{query_rt} are derived
 from the ms2 matches data. A column (\verb{"ref_idx}) is included to report the
 location for the matching reference molecule in \code{"reference"}. Scores
-are reported in the \code{"score"} column. Annotation information is returned
+are reported in the \code{"score"} column. \code{query_formula} and \code{chemical_similarity}
+are also reported. Annotation information is returned
 given the information provided in the reference used as input.
 }
 \description{
@@ -67,4 +68,25 @@ spectral scoring methods. Currently scoring methods \code{"gnps"} and
 chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
 created with notur functions \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}},
 respectively.
+}
+\examples{
+squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
+                            meta_data = mums2::example("squid_meta_data.csv"), 
+                             format = "None")
+
+squid_filter <- squid_data |>
+   filter_peak_table(filter_mispicked_ions_parameters()) |>
+   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_insource_ions_parameters())
+
+
+ matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+ squid_filter, 2, 6)
+ psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+ annotations <- annotate_ms2(mass_data = matched_data, 
+   reference = psu_msmls, scoring_params = gnps_params(0.5),
+   precursor_tolerance = 1000, 
+   min_score =  0.1, chemical_min_score = .1)
+
 }
