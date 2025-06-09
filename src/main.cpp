@@ -7,6 +7,7 @@
 #include <numeric>
 #include <algorithm>
 #include <RcppThread.h>
+#include <mutex>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 #include "Chemicals/MolecularFormula/MolecularMakeup.h"
@@ -59,48 +60,59 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
+std::vector<uint32_t> ComputeRarefaction(const std::vector<uint32_t> & abundance,
+    const std::vector<uint32_t> & eligibleIndex, std::vector<uint32_t> & availableIndexValues, const uint32_t size,
+     const uint32_t sum, const uint32_t threshold) {
+    return Rarefaction::Rarefy(abundance, eligibleIndex,
+            availableIndexValues, size, sum, threshold);
+
+}
+
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
-    const uint32_t threshold) {
+    const uint32_t threshold, const int numOfThreads) {
 
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
     const int col = matrix.get()->GetColumn();
     const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
     const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
-
-    Rarefaction rarefaction;
+    std::vector<std::string> names = Rcpp::as<std::vector<std::string> >(rowNames);
+    std::mutex mut;
     std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
+    const std::vector<std::vector<uint32_t>>& communityAbundances = matrix.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
-    std::vector<std::vector<uint32_t>> eligibleAbundances = matrix.get()->GetRowAbundances();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
-    for(int i = 0; i < row; i++) {
-        const std::vector<uint32_t> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
-        const auto results = rarefaction.Rarefy(communityVector, eligibleIndexes[i], allIndexes[i],
-                                                 size, sums[i], threshold);
 
+    RcppThread::parallelFor(0, row, [&mut, &resultantMatrix, &communityAbundances, &allIndexes, &eligibleIndexes, &size, &sums,
+        &threshold](int i) {
+        const std::vector<uint32_t> result = ComputeRarefaction(communityAbundances[i], eligibleIndexes[i],
+        allIndexes[i], size, sums[i], threshold);
+        mut.lock();
         for(const auto& index : eligibleIndexes[i]) {
-            resultantMatrix(i, index) = results.at(index);
+            resultantMatrix(i, index) = result.at(index);
         }
-
-    }
+        mut.unlock();
+    }, numOfThreads);
     Rcpp::rownames(resultantMatrix) = rowNames;
     Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
 }
 
+
+
 // [[Rcpp::export]]
 Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
-    const uint32_t size, const uint32_t threshold, const int iterations = 1000) {
+    const uint32_t size, const uint32_t threshold, const int numOfThreads, const int iterations = 1000) {
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
 
     Rcpp::NumericMatrix diversityMatrix = CalculateDiversity(RarefactionCalculation(communityObject,
-        size, threshold), index);
+        size, threshold, numOfThreads), index);
     for(int i = 1; i < iterations; i++) {
         Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityObject,
-            size, threshold);
+            size, threshold, numOfThreads);
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
     }
     diversityMatrix = diversityMatrix/iterations;

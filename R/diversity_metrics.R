@@ -44,7 +44,9 @@ diversity <- function(community_object, diversity_index){
 #' in the rarefaction sum.
 #' @param diversity_index the diversity index you wish to calculate diversity. You can choose from:
 #' bray, jaccard, soren, hamming, morista, and thetayc.
-#' @param iterations the amount of times you wish to run your diversity metrics.
+#' @param iterations the amount of times you wish to run your calculation.
+#' @param number_of_threads the amount of threads you want to use for this calculation.
+#' Default is to use all threads.
 #' @examples 
 #' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
 #'                             meta_data = mums2::example("squid_meta_data.csv"), 
@@ -66,7 +68,7 @@ diversity <- function(community_object, diversity_index){
 #' community_object <- create_community_matrix_object(cluster_results)
 #' dist_shared(community_object, 4000, 100, "bray", 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
-dist_shared <- function(community_object, size, threshold, diversity_index = "bray", iterations = 1000) {
+dist_shared <- function(community_object, size, threshold, diversity_index = "bray", iterations = 100, number_of_threads = detectCores()) {
   diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -76,7 +78,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold, iterations)
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, number_of_threads, iterations)
   result$diversity[is.nan(result$diversity)] <- 0
   return(result)
 }
@@ -91,7 +93,9 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' in the rarefaction sum.
 #' @param diversity_index the diversity index you wish to calculate diversity, the two options are
 #' shannon or simpson.
-#' @param iterations the amount of times you wish to run your diversity metrics.
+#' @param iterations the amount of times you wish to run your calculation.
+#' @param number_of_threads the amount of threads you want to use for this calculation.
+#' Default is to use all threads.
 #' @examples 
 #' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
 #'                             meta_data = mums2::example("squid_meta_data.csv"), 
@@ -113,7 +117,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' community_object <- create_community_matrix_object(cluster_results)
 #' alpha_summary(community_object, 4000, 100, "shannon", iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
-alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon", iterations = 1000) {
+alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon", iterations = 1000, number_of_threads = detectCores()) {
   diversity_index_list <- c("shannon", "simpson")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -124,5 +128,5 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, iterations))
+  return(FasterAvgDist(community_object, diversity_index, size, threshold, number_of_threads, iterations))
 }

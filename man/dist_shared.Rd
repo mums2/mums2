@@ -9,7 +9,8 @@ dist_shared(
   size,
   threshold,
   diversity_index = "bray",
-  iterations = 1000
+  iterations = 100,
+  number_of_threads = detectCores()
 )
 }
 \arguments{
@@ -23,7 +24,10 @@ in the rarefaction sum.}
 \item{diversity_index}{the diversity index you wish to calculate diversity. You can choose from:
 bray, jaccard, soren, hamming, morista, and thetayc.}
 
-\item{iterations}{the amount of times you wish to run your diversity metrics.}
+\item{iterations}{the amount of times you wish to run your calculation.}
+
+\item{number_of_threads}{the amount of threads you want to use for this calculation.
+Default is to use all threads.}
 }
 \value{
 a \code{data.frame} object that shows the dissimilarity between all samples.
