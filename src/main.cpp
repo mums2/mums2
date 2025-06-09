@@ -77,8 +77,8 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
         const std::vector<uint32_t> communityVector = matrix.get()->GetCommunityMatrixByRow(i);
-        const auto results = rarefaction.Rarefy(communityVector, eligibleIndexes[i], allIndexes[i],
-                                                 size, sums[i], threshold);
+        const auto results = rarefaction.Rarefy(communityVector, eligibleIndexes[i],
+            allIndexes[i], size, sums[i], threshold);
 
         for(const auto& index : eligibleIndexes[i]) {
             resultantMatrix(i, index) = results.at(index);
@@ -88,6 +88,15 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     Rcpp::rownames(resultantMatrix) = rowNames;
     Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
+}
+
+std::vector<uint32_t> GetRowRarefaction( const std::vector<uint32_t> & abundance,
+    const std::vector<uint32_t> & eligibleIndex, std::vector<uint32_t> & availableIndexValues, const uint32_t size,
+     const uint32_t sum, const uint32_t threshold) {
+    Rarefaction rarefaction;
+    return rarefaction.Rarefy(abundance, eligibleIndex,
+            availableIndexValues, size, sum, threshold);
+
 }
 
 // [[Rcpp::export]]
