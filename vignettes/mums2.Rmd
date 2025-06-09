@@ -3,8 +3,10 @@ title: "mums2"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{mums2}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -14,181 +16,191 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+The mums2 package is designed to provide researchers with tools to analyze untargeted metabolomics data generated using tandeom mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data.
+
+
 ```{r setup}
 library(mums2)
 library(ggplot2)
 library(mpactr)
 ```
 
-# Import
+## Import
 
-To import data inside of mums2, we are using the mpactR package. mpactR allows us to import three different types of formats: Metaboscape, Progensis, and its own output. From there we can conduct a number of analysis on the data.
+Functions from the mpactR package are used to import data. mpactR allows us to import three different types of formats: Metaboscape, Progensis, and its own output. From there we can conduct a number of analysis on the data.
 
 ```{r import_data}
-
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                              meta_data = mums2::example("squid_meta_data.csv"), 
-                              format = "None")
-
+squid_data <- import_all_data(
+  peak_table = mums2::example("squid_peak_table.csv"), 
+  meta_data = mums2::example("squid_meta_data.csv"), 
+  format = "None")
 ```
 
-# Filter
+## Filter
 
-After you import the data we are able to filter the data using filters including in mpactR. There are four different filters included in mpactR, `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on mpactR's website).
+After you import the data you can use from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on mpactR's website).
 
 ```{r  R.options=list(max.print=15)}
-  squid_filter <- squid_data |>
-    filter_peak_table(filter_mispicked_ions_parameters()) |>
-    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
-    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-    filter_peak_table(filter_insource_ions_parameters())
-  squid_filter
+squid_filter <- squid_data |>
+  filter_peak_table(filter_mispicked_ions_parameters()) |>
+  filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, 
+                                         cv_param = "mean")) |>
+  filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                            "Blanks")) |>
+  filter_peak_table(filter_insource_ions_parameters())
+
+squid_filter
 ```
 
-# Convert from rt to "RT in minutes" or "rt in seconds"
+## Convert from rt to "RT in minutes" or "rt in seconds"
 
-Sometimes your ms2 file using minutes as retention time but your ms1 file uses seconds. This will cause your ms1 to match incorrect peaks in the ms2, to help users address this problem we created a `change_rt_to_seconds_or_minutes()` function. Be aware, this function modifed your mpactr object in place. Therefore, you have to call the function again to revert it.
+Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifes the mpactr object in place. Therefore, you will need to call the function again to revert the units.
 
 ```{r R.options=list(max.print=15)}
 change_rt_to_seconds_or_minutes(squid_filter, "seconds")
 change_rt_to_seconds_or_minutes(squid_filter, "minutes")
 ```
 
-# Preprocess ms2 data
+***Which command here do the users need to carry out the analysis?***
 
-Once you create your mpactr_object, you can use a mgf/mzxml/mzml to match ms1 and ms2 peaks. Our `ms2_ms1_compare()` function reads a list of mgf files and matches them with a ms1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that ms2 spectra files are very memory intensive, they can be anywhere from 1mb to 100gbs. Therefore, depending on how big your file is, do not expect this function to be overly fast.
+## Preprocess MS2 data
 
-```{r  R.options=list(max.print=15)}
-  matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
-  matched_data
-  
-```
-
-# Chemical Formula Prediction
-
-We have implemented de-novo chemical formula predictions into mums via fragmentation trees. We are able to use the given data from the ms2 to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)).
+Once the mpactr_object is created one can use a mgf/mzxml/mzml to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
 
 ```{r  R.options=list(max.print=15)}
-  matched_data <- compute_molecular_formulas(matched_data, 3, 16)
-  matched_data$predicted_molecular_formulas
-  
+matched_data <- ms2_ms1_compare(
+  example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+
+matched_data
 ```
 
-# Annotations
+## Chemical formula prediction
 
-We are also able annotate our matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm(whether it be a cosine squared algorith or anything else) we can compute similairty between peaks in the msp file and generate annotations. Since we are able to also compute chemical formulas, we can also use chemical formula similarity to further filter data. Chemical formula similarity is computed using cosine similarity.
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)).
 
 ```{r  R.options=list(max.print=15)}
-
-
-  psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
-  annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), precursor_tolerance = 1000, min_score =  0.1, chemical_min_score = .1)
-
-  annotations
+matched_data <- compute_molecular_formulas(matched_data, 3, 16)
+matched_data$predicted_molecular_formulas
 ```
 
-# Scoring/Distance
+## Annotations
 
-We have implemented a scoring and/or distance algorithm that allows you to generate a score between two different features. We can use that score to cluster the data based on closeness.
+Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. 
 
 ```{r  R.options=list(max.print=15)}
- dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2, score_params = gnps_params(0.5), min_peaks = 0)
- dist
+psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+annotations <- annotate_ms2(
+  mass_data = matched_data, reference = psu_msmls,
+  scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
+  min_score =  0.1, chemical_min_score = .1)
+
+annotations
 ```
 
-# OMUs (Clustering)
+## Scoring/Distance
 
-Once we have generated a distance matrix, we can use that matrix to cluster our data using the clustur package (more information can be found on the clustur website). clustur is an R package that contains the clusturing algorithms from mothur (a software that is used to anaylsis microbial ecology).
+We have implemented distance calculation approaches to generate distances between all pairs of compounds. We can use that distance to cluster the data based on their similarity.
 
 ```{r  R.options=list(max.print=15)}
+dist <- dist_ms2(
+  data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+  score_params = gnps_params(0.5), min_peaks = 0)
 
-  cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
-  cluster_results
-
+dist
 ```
 
-# Clusters and Annotations
+## Operational Metabolomic Units (OMUs)
 
-After you have clustered your data together, you can add the OMU the feature resides in to your annotation table for a more accurate data frame.
+Once a distance matrix is generated between metabolites, they can be clustered into OMUs using functions from the clustur package
+
+```{r  R.options=list(max.print=15)}
+cluster_results <- cluster_data(
+  distance_df = dist, ms2_match_data = matched_data, cutoff = 0.3,
+  cluster_method = "opticlust")
+
+cluster_results
+```
+
+## Clusters and Annotations
+
+After you have clustered your data into OMUs the consensus annotation for the spectra within the OMU can be determined usin ghte annotate_ms2() function.
 
 ```{r}
- annotations <- annotate_ms2(matched_data, psu_msmls, gnps_params(0.5), 1000, 0.1, .1, cluster_results)
- annotations
+annotations <- annotate_ms2(matched_data, psu_msmls, gnps_params(0.5), 
+                            1000, 0.1, .1, cluster_results)
 
+annotations
 ```
 
-# Create the community object/matrix
+## Create the community object/matrix
 
-Once you clustered your data, you have to transform it into a data-usable format. We have supplied the `create_community_object()` function for this purpose.
+Now that the data have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses. First, it is necessary to transform it using the `create_community_object()` function.
 
 ```{r  R.options=list(max.print=15)}
-  # Create community object
-  community_obj <- create_community_matrix_object(cluster_results)
-  mat <- get_community_matrix(community_obj)
-
-  # You can also do this without clustering
-  community_obj_no_cluster <- create_community_matrix_object(matched_data)
-  mat2 <- get_community_matrix(community_obj_no_cluster)
-  mat[, 1:10]
+community_w_omus <- create_community_matrix_object(cluster_results)
+get_community_matrix(community_w_omus)
 ```
 
-# Run the diversity metrics
-
-## Rarefaction
-
-Once you create your community object, we can finally compute the diversity metrics on our data. Below this you can see the `rarefaction()` function.
-
-```{r  R.options=list(max.print=15)}
-  # Rarefacton
-  rarefy_new <- rarefy_ms(community_object = community_obj, size = 4000, threshold = 100)
-  rarefy_new[1:10, 1:10]
-```
-
-## Alpha Diversity
-
-You can also compute the alpha diversity. We currently only support shannon, and simpsons diversity.
-
-```{r  R.options=list(max.print=15)}
-  # Calculate Alpha Diversity
-  shannon_diversity <- diversity(community_object = community_obj, diversity_index = "shannon")
-  simpson_diversity <- diversity(community_object = community_obj, diversity_index = "simpson")
-  shannon_diversity
-  simpson_diversity
-
-```
-
-## Beta Diversity
-
-Beta diversity is also included inside of this package, included diversity metrtics: bray, thetayc (Yue and Clayton), jaccard distance, hamming distance, moristia horn distance, and soren distance.
+If you decide that you would rather work with distinct MS data rather than OMUs, the following will generate a community matrix using the individual MS data.
 
 ```{r}
-  #Calculate Beta Diversity
-  braycurits <- diversity(community_object = community_obj, diversity_index = "bray")
-  braycurits[1,]
+community_wo_omus <- create_community_matrix_object(matched_data)
+get_community_matrix(community_wo_omus)
 ```
 
-## Average Subsampled Dissimilarity
+## Run the diversity metrics
 
-Finally you can average the diversity metrics using the `average_subsampled_diversity()` function. This allows you to run the rarefaction and diversity command n number of times. This will generate a average distance matrix. This allows you to ensure that your rare species were included inside of the analysis.
+
+<!-- The rarefaction section is unnecessary as written...
+### Rarefaction -->
+
+<!-- Once you create your community object, we can finally compute the diversity metrics on our data. Below this you can see the `rarefaction()` function. -->
+
+<!-- ```{r  R.options=list(max.print=15)} -->
+<!-- rarefy_new <- rarefy_ms( -->
+<!--   community_object = community_obj, size = 4000, threshold = 100) -->
+
+<!-- rarefy_new[1:10, 1:10] -->
+<!-- ``` -->
+
+### Alpha Diversity
+
+You can also compute the alpha diversity using the Shannon and Simpson diversity indices.
 
 ```{r  R.options=list(max.print=15)}
-  # Avg dist
-  avg <- dist_shared(community_object = community_obj, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
-  # Avg dist without clustering
-  avg_no_cluster <- dist_shared(community_object = community_obj_no_cluster, size = 4000, threshold = 100, diversity_index = "bray", iterations = 100)
-  avg
+diversity(community_object = community_w_omus, diversity_index = "shannon")
+diversity(community_object = community_w_omus, diversity_index = "simpson")
 ```
 
-# Visualizations
+### Beta Diversity
 
-## PCOA
+Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. This function call calculates Bray-Curtis distances without using rarefaction
 
-PCoA or Princple coordinate analysis is a statistical technique used to show similiarities or disimilarities in your data. PCA or Principle component analysis uses dimension reduction techniques to look for similiarities or variance inside data. These two method perform similiar metric, but PCA can only be performed on euclidean distances. PCOA can be performed using a multitude of distance calculations (such as bray curtis or jaccard distance). In ecology, because there are numerous ways to calculate diversity between species, pcoa allows us to visualize differences between samples.
+```{r}
+diversity(community_object = community_w_omus, diversity_index = "bray")
+```
 
-There are a few steps needed to calculate a pcoa in R. To start, you have to create a dist object or distance matrix. Using our `community_object_to_distance_object()` function, we can transform your distances that were generated from the `dist_shared()` function into a distance matrix. Once your distance matrix is created, we can conduct a pcoa or Classical Multidimensional Scaling(MDS) using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
+Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
+
+```{r  R.options=list(max.print=15)}
+bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
+                          threshold = 100, diversity_index = "bray")
+bray_w_omus
+
+bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
+                           threshold = 100, diversity_index = "bray")
+bray_no_omus
+```
+
+## Visualizations
+
+### PCOA
+
+Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- community_object_to_distance_object(avg)
+dist_obj <- community_object_to_distance_object(bray_w_omus)
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)
@@ -203,7 +215,6 @@ for(i in 1:nrow(pcoa_points)) {
   
 }
 
-
 pcoa_points |>
   ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
     geom_point() +
@@ -211,41 +222,12 @@ pcoa_points |>
       legend.text = element_text(size = 10), 
       legend.title = element_text(size = 15)
     )
-
 ```
 
-MDS plot without clustering the data.
 
-```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj_no_cluster <- community_object_to_distance_object(avg_no_cluster)
+### Hierarchical Clustering
 
-pcoa <- cmdscale(dist_obj_no_cluster, k = 2, eig = T, add = T)
-pcoa_points <- as.data.frame(pcoa$points)
-variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
-names(pcoa_points) <- paste0("PCOA", seq(1:2))
-pcoa_points$Samples <- rownames(pcoa_points)
-
-meta_data <- get_meta_data(squid_filter)
-for(i in 1:nrow(pcoa_points)) {
-  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
-  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[i]]
-  
-}
-
-
-pcoa_points |>
-  ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
-    geom_point() +
-    theme(
-      legend.text = element_text(size = 10), 
-      legend.title = element_text(size = 15)
-    )
-
-```
-
-## Hierarchical Clustering
-
-Another way to visualize your data is by using hclust or Hierarchical Clustering. Hierarchical clustering generates a tree of distances to show the similarities between the samples.
+Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
@@ -253,10 +235,3 @@ par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
 
-Hierarchical cluster Without using the clustered data
-
-```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-hclust_result <- hclust(dist_obj_no_cluster, "complete")
-par(cex=0.6, mar=c(5, 8, 4, 1))
-plot(hclust_result)
-```
