@@ -5,9 +5,8 @@ test_that("Test dist_shared works with bray", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "bray", T, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 test_that("Test dist_shared works with without subsample = F", {
@@ -17,9 +16,8 @@ test_that("Test dist_shared works with without subsample = F", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "bray", F, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 
@@ -30,9 +28,8 @@ test_that("Test dist_shared works with jaccard", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "jaccard",T , 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 test_that("Test dist_shared works with hamming distance", {
@@ -42,9 +39,8 @@ test_that("Test dist_shared works with hamming distance", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "hamming", T, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 test_that("Test dist_shared works with soren index", {
@@ -54,9 +50,8 @@ test_that("Test dist_shared works with soren index", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "soren", T, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 test_that("Test dist_shared works with morisita horn index", {
@@ -66,9 +61,8 @@ test_that("Test dist_shared works with morisita horn index", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "morisita", T, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 test_that("Test dist_shared works with thetayc(Yun and Clayton) distance", {
@@ -78,9 +72,8 @@ test_that("Test dist_shared works with thetayc(Yun and Clayton) distance", {
   communiy_object <- create_community_matrix_object(result)
 
   result <- dist_shared(communiy_object, 400, 10, "thetayc", T, 2)
-  expect_true("data.frame" %in% class(result))
-  expect_true(ncol(result) == 3)
-  expect_true(nrow(result) == length(dat$samples)*length(dat$samples))
+  expect_true("dist" %in% class(result))
+  expect_true(length(result) == 210)
 })
 
 
@@ -113,7 +106,7 @@ test_that("Alpha summary returns the proper results for simpsons",{
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(communiy_object, 400, 10, "simpson", T, 2)
-  expect_true("data.frame" %in% class(alpha_sum))
+expect_true("matrix" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == length(dat$samples))
   expect_true(nrow(alpha_sum) == 1)
 })
@@ -124,7 +117,7 @@ test_that("Alpha summary returns the proper results for shannon",{
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(communiy_object, 400, 10, "shannon", T, 2)
-  expect_true("data.frame" %in% class(alpha_sum))
+expect_true("matrix" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == length(dat$samples))
   expect_true(nrow(alpha_sum) == 1)
 })
@@ -135,7 +128,7 @@ test_that("Alpha summary works when subsample = F",{
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(communiy_object, 400, 10, "simpson", F, 2)
-  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true("matrix" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == length(dat$samples))
   expect_true(nrow(alpha_sum) == 1)
 })

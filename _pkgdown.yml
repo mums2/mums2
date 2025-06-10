@@ -54,5 +54,4 @@ reference:
 - title: Helper Functions
   contents:
   - change_rt_to_seconds_or_minutes
-  - community_object_to_distance_object
 

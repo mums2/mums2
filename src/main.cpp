@@ -103,7 +103,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 
 
 // [[Rcpp::export]]
-Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
+Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const bool subsample,
     const int numOfThreads, const int iterations = 1000) {
 
@@ -125,22 +125,7 @@ Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& in
     Rcpp::colnames(diversityMatrix) = samples;
     if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
     Rcpp::rownames(diversityMatrix) = samples;
-    const int sampleSize = std::pow(samples.size(), 2);
-    Rcpp::CharacterVector firstSample(sampleSize);
-    Rcpp::CharacterVector otherSample(sampleSize);
-    Rcpp::NumericVector diversityResults(sampleSize);
-    int currentIndex = 0;
-    for(int i = 0; i < samples.size(); i++) {
-        for(int j = 0; j < samples.size(); j++) {
-            firstSample[currentIndex] = samples[i];
-            otherSample[currentIndex] = samples[j];
-            diversityResults[currentIndex++] = diversityMatrix(i, j);
-        }
-    }
-
-    return Rcpp::DataFrame::create(Rcpp::Named("firstSample") = firstSample,
-        Rcpp::Named("otherSample") = otherSample,
-        Rcpp::Named("diversity") = diversityResults);
+    return diversityMatrix;
 }
 
 // [[Rcpp::export]]

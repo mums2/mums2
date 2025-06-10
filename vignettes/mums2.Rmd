@@ -174,27 +174,23 @@ get_community_matrix(community_wo_omus)
 You can also compute the alpha diversity using the Shannon and Simpson diversity indices.
 
 ```{r  R.options=list(max.print=15)}
-diversity(community_object = community_w_omus, diversity_index = "shannon")
-diversity(community_object = community_w_omus, diversity_index = "simpson")
+alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
+              diversity_index = "simpson", subsample = TRUE)
 ```
 
 ### Beta Diversity
 
-Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. This function call calculates Bray-Curtis distances without using rarefaction
-
-```{r}
-diversity(community_object = community_w_omus, diversity_index = "bray")
-```
+Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric.
 
 Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
 
 ```{r  R.options=list(max.print=15)}
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
-                          threshold = 100, diversity_index = "bray")
+                          threshold = 100, diversity_index = "bray", subsample = TRUE)
 bray_w_omus
 
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
-                           threshold = 100, diversity_index = "bray")
+                           threshold = 100, diversity_index = "bray", subsample = TRUE)
 bray_no_omus
 ```
 
@@ -205,7 +201,7 @@ bray_no_omus
 Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- community_object_to_distance_object(bray_w_omus)
+dist_obj <- bray_no_omus
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)

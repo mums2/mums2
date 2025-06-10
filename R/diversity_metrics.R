@@ -45,8 +45,8 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
     )
   }
   result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample, number_of_threads, iterations)
-  result$diversity[is.nan(result$diversity)] <- 0
-  return(result)
+  result[which(is.nan(result))] <- 0
+  return(as.dist(result))
 }
 
 
@@ -85,8 +85,9 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' community_object <- create_community_matrix_object(cluster_results)
 #' alpha_summary(community_object, 4000, 100, "shannon", T, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
-alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon", subsample,
-                          iterations = 1000, number_of_threads = detectCores()) {
+alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
+                          subsample = TRUE, iterations = 1000,
+                          number_of_threads = detectCores()) {
   diversity_index_list <- c("shannon", "simpson")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")

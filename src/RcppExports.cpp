@@ -94,7 +94,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // FasterAvgDist
-Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint32_t size, const uint32_t threshold, const bool subsample, const int numOfThreads, const int iterations);
+Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint32_t size, const uint32_t threshold, const bool subsample, const int numOfThreads, const int iterations);
 RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numOfThreadsSEXP, SEXP iterationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
