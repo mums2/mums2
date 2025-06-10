@@ -139,6 +139,6 @@ test_that("Alpha summary fails when given wrong input",{
   distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(results)
-  expect_error(alpha_summary(results, 400, 10, "shannon", 2))
-  expect_error(alpha_summary(communiy_object, 400, 10, "bray", 2))
+  expect_error(alpha_summary(results, 400, 10, "shannon", T, 2))
+  expect_error(alpha_summary(communiy_object, 400, 10, "bray", T, 2))
 })

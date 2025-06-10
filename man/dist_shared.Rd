@@ -10,8 +10,7 @@ dist_shared(
   threshold,
   diversity_index = "bray",
   subsample = TRUE,
-  iterations = 100,
-  number_of_threads = detectCores()
+  iterations = 100
 )
 }
 \arguments{
@@ -29,9 +28,6 @@ bray, jaccard, soren, hamming, morista, and thetayc.}
 Default is TRUE.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
-
-\item{number_of_threads}{the amount of threads you want to use for this calculation.
-Default is to use all threads.}
 }
 \value{
 a \code{data.frame} object that shows the dissimilarity between all samples.

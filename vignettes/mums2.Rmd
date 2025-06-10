@@ -82,7 +82,7 @@ matched_data
 
 ## Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)).
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)).p
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- compute_molecular_formulas(matched_data, 3, 16)

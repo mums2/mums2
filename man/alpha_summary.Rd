@@ -10,8 +10,7 @@ alpha_summary(
   threshold,
   diversity_index = "shannon",
   subsample = TRUE,
-  iterations = 1000,
-  number_of_threads = detectCores()
+  iterations = 1000
 )
 }
 \arguments{
@@ -29,9 +28,6 @@ shannon or simpson.}
 Default is TRUE.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
-
-\item{number_of_threads}{the amount of threads you want to use for this calculation.
-Default is to use all threads.}
 }
 \value{
 a \code{data.frame} object that shows the dissimilarity between all samples.

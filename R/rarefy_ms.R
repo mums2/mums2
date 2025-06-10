@@ -13,8 +13,6 @@
 #' @param size The desired total sample intensity to subsample to.
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
-#' @param number_of_threads the amount of times you wish to run your calculation.
-#' Default is to use all threads.
 #' @return A `external_pointer` that references a community matrix of rarefied feature intensities.
 #' @export
 #' 
@@ -42,9 +40,9 @@
 #' community_object <- create_community_matrix_object(cluster_results)
 #' rarefy_ms(community_object, 4000, 100)
 #' 
-rarefy_ms <- function(community_object, size, threshold, number_of_threads = detectCores()) {
+rarefy_ms <- function(community_object, size, threshold) {
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
   }
-  return(RarefactionCalculation(community_object, size, threshold, number_of_threads))
+  return(RarefactionCalculation(community_object, size, threshold))
 }

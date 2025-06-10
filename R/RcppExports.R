@@ -21,12 +21,12 @@ GetCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
 }
 
-RarefactionCalculation <- function(communityMatrix, size, threshold, numOfThreads) {
-    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numOfThreads)
+RarefactionCalculation <- function(communityMatrix, size, threshold) {
+    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numOfThreads, iterations = 1000L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numOfThreads, iterations)
+FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, iterations = 1000L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, iterations)
 }
 
 ReadMgf <- function(path) {
