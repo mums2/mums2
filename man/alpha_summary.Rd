@@ -58,5 +58,5 @@ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 community_object <- create_community_matrix_object(cluster_results)
-alpha_summary(community_object, 4000, 100, "shannon", T, iterations = 1)
+alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
 }

@@ -83,7 +83,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 #' community_object <- create_community_matrix_object(cluster_results)
-#' alpha_summary(community_object, 4000, 100, "shannon", T, iterations = 1)
+#' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
                           subsample = TRUE, iterations = 1000,
