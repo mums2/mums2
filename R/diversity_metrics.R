@@ -44,6 +44,8 @@ diversity <- function(community_object, diversity_index){
 #' in the rarefaction sum.
 #' @param diversity_index the diversity index you wish to calculate diversity. You can choose from:
 #' bray, jaccard, soren, hamming, morista, and thetayc.
+#' @param subsample if true, we will rarefy the data before we run the diversity calculations.
+#' Default is TRUE.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param number_of_threads the amount of threads you want to use for this calculation.
 #' Default is to use all threads.
@@ -66,9 +68,10 @@ diversity <- function(community_object, diversity_index){
 #' cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data,
 #'  cutoff = 0.3, cluster_method = "opticlust")
 #' community_object <- create_community_matrix_object(cluster_results)
-#' dist_shared(community_object, 4000, 100, "bray", 1)
+#' dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
-dist_shared <- function(community_object, size, threshold, diversity_index = "bray", iterations = 100, number_of_threads = detectCores()) {
+dist_shared <- function(community_object, size, threshold, diversity_index = "bray", subsample = TRUE, 
+                        iterations = 100, number_of_threads = detectCores()) {
   diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")

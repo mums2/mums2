@@ -32,8 +32,8 @@ Functions from the mpactR package are used to import data. mpactR allows us to i
 
 ```{r import_data}
 squid_data <- import_all_data(
-  peak_table = mums2::example("squid_peak_table.csv"), 
-  meta_data = mums2::example("squid_meta_data.csv"), 
+  peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+  meta_data = mums2::mums2_example("squid_meta_data.csv"), 
   format = "None")
 ```
 
@@ -56,6 +56,11 @@ squid_filter
 ## Convert from rt to "RT in minutes" or "rt in seconds"
 
 Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifes the mpactr object in place. Therefore, you will need to call the function again to revert the units.
+```{r R.options=list(max.print=15)}
+get_peak_table(squid_filter)$rt
+```
+
+The retention time is currently in minutes, however, some mgf files may display retention time in seconds. To ensure that our MS1 data will proper match our MS2 data, we can convert from minutes to seconds. 
 
 ```{r R.options=list(max.print=15)}
 change_rt_to_seconds_or_minutes(squid_filter, "seconds")
@@ -70,7 +75,7 @@ Once the mpactr_object is created one can use a mgf/mzxml/mzml to match MS1 and 
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- ms2_ms1_compare(
-  example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+  mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 
 matched_data
 ```
@@ -89,7 +94,7 @@ matched_data$predicted_molecular_formulas
 Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. 
 
 ```{r  R.options=list(max.print=15)}
-psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = psu_msmls,
   scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
