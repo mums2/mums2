@@ -8,8 +8,8 @@
 #' @param format The expected exported type of your peak table, can be
 #' one of "Progenesis", "Metaboscape", "None".
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
@@ -28,8 +28,8 @@ import_all_data <- function(peak_table, meta_data, format) {
 #' @param rt_type how you want to convert your retention time, your options are minutes, or seconds.
 #' defaults to seconds.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #' change_rt_to_seconds_or_minutes(squid_data, "minutes")
 #' @returns a modified `mpactr` object.

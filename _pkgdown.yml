@@ -37,7 +37,6 @@ reference:
 - title: Diversity Metrics
   contents:
   - rarefy_ms
-  - diversity
   - dist_shared
   - alpha_summary
 - title: Community Object
@@ -48,12 +47,11 @@ reference:
   - get_community_matrix
 - title: Example Data
   contents:
-  - example
+  - mums2_example
 - title: De-novo Molecular Formula Predictions
   contents:
   - compute_molecular_formulas
 - title: Helper Functions
   contents:
   - change_rt_to_seconds_or_minutes
-  - community_object_to_distance_object
 

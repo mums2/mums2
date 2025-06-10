@@ -32,8 +32,8 @@ Functions from the mpactR package are used to import data. mpactR allows us to i
 
 ```{r import_data}
 squid_data <- import_all_data(
-  peak_table = mums2::example("squid_peak_table.csv"), 
-  meta_data = mums2::example("squid_meta_data.csv"), 
+  peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+  meta_data = mums2::mums2_example("squid_meta_data.csv"), 
   format = "None")
 ```
 
@@ -56,6 +56,11 @@ squid_filter
 ## Convert from rt to "RT in minutes" or "rt in seconds"
 
 Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifes the mpactr object in place. Therefore, you will need to call the function again to revert the units.
+```{r R.options=list(max.print=15)}
+get_peak_table(squid_filter)$rt
+```
+
+The retention time is currently in minutes, however, some mgf files may display retention time in seconds. To ensure that our MS1 data will proper match our MS2 data, we can convert from minutes to seconds. 
 
 ```{r R.options=list(max.print=15)}
 change_rt_to_seconds_or_minutes(squid_filter, "seconds")
@@ -70,7 +75,7 @@ Once the mpactr_object is created one can use a mgf/mzxml/mzml to match MS1 and 
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- ms2_ms1_compare(
-  example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+  mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 
 matched_data
 ```
@@ -89,7 +94,7 @@ matched_data$predicted_molecular_formulas
 Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. 
 
 ```{r  R.options=list(max.print=15)}
-psu_msmls <- read_msp(example("PSU-MSMLS.msp"))
+psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = psu_msmls,
   scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
@@ -169,27 +174,23 @@ get_community_matrix(community_wo_omus)
 You can also compute the alpha diversity using the Shannon and Simpson diversity indices.
 
 ```{r  R.options=list(max.print=15)}
-diversity(community_object = community_w_omus, diversity_index = "shannon")
-diversity(community_object = community_w_omus, diversity_index = "simpson")
+alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
+              diversity_index = "simpson", subsample = TRUE)
 ```
 
 ### Beta Diversity
 
-Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. This function call calculates Bray-Curtis distances without using rarefaction
-
-```{r}
-diversity(community_object = community_w_omus, diversity_index = "bray")
-```
+Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric.
 
 Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
 
 ```{r  R.options=list(max.print=15)}
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
-                          threshold = 100, diversity_index = "bray")
+                          threshold = 100, diversity_index = "bray", subsample = TRUE)
 bray_w_omus
 
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
-                           threshold = 100, diversity_index = "bray")
+                           threshold = 100, diversity_index = "bray", subsample = TRUE)
 bray_no_omus
 ```
 
@@ -200,7 +201,7 @@ bray_no_omus
 Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- community_object_to_distance_object(bray_w_omus)
+dist_obj <- bray_w_omus
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)

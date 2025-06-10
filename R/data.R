@@ -10,10 +10,10 @@
 #' @return A file path to example data stored in the `inst/extdata` directory
 #' of the package.
 #' @examples
-#' example()
+#' mums2_example()
 #'
-#' example("PSUMSMLS_Adenine.csv")
-example <- function(file = NULL) {
+#' mums2_example("PSUMSMLS_Adenine.csv")
+mums2_example <- function(file = NULL) {
   path <- ""
   if (is.null(file)) {
     path <- dir(system.file("extdata", package = "mums2"))
