@@ -22,8 +22,8 @@ returns a \code{mass_data} object of all of the matches.
 We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                            meta_data = mums2::example("squid_meta_data.csv"), 
+squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
                              format = "None")
 
 squid_filter <- squid_data |>
@@ -33,5 +33,5 @@ squid_filter <- squid_data |>
    filter_peak_table(filter_insource_ions_parameters())
 
 
-ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 }

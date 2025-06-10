@@ -6,8 +6,8 @@
 #' @param mz_tolerance your mass-charge ratio tolerance
 #' @param rt_tolerance your retention time tolerance
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #'
 #' squid_filter <- squid_data |>
@@ -17,7 +17,7 @@
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#' ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+#' ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 #' @return returns a `mass_data` object of all of the matches.
 ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance) {
   ms2_data <- list()

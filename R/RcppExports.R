@@ -25,8 +25,8 @@ RarefactionCalculation <- function(communityMatrix, size, threshold, numOfThread
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numOfThreads)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, numOfThreads, iterations = 1000L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, numOfThreads, iterations)
+FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numOfThreads, iterations = 1000L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numOfThreads, iterations)
 }
 
 ReadMgf <- function(path) {

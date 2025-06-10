@@ -23,7 +23,7 @@ This function is a wrapper for the mpactr import_data function.
 It will import your peak table and meta data and create a mpactr_object.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                            meta_data = mums2::example("squid_meta_data.csv"), 
+squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
                              format = "None")
 }

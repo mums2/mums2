@@ -13,8 +13,8 @@
 #' `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`,
 #' and `filter_insource_ions_parameters()`.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #'
 #' squid_filter <- squid_data |>

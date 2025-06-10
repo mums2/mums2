@@ -9,6 +9,7 @@ alpha_summary(
   size,
   threshold,
   diversity_index = "shannon",
+  subsample = TRUE,
   iterations = 1000,
   number_of_threads = detectCores()
 )
@@ -24,6 +25,9 @@ in the rarefaction sum.}
 \item{diversity_index}{the diversity index you wish to calculate diversity, the two options are
 shannon or simpson.}
 
+\item{subsample}{if true, we will rarefy the data before we run the diversity calculations.
+Default is TRUE.}
+
 \item{iterations}{the amount of times you wish to run your calculation.}
 
 \item{number_of_threads}{the amount of threads you want to use for this calculation.
@@ -36,8 +40,8 @@ a \code{data.frame} object that shows the dissimilarity between all samples.
 alpha diversity
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                            meta_data = mums2::example("squid_meta_data.csv"), 
+squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
                              format = "None")
 
 squid_filter <- squid_data |>
@@ -47,12 +51,12 @@ squid_filter <- squid_data |>
    filter_peak_table(filter_insource_ions_parameters())
 
 
-matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
  squid_filter, 2, 6)
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = gnps_params(0.5), min_peaks = 0)
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 community_object <- create_community_matrix_object(cluster_results)
-alpha_summary(community_object, 4000, 100, "shannon", iterations = 1)
+alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
 }
