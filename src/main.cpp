@@ -104,15 +104,21 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 
 // [[Rcpp::export]]
 Rcpp::DataFrame FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
-    const uint32_t size, const uint32_t threshold, const int numOfThreads, const int iterations = 1000) {
+    const uint32_t size, const uint32_t threshold, const bool subsample,
+    const int numOfThreads, const int iterations = 1000) {
+
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
-
-    Rcpp::NumericMatrix diversityMatrix = CalculateDiversity(RarefactionCalculation(communityObject,
-        size, threshold, numOfThreads), index);
-    for(int i = 1; i < iterations; i++) {
-        Rcpp::NumericMatrix rarefyMatrix = RarefactionCalculation(communityObject,
-            size, threshold, numOfThreads);
+    int row = samples.size();
+    if (index == "simpson" || index == "shannon")
+        row = 1;
+    Rcpp::NumericMatrix diversityMatrix(row, samples.size());
+    for(int i = 0; i < iterations; i++) {
+        Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
+        if (subsample) {
+            rarefyMatrix = RarefactionCalculation(communityObject,
+                size, threshold, numOfThreads);
+        }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
     }
     diversityMatrix = diversityMatrix/iterations;

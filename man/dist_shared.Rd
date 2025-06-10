@@ -9,6 +9,7 @@ dist_shared(
   size,
   threshold,
   diversity_index = "bray",
+  subsample = TRUE,
   iterations = 100,
   number_of_threads = detectCores()
 )
@@ -23,6 +24,9 @@ in the rarefaction sum.}
 
 \item{diversity_index}{the diversity index you wish to calculate diversity. You can choose from:
 bray, jaccard, soren, hamming, morista, and thetayc.}
+
+\item{subsample}{if true, we will rarefy the data before we run the diversity calculations.
+Default is TRUE.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
 
@@ -54,5 +58,5 @@ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data,
  cutoff = 0.3, cluster_method = "opticlust")
 community_object <- create_community_matrix_object(cluster_results)
-dist_shared(community_object, 4000, 100, "bray", 1)
+dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
 }

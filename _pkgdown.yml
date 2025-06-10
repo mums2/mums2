@@ -37,7 +37,6 @@ reference:
 - title: Diversity Metrics
   contents:
   - rarefy_ms
-  - diversity
   - dist_shared
   - alpha_summary
 - title: Community Object
