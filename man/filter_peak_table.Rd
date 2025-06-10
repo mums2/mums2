@@ -37,8 +37,8 @@ it will call the subsequent filter: \code{filter_mispicked_ions_parameters()}, \
 on these functions in\code{mpactr} documentation.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                            meta_data = mums2::example("squid_meta_data.csv"), 
+squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
                              format = "None")
 
 squid_filter <- squid_data |>

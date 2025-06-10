@@ -4,8 +4,8 @@
 #' Takes you mass_data object and creates a community matrix object. This object is used to compute diversity calculations.
 #' @param data the result of the `cluster_data()` function, or just a mass_data object created from `ms2_ms1_compare()`.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #'
 #' squid_filter <- squid_data |>
@@ -15,7 +15,7 @@
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
 #'  squid_filter, 2, 6)
 #' 
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
@@ -73,8 +73,8 @@ create_community_matrix_object.list <- function(data)
 #' Returns the community `matrix` or the data that you used to create the object.
 #' @param community_object the object created from the `create_community_object()` function.
 #' @examples 
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #'
 #' squid_filter <- squid_data |>
@@ -84,7 +84,7 @@ create_community_matrix_object.list <- function(data)
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
 #'  squid_filter, 2, 6)
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = gnps_params(0.5), min_peaks = 0)
@@ -109,8 +109,8 @@ get_community_matrix <- function(community_object) {
 #' @param x the object created from the `create_community_object()` function.
 #' @param ... other parameters that are included in the print function.
 #' @examples 
-#' squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::example("squid_meta_data.csv"), 
+#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
 #'                              format = "None")
 #'
 #' squid_filter <- squid_data |>
@@ -120,7 +120,7 @@ get_community_matrix <- function(community_object) {
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
 #'  squid_filter, 2, 6)
 #' 
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,

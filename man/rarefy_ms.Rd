@@ -30,8 +30,8 @@ of samples at diffrent dilutions regardless of the desired
 submsampling \code{size}.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::example("squid_peak_table.csv"), 
-                            meta_data = mums2::example("squid_meta_data.csv"), 
+squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
                              format = "None")
 
 squid_filter <- squid_data |>
@@ -41,7 +41,7 @@ squid_filter <- squid_data |>
    filter_peak_table(filter_insource_ions_parameters())
 
 
-matched_data <- ms2_ms1_compare(example("12152023_Coculture_with_new_JC1.gnps.mgf"),
+matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
  squid_filter, 2, 6)
 
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,

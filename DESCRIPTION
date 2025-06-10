@@ -27,7 +27,6 @@ Imports:
     clustur,
     msentropy,
     Rcpp,
-    tibble,
     data.table,
     mpactr,
     mzR,

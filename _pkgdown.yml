@@ -48,7 +48,7 @@ reference:
   - get_community_matrix
 - title: Example Data
   contents:
-  - example
+  - mums2_example
 - title: De-novo Molecular Formula Predictions
   contents:
   - compute_molecular_formulas
