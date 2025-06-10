@@ -201,7 +201,7 @@ bray_no_omus
 Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- bray_no_omus
+dist_obj <- bray_w_omus
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)
