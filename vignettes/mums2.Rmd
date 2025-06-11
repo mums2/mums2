@@ -28,7 +28,7 @@ library(mpactr)
 
 ## Import
 
-Functions from the mpactR package are used to import data. mpactR allows us to import three different types of formats: Metaboscape, Progensis, and its own output. From there we can conduct a number of analysis on the data.
+Functions from the mpactR package are used to import data. mpactR allows us to import a two different formats: Metaboscape, Progensis. If you create a csv using the mpactr feature table (such as using `write.table()` from the utils package), you can also use that to create a mpactr object. 
 
 ```{r import_data}
 squid_data <- import_all_data(
@@ -39,7 +39,7 @@ squid_data <- import_all_data(
 
 ## Filter
 
-After you import the data you can use from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. 
+After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. 
 
 ```{r  R.options=list(max.print=15)}
 squid_filter <- squid_data |>
@@ -66,8 +66,6 @@ change_rt_to_seconds_or_minutes(squid_filter, "seconds")
 change_rt_to_seconds_or_minutes(squid_filter, "minutes")
 ```
 
-***Which command here do the users need to carry out the analysis?***
-
 ## Preprocess MS2 data
 
 Using the generated mpactr_object from calling the `import_all_data()` function we can use a .mgf/.mzxml/.mzml file to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
@@ -83,7 +81,7 @@ matched_data
 
 ## Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). Open-Sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) have functionality for chemical formula generation. Being able to determine chemical formulas will generate more metadata when attempting to identify compounds. 
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potenetial to be the predicted formulas. We then look at every mass and intenesity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula.
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- compute_molecular_formulas(matched_data, 3, 16)
@@ -187,7 +185,7 @@ bray_no_omus
 
 ### PCOA
 
-Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
+Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. Using the result from `dist_shared()` we can compute PCoA graph. This graph will plot points of each sample. Points that are closet to eachother are the most similar and vice versa. 
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj <- bray_w_omus
@@ -217,7 +215,7 @@ pcoa_points |>
 
 ### Hierarchical Clustering
 
-Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples
+Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
