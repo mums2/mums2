@@ -70,7 +70,7 @@ std::vector<uint32_t> ComputeRarefaction(const std::vector<uint32_t> & abundance
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
-    const uint32_t threshold, const int numOfThreads) {
+    const uint32_t threshold) {
 
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
@@ -84,17 +84,13 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
-
-    RcppThread::parallelFor(0, row, [&mut, &resultantMatrix, &communityAbundances, &allIndexes, &eligibleIndexes, &size, &sums,
-        &threshold](int i) {
+    for (int i = 0; i < row; i++) {
         const std::vector<uint32_t> result = ComputeRarefaction(communityAbundances[i], eligibleIndexes[i],
         allIndexes[i], size, sums[i], threshold);
-        mut.lock();
         for(const auto& index : eligibleIndexes[i]) {
             resultantMatrix(i, index) = result.at(index);
         }
-        mut.unlock();
-    }, numOfThreads);
+    }
     Rcpp::rownames(resultantMatrix) = rowNames;
     Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
@@ -105,7 +101,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const bool subsample,
-    const int numOfThreads, const int iterations = 1000) {
+    const int iterations = 1000) {
 
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
@@ -117,7 +113,7 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
         Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
         if (subsample) {
             rarefyMatrix = RarefactionCalculation(communityObject,
-                size, threshold, numOfThreads);
+                size, threshold);
         }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
     }

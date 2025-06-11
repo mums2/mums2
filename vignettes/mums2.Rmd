@@ -28,7 +28,7 @@ library(mpactr)
 
 ## Import
 
-Functions from the mpactR package are used to import data. mpactR allows us to import three different types of formats: Metaboscape, Progensis, and its own output. From there we can conduct a number of analysis on the data.
+Functions from the mpactR package are used to import data. mpactR allows us to import a two different formats: Metaboscape, Progensis. If you create a csv using the mpactr feature table (such as using `write.table()` from the utils package), you can also use that to create a mpactr object. 
 
 ```{r import_data}
 squid_data <- import_all_data(
@@ -39,7 +39,7 @@ squid_data <- import_all_data(
 
 ## Filter
 
-After you import the data you can use from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on mpactR's website).
+After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. 
 
 ```{r  R.options=list(max.print=15)}
 squid_filter <- squid_data |>
@@ -55,23 +55,20 @@ squid_filter
 
 ## Convert from rt to "RT in minutes" or "rt in seconds"
 
-Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifes the mpactr object in place. Therefore, you will need to call the function again to revert the units.
+Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifes the mpactr object in place. Therefore, you will need to call the function again to revert the units. Below will display a vector of retention time. 
 ```{r R.options=list(max.print=15)}
 get_peak_table(squid_filter)$rt
 ```
 
-The retention time is currently in minutes, however, some mgf files may display retention time in seconds. To ensure that our MS1 data will proper match our MS2 data, we can convert from minutes to seconds. 
-
+Retention time(rt) is the amount of time a compound spends in a coloumn and it is an important variable for identifying MS1 compounds. It is used to match MS1 and MS2 spectra together. However, there are times when rt is displayed in a incorrect time format. Such as in minutes instead of seconds. And, if we were to match a MS1 spectra with your rt time in minutes to a MS2 spectra with rt time in seconds, the data would match incorrectly. Therefore, using a function to convert from one format to another is helpful. Keep in mind, that this function cannot directly detect whether your retention time is in seconds or minutes, so if you convert your retention to minutes when it is already in minutes you will generate rt in seconds instead (seconds / 60 = minutes).
 ```{r R.options=list(max.print=15)}
 change_rt_to_seconds_or_minutes(squid_filter, "seconds")
 change_rt_to_seconds_or_minutes(squid_filter, "minutes")
 ```
 
-***Which command here do the users need to carry out the analysis?***
-
 ## Preprocess MS2 data
 
-Once the mpactr_object is created one can use a mgf/mzxml/mzml to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
+Using the generated mpactr_object from calling the `import_all_data()` function we can use a .mgf/.mzxml/.mzml file to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- ms2_ms1_compare(
@@ -80,9 +77,11 @@ matched_data <- ms2_ms1_compare(
 matched_data
 ```
 
+`ms2_ms1_compare()` generates a list of data with data.frames to represent the matched data and a list of peaks. This is neccesary to properly compare compounds. Since the information supplied from a MS2 file will compute similar results to compounds that are alike, we can use algorithmic techniques to compute the similarity between two compounds. This allows us to generate annotations and cluster similar spectra (MS2 matched information) together.
+
 ## Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)).
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potenetial to be the predicted formulas. We then look at every mass and intenesity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula.
 
 ```{r  R.options=list(max.print=15)}
 matched_data <- compute_molecular_formulas(matched_data, 3, 16)
@@ -91,7 +90,7 @@ matched_data$predicted_molecular_formulas
 
 ## Annotations
 
-Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms1_ms2 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. 
+Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms2_ms1 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. If you computed predicted molecular formulas, you may specify a chemical min_score filter as well. This filter will use a cosine scoring algorithm to compute the similiarity between chemical formulas. Finally, the annotation function will generate a data.frame object that displays the data that matched between the reference and your data. 
 
 ```{r  R.options=list(max.print=15)}
 psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
@@ -103,9 +102,10 @@ annotations <- annotate_ms2(
 annotations
 ```
 
+Two out of 15 ms2 spectra matched to a compound inside of the reference. The reference database we are using is not very exhaustive and we do not expect many compounds to match our data. But, given a fleshed out reference database, we would be able to generate stronger supporting annotations which would be able to help us identify unknown compounds.
 ## Scoring/Distance
 
-We have implemented distance calculation approaches to generate distances between all pairs of compounds. We can use that distance to cluster the data based on their similarity.
+We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`gnps_params()`) or an algorithm called spectral entrophy (`spec_entrophy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
 
 ```{r  R.options=list(max.print=15)}
 dist <- dist_ms2(
@@ -117,8 +117,7 @@ dist
 
 ## Operational Metabolomic Units (OMUs)
 
-Once a distance matrix is generated between metabolites, they can be clustered into OMUs using functions from the clustur package
-
+Using the distance matrix created from the `dist_ms2()` function, we can are able to cluster the data. the `cluster_data()` function generates a list object with four slots: abundance, cluster, cluster_metrics, and iteration metrics. Since we are generate OMUs we want to know what the shared species abundances. Using that data in the later steps allows us to compute beta and alpha diversity. However, if you wish to see which features clustered together, you may also look at the cluster slot. 
 ```{r  R.options=list(max.print=15)}
 cluster_results <- cluster_data(
   distance_df = dist, ms2_match_data = matched_data, cutoff = 0.3,
@@ -129,18 +128,18 @@ cluster_results
 
 ## Clusters and Annotations
 
-After you have clustered your data into OMUs the consensus annotation for the spectra within the OMU can be determined usin ghte annotate_ms2() function.
+After your data has been clustered, if you wish to see which omu the annotated features are in, you can supply that to the cluster function. This allows you to determine if the compounds that cluster together and matched by similar reference compounds.
 
 ```{r}
-annotations <- annotate_ms2(matched_data, psu_msmls, gnps_params(0.5), 
-                            1000, 0.1, .1, cluster_results)
+annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
+                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = .1, cluster_data = cluster_results)
 
 annotations
 ```
 
 ## Create the community object/matrix
 
-Now that the data have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses. First, it is necessary to transform it using the `create_community_object()` function.
+Now that the data have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses. First, it is necessary to transform it using the `create_community_object()` function. This will create a Rcpp object that contains all of your generated ecological data. If you wish to see what your data looks like, you can call the `get_community_matrix()` function. 
 
 ```{r  R.options=list(max.print=15)}
 community_w_omus <- create_community_matrix_object(cluster_results)
@@ -155,23 +154,9 @@ get_community_matrix(community_wo_omus)
 ```
 
 ## Run the diversity metrics
-
-
-<!-- The rarefaction section is unnecessary as written...
-### Rarefaction -->
-
-<!-- Once you create your community object, we can finally compute the diversity metrics on our data. Below this you can see the `rarefaction()` function. -->
-
-<!-- ```{r  R.options=list(max.print=15)} -->
-<!-- rarefy_new <- rarefy_ms( -->
-<!--   community_object = community_obj, size = 4000, threshold = 100) -->
-
-<!-- rarefy_new[1:10, 1:10] -->
-<!-- ``` -->
-
 ### Alpha Diversity
 
-You can also compute the alpha diversity using the Shannon and Simpson diversity indices.
+Using your create community matrix object, you are able to compute alpha diversity. Alpha diversity represents diversity  (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: simpson and shannon. Simpson represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannons diversity is not locked between zero and one, but the higher the resultant value, the more diverse the sample is. 
 
 ```{r  R.options=list(max.print=15)}
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
@@ -180,7 +165,9 @@ alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
 
 ### Beta Diversity
 
-Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric.
+Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. By default, the `dist_shared()` function uses subsample = TRUE, which automically rarefies the samples.
+
+Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the comnunity that can be used for visualizations. And, with all of the annotations, and clusters that was computed earlier, you can see just how similar the resultant samples are. 
 
 Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
 
@@ -198,7 +185,7 @@ bray_no_omus
 
 ### PCOA
 
-Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. There are a few steps needed to perform PCoA in R. To start, a special distance matrix object is needed. Using `community_object_to_distance_object()` function, we can transform the distances that were generated from the `dist_shared()` function (e.g., `bray_w_omus`). Once a distance matrix is created, we can run PCoA using the `cmdscale()` function. Once the result is computed, we clean up the data and plot.
+Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. Using the result from `dist_shared()` we can compute PCoA graph. This graph will plot points of each sample. Points that are closet to eachother are the most similar and vice versa. 
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj <- bray_w_omus
@@ -228,7 +215,7 @@ pcoa_points |>
 
 ### Hierarchical Clustering
 
-Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples
+Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples.
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
