@@ -105,13 +105,13 @@ annotations
 Two out of 15 ms2 spectra matched to a compound inside of the reference. The reference database we are using is not very exhaustive and we do not expect many compounds to match our data. But, given a fleshed out reference database, we would be able to generate stronger supporting annotations which would be able to help us identify unknown compounds.
 ## Scoring/Distance
 
-We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`gnps_params()`) or an algorithm called spectral entrophy (`spec_entrophy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
+We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`gnps_params()`) or an algorithm called spectral entropy (`spec_entropy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
 
 ```{r  R.options=list(max.print=15)}
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_thresh = 2,
   score_params = gnps_params(0.5), min_peaks = 0)
-
+  spec_entropy_params()
 dist
 ```
 
@@ -128,7 +128,7 @@ cluster_results
 
 ## Clusters and Annotations
 
-After your data has been clustered, if you wish to see which omu the annotated features are in, you can supply that to the cluster function. This allows you to determine if the compounds that cluster together and matched by similar reference compounds.
+After your data has been clustered, if you wish to see which omus the annotated features are in, you can supply that to the cluster function using the "cluster_data" parameter. This allows you to determine if the compounds that cluster together and matched by similar reference compounds.
 
 ```{r}
 annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
@@ -167,7 +167,7 @@ alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
 
 Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. By default, the `dist_shared()` function uses subsample = TRUE, which automically rarefies the samples.
 
-Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the comnunity that can be used for visualizations. And, with all of the annotations, and clusters that was computed earlier, you can see just how similar the resultant samples are. 
+Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the comnunity that can be used for visualizations. And, with all of the annotations, and clusters that was computed earlier, you can see just how dissimilar/similar the resultant samples are. 
 
 Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
 
@@ -186,6 +186,8 @@ bray_no_omus
 ### PCOA
 
 Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. Using the result from `dist_shared()` we can compute PCoA graph. This graph will plot points of each sample. Points that are closet to eachother are the most similar and vice versa. 
+
+
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj <- bray_w_omus

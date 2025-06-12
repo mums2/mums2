@@ -1,9 +1,14 @@
 #include "Utils/Utils.h"
 #include <Rcpp.h>
-
+#include <algorithm>
 #include "AnnotateMs2/DataStructures/AnnotationNode.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 #include "ScoringMethods/ScoringFactory.h"
+
+
+bool IsWhiteSpace(const unsigned char c) {
+    return c == '\r' || c == '\n';
+}
 
 // [[Rcpp::export]]
 Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,

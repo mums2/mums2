@@ -35,7 +35,7 @@ cluster_data <- function(distance_df, ms2_match_data, cutoff = 0.3, cluster_meth
 
   # Create Count Table 
   count_table <- create_count_table(ms2_match_data)
-
+  
   # Create Distance Object
   dist <- read_dist(sparse_matrix, count_table, cutoff, FALSE)
 
