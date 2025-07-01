@@ -24,6 +24,8 @@ The mums2 package is designed to provide researchers with tools to analyze untar
 library(mums2)
 library(ggplot2)
 library(mpactr)
+library(networkD3)
+library(reshape2)
 ```
 
 ## Import
@@ -228,3 +230,17 @@ par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
 
+
+# Network Plot
+
+```{r}
+distance_df <- reshape2::melt(as.matrix(bray_w_omus))
+simpleNetwork(distance_df, height="100px", width="100px", zoom = TRUE)
+```
+
+
+
+```{r}
+distance_df_annotations <- annotations[, c("query_ms2_id", "NAME", "score")]
+simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
+```
