@@ -39,7 +39,7 @@ squid_data <- import_all_data(
 
 ## Filter
 
-After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `check_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. 
+After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. 
 
 ```{r  R.options=list(max.print=15)}
 squid_filter <- squid_data |>
@@ -90,7 +90,7 @@ matched_data$predicted_molecular_formulas
 
 ## Annotations
 
-Beyond predicting the molecular formula, it is possible to use the `annotate_ms()` function to annotate the data in the matched_ms2_ms1 object. By using an msp file as a reference and using a specified scoring algorithm we can compute similarity between peaks in the msp file and generate annotations using the cosine squared or another calculator. If you computed predicted molecular formulas, you may specify a chemical min_score filter as well. This filter will use a cosine scoring algorithm to compute the similiarity between chemical formulas. Finally, the annotation function will generate a data.frame object that displays the data that matched between the reference and your data. 
+Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object. By supplying a reference database and a scoring method, we can generate numerous annotations. A reference databse is a collection of ms2 spectra, generally curated in a specific format. This package is able to read msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. To determine how similar ms2 spectra are from eachother, we have to incorporate special algorithms. The algorithms we have decided to use are spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z))and the gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). Which gnps uses an modifed cosine score to compute similairty between spectra, spectral entropy takes advantage of the total intenesities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the supplied data. 
 
 ```{r  R.options=list(max.print=15)}
 psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
@@ -117,7 +117,8 @@ dist
 
 ## Operational Metabolomic Units (OMUs)
 
-Using the distance matrix created from the `dist_ms2()` function, we can are able to cluster the data. the `cluster_data()` function generates a list object with four slots: abundance, cluster, cluster_metrics, and iteration metrics. Since we are generate OMUs we want to know what the shared species abundances. Using that data in the later steps allows us to compute beta and alpha diversity. However, if you wish to see which features clustered together, you may also look at the cluster slot. 
+OMUs or Operational Metabolomic Units are clusters of unknown metabolites. We cluster metabolites based on how similar their ms2s are to eachother. In our case, we are have a function that is able to do just this, the `dist_ms2()` function. This function generates a distance `data.frame`, or a `data.frame` of closeness between metabolites. Using the generate object along with the matched_ms2_ms1 object, we are able to cluster are data together to generate OMUs using the `cluster_data()` function. This function returns a list with five slots; label, abundance, cluster, cluste_metrics, and iteration metrics. Label represents the cutoff distance, abundance shows the number absolute abundance of the clusters by sample, cluster shows which features clustered together, and cluster_metrics and iteration metrics represent the additional timing and scoring methods that were used to generate the resultant data. 
+
 ```{r  R.options=list(max.print=15)}
 cluster_results <- cluster_data(
   distance_df = dist, ms2_match_data = matched_data, cutoff = 0.3,
@@ -126,9 +127,9 @@ cluster_results <- cluster_data(
 cluster_results
 ```
 
-## Clusters and Annotations
+## Display OMUs when you annotate
 
-After your data has been clustered, if you wish to see which omus the annotated features are in, you can supply that to the cluster function using the "cluster_data" parameter. This allows you to determine if the compounds that cluster together and matched by similar reference compounds.
+After your data has been clustered, if you wish to see which omus the annotated features are in, you can supply that to the annotation function using the "cluster_data" parameter. Doing so will add a column named OMU. This column will display the OMU the feature is represented in.
 
 ```{r}
 annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
@@ -139,7 +140,9 @@ annotations
 
 ## Create the community object/matrix
 
-Now that the data have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses. First, it is necessary to transform it using the `create_community_object()` function. This will create a Rcpp object that contains all of your generated ecological data. If you wish to see what your data looks like, you can call the `get_community_matrix()` function. 
+Now that the data have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses. First, it is necessary to transform it using the `create_community_matrix_object()` function. This will create a Rcpp object that contains all of your generated ecological data. If you wish to see what your data looks like, you can call the `get_community_matrix()` function. 
+
+Packages like vegan opt for using a `matrix` object as input for ecological analyses (see more `vegan::rarefy()`). However, if we were to use the same methodology, the computation would take far too long. In particular, the rarefaction algorithm. Rarefaction is the process of randomly selecting n number of samples without replacement. With n being the user defined sum threshold. However, in mass spectrometry, in order to account for machine limits and backgroup noise, we have to define a sample threshold. So, rarefaction is the process of randomly selecting n number of samples without replacement, with n being the user defined sum threshold. **After selecting n number of samples, we only add the samples that are above the size threshold. If the total is below the sum threshold, we continue until we are equal to or above the sum threshold.** Therefore, adding the size threshold adds another layer complexity to the algorithm. In order to retain efficiency, we create a custom object that contains all of the neccessary data for the calculation. 
 
 ```{r  R.options=list(max.print=15)}
 community_w_omus <- create_community_matrix_object(cluster_results)
@@ -156,7 +159,7 @@ get_community_matrix(community_wo_omus)
 ## Run the diversity metrics
 ### Alpha Diversity
 
-Using your create community matrix object, you are able to compute alpha diversity. Alpha diversity represents diversity  (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: simpson and shannon. Simpson represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannons diversity is not locked between zero and one, but the higher the resultant value, the more diverse the sample is. 
+Using your created community matrix object, you are able to compute alpha diversity. Alpha diversity represents diversity (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: simpson and shannon. Simpson represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannons diversity is not locked between zero and one, but the higher the resultant value, the more diverse the sample is. 
 
 ```{r  R.options=list(max.print=15)}
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
@@ -167,9 +170,9 @@ alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
 
 Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. By default, the `dist_shared()` function uses subsample = TRUE, which automically rarefies the samples.
 
-Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the comnunity that can be used for visualizations. And, with all of the annotations, and clusters that was computed earlier, you can see just how dissimilar/similar the resultant samples are. 
+Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the community that can be used for visualizations. And, with all of the annotations, and clusters that were computed earlier, you can see just how dissimilar/similar the resultant samples are. 
 
-Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites
+Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites.
 
 ```{r  R.options=list(max.print=15)}
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
