@@ -190,7 +190,7 @@ bray_no_omus
 
 ### PCOA
 
-Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between samples based on the beta diversity values. Using the result from `dist_shared()` we can compute PCoA graph. This graph will plot points of each sample. Points that are closet to eachother are the most similar and vice versa. 
+Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis, it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at you beta diversity results visually. 
 
 
 
@@ -222,7 +222,7 @@ pcoa_points |>
 
 ### Hierarchical Clustering
 
-Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples.
+Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples. The results are similar to that of PCoA but it is another way to look at there dissimilarities/similarities. 
 
 ```{r, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
@@ -232,14 +232,7 @@ plot(hclust_result)
 
 
 # Network Plot
-
-```{r}
-distance_df <- reshape2::melt(as.matrix(bray_w_omus))
-simpleNetwork(distance_df, height="100px", width="100px", zoom = TRUE)
-```
-
-
-
+Sometimes, it is useful to see a visual map of your annotations. We can accomplish this using a network plot. By creating a network of data, we can see which compounds matched certain features. Its very useful for looking at relationships between compounds and features. 
 ```{r}
 distance_df_annotations <- annotations[, c("query_ms2_id", "NAME", "score")]
 simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
