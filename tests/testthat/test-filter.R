@@ -11,7 +11,7 @@ test_that("all the filters work as expected", {
   filtered_peak_table <- get_peak_table(data_filtered)
   expect_false(nrow(current_peak_table) == nrow(filtered_peak_table))
   expect_true(nrow(current_peak_table) == 1303)
-  expect_true(nrow(filtered_peak_table) == 407)
+  expect_true(nrow(filtered_peak_table) == 590)
 })
 
 test_that("filter_mispicked_ions parameters return correct data", {

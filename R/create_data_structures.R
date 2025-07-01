@@ -41,13 +41,8 @@ create_community_matrix <- function(cluster_object) {
 # Helper function for creating count tables
 create_count_table <- function(ms2_match_data) {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
-  peak_table <- ms2_match_data$ms1_data[ ,-c(2, 3)]
-  if("cor" %in% colnames(peak_table)) {
-    peak_table$cor <- NULL
-  }
-  if("kmd" %in% colnames(peak_table)) {
-    peak_table$kmd <- NULL
-  }
+  peak_table <- ms2_match_data$ms1_data[ ,c("Compound", ms2_match_data$samples), with = FALSE]
+
   samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
   return(data.frame(Representative_Sequence = samples$Compound, 
                     total = rowSums(samples[,-1]), samples[,-1], check.names = FALSE))

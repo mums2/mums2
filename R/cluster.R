@@ -32,7 +32,6 @@
 cluster_data <- function(distance_df, ms2_match_data, cutoff = 0.3, cluster_method = "opticlust") {
 
   sparse_matrix <- create_sparse_matrix(distance_df$i, distance_df$j, distance_df$dist)
-
   # Create Count Table 
   count_table <- create_count_table(ms2_match_data)
   
