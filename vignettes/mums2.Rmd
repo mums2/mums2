@@ -82,13 +82,17 @@ peak_table
 
 Using the generated mpactr_object from calling the `import_all_data()` function we can use a .mgf/.mzxml/.mzml file to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple peaks, it will select the peak with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
 
-```{r  R.options=list(max.print=15)}
+```{r}
 matched_data <- ms2_ms1_compare(
   mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 
-matched_data$ms2_matches
+matched_data$ms2_matches[,1]
 
-matched_data$peak_data
+matched_data$ms1_data[,1]
+
+matched_data$peak_data[[1]]
+
+matched_data$samples[[1]]
 ```
 
 `ms2_ms1_compare()` generates a list of data with two data.frames ("ms1_data", "peak_data"), a list ("peak_data"), and a character vector ("samples").
