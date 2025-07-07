@@ -86,7 +86,9 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 matched_data <- ms2_ms1_compare(
   mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
 
-matched_data
+matched_data$ms2_matches
+
+matched_data$peak_data
 ```
 
 `ms2_ms1_compare()` generates a list of data with two data.frames ("ms1_data", "peak_data"), a list ("peak_data"), and a character vector ("samples").
