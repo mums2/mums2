@@ -43,7 +43,7 @@ squid_data <- import_all_data(
 
 After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. Which will also speed up the analysis.  
 
-```{r  R.options=list(max.print=15)}
+```{r}
 squid_filter <- squid_data |>
   filter_peak_table(filter_mispicked_ions_parameters()) |>
   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, 
@@ -52,7 +52,9 @@ squid_filter <- squid_data |>
                                             "Blanks")) |>
   filter_peak_table(filter_insource_ions_parameters())
 
-squid_filter
+peak_table <- get_peak_table(squid_filter)
+names(peak_table) <- substr(names(peak_table), 1, 8)
+peak_table
 ```
 
 ## Convert from rt to "RT in minutes" or "rt in seconds"
@@ -63,9 +65,17 @@ get_peak_table(squid_filter)$rt
 ```
 
 Retention time(rt) is the amount of time a compound spends in a coloumn and it is an important variable for identifying MS1 compounds. It is used to match MS1 and MS2 spectra together. However, there are times when rt is displayed in a incorrect time format. Such as in minutes instead of seconds. And, if we were to match a MS1 spectra with your rt time in minutes to a MS2 spectra with rt time in seconds, the data would match incorrectly. Therefore, using a function to convert from one format to another is helpful. Keep in mind, that this function cannot directly detect whether your retention time is in seconds or minutes, so if you convert your retention to minutes when it is already in minutes you will generate rt in seconds instead.
-```{r R.options=list(max.print=15)}
-change_rt_to_seconds_or_minutes(squid_filter, "seconds")
-change_rt_to_seconds_or_minutes(squid_filter, "minutes")
+```{r}
+squid_filter <- change_rt_to_seconds_or_minutes(squid_filter, "seconds")
+peak_table <- get_peak_table(squid_filter)
+names(peak_table) <- substr(names(peak_table), 1, 8)
+peak_table
+
+
+squid_filter <- change_rt_to_seconds_or_minutes(squid_filter, "minutes")
+peak_table <- get_peak_table(squid_filter)
+names(peak_table) <- substr(names(peak_table), 1, 8)
+peak_table
 ```
 
 ## Preprocess MS2 data
@@ -79,10 +89,23 @@ matched_data <- ms2_ms1_compare(
 matched_data
 ```
 
-`ms2_ms1_compare()` generates a list of data with data.frames to represent the matched data and a list of peaks. This is neccesary to properly compare compounds. Since the information supplied from a MS2 file will compute similar results to compounds that are alike, we can use algorithmic techniques to compute the similarity between two compounds. This allows us to generate annotations and cluster similar spectra (MS2 matched information) together.
+`ms2_ms1_compare()` generates a list of data with two data.frames ("ms1_data", "peak_data"), a list ("peak_data"), and a character vector ("samples").
+
+
+**ms2_matches**
+- One of the two data.frames, "ms2_matches", is a data.frame that contains five columns: "mz", "rt", "ms1_compound_id", "spectra_index", and "ms2_spectrum_id." "mz" and "rt", represent the ms2 mass to charge ratio and retention time. "ms1_compound_id" represents your ms1 compound id that was imported from the feature table. "spectra_index" matches the ms2 data with its ms2 spectrum. Finally, "ms2_spectrum_id" similar to the "ms1_compound_id", is the generated name to represent your ms2 spectra (the name is a combination of your mz and rt). This is neccesary to properly compare compounds. Since the information supplied from a MS2 file will compute similar results to compounds that are alike, we can use algorithmic techniques to compute the similarity between two compounds. This allows us to generate annotations and cluster similar spectra (MS2 matched information) together.
+
+**ms1_data**
+- The other "data.frame", "ms1_data", is a data.frame of the created mpactr object. 
+
+**peak_data**
+- The list that is generate from `ms2_ms1_compare()` is named "peak_data." "peak_data" is a collection of ms2 peak list. A peak list a collection of fragment ions, they all have a value to represent their intenesity and mass-charge ratio. 
+
+**samples**
+- The last slot inside of the list is a character vector named "samples." Samples are a mixture of compounds used for analysis. Each feature has a certain abundance of some sample contained in it. Sample abundance is a very important value and is used to determine which features contain which compounds. It is also important in conducting post-processing analysis, like clustering and beta/alpha diversity (it also is important in the pursuit to determine unknown compounds).
+
 
 ## Chemical formula prediction
-
 To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potenetial to be the predicted formulas. We then look at every mass and intenesity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula.
 
 ```{r  R.options=list(max.print=15)}
