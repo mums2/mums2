@@ -24,6 +24,7 @@ library(ggplot2)
 library(mpactr)
 library(networkD3)
 library(reshape2)
+options(warn=-1)
 ```
 
 ## Import
@@ -69,11 +70,14 @@ Retention time(rt) is the amount of time a compound spends in a coloumn and it i
 
 filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 peak_table <- get_peak_table(filtered_data)
+# Reducing rownames sizes so we can properly see the data
 names(peak_table) <- substr(names(peak_table), 1, 8)
 peak_table
 
+
 filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "seconds")
 peak_table <- get_peak_table(filtered_data)
+# Reducing rownames sizes so we can properly see the data
 names(peak_table) <- substr(names(peak_table), 1, 8)
 peak_table
 
@@ -116,6 +120,8 @@ matched_data <- compute_molecular_formulas(matched_data, 3, 16)
 matched_data$predicted_molecular_formulas
 ```
 
+It is possible for a formula to be unable to be generated. In this case we return a empty string to represent an unknown molecular formula.
+
 ## Annotations
 
 Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object. By supplying a reference database and a scoring method, we can generate numerous annotations. A reference databse is a collection of ms2 spectra, generally curated in a specific format. This package is able to read msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. To determine how similar ms2 spectra are from eachother, we have to incorporate special algorithms. The algorithms we have decided to use are spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z))and the gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). Which gnps uses an modifed cosine score to compute similairty between spectra, spectral entropy takes advantage of the total intenesities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the supplied data.
@@ -129,8 +135,6 @@ annotations <- annotate_ms2(
 
 annotations
 ```
-
-Two out of 15 ms2 spectra matched to a compound inside of the reference. The reference database we are using is not very exhaustive and we do not expect many compounds to match our data. But, given a fleshed out reference database, we would be able to generate stronger supporting annotations which would be able to help us identify unknown compounds. 
 
 ## Scoring/Distance
 
@@ -176,6 +180,8 @@ Packages like vegan opt for using a `matrix` object as input for ecological anal
 ```{r  R.options=list(max.print=15)}
 community_w_omus <- create_community_matrix_object(cluster_results)
 community_matrix_short <- get_community_matrix(community_w_omus)
+
+# Reducing rownames sizes so we can properly see the data
 rownames(community_matrix_short) <- substr(rownames(community_matrix_short), 1, 8)
 community_matrix_short
 ```
@@ -185,6 +191,8 @@ You have the option of not clustering your data to generate a community object a
 ```{r}
 community_wo_omus <- create_community_matrix_object(matched_data)
 community_matrix_short <- get_community_matrix(community_wo_omus)
+
+# Reducing rownames sizes so we can properly see the data
 rownames(community_matrix_short) <- substr(rownames(community_matrix_short), 1, 8)
 community_matrix_short[1:5, ]
 ```
