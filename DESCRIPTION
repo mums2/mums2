@@ -40,6 +40,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     xml2,
-    ggplot2
+    ggplot2,
+    networkD3,
+    reshape2
 Config/testthat/edition: 3
 VignetteBuilder: knitr

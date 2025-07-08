@@ -17,7 +17,7 @@
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
@@ -67,7 +67,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'

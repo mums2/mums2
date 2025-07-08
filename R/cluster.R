@@ -14,7 +14,7 @@
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
@@ -32,10 +32,9 @@
 cluster_data <- function(distance_df, ms2_match_data, cutoff = 0.3, cluster_method = "opticlust") {
 
   sparse_matrix <- create_sparse_matrix(distance_df$i, distance_df$j, distance_df$dist)
-
   # Create Count Table 
   count_table <- create_count_table(ms2_match_data)
-
+  
   # Create Distance Object
   dist <- read_dist(sparse_matrix, count_table, cutoff, FALSE)
 

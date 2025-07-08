@@ -4,16 +4,12 @@
 \alias{filter_cv_parameters}
 \title{Filter Cv Parameters}
 \usage{
-filter_cv_parameters(cv_threshold = NULL, cv_param, copy_object = FALSE)
+filter_cv_parameters(cv_threshold = NULL, copy_object = FALSE)
 }
 \arguments{
 \item{cv_threshold}{Coefficient of variation threshold.
 A lower cv_threshold will result in more stringent filtering and higher
 reproducibility. Recommended values between 0.2 - 0.5.}
-
-\item{cv_param}{Coefficient of variation (CV) statistic to use for filtering
-Options are "mean" or "median", corresponding to mean and median CV,
-respectively.}
 
 \item{copy_object}{A \code{boolean} parameter that allows users to return a copied
 object instead of modifying the object.}
@@ -27,6 +23,6 @@ Creates a list of filter cv arguments
 for the \code{filter_peak_table()} function
 }
 \examples{
-filter_cv_parameters(0.2, "mean")
-filter_cv_parameters(0.2, "median")
+filter_cv_parameters(0.2)
+filter_cv_parameters(0.2)
 }

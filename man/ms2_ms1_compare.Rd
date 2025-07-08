@@ -7,7 +7,7 @@
 ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 }
 \arguments{
-\item{ms2_files}{a list of either \emph{all} mgf files, mzml, or mzxml files.}
+\item{ms2_files}{a list of all your mgf, mzml, or mzxml files.}
 
 \item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
 
@@ -28,7 +28,7 @@ squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_tabl
 
 squid_filter <- squid_data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 

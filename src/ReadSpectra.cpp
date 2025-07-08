@@ -126,10 +126,13 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         if (line.find(' ') != std::string::npos)
             delimiter = ' ';
         // peak mz/intensities
+        
         std::vector<std::string> values;
         const auto pos = line.find(delimiter);
         const std::string mzValue = line.substr(0, pos);
         const std::string intensityValue = line.substr(pos + delimiter.length(), line.size());
+        if (mzValue.empty() || intensityValue.empty()) continue;
+        if (!std::isdigit(mzValue[0]) || !std::isdigit(intensityValue[0])) continue;
         mz.emplace_back(std::stod(mzValue));
         intensity.emplace_back(std::stod(intensityValue));
 

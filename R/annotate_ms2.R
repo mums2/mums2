@@ -45,7 +45,7 @@
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
@@ -81,6 +81,9 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data, reference, scoring_params, 
   preds, precursor_tolerance, min_score, chemical_min_score, min_peaks)
 
+  for(i in seq_along(1:ncol(annotations))){
+    annotations[, i] <- trimws(annotations[ ,i], "right")
+  }
   if(is.null(cluster_data)){
     return(annotations)
   }

@@ -1,7 +1,7 @@
 #' @title Match your ms1 spectra to a ms2
 #' @export
 #' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
-#' @param ms2_files a list of either *all* mgf files, mzml, or mzxml files. 
+#' @param ms2_files a list of all your mgf, mzml, or mzxml files. 
 #' @param mpactr_object your mpactr object creatd from `import_all_data()`
 #' @param mz_tolerance your mass-charge ratio tolerance
 #' @param rt_tolerance your retention time tolerance
@@ -12,7 +12,7 @@
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'

@@ -19,7 +19,7 @@
 #'
 #' squid_filter <- squid_data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #' @returns a `mpactr` object that has been filter based on the supplied parameters.
@@ -52,7 +52,7 @@ filter_peak_table.filter_group <- function(mpactr_object, params) {
 #' @rdname filter_peak_table
 filter_peak_table.filter_cv <- function(mpactr_object, params) {
   return(filter_cv(mpactr_object = mpactr_object, cv_threshold = params$cv_threshold,
-  cv_param = params$cv_param, copy_object = params$copy_object))
+                  copy_object = params$copy_object))
 }
 
 #' @export
@@ -129,20 +129,15 @@ filter_group_parameters <- function(group_threshold = 0.01, group_to_remove,
 #' @param cv_threshold Coefficient of variation threshold.
 #' A lower cv_threshold will result in more stringent filtering and higher
 #' reproducibility. Recommended values between 0.2 - 0.5.
-#' @param cv_param Coefficient of variation (CV) statistic to use for filtering
-#' Options are "mean" or "median", corresponding to mean and median CV,
-#' respectively.
 #' @param copy_object A `boolean` parameter that allows users to return a copied
 #' object instead of modifying the object.
 #' @examples
-#' filter_cv_parameters(0.2, "mean")
-#' filter_cv_parameters(0.2, "median")
+#' filter_cv_parameters(0.2)
+#' filter_cv_parameters(0.2)
 #' @return a `list` object of arguments needed to call the given mpactr function when supplied to the 
 #' `filter_peak_table()` wrapper function.
-filter_cv_parameters <- function(cv_threshold = NULL, cv_param, copy_object = FALSE) {
-  params <- list(cv_threshold = cv_threshold,
-    cv_param = cv_param, copy_object = copy_object)
-  
+filter_cv_parameters <- function(cv_threshold = NULL, copy_object = FALSE) {
+  params <- list(cv_threshold = cv_threshold, copy_object = copy_object)
   class(params) <- "filter_cv"
   return(params)
 }
