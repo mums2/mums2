@@ -6,6 +6,9 @@ read_mzml_mzxml <- function(file) {
                                                file = as.character()), 
                   peak_data = list())
   for(file in file_list) {
+    if(!file.exists(file)) {
+      stop(paste0("file: ", file, " does not exist. Please ensure all files exist."))
+    }
     extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
     if(!(tolower(extension) %in% c("mzml", "mzxml"))) {
       stop(paste0("Please ensure the input file is a .mzml/mzxml, it is currently a .", extension))
@@ -43,6 +46,9 @@ read_mgf <- function(file) {
                                                file = as.character()), 
                   peak_data = list())
   for(file in file_list) {
+    if(!file.exists(file)) {
+      stop(paste0("file: ", file, " does not exist. Please ensure all files exist."))
+    }
     extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
     if(tolower(extension) != "mgf") {
       stop(paste0("Please ensure the input file is a .mgf, it is currently a .", extension))
