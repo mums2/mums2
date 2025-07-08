@@ -1,7 +1,7 @@
 #' @title Match your ms1 spectra to a ms2
 #' @export
 #' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
-#' @param ms2_files a list of either *all* mgf files, mzml, or mzxml files. 
+#' @param ms2_files a list of all your mgf, mzml, or mzxml files. 
 #' @param mpactr_object your mpactr object creatd from `import_all_data()`
 #' @param mz_tolerance your mass-charge ratio tolerance
 #' @param rt_tolerance your retention time tolerance

@@ -7,7 +7,7 @@
 ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 }
 \arguments{
-\item{ms2_files}{a list of either \emph{all} mgf files, mzml, or mzxml files.}
+\item{ms2_files}{a list of all your mgf, mzml, or mzxml files.}
 
 \item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
 
