@@ -5,7 +5,7 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
 
   data_filtered <- data |>
     filter_peak_table(filter_mispicked_ions_parameters()) |>
-    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
     filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
     filter_peak_table(filter_insource_ions_parameters())
 
@@ -21,7 +21,7 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
 
   data_filtered <- data |>
     filter_peak_table(filter_mispicked_ions_parameters()) |>
-    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
+    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
     filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
     filter_peak_table(filter_insource_ions_parameters())
 
