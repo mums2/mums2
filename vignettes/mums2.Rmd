@@ -50,9 +50,7 @@ filtered_data <- data |>
                                             "Blanks")) |>
   filter_peak_table(filter_insource_ions_parameters())
 
-peak_table <- get_peak_table(filtered_data)
-names(peak_table) <- substr(names(peak_table), 1, 8)
-peak_table
+get_peak_table(filtered_data)
 ```
 
 ## Convert from rt to "RT in minutes" or "rt in seconds"
@@ -68,18 +66,12 @@ Retention time(rt) is the amount of time a compound spends in a coloumn and it i
 ```{r convert_rt_to_minutes_or_seconds}
 
 filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
-peak_table <- get_peak_table(filtered_data)
-# Reducing rownames sizes so we can properly see the data
-names(peak_table) <- substr(names(peak_table), 1, 8)
-peak_table
-
+filtered_data
 
 filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "seconds")
-peak_table <- get_peak_table(filtered_data)
-# Reducing rownames sizes so we can properly see the data
-names(peak_table) <- substr(names(peak_table), 1, 8)
-peak_table
+filtered_data
 
+# Changing back to minutes so we can continue the analysis
 filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 ```
 
@@ -91,7 +83,7 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 matched_data <- ms2_ms1_compare(
   mums2_example("full_mix_ms2.mgf"), filtered_data, 2, 6)
 
-matched_data$ms2_matches[,1]
+matched_data$ms2_matches[1,]
 
 matched_data$ms1_data[,1]
 
@@ -115,7 +107,7 @@ matched_data$samples
 To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potenetial to be the predicted formulas. We then look at every mass and intenesity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-matched_data <- compute_molecular_formulas(matched_data, 3, 16)
+matched_data <- compute_molecular_formulas(matched_data, 3)
 matched_data$predicted_molecular_formulas
 ```
 
@@ -125,10 +117,12 @@ It is possible for a formula to be unable to be generated. In this case we retur
 
 Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object. By supplying a reference database and a scoring method, we can generate numerous annotations. A reference databse is a collection of ms2 spectra, generally curated in a specific format. This package is able to read msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. To determine how similar ms2 spectra are from eachother, we have to incorporate special algorithms. The algorithms we have decided to use are spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z))and the gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). Which gnps uses an modifed cosine score to compute similairty between spectra, spectral entropy takes advantage of the total intenesities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the supplied data.
 
+It is recommended to use the `read_msp()` function with your reference databse path for the reference parameter. If you store the returned data of `read_msp()` in a variable it may cause lag if it is too big (over ~100mbs). But we show both ways below. 
+
 ```{r annotations}
 psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
-  mass_data = matched_data, reference = psu_msmls,
+  mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
   scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
   min_score =  0.1, chemical_min_score = .1)
 
@@ -178,22 +172,14 @@ Packages like vegan opt for using a `matrix` object as input for ecological anal
 
 ```{r  community_object, R.options=list(max.print=15)}
 community_w_omus <- create_community_matrix_object(cluster_results)
-community_matrix_short <- get_community_matrix(community_w_omus)
-
-# Reducing rownames sizes so we can properly see the data
-rownames(community_matrix_short) <- substr(rownames(community_matrix_short), 1, 8)
-community_matrix_short
+community_w_omus
 ```
 
 You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together. If you chose not to cluster your data, it may be difficult to find out what that similar species is.
 
-```{r community_object_no_omus}
+```{r community_object_no_omus, R.options=list(max.print=15)}
 community_wo_omus <- create_community_matrix_object(matched_data)
-community_matrix_short <- get_community_matrix(community_wo_omus)
-
-# Reducing rownames sizes so we can properly see the data
-rownames(community_matrix_short) <- substr(rownames(community_matrix_short), 1, 8)
-community_matrix_short[1:5, ]
+community_wo_omus
 ```
 
 ## Run the diversity metrics
@@ -218,20 +204,11 @@ Here are examples of using rarefaction to calculate Bray-Curtis distances using 
 ```{r  dist_shared, R.options=list(max.print=15)}
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
                           threshold = 100, diversity_index = "bray", subsample = TRUE)
+bray_w_omus
 
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
                            threshold = 100, diversity_index = "bray", subsample = TRUE)
-# Reducing name sizes so it is easier to see
-mat_w_omus <- as.matrix(bray_w_omus)
-colnames(mat_w_omus) <- substr(colnames(mat_w_omus), 1, 8)
-rownames(mat_w_omus) <- substr(rownames(mat_w_omus), 1, 8)
-
-mat_no_omus <- as.matrix(bray_no_omus)
-colnames(mat_no_omus) <- substr(colnames(mat_no_omus), 1, 8)
-rownames(mat_no_omus) <- substr(rownames(mat_no_omus), 1, 8)
-
-mat_w_omus
-mat_no_omus
+bray_no_omus
 ```
 
 ## Visualizations
