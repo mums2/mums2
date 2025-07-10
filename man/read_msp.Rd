@@ -13,6 +13,6 @@ read_msp(msp_file)
 Reader function msp files
 }
 \examples{
-read_msp(mums2_example("PSU-MSMLS.msp"))
+read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
 
 }
