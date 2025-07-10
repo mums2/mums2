@@ -8,9 +8,9 @@
 #' @param format The expected exported type of your peak table, can be
 #' one of "Progenesis", "Metaboscape", "None".
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-#'                              format = "None")
+#' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+#'                              format = "Metaboscape")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
   return(import_data(peak_table = peak_table,
