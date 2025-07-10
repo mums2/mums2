@@ -28,10 +28,10 @@ import_all_data <- function(peak_table, meta_data, format) {
 #' @param rt_type how you want to convert your retention time, your options are minutes, or seconds.
 #' defaults to seconds.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-#'                              format = "None")
-#' change_rt_to_seconds_or_minutes(squid_data, "minutes")
+#' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+#'                              format = "Metaboscape")
+#' change_rt_to_seconds_or_minutes(data, "minutes")
 #' @returns a modified `mpactr` object.
 change_rt_to_seconds_or_minutes <- function(mpactr_object, rt_type = "seconds") {
   if(!("filter_pactr" %in% class(mpactr_object))) {

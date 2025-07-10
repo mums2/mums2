@@ -13,11 +13,11 @@
 #' `filter_mispicked_ions_parameters()`, `filter_group_parameters()`, `filter_cv_parameters()`,
 #' and `filter_insource_ions_parameters()`.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-#'                              format = "None")
+#' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+#'                              format = "Metaboscape")
 #'
-#' squid_filter <- squid_data |>
+#' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
 #'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>

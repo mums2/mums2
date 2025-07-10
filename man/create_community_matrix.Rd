@@ -17,22 +17,26 @@ Using your community_object, we are able to convert it into a community matrix f
 usability of the object.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-                             format = "None")
+data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+                             format = "Metaboscape")
 
-squid_filter <- squid_data |>
+filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
+change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
-  squid_filter, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+ filtered_data, 2, 6)
+
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
   score_params = gnps_params(0.5), min_peaks = 0)
+
 cluster_results <- cluster_data(distance_df = dist,
   ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
+
 community_matrix <- create_community_matrix_object(cluster_results)
 }

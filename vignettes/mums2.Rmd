@@ -177,7 +177,7 @@ community_w_omus
 
 You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together. If you chose not to cluster your data, it may be difficult to find out what that similar species is.
 
-```{r community_object_no_omus, R.options=list(max.print=15)}
+```{r community_object_no_omus, R.options=list(max.print=30)}
 community_wo_omus <- create_community_matrix_object(matched_data)
 community_wo_omus
 ```
@@ -215,10 +215,10 @@ bray_no_omus
 
 ### PCOA
 
-Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis, it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at you beta diversity results visually.
+Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at your beta diversity results visually and shows us how similar samples are to eachother. 
 
 ```{r pcoa, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- bray_w_omus
+dist_obj <- bray_no_omus
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)
@@ -244,7 +244,7 @@ pcoa_points |>
 
 ### Hierarchical Clustering
 
-Another visualization approach is to perform hierarchical clustering using the hclust() function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples. The results are similar to that of PCoA but it uses a tree like structure to showcase relationships. It tends to be easier to look at relationships or clusters using this type of graph.
+Another visualization approach is to perform hierarchical clustering using the `stats::hclust()` function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples. The results are similar to that of PCoA but it uses a tree like structure to showcase relationships. It tends to be easier to look at relationships or clusters using this type of graph.
 
 ```{r hierarchical_clustering, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 hclust_result <- hclust(dist_obj, "complete")
@@ -254,7 +254,7 @@ plot(hclust_result)
 
 # Network Plot
 
-Sometimes, it is useful to see a visual map of your annotations. We can accomplish this using a network plot. By creating a network of data, we can see which compounds matched certain features. Its very useful for looking at relationships between compounds and features.
+Sometimes, it is useful to see a visual map of your annotations. We can accomplish this using a network plot. By creating a network of data, we can see which compounds matched certain features. Its very useful for looking at relationships between compounds and features. And using `networkD3::simpleNetwork()` we can generate a very simple network plot.
 
 ```{r network_plot}
 distance_df_annotations <- annotations[, c("query_ms2_id", "name", "score")]
