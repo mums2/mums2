@@ -84,19 +84,20 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   for(i in seq_along(1:ncol(annotations))){
     annotations[, i] <- trimws(annotations[ ,i], "right")
   }
+  colnames(annotations) <- tolower(colnames(annotations))
   if(is.null(cluster_data)){
     return(annotations)
   }
 
   list_data <- clustur::split_clusters_to_list(cluster_data)
-  annotations$OMU <- rep("", times = nrow(annotations))
+  annotations$omu <- rep("", times = nrow(annotations))
   annotaion_omus <- lapply(list_data, function(x)  which(annotations$query_ms1_id %in% x))
 
   for(i in seq_along(annotaion_omus)){
     if(length(annotaion_omus[[i]]) <= 0){
       next
     }
-    annotations$OMU[annotaion_omus[[i]]] <- names(annotaion_omus[i])
+    annotations$omu[annotaion_omus[[i]]] <- names(annotaion_omus[i])
   }                           
   return(annotations)
 }

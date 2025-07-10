@@ -257,6 +257,6 @@ plot(hclust_result)
 Sometimes, it is useful to see a visual map of your annotations. We can accomplish this using a network plot. By creating a network of data, we can see which compounds matched certain features. Its very useful for looking at relationships between compounds and features.
 
 ```{r network_plot}
-distance_df_annotations <- annotations[, c("query_ms2_id", "NAME", "score")]
+distance_df_annotations <- annotations[, c("query_ms2_id", "name", "score")]
 simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
 ```

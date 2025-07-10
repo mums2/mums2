@@ -13,11 +13,11 @@ test_that("annotate_ms_featrues returns the correct annotations in the
 
             colnames <- c("query_ms1_id", "query_ms2_id", "query_mz",
                           "query_rt", "ref_idx", "query_formula", "chemical_similarity", "score",
-                          "Num.Peaks", "NAME", "PRECURSORMZ",
-                          "PRECURSORTYPE", "FORMULA", "Ontology", "INCHIKEY",
-                          "INCHI", "SMILES", "RETENTIONTIME", "IONMODE",
-                          "INSTRUMENTTYPE", "INSTRUMENT",
-                          "COLLISIONENERGY", "Comment")
+                          "num.peaks", "name", "precursormz",
+                          "precursortype", "formula", "ontology", "inchikey",
+                          "inchi", "smiles", "retentiontime", "ionmode",
+                          "instrumenttype", "instrument",
+                          "collisionenergy", "comment")
             expect_true(all(colnames %in% colnames(annotations)))
             expect_true(nrow(annotations) > 0)
             expect_s3_class(annotations, "data.frame")
@@ -33,7 +33,7 @@ test_that("annotate_ms_featrues returns the omu where the query is present", {
   annotations <- annotate_ms2(dat, psu_msmls,
     gnps_params(0.5), 20, .2, 0, min_peaks = 0, cluster_data = cluster)
   
-  expect_true("OMU" %in% colnames(annotations))
+  expect_true("omu" %in% colnames(annotations))
 })
 
 test_that("annotate_ms_featrues returns the correct amount of rows and columns", {
