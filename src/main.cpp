@@ -9,8 +9,6 @@
 #include <RcppThread.h>
 #include <mutex>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
-#include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
-#include "Chemicals/MolecularFormula/MolecularMakeup.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
