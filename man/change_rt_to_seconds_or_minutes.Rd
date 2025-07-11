@@ -22,8 +22,8 @@ rt time in seconds or minutes. This modification happens in place (or by referen
 so the \code{mpactr_object} will be updated.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-                             format = "None")
-change_rt_to_seconds_or_minutes(squid_data, "minutes")
+data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+                             format = "Metaboscape")
+change_rt_to_seconds_or_minutes(data, "minutes")
 }

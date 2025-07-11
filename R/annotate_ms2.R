@@ -39,19 +39,19 @@
 #'  are also reported. Annotation information is returned
 #'  given the information provided in the reference used as input.
 #' @examples
-#' squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-#'                             meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-#'                              format = "None")
+#' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
+#'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
+#'                              format = "Metaboscape")
 #'
-#' squid_filter <- squid_data |>
+#' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_parameters()) |>
 #'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
 #'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#'  matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
-#'  squid_filter, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#'  filtered_data, 2, 6)
 #'  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data, 
 #'    reference = psu_msmls, scoring_params = gnps_params(0.5),
@@ -84,19 +84,20 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   for(i in seq_along(1:ncol(annotations))){
     annotations[, i] <- trimws(annotations[ ,i], "right")
   }
+  colnames(annotations) <- tolower(colnames(annotations))
   if(is.null(cluster_data)){
     return(annotations)
   }
 
   list_data <- clustur::split_clusters_to_list(cluster_data)
-  annotations$OMU <- rep("", times = nrow(annotations))
+  annotations$omu <- rep("", times = nrow(annotations))
   annotaion_omus <- lapply(list_data, function(x)  which(annotations$query_ms1_id %in% x))
 
   for(i in seq_along(annotaion_omus)){
     if(length(annotaion_omus[[i]]) <= 0){
       next
     }
-    annotations$OMU[annotaion_omus[[i]]] <- names(annotaion_omus[i])
+    annotations$omu[annotaion_omus[[i]]] <- names(annotaion_omus[i])
   }                           
   return(annotations)
 }

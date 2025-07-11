@@ -19,14 +19,6 @@ context("Molecular Formula") {
         const MolecularFormula molecularFormula2("C20H15O7N3");
         result = molecularFormula2.GetMolecularFormula() == "C20H15N3O7";
         expect_true(result);
-
-        // std::unordered_map<std::string, int> map {{"C", 6}, {"H", 12}, {"O", 6}};
-        // std::vector<std::string> namesOrder {"C", "H", "O"};
-        // MolecularFormula formula(map, namesOrder);
-        // result = formula.GetMolecularFormula() == "C6H12O6";
-        // expect_true(result);
-
-
     }
     test_that("Get Atoms returns proper amount of atoms or 0 if not found") {
         const MolecularFormula molecularFormula("C6H12O6");
