@@ -23,7 +23,6 @@ LinkingTo:
     testthat,
     RcppProgress
 Imports: 
-    cli,
     clustur,
     msentropy,
     Rcpp,
