@@ -174,7 +174,7 @@ community_w_omus <- create_community_matrix_object(cluster_results)
 community_w_omus
 ```
 
-You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together. If you chose not to cluster your data, it may be difficult to find out what that similar species is.
+You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together.
 
 ```{r community_object_no_omus, R.options=list(max.print=30)}
 community_wo_omus <- create_community_matrix_object(matched_data)
@@ -198,7 +198,7 @@ Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard
 
 Beta diveristy represents the dissimilarity of two different samples. With this calculation the user can generate distances between the community that can be used for visualizations. And, with all of the annotations, and clusters that were computed earlier, you can see just how dissimilar/similar the resultant samples are.
 
-Here are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites.
+Below are examples of using rarefaction to calculate Bray-Curtis distances using OMU or individual metabolites.
 
 ```{r  dist_shared, R.options=list(max.print=15)}
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
