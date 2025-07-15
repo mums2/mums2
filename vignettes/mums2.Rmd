@@ -23,7 +23,6 @@ library(mums2)
 library(ggplot2)
 library(mpactr)
 library(networkD3)
-options(warn=-1)
 ```
 
 ## Import
@@ -92,9 +91,9 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 matched_data <- ms2_ms1_compare(
   mums2_example("full_mix_ms2.mgf"), filtered_data, 2, 6)
 
-matched_data$ms2_matches[1,]
+head(matched_data$ms2_matches)
 
-matched_data$ms1_data[,1]
+head(matched_data$ms1_data)
 
 matched_data$peak_data[[1]]
 
@@ -109,9 +108,11 @@ To add annotation information to the data, mums2 will generate *de novo* chemica
 
 It is possible for a formula to be unable to be generated. In this case we return a empty string to represent an unknown molecular formula. 
 
-```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-# matched_data <- compute_molecular_formulas(matched_data, 3)
-# matched_data$predicted_molecular_formulas
+Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula. 
+
+```{r  chemical_formula_prediction, warning=FALSE, R.options=list(max.print=15)}
+matched_data <- compute_molecular_formulas(matched_data, 3)
+matched_data$predicted_molecular_formulas
 ```
 
 
