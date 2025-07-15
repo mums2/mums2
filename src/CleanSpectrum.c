@@ -254,17 +254,3 @@ int clean_spectrum(float_spec* spectrum, int spectrum_length,
     free(spectrum_argsort);
     return spectrum_length;
 }
-
-// int main()
-// {
-// 	float_spec spectrum_2d[7][2] = { {41.04, 0.3716},{0., 0.3716},{69.070, 7.917962},{69.070, -7.917962},{69.071, 100.},{86.0969, 66.83},{86.01,10} };
-// 	int spectrum_len = 7;
-
-// 	int spectrum_output_len = 0;
-// 	printf("Origin spectrum:\n");
-// 	// print_spectrum(spectrum_2d, spectrum_len);
-// 	clean_spectrum(*spectrum_2d, spectrum_len);
-// 	printf("Final spectrum:\n");
-// 	// print_spectrum(spectrum_2d, spectrum_len);
-// 	return 0;
-// }
