@@ -27,9 +27,13 @@ library(networkD3)
 
 ## Preprocess data
 
+Before we even begin the process of analyzing your data, we have to preprocess it. It is import that we process your data into a readable `data.frame` or object that we can view and transform. To process your data we need to run a two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting the imported data, and `ms2_ms1_compare()` assigns ms2 spectra to your ms1 data. However, some of your data could be noise, or may need to be transformed before you can properly analysis it. To accommodate for those issues, we have two other functions: `filter_peak_table()`, `change_rt_to_seconds_or_minutes()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minutes()` allows you to transform your retention to minutes or seconds. This allows you to ensure your retention time matches that of your ms2 data's retention time. Below will explain in more detail what each function does and how to go through the pipeline.
+
 ### Import
 
 The `import_all_data()` function takes in a peak_table and meta_data table as input and converts it into a `mpactr` object (its a wrapper for `mpactr::import_data()`). The format parameter accepts three different formats: Metaboscape, Progenesis, and None. If you are using a feature table that was exported from metaboscape, use the "Metaboscape" format. If its from Progenesis, use the "Progenesis" format. In order for "Metaboscape" and "Progenesis" to work, mpactr transforms the data behind the scenes into a universal peak table. The "None" format is only used when you are using the "universal peak table" as the "peak table" parameter. You can read up more about each of the formats here(`mpactr::import_data()`).
+
+Meta data is a csv that provides information about the samples. In order for your meta data to be valid, it needs the following columns: "Injection", "Sample_Code", " Biological_Group." The "Injection" column is the name of the samples, it should match the samples inside of the peak_table. "Sample_Code" is the id for you technical replicates. Finally, "Biological_Group" is another id, but for your biological replicate groups (you can learn more here `mpactr::import_data()`).
 
 ```{r import_data}
 data <- import_all_data(
@@ -102,11 +106,13 @@ matched_data$peak_data[[1]]
 matched_data$samples
 ```
 
-## Data euclidation
+## Generate Metadata
+
+Once you preprocess your data, we can start to generate additional metadata like molecular formulas and annotations. Using the `compute_molecular_formulas()` function, we can generate molecular formulas and `annotate_ms2()` allows us to annotate our data based on a reference database. This allows us to annotate additional data to unknown features or confirm known features. Below will explain in further detail how these functions are used.
 
 ### Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take atleast three minutes to run.
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take at least three minutes to run.
 
 It is possible for a formula to be unable to be generated. In this case we return a empty string to represent an unknown molecular formula.
 
@@ -135,6 +141,8 @@ annotations[1:5,]
 
 ## Create OMUs
 
+Lets look into generating OMUs. OMUs are cluster of metabolites and can be used for numerous analysis. To properly cluster your data together, you need to generate some similarity or distance between your data. This is where our `dist_ms2()` function comes in. After you generate a distance `data.frame` we can use the `cluster_data()` function to create your OMUs. Below will show you the process how this works.
+
 ### Scoring/Distance
 
 We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`gnps_params()`) or an algorithm called spectral entropy (`spec_entropy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
@@ -148,7 +156,7 @@ dist
 
 ### Operational Metabolomic Units (OMUs)
 
-OMUs or Operational Metabolomic Units are clusters of unknown metabolites. We cluster metabolites based on how similar their ms2s are to eachother. In our case, we are have a function that is able to do just this, the `dist_ms2()` function. This function generates a distance `data.frame`, or a `data.frame` of closeness between metabolites. Using the generate object along with the matched_ms2_ms1 object, we are able to cluster are data together to generate OMUs using the `cluster_data()` function. This function returns a list with five slots; label, abundance, cluster, cluster_metrics, and iteration metrics.
+OMUs or Operational Metabolomic Units are clusters of metabolites. We cluster metabolites based on how similar their ms2s are to eachother. In our case, we are have a function that is able to do just this, the `dist_ms2()` function. This function generates a distance `data.frame`, or a `data.frame` of closeness between metabolites. Using the generate object along with the matched_ms2_ms1 object, we are able to cluster are data together to generate OMUs using the `cluster_data()` function. This function returns a list with five slots; label, abundance, cluster, cluster_metrics, and iteration metrics.
 
 **label** - Represents the cutoff distance used for the cluster. **abundance** - A `data.frame()` that shows the absolute abundance of the clusters by sample. **cluster** - A `data.frame()` that shows which features clustered together **cluster_metrics** - A `data.frame()` representing metrics for how the clusters were formed. **iteration_metrics** - A `data.frame()` that shows how the data was clustered at each iteration.
 
@@ -172,6 +180,8 @@ annotations[1:5,]
 ```
 
 ## Ecological Analysis
+
+After all of your data is processed, we can finally start analysis your data. To begin, you have to create a "community_object". A community object is a Rcpp Object used for all ecological analysis. You can generate a "community_object" by running the `create_community_matrix_object()`. Once your object is created, we can start computing the diversity inside of the samples. We can compute beta (`dist_shared()`) and alpha diversity (`alpha_summary()`). For more information and how to analysis beta and alpha diversity, or how to further analysis your data, continue reading below.
 
 ### Create the community object/matrix
 
@@ -199,18 +209,16 @@ The vegan package uses an object called a "community matrix." A community matrix
   get_community_matrix(community_w_omus)
 ```
 
-### Run the diversity metrics
+### Alpha Diversity
 
-#### Alpha Diversity
-
-Using your created community matrix object, you are able to compute alpha diversity. Alpha diversity represents diversity (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: simpson and shannon. Simpson represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannon diversity is not bound by zero, essentially, the higher the value, the more diversity there is.
+Using your created community matrix object, you are able to compute alpha diversity. Alpha diversity represents diversity (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: Simpson's and Shannon's diversity. Simpson's diversity represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannon's diversity is not bound by zero, essentially, the higher the value, the more diversity there is.
 
 ```{r  alpha_summary, R.options=list(max.print=15)}
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
               diversity_index = "simpson", subsample = TRUE)
 ```
 
-#### Beta Diversity
+### Beta Diversity
 
 Beta diversity values can be calculated using the Bray-Curtis, Theta-YC, Jaccard, Hamming, Moristia-Horn, and Sorenson distance calculators. Users are strongly encouraged to use rarefaction to control for uneven sampling effort when calculating any diversity metric. By default, the `dist_shared()` function uses subsample = TRUE, which automatically rarefies the samples.
 
@@ -229,6 +237,8 @@ bray_no_omus
 ```
 
 ## Visualizations
+
+There are a few different ways to visualize the data generated from this package. Below we have examples of a PCOA plot, Hierarchical Clustering graph, and a Network graph.
 
 ### PCOA
 
