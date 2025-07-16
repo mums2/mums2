@@ -22,15 +22,16 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::unordered_map<std::string, std::vector<std::string>> map;
     spectraData.unsetf(std::ios_base::skipws);
     // count the newlines with an algorithm specialized for counting:
-    unsigned long line_count = std::count(
-        std::istream_iterator<char>(spectraData),
-        std::istream_iterator<char>(),
-        '\n');
-    Progress p(line_count, true);
+    float line_count = static_cast<float>(std::count(
+         std::istream_iterator<char>(spectraData),
+         std::istream_iterator<char>(),
+         '\n'));
+    CliProgressBar p;
     spectraData.close();
     spectraData.open(filePath);
+    float currentLine = 0;
     while(std::getline(spectraData,  line)) {
-        p.increment();
+        p.update(++currentLine/line_count);
         if(line.find("BEGIN IONS") != std::string::npos) continue;
         if(line.find("END IONS") != std::string::npos) { // ending
 

@@ -29,17 +29,16 @@
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = detectCores()) {
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)
-  pb <- progress_bar$new(
-    format = "  Computing Molecular Formulas [:bar] :percent eta: :eta",
-    total = size, clear = FALSE, width= 75)
-  pb$tick(0)
+  pb <- CreateProgressBarObject()
 
   for(i in seq_along(mass_data$peak_data)) {
     molecular_formula_list[[i]] <- compute_fragmentation_tree(mass_data$peak_data[[i]],
                                                               mass_data$ms2_matches$mz[[i]],
                                                               parent_ppm, num_threads)
-    pb$tick()
+    IncrementProgressBar(pb, i/size)
   }
+  DestroyProgressBar(pb)
+  rm(pb)
   results <- as.character(molecular_formula_list)
   mass_data$predicted_molecular_formulas = results
   failed_amount <- length(which(is.na(results)))

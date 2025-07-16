@@ -9,6 +9,7 @@
 #include <RcppThread.h>
 #include <mutex>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "CustomProgressBar/CliProgressBar.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
@@ -174,4 +175,22 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
         tree.AddMolecularFormulaToGraph(i);
     }, numberOfThreads);
     return GreedyHeuristic::CalculateHeuristic(tree);
+}
+
+// [[Rcpp::export]]
+SEXP CreateProgressBarObject() {
+    auto* progressBar = new CliProgressBar();
+    return Rcpp::XPtr<CliProgressBar>(progressBar);
+}
+
+// [[Rcpp::export]]
+void IncrementProgressBar(SEXP& progressBar, const float progress) {
+    const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
+    cliProgressBar.get()->update(progress);
+}
+
+// [[Rcpp::export]]
+void DestroyProgressBar(SEXP& progressBar) {
+    const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
+    cliProgressBar.get()->end_display();
 }

@@ -159,6 +159,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CreateProgressBarObject
+SEXP CreateProgressBarObject();
+RcppExport SEXP _mums2_CreateProgressBarObject() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CreateProgressBarObject());
+    return rcpp_result_gen;
+END_RCPP
+}
+// IncrementProgressBar
+void IncrementProgressBar(SEXP& progressBar, const float progress);
+RcppExport SEXP _mums2_IncrementProgressBar(SEXP progressBarSEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
+    Rcpp::traits::input_parameter< const float >::type progress(progressSEXP);
+    IncrementProgressBar(progressBar, progress);
+    return R_NilValue;
+END_RCPP
+}
+// DestroyProgressBar
+void DestroyProgressBar(SEXP& progressBar);
+RcppExport SEXP _mums2_DestroyProgressBar(SEXP progressBarSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
+    DestroyProgressBar(progressBar);
+    return R_NilValue;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -196,6 +227,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
+    {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
+    {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
+    {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
