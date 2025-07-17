@@ -10,6 +10,7 @@
 #include <mutex>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "CustomProgressBar/CliProgressBar.h"
+#include "CustomProgressBar/ETAProgressBar.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
