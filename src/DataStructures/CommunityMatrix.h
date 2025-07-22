@@ -18,7 +18,7 @@ public:
 
 
     const std::vector<std::vector<uint32_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
-    std::vector<std::vector<uint32_t>>& GetAllIndexes() {return allIndexes;}
+    std::vector<std::vector<uint32_t>>& GetAbundanceRanges() {return abundancesRanges;}
     const std::vector<std::vector<uint32_t>>& GetCommunityAbundances() const {return communityAbundances;}
     Rcpp::CharacterVector GetSampleNames();
     const std::vector<uint32_t>& GetSums() const {return sums;}
@@ -26,7 +26,6 @@ public:
     const int& GetColumn() const {return col;}
     const Rcpp::CharacterVector& GetRowNames() const {return rowNames;}
     const Rcpp::CharacterVector& GetColumnNames() const {return colNames;}
-
 
 private:
     int row = 0;
@@ -36,9 +35,8 @@ private:
     Rcpp::NumericMatrix communityMatrix;
     std::vector<uint32_t> sums;
     std::vector<std::vector<uint32_t>> eligibleRowIndexes; // The values in the row that do not have 0 abundance
-    std::vector<std::vector<uint32_t>> allIndexes;
     std::vector<std::vector<uint32_t>> communityAbundances;
-
+   std::vector<std::vector<uint32_t>> abundancesRanges;
 
 
 };

@@ -16,7 +16,7 @@ void CommunityMatrix::InitializeMatrix() {
     col = communityMatrix.ncol();
     communityAbundances = std::vector<std::vector<uint32_t>>(row);
     eligibleRowIndexes = std::vector<std::vector<uint32_t>>(row);
-    allIndexes = std::vector<std::vector<uint32_t>>(row);
+    abundancesRanges = std::vector<std::vector<uint32_t>>(row);
     sums = std::vector<uint32_t>(row);
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for(int i = 0; i < row; i++) {
@@ -25,19 +25,15 @@ void CommunityMatrix::InitializeMatrix() {
         communityAbundances[i] = communityVector;
         const size_t size = communityVector.size();
         eligibleRowIndexes[i].reserve(size);
+        abundancesRanges[i].reserve(size);
         sums[i] = std::accumulate(communityVector.begin(), communityVector.end(), 0LL);
-        allIndexes[i] = std::vector<uint32_t>(sums[i]);
-        size_t index = 0;
-        uint32_t currentPosition = 0;
+        uint32_t previousAbundance = 0;
         for(size_t j = 0; j < size; j++) {
-            uint32_t val = communityVector[j];
-            if(val > 0) {
-                eligibleRowIndexes[i].emplace_back(j);
-                for (uint32_t k = 0; k < val; k++) {
-                    allIndexes[i][index++] = currentPosition;
-                }
-                currentPosition++;
-            }
+            uint32_t abundance = communityVector[j];
+            if (abundance <= 0) continue;
+            eligibleRowIndexes[i].emplace_back(j);
+            previousAbundance = abundance + previousAbundance;
+            abundancesRanges[i].emplace_back(previousAbundance);
         }
     }
 }

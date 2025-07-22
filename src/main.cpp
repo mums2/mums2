@@ -60,14 +60,6 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
-std::vector<uint32_t> ComputeRarefaction(const std::vector<uint32_t> & abundance,
-    const std::vector<uint32_t> & eligibleIndex, std::vector<uint32_t> & availableIndexValues, const uint32_t size,
-     const uint32_t sum, const uint32_t threshold) {
-    return Rarefaction::Rarefy(abundance, eligibleIndex,
-            availableIndexValues, size, sum, threshold);
-
-}
-
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
     const uint32_t threshold) {
@@ -78,15 +70,14 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
     const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
     std::vector<std::string> names = Rcpp::as<std::vector<std::string> >(rowNames);
-    std::mutex mut;
-    std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
+    std::vector<std::vector<uint32_t>>& abundanceRanges = matrix.get()->GetAbundanceRanges();
     const std::vector<std::vector<uint32_t>>& communityAbundances = matrix.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for (int i = 0; i < row; i++) {
-        const std::vector<uint32_t> result = ComputeRarefaction(communityAbundances[i], eligibleIndexes[i],
-        allIndexes[i], size, sums[i], threshold);
+        const std::vector<uint32_t> result = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
+        abundanceRanges[i], size, sums[i], threshold);
         for(const auto& index : eligibleIndexes[i]) {
             resultantMatrix(i, index) = result.at(index);
         }

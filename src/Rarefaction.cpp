@@ -9,7 +9,7 @@
 
 std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance,
     const std::vector<uint32_t>& eligibleIndex,
-    std::vector<uint32_t>& availableIndexValues,
+    std::vector<uint32_t>& abundancesRanges,
     const uint32_t size, const uint32_t sum,
     const uint32_t threshold) {
 
@@ -27,17 +27,20 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
     uint32_t incrementer = size;
 
     std::vector<uint32_t> counter(vectorSize, 0);
-    std::deque<std::pair<size_t, size_t>> indexSwap;
-
+    std::unordered_map<size_t, size_t> indexSwap;
     size_t currentIndex = 0;
+    size_t currentIndexSwap = 0;
     while(grandTotal <= size) {
 
         const auto maxValue = incrementer + currentIndex;
         for(size_t i = currentIndex; i < maxValue; i++) {
-            const auto randomIndex = static_cast<size_t>(R::runif(i, sum));
-            const auto index = availableIndexValues[randomIndex];
-            std::swap(availableIndexValues[randomIndex], availableIndexValues[i]);
-            indexSwap.emplace_front(i, randomIndex);
+            const auto randomValue = static_cast<size_t>(R::runif(i, sum));
+            auto index = std::lower_bound(abundancesRanges.begin(),
+                abundancesRanges.end(), randomValue) - abundancesRanges.begin();
+            if (indexSwap.find(randomValue) != indexSwap.end())
+                index = indexSwap[index];
+            else
+                indexSwap[randomValue] = currentIndexSwap++;
             counter[eligibleIndex[index]]++;
         }
         if(currentIndex <= 0) currentIndex += size;
@@ -60,11 +63,7 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
         if(value < threshold)
             value = 0;
     }
-    while(!indexSwap.empty()) {
-        const auto pair = indexSwap.front();
-        indexSwap.pop_front();
-        std::swap(availableIndexValues[pair.first],availableIndexValues[pair.second]);
-    }
     return counter;
 }
+
 
