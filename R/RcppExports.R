@@ -45,6 +45,18 @@ ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThre
     .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
 }
 
+CreateProgressBarObject <- function() {
+    .Call(`_mums2_CreateProgressBarObject`)
+}
+
+IncrementProgressBar <- function(progressBar, progress) {
+    invisible(.Call(`_mums2_IncrementProgressBar`, progressBar, progress))
+}
+
+DestroyProgressBar <- function(progressBar) {
+    invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

@@ -62,3 +62,16 @@ change_rt_to_seconds_or_minutes <- function(mpactr_object, rt_type = "seconds") 
   }
   return(mpactr_object)
 }
+
+
+
+format_data_to_uft8_and_remove_commas <- function(mpactr_object) {
+  message("If peak table has corrupted compound names they will be converted to
+           utf-8 and if there are any commas, they will be converted to periods(.).")
+  peak_table <- get_peak_table(mpactr_object)
+  # Converts non-utf8 data to utf8 data
+  peak_table$Compound <- iconv(peak_table$Compound, from = "latin1", "UTF-8")
+  peak_table$Compound <- gsub(",", ".", peak_table$Compound)
+  mpactr_object$mpactr_data$set_peak_table(peak_table)
+  return(mpactr_object)
+}

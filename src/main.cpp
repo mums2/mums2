@@ -9,6 +9,8 @@
 #include <RcppThread.h>
 #include <mutex>
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "CustomProgressBar/CliProgressBar.h"
+#include "CustomProgressBar/ETAProgressBar.h"
 #include "DataStructures/CommunityMatrix.h"
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
@@ -58,14 +60,6 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
-std::vector<uint32_t> ComputeRarefaction(const std::vector<uint32_t> & abundance,
-    const std::vector<uint32_t> & eligibleIndex, std::vector<uint32_t> & availableIndexValues, const uint32_t size,
-     const uint32_t sum, const uint32_t threshold) {
-    return Rarefaction::Rarefy(abundance, eligibleIndex,
-            availableIndexValues, size, sum, threshold);
-
-}
-
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
     const uint32_t threshold) {
@@ -76,15 +70,14 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
     const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
     std::vector<std::string> names = Rcpp::as<std::vector<std::string> >(rowNames);
-    std::mutex mut;
-    std::vector<std::vector<uint32_t>>& allIndexes = matrix.get()->GetAllIndexes();
+    std::vector<std::vector<uint32_t>>& abundanceRanges = matrix.get()->GetAbundanceRanges();
     const std::vector<std::vector<uint32_t>>& communityAbundances = matrix.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
     for (int i = 0; i < row; i++) {
-        const std::vector<uint32_t> result = ComputeRarefaction(communityAbundances[i], eligibleIndexes[i],
-        allIndexes[i], size, sums[i], threshold);
+        const std::vector<uint32_t> result = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
+        abundanceRanges[i], size, sums[i], threshold);
         for(const auto& index : eligibleIndexes[i]) {
             resultantMatrix(i, index) = result.at(index);
         }
@@ -100,7 +93,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const bool subsample,
     const int iterations = 1000) {
-
+    CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
     int row = samples.size();
@@ -114,11 +107,13 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
                 size, threshold);
         }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+        p.update(static_cast<float>(i)/static_cast<float>(iterations));
     }
     diversityMatrix = diversityMatrix/iterations;
     Rcpp::colnames(diversityMatrix) = samples;
     if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
     Rcpp::rownames(diversityMatrix) = samples;
+    p.end_display();
     return diversityMatrix;
 }
 
@@ -174,4 +169,22 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
         tree.AddMolecularFormulaToGraph(i);
     }, numberOfThreads);
     return GreedyHeuristic::CalculateHeuristic(tree);
+}
+
+// [[Rcpp::export]]
+SEXP CreateProgressBarObject() {
+    auto* progressBar = new CliProgressBar();
+    return Rcpp::XPtr<CliProgressBar>(progressBar);
+}
+
+// [[Rcpp::export]]
+void IncrementProgressBar(SEXP& progressBar, const float progress) {
+    const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
+    cliProgressBar.get()->update(progress);
+}
+
+// [[Rcpp::export]]
+void DestroyProgressBar(SEXP& progressBar) {
+    const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
+    cliProgressBar.get()->end_display();
 }

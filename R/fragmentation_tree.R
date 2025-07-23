@@ -29,19 +29,21 @@
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3, num_threads = detectCores()) {
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)
-  pb <- progress_bar$new(
-    format = "  Computing Molecular Formulas [:bar] :percent eta: :eta",
-    total = size, clear = FALSE, width= 75)
-  pb$tick(0)
+  pb <- CreateProgressBarObject()
 
   for(i in seq_along(mass_data$peak_data)) {
     molecular_formula_list[[i]] <- compute_fragmentation_tree(mass_data$peak_data[[i]],
                                                               mass_data$ms2_matches$mz[[i]],
                                                               parent_ppm, num_threads)
-    pb$tick()
+    IncrementProgressBar(pb, i/size)
   }
+  DestroyProgressBar(pb)
+  rm(pb)
   results <- as.character(molecular_formula_list)
   mass_data$predicted_molecular_formulas = results
+  failed_amount <- length(which(is.na(results)))
+  message(paste0(abs(length(results) - failed_amount), "/", length(results),
+                 " chemical formulas were predicted"))
   return(mass_data)
 }
 
@@ -51,19 +53,16 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass, parent_ppm, 
   valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
   invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
   if(length(parent_decomp$formula) <= 0) {
-    warning("No parent decompositions, returning emptry string.")
-    return("")
+    return(NA_character_)
   }
   if(length(valid_parent_indexes) == 1) {
     return(parent_decomp$formula[valid_parent_indexes])
   }
   if(length(parent_decomp$formula) == 1) {
-    warning("No valid parent formulas identified, therefore, return an invalid but possible formula.")
     return(parent_decomp$formula[1])
   }
   # worse case scenario, use the invalid indexes to generate a value
   if(length(valid_parent_indexes) <= 0 && length(invalid_indexes) > 0) {
-    warning("No valid parent formulas identified, therefore, replacing with invalid formulas.")
     valid_parent_indexes <- invalid_indexes
   }
   decompList <- vector("list", length(list_of_mz_int$mz))

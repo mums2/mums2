@@ -22,16 +22,15 @@ context("Test Rarefaction") {
         setSeed(2);
         Rarefaction rarefaction;
         std::vector<uint32_t> abundances = {3, 2, 1, 8};
-        std::vector<uint32_t> availableIndexes = {0, 0, 0, 1, 1,
-            2, 3, 3, 3, 3, 3, 3, 3, 3};
+        std::vector<uint32_t> abundanceRanges = {3, 5, 6, 14};
         const std::vector<uint32_t> eligible = {0, 1, 2, 3};
         const uint32_t size = 10;
         const uint32_t threshold = 2;
         const uint32_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
         const auto vec = rarefaction.Rarefy(abundances,
-                eligible, availableIndexes, size, currentSum, threshold);
+                eligible, abundanceRanges, size, currentSum, threshold);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
-        std::vector<uint32_t> expected = {2, 2, 0, 6};
+        std::vector<uint32_t> expected = {3, 0, 0, 7};
         expect_true(sum == size);
         expect_true(vec.size() == 4);
         expect_true(vec == expected);
