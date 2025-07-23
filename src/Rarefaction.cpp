@@ -38,6 +38,8 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
                 // Set the random number to the next index
                 size_t currentRandomValue = randomValue;
                 randomValue = indexSwap[randomValue];
+                if (indexSwap.find(randomValue) != indexSwap.end())
+                    randomValue = indexSwap[randomValue];
                 indexSwap[currentRandomValue] = i;
             }
             else
