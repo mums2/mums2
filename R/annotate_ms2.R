@@ -81,9 +81,9 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data, reference, scoring_params, 
   preds, precursor_tolerance, min_score, chemical_min_score, min_peaks)
 
-  # for(i in seq_along(1:ncol(annotations))){
-  #   annotations[, i] <- trimws(annotations[ ,i], "right")
-  # }
+  for(i in seq_along(1:ncol(annotations))){
+    annotations[, i] <- trimws(annotations[ ,i], "right")
+  }
   colnames(annotations) <- tolower(colnames(annotations))
   if(is.null(cluster_data)){
     return(annotations)
