@@ -29,21 +29,19 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
     std::vector<uint32_t> counter(vectorSize, 0);
     std::unordered_map<size_t, size_t> indexSwap;
     size_t currentIndex = 0;
-    size_t currentIndexSwap = 0;
     while(grandTotal <= size) {
 
         const auto maxValue = incrementer + currentIndex;
         for(size_t i = currentIndex; i < maxValue; i++) {
             auto randomValue = static_cast<size_t>(R::runif(i, sum));
             if (indexSwap.find(randomValue) != indexSwap.end()) {
+                // Set the random number to the next index
+                size_t currentRandomValue = randomValue;
                 randomValue = indexSwap[randomValue];
-                // Take the number that was swapped with the original number
-                // And give it its own value;
-                size_t tempNumber = indexSwap[randomValue];
-                indexSwap[tempNumber] = currentIndexSwap++;
+                indexSwap[currentRandomValue] = i;
             }
             else
-                indexSwap[randomValue] = currentIndexSwap++;
+                indexSwap[randomValue] = i;
 
             const auto index = std::lower_bound(abundancesRanges.begin(),
                 abundancesRanges.end(), randomValue) - abundancesRanges.begin();
