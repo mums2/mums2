@@ -186,3 +186,20 @@ void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
 }
+// [[Rcpp::export]]
+void Test() {
+    Rcpp::Environment base = Rcpp::Environment::namespace_env("base");
+    const Rcpp::Function setSeed = base["set.seed"];
+    setSeed(2);
+    Rarefaction rarefaction;
+    std::vector<uint32_t> abundances = {3, 2, 1, 8};
+    std::vector<uint32_t> abundanceRanges = {3, 5, 6, 14};
+    const std::vector<uint32_t> eligible = {0, 1, 2, 3};
+    const uint32_t size = 10;
+    const uint32_t threshold = 2;
+    const uint32_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
+    const auto vec = rarefaction.Rarefy(abundances,
+            eligible, abundanceRanges, size, currentSum, threshold);
+    const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
+    std::vector<uint32_t> expected = {4, 0, 0, 6};
+}

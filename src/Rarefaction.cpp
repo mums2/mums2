@@ -34,13 +34,19 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
 
         const auto maxValue = incrementer + currentIndex;
         for(size_t i = currentIndex; i < maxValue; i++) {
-            const auto randomValue = static_cast<size_t>(R::runif(i, sum));
-            auto index = std::lower_bound(abundancesRanges.begin(),
-                abundancesRanges.end(), randomValue) - abundancesRanges.begin();
-            if (indexSwap.find(randomValue) != indexSwap.end())
-                index = indexSwap[index];
+            auto randomValue = static_cast<size_t>(R::runif(i, sum));
+            if (indexSwap.find(randomValue) != indexSwap.end()) {
+                randomValue = indexSwap[randomValue];
+                // Take the number that was swapped with the original number
+                // And give it its own value;
+                size_t tempNumber = indexSwap[randomValue];
+                indexSwap[tempNumber] = currentIndexSwap++;
+            }
             else
                 indexSwap[randomValue] = currentIndexSwap++;
+
+            const auto index = std::lower_bound(abundancesRanges.begin(),
+                abundancesRanges.end(), randomValue) - abundancesRanges.begin();
             counter[eligibleIndex[index]]++;
         }
         if(currentIndex <= 0) currentIndex += size;
