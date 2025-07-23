@@ -93,7 +93,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const bool subsample,
     const int iterations = 1000) {
-
+    CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
     int row = samples.size();
@@ -107,11 +107,13 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
                 size, threshold);
         }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+        p.update(static_cast<float>(i)/static_cast<float>(iterations));
     }
     diversityMatrix = diversityMatrix/iterations;
     Rcpp::colnames(diversityMatrix) = samples;
     if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
     Rcpp::rownames(diversityMatrix) = samples;
+    p.end_display();
     return diversityMatrix;
 }
 

@@ -73,7 +73,7 @@ protected:
 
         std::string time_string = _time_to_string(rem_time);
         if (_firstTime)
-            time_string = "Estimating...";
+            time_string = "-";
         for (int i = 0; i < _ticks_displayed; ++i) {
             Rcpp::Rcout << "\033[32m\u25A0" << std::flush;
         }

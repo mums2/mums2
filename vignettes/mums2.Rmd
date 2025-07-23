@@ -134,7 +134,7 @@ psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
   scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
-  min_score =  0.1, chemical_min_score = .1)
+  min_score =  0.1, chemical_min_score = 0)
 
 annotations[1:5,]
 ```
@@ -174,7 +174,7 @@ After your data has been clustered, if you wish to see which OMUs the annotated 
 
 ```{r omu_annotations}
 annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
-                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = .1, cluster_data = cluster_results)
+                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
 ```
