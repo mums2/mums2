@@ -13,8 +13,8 @@
 #'                              format = "Metaboscape")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
-  return(import_data(peak_table = peak_table,
-                     meta_data = meta_data, format = format))
+  return(format_data_to_uft8_and_remove_commas(import_data(peak_table = peak_table,
+                     meta_data = meta_data, format = format)))
 }
 
 
