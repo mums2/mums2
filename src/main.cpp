@@ -61,7 +61,6 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
-// [[Rcpp::depends(sitmo)]]
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
     const uint32_t threshold, const int seed = 123) {
@@ -77,9 +76,9 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
-    std::vector<sitmo::prng> rngEngines(row);
+    std::vector<ParallelRandomNumberSitmo> rngEngines(row);
     for (int i = 0; i < row; ++i) {
-        rngEngines[i] = ParallelRandomNumberSitmo::CreateRandomNumberGenerateSitmo(seed + i);
+        rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
     }
 
     std::mutex mutex;
@@ -198,31 +197,4 @@ void IncrementProgressBar(SEXP& progressBar, const float progress) {
 void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
-}
-
-
-
-// [[Rcpp::depends(sitmo)]]
-#include <sitmo.h>
-// [[Rcpp::export]]
-Rcpp::NumericVector runif_sitmo(unsigned int n, double min = 0.0, double max = 1.0, uint32_t seed = 1) {
-    Rcpp::NumericVector o(n);
-
-    // Create a prng engine
-    sitmo::prng eng(seed);
-    // Obtain the range between max and min
-    double dis = max - min;
-
-    for(int i = 0; i < n; ++i) {
-        // Sample from the RNG and divide it by the maximum value possible (can also use SITMO_RAND_MAX, which is 4294967295)
-        // Apply appropriate scale (MAX-MIN)
-        o[i] = min + (static_cast<double>(eng()) / (sitmo::prng::max())) * (dis);
-    }
-
-    return o;
-}
-
-// [[Rcpp::export]]
-int Test(int seed) {
-    return 0;
 }

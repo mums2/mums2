@@ -57,14 +57,6 @@ DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
 }
 
-runif_sitmo <- function(n, min = 0.0, max = 1.0, seed = 1L) {
-    .Call(`_mums2_runif_sitmo`, n, min, max, seed)
-}
-
-Test <- function(seed) {
-    .Call(`_mums2_Test`, seed)
-}
-
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

@@ -192,31 +192,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// runif_sitmo
-Rcpp::NumericVector runif_sitmo(unsigned int n, double min, double max, uint32_t seed);
-RcppExport SEXP _mums2_runif_sitmo(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP, SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type min(minSEXP);
-    Rcpp::traits::input_parameter< double >::type max(maxSEXP);
-    Rcpp::traits::input_parameter< uint32_t >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(runif_sitmo(n, min, max, seed));
-    return rcpp_result_gen;
-END_RCPP
-}
-// Test
-int Test(int seed);
-RcppExport SEXP _mums2_Test(SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(Test(seed));
-    return rcpp_result_gen;
-END_RCPP
-}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -257,8 +232,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_runif_sitmo", (DL_FUNC) &_mums2_runif_sitmo, 4},
-    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},

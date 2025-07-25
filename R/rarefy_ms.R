@@ -13,6 +13,7 @@
 #' @param size The desired total sample intensity to subsample to.
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @return A `external_pointer` that references a community matrix of rarefied feature intensities.
 #' @export
 #' 
@@ -41,9 +42,9 @@
 #' community_object <- create_community_matrix_object(cluster_results)
 #' rarefy_ms(community_object, 4000, 100)
 #' 
-rarefy_ms <- function(community_object, size, threshold) {
+rarefy_ms <- function(community_object, size, threshold, seed = 123) {
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
   }
-  return(RarefactionCalculation(community_object, size, threshold))
+  return(RarefactionCalculation(community_object, size, threshold, seed))
 }

@@ -12,7 +12,7 @@
 std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance,
                                           const std::vector<uint32_t>& eligibleIndex,
                                           const std::vector<uint32_t>& abundancesRanges,
-                                          sitmo::prng& rngEngine,
+                                          ParallelRandomNumberSitmo& rngEngine,
                                           const uint32_t size, const uint32_t sum,
                                           const uint32_t threshold) {
 
@@ -38,7 +38,7 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
         const auto maxValue = incrementer + currentIndex;
         std::vector<size_t> randomNumbers(maxValue - currentIndex);
         for(size_t i = currentIndex, index = 0; i < maxValue; ++i) {
-            randomNumbers[index++] = ParallelRandomNumberSitmo::GetRandomValue(rngEngine, i, sum);
+            randomNumbers[index++] = rngEngine.NextRandomValue(i, sum);
 
         }
         for(size_t i = 0; i < randomNumbers.size(); i++) {

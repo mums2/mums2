@@ -7,12 +7,13 @@
 #include <cstdint>
 #include <vector>
 #include <Rcpp.h>
-#include <sitmo.h>
+#include "../Math/ParallelRandomNumberSitmo.h"
+
 class Rarefaction {
 public:
-    // [[Rcpp::depends(sitmo)]]
     static std::vector<uint32_t> Rarefy(const std::vector<uint32_t> &abundance, const std::vector<uint32_t> &eligibleIndex,
-                                        const std::vector<uint32_t> &abundancesRanges, sitmo::prng& rngEngine,
+                                        const std::vector<uint32_t> &abundancesRanges,
+                                        ParallelRandomNumberSitmo& rngEngine,
                                         uint32_t size, uint32_t sum,
                                         uint32_t threshold);
 };

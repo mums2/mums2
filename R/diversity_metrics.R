@@ -10,6 +10,7 @@
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
 #' @param iterations the amount of times you wish to run your calculation.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
@@ -36,7 +37,7 @@
 #' dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold, diversity_index = "bray", subsample = TRUE, 
-                        iterations = 100) {
+                        iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -46,7 +47,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations)
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(as.dist(result))
 }
@@ -64,6 +65,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
 #' @param iterations the amount of times you wish to run your calculation.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
@@ -91,7 +93,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
-                          subsample = TRUE, iterations = 1000) {
+                          subsample = TRUE, iterations = 1000, seed = 123) {
   diversity_index_list <- c("shannon", "simpson")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -102,5 +104,5 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations))
+  return(FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations, seed))
 }
