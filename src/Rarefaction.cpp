@@ -32,7 +32,6 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
     std::vector<uint32_t> counter(vectorSize, 0);
     std::unordered_map<size_t, size_t> indexSwap;
     size_t currentIndex = 0;
-    std::mutex mutex;
     while(grandTotal <= size) {
 
         const auto maxValue = incrementer + currentIndex;
