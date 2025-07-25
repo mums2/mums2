@@ -114,7 +114,7 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
         Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
         if (subsample) {
             rarefyMatrix = RarefactionCalculation(communityObject,
-                size, threshold);
+                size, threshold, seed);
         }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
         p.update(static_cast<float>(i)/static_cast<float>(iterations));
