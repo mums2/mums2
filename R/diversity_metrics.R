@@ -9,6 +9,7 @@
 #' bray, jaccard, soren, hamming, morista, and thetayc.
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
+#' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
@@ -37,7 +38,7 @@
 #' dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold, diversity_index = "bray", subsample = TRUE, 
-                        iterations = 100, seed = 123) {
+                        number_of_threads = detectCores(), iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -47,7 +48,8 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations, seed)
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample,
+                          number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(as.dist(result))
 }
@@ -64,6 +66,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' shannon or simpson.
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
+#' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
@@ -93,7 +96,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
-                          subsample = TRUE, iterations = 1000, seed = 123) {
+                          subsample = TRUE, number_of_threads = detectCores(), iterations = 1000, seed = 123) {
   diversity_index_list <- c("shannon", "simpson")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -104,5 +107,6 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations, seed))
+  return(FasterAvgDist(community_object, diversity_index, size, threshold, 
+                       subsample, number_of_threads, iterations, seed))
 }

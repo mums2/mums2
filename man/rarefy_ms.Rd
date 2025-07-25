@@ -4,7 +4,13 @@
 \alias{rarefy_ms}
 \title{Rarefy MS1 Feature Table}
 \usage{
-rarefy_ms(community_object, size, threshold)
+rarefy_ms(
+  community_object,
+  size,
+  threshold,
+  number_of_threads = detectCores(),
+  seed = 123
+)
 }
 \arguments{
 \item{community_object}{A \code{community_object}}
@@ -13,6 +19,10 @@ rarefy_ms(community_object, size, threshold)
 
 \item{threshold}{The individual feature threshold. Each subsampled feature
 must be >= this value to be retained.}
+
+\item{number_of_threads}{the amount of threads you want the calculation to use.}
+
+\item{seed}{the rng (random number generator) seed you would like to use.}
 }
 \value{
 A \code{external_pointer} that references a community matrix of rarefied feature intensities.

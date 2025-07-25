@@ -63,7 +63,7 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
-    const uint32_t threshold, const int seed = 123) {
+    const uint32_t threshold, const int numberOfThreads, const int seed = 123) {
 
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
@@ -91,7 +91,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
           resultantMatrix(i, index) = result.at(index);
         }
         mutex.unlock();
-    }, 16);
+    }, numberOfThreads);
     Rcpp::rownames(resultantMatrix) = rowNames;
     Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
@@ -101,7 +101,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
-    const uint32_t size, const uint32_t threshold, const bool subsample,
+    const uint32_t size, const uint32_t threshold, const bool subsample, const int numberOfThreads,
     const int iterations = 1000, const int seed = 123) {
     CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
@@ -114,7 +114,7 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
         Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
         if (subsample) {
             rarefyMatrix = RarefactionCalculation(communityObject,
-                size, threshold, seed);
+                size, threshold, numberOfThreads, seed);
         }
         diversityMatrix += CalculateDiversity(rarefyMatrix, index);
         p.update(static_cast<float>(i)/static_cast<float>(iterations));
