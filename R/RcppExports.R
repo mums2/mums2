@@ -21,12 +21,12 @@ GetCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
 }
 
-RarefactionCalculation <- function(communityMatrix, size, threshold) {
-    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
+RarefactionCalculation <- function(communityMatrix, size, threshold, seed = 123L) {
+    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, seed)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, iterations = 1000L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, iterations)
+FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, iterations = 1000L, seed = 123L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, iterations, seed)
 }
 
 ReadMgf <- function(path) {
@@ -55,6 +55,14 @@ IncrementProgressBar <- function(progressBar, progress) {
 
 DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
+}
+
+runif_sitmo <- function(n, min = 0.0, max = 1.0, seed = 1L) {
+    .Call(`_mums2_runif_sitmo`, n, min, max, seed)
+}
+
+Test <- function(seed) {
+    .Call(`_mums2_Test`, seed)
 }
 
 squareRootNormalize <- function(vec) {

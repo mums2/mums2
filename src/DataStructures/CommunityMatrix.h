@@ -18,7 +18,7 @@ public:
 
 
     const std::vector<std::vector<uint32_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}
-    std::vector<std::vector<uint32_t>>& GetAbundanceRanges() {return abundancesRanges;}
+    const std::vector<std::vector<uint32_t>>& GetAbundanceRanges() const {return abundancesRanges;}
     const std::vector<std::vector<uint32_t>>& GetCommunityAbundances() const {return communityAbundances;}
     Rcpp::CharacterVector GetSampleNames();
     const std::vector<uint32_t>& GetSums() const {return sums;}

@@ -5,7 +5,7 @@
 #include <testthat.h>
 
 #include "Rarefy/Rarefaction.h"
-
+#include "Math/ParallelRandomNumberSitmo.h"
 
 // Initialize a unit test context. This is similar to how you
 // might begin an R test file with 'context()', expect the
@@ -27,8 +27,9 @@ context("Test Rarefaction") {
         const uint32_t size = 10;
         const uint32_t threshold = 2;
         const uint32_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
+        sitmo::prng rngEngine = ParallelRandomNumberSitmo::CreateRandomNumberGenerateSitmo(123);
         const auto vec = rarefaction.Rarefy(abundances,
-                eligible, abundanceRanges, size, currentSum, threshold);
+                eligible, abundanceRanges, rngEngine, size, currentSum, threshold);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
         std::vector<uint32_t> expected = {3, 0, 0, 7};
         expect_true(sum == size);

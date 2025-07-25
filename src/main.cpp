@@ -17,6 +17,7 @@
 #include "DiversityMetrics/DiversityMetricFactory.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
+#include "Math/ParallelRandomNumberSitmo.h"
 #include "Math/VectorMath.h"
 #include "Spectra/ReadSpectra.h"
 
@@ -60,9 +61,10 @@ SEXP GetCommunityMatrix(SEXP communityMatrix) {
     return matrix.get()->GetCommunityMatrix();
 }
 
+// [[Rcpp::depends(sitmo)]]
 // [[Rcpp::export]]
 Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size,
-    const uint32_t threshold) {
+    const uint32_t threshold, const int seed = 123) {
 
     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
     const int row = matrix.get()->GetRow();
@@ -70,18 +72,27 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     const Rcpp::CharacterVector& rowNames = matrix.get()->GetRowNames();
     const Rcpp::CharacterVector& columnNames = matrix.get()->GetColumnNames();
     std::vector<std::string> names = Rcpp::as<std::vector<std::string> >(rowNames);
-    std::vector<std::vector<uint32_t>>& abundanceRanges = matrix.get()->GetAbundanceRanges();
+    const std::vector<std::vector<uint32_t>>& abundanceRanges = matrix.get()->GetAbundanceRanges();
     const std::vector<std::vector<uint32_t>>& communityAbundances = matrix.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint32_t>>& eligibleIndexes = matrix.get()->GetColumnEligibleIndexes();
     const std::vector<uint32_t>& sums = matrix.get()->GetSums();
     Rcpp::NumericMatrix resultantMatrix(row, col);
-    for (int i = 0; i < row; i++) {
-        const std::vector<uint32_t> result = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
-        abundanceRanges[i], size, sums[i], threshold);
-        for(const auto& index : eligibleIndexes[i]) {
-            resultantMatrix(i, index) = result.at(index);
-        }
+    std::vector<sitmo::prng> rngEngines(row);
+    for (int i = 0; i < row; ++i) {
+        rngEngines[i] = ParallelRandomNumberSitmo::CreateRandomNumberGenerateSitmo(seed + i);
     }
+
+    std::mutex mutex;
+    RcppThread::parallelFor(0, row, [&communityAbundances, &eligibleIndexes,
+    &abundanceRanges, &resultantMatrix, &sums, &rngEngines, &mutex, &size, &threshold](int i) {
+        const std::vector<uint32_t> result = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
+          abundanceRanges[i],rngEngines[i], size, sums[i], threshold);
+        mutex.lock();
+        for(const auto& index : eligibleIndexes[i]) {
+          resultantMatrix(i, index) = result.at(index);
+        }
+        mutex.unlock();
+    }, 16);
     Rcpp::rownames(resultantMatrix) = rowNames;
     Rcpp::colnames(resultantMatrix) = columnNames;
     return resultantMatrix;
@@ -92,7 +103,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint32_t size, const uint32_t threshold, const bool subsample,
-    const int iterations = 1000) {
+    const int iterations = 1000, const int seed = 123) {
     CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
@@ -187,4 +198,31 @@ void IncrementProgressBar(SEXP& progressBar, const float progress) {
 void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
+}
+
+
+
+// [[Rcpp::depends(sitmo)]]
+#include <sitmo.h>
+// [[Rcpp::export]]
+Rcpp::NumericVector runif_sitmo(unsigned int n, double min = 0.0, double max = 1.0, uint32_t seed = 1) {
+    Rcpp::NumericVector o(n);
+
+    // Create a prng engine
+    sitmo::prng eng(seed);
+    // Obtain the range between max and min
+    double dis = max - min;
+
+    for(int i = 0; i < n; ++i) {
+        // Sample from the RNG and divide it by the maximum value possible (can also use SITMO_RAND_MAX, which is 4294967295)
+        // Apply appropriate scale (MAX-MIN)
+        o[i] = min + (static_cast<double>(eng()) / (sitmo::prng::max())) * (dis);
+    }
+
+    return o;
+}
+
+// [[Rcpp::export]]
+int Test(int seed) {
+    return 0;
 }

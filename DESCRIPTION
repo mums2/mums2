@@ -18,6 +18,7 @@ URL: https://github.com/mums2/mums2
 BugReports: https://github.com/mums2/mums2/issues
 biocViews:
 LinkingTo: 
+    sitmo,
     Rcpp,
     RcppThread,
     testthat,
@@ -33,6 +34,7 @@ Imports:
     stats,
     parallel,
     progress,
+    sitmo,
     Rdisop
 Suggests: 
     knitr,

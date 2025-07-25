@@ -7,11 +7,14 @@
 #include <numeric>
 #include <unordered_map>
 
+#include "Math/ParallelRandomNumberSitmo.h"
+
 std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance,
-    const std::vector<uint32_t>& eligibleIndex,
-    std::vector<uint32_t>& abundancesRanges,
-    const uint32_t size, const uint32_t sum,
-    const uint32_t threshold) {
+                                          const std::vector<uint32_t>& eligibleIndex,
+                                          const std::vector<uint32_t>& abundancesRanges,
+                                          sitmo::prng& rngEngine,
+                                          const uint32_t size, const uint32_t sum,
+                                          const uint32_t threshold) {
 
     if(eligibleIndex.empty()) return abundance;
     uint32_t aboveThresholdSum = 0;
@@ -29,11 +32,17 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
     std::vector<uint32_t> counter(vectorSize, 0);
     std::unordered_map<size_t, size_t> indexSwap;
     size_t currentIndex = 0;
+    std::mutex mutex;
     while(grandTotal <= size) {
 
         const auto maxValue = incrementer + currentIndex;
-        for(size_t i = currentIndex; i < maxValue; i++) {
-            auto randomValue = static_cast<size_t>(R::runif(i, sum));
+        std::vector<size_t> randomNumbers(maxValue - currentIndex);
+        for(size_t i = currentIndex, index = 0; i < maxValue; ++i) {
+            randomNumbers[index++] = ParallelRandomNumberSitmo::GetRandomValue(rngEngine, i, sum);
+
+        }
+        for(size_t i = 0; i < randomNumbers.size(); i++) {
+            auto randomValue = randomNumbers[i];
             if (indexSwap.find(randomValue) != indexSwap.end()) {
                 // Set the random number to the next index
                 size_t currentRandomValue = randomValue;
