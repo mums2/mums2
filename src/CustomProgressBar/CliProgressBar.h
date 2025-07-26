@@ -5,6 +5,7 @@
 #ifndef CLIPROGRESSBAR_H
 #define CLIPROGRESSBAR_H
 #include <Rcpp.h>
+#include <RcppThread.h>
 #include "progress_bar.hpp"
 class CliProgressBar : public ProgressBar {
 public:
@@ -13,7 +14,7 @@ public:
     ~CliProgressBar() = default;
 
 public:
-    void display() override { Rcpp::Rcout << "\033[37mRunning simulations "; }
+    void display() override { RcppThread::Rcout << "\033[37mRunning simulations "; }
 
     void update(const float progress) override {
         if (_firstTime) {
@@ -48,7 +49,7 @@ protected:
         const int nb_ticks = _compute_nb_ticks(progress);
         const int delta = nb_ticks - _ticks_displayed;
         if (delta > 0) {
-            Rcpp::Rcout << "\r" << std::flush;
+            RcppThread::Rcout << "\r" << std::flush;
             _ticks_displayed = nb_ticks;
             _display_ticks(progress);
         }
@@ -57,14 +58,14 @@ protected:
     void _finalize_display() {
         if (_finalized) return;
 
-        Rcpp::Rcout << std::endl;
+        RcppThread::Rcout << std::endl;
         _finalized = true;
     }
 
     int _compute_nb_ticks(const float progress) const { return static_cast<int>(progress * _max_ticks); }
 
     void _display_ticks(const double progress) const {
-        Rcpp::Rcout << "\033[37mRunning simulations ";
+        RcppThread::Rcout << "\033[37mRunning simulations ";
         // calculate passed time and remaining time (in seconds)
         const double pas_time = std::difftime(end, start);
         const double rem_time = (pas_time / progress) * (1 - progress);
@@ -75,12 +76,12 @@ protected:
         if (_firstTime)
             time_string = "-";
         for (int i = 0; i < _ticks_displayed; ++i) {
-            Rcpp::Rcout << "\033[32m\u25A0" << std::flush;
+            RcppThread::Rcout << "\033[32m\u25A0" << std::flush;
         }
         for (int i = 0; i < (_max_ticks - _ticks_displayed); i++) {
-            Rcpp::Rcout << " " << std::flush;
+            RcppThread::Rcout << " " << std::flush;
         }
-        Rcpp::Rcout << "\033[37m | " << static_cast<int>(progress * 100) << "%" << "  ETA: " << time_string;
+        RcppThread::Rcout << "\033[37m | " << static_cast<int>(progress * 100) << "%" << "  ETA: " << time_string;
     }
     static std::string _time_to_string(const double seconds) {
 

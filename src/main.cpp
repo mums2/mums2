@@ -97,7 +97,32 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     return resultantMatrix;
 }
 
+std::vector<std::vector<uint32_t>> RarefactionCalculation2(const std::vector<std::vector<uint32_t>>& communityAbundances,
+    const std::vector<std::vector<uint32_t>>& eligibleIndexes,
+    const std::vector<std::vector<uint32_t>>& abundanceRanges,
+    const std::vector<uint32_t>& sums,
+    std::vector<ParallelRandomNumberSitmo>& rngEngines,
+    const int rows,
+    const uint32_t size,
+    const uint32_t threshold) {
 
+    std::vector<std::vector<uint32_t>> resultantMatrix(rows);
+    for (int i = 0; i < rows; i++) {
+        resultantMatrix[i] = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
+        abundanceRanges[i],rngEngines[i], size, sums[i], threshold);
+    }
+    return resultantMatrix;
+}
+
+Rcpp::NumericMatrix TwoDimVectorToNumericMatrix(const std::vector<std::vector<uint32_t>>& matrix){
+    Rcpp::NumericMatrix result(matrix.size(), matrix[0].size());
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[i].size(); ++j) {
+            result(i, j) = matrix[i][j];
+        }
+    }
+    return result;
+}
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
@@ -110,15 +135,39 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     if (index == "simpson" || index == "shannon")
         row = 1;
     Rcpp::NumericMatrix diversityMatrix(row, samples.size());
-    for(int i = 0; i < iterations; i++) {
-        Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
-        if (subsample) {
-            rarefyMatrix = RarefactionCalculation(communityObject,
-                size, threshold, numberOfThreads, seed);
-        }
-        diversityMatrix += CalculateDiversity(rarefyMatrix, index);
-        p.update(static_cast<float>(i)/static_cast<float>(iterations));
+    // for(int i = 0; i < iterations; i++) {
+    //     Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
+    //     if (subsample) {
+    //         rarefyMatrix = RarefactionCalculation(communityObject,
+    //             size, threshold, numberOfThreads, seed);
+    //     }
+    //     diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+    //     p.update(static_cast<float>(i)/static_cast<float>(iterations));
+    // }
+    // Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
+    const std::vector<std::vector<uint32_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
+    const std::vector<std::vector<uint32_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
+    const std::vector<std::vector<uint32_t>>& eligibleIndexes = communityObject.get()->GetColumnEligibleIndexes();
+    const std::vector<uint32_t>& sums = communityObject.get()->GetSums();
+    std::vector<ParallelRandomNumberSitmo> rngEngines(row);
+    for (int i = 0; i < row; ++i) {
+        rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
     }
+    std::mutex mutex;
+    int currentProgress = 0;
+    RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
+        &diversityMatrix, &rngEngines, &sums, &row, &size, &threshold, &subsample, &index,
+        &iterations, &mutex, &p, &currentProgress](int i) {
+        std::vector<std::vector<uint32_t>> rarefyMatrix{};
+        if (subsample) {
+             rarefyMatrix = RarefactionCalculation2(communityAbundances, eligibleIndexes,
+                 abundanceRanges, sums, rngEngines, row, size, threshold);
+        }
+        mutex.lock();
+        // diversityMatrix += CalculateDiversity(TwoDimVectorToNumericMatrix(rarefyMatrix), index);
+        p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
+        mutex.unlock();
+    }, numberOfThreads);
     diversityMatrix = diversityMatrix/iterations;
     Rcpp::colnames(diversityMatrix) = samples;
     if(diversityMatrix.rows() <= 1) return diversityMatrix; // alpha diversity
