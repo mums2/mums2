@@ -27,6 +27,7 @@ CppMatrix BetaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
             // brayCurtisMatrix(i,j) += result;
             // brayCurtisMatrix(j,i) += result;
             brayCurtis[i * sampleSize + j] = result;
+            brayCurtis[j * sampleSize + i] = result;
         }
     }
     // Rcpp::colnames(brayCurtisMatrix) = samples;

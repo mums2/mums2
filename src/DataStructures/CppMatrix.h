@@ -84,7 +84,7 @@ public:
         Rcpp::NumericMatrix result(rowSize, colSize);
         for (size_t i = 0; i < rowSize; i++) {
             for (size_t j = 0; j < colSize; j++) {
-                result(i, j) = data[i * colSize + j];
+                result(j, i) = data[i * colSize + j];
             }
         }
         return result;

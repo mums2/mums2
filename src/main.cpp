@@ -185,7 +185,6 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
 
     Rcpp::NumericMatrix resultantMatrix = diversityMatrix.ToRcppMatrix();
     Rcpp::colnames(resultantMatrix) = samples;
-    Rcpp::Rcout << resultantMatrix << std::endl;
     if(diversityMatrix.GetRowSize() <= 1) return resultantMatrix; // alpha diversity
     Rcpp::rownames(resultantMatrix) = samples;
     return resultantMatrix;
