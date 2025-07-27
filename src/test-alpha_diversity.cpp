@@ -22,10 +22,10 @@
 // associated context should be wrapped in braced.
 context("Test Alpha Diversity") {
 
-    // The format for specifying tests is similar to that of
-    // testthat's R functions. Use 'test_that()' to define a
-    // unit test, and use 'expect_true()' and 'expect_false()'
-    // to test the desired conditions.
+//    // The format for specifying tests is similar to that of
+//    // testthat's R functions. Use 'test_that()' to define a
+//    // unit test, and use 'expect_true()' and 'expect_false()'
+//    // to test the desired conditions.
 //    test_that("Calculate Shannon Diversity returns proper results") {
 //        AlphaDiversity test;
 //        Rcpp::NumericVector v = {1,2,3,4};

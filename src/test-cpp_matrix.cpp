@@ -84,5 +84,19 @@ context("Test CppMatrix Operations") {
         expect_error(matrix + matrix2);
         expect_error(matrix == matrix2);
     }
+    test_that("You are able to divide CppMatrix by a scaler") {
+        std::vector<std::vector<double>> mat(3);
+        mat[0] = {5,5,5};
+        mat[1] = {10,10,10};
+        mat[2] = {15,15,15};
+        CppMatrix matrix(mat);
+        std::vector<std::vector<double>> expectedResult(3);
+        expectedResult[0] = {1,1,1};
+        expectedResult[1] = {2,2,2};
+        expectedResult[2] = {3,3,3};
+        const CppMatrix expectedMatrix(expectedResult);
+        matrix/=5;
+        expect_true(matrix == expectedMatrix);
+    }
 
 }

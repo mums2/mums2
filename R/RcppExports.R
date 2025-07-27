@@ -57,18 +57,6 @@ Test <- function() {
     .Call(`_mums2_Test`)
 }
 
-TestNumericMatrix <- function(vector) {
-    invisible(.Call(`_mums2_TestNumericMatrix`, vector))
-}
-
-TestCppMatrix <- function() {
-    invisible(.Call(`_mums2_TestCppMatrix`))
-}
-
-TestTraditional <- function() {
-    invisible(.Call(`_mums2_TestTraditional`))
-}
-
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

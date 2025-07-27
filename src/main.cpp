@@ -16,6 +16,7 @@
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
+#include "DiversityMetrics/BetaDiversityCalculators/BetaDiversity.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
 #include "Math/ParallelRandomNumberSitmo.h"
@@ -98,7 +99,7 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     return resultantMatrix;
 }
 
-CppMatrix RarefactionCalculation2(const std::vector<std::vector<uint64_t>>& communityAbundances,
+CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint64_t>>& communityAbundances,
     const std::vector<std::vector<uint64_t>>& eligibleIndexes,
     const std::vector<std::vector<uint64_t>>& abundanceRanges,
     const std::vector<uint64_t>& sums,
@@ -142,52 +143,34 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     if (index == "simpson" || index == "shannon")
         row = 1;
     CppMatrix diversityMatrix(std::vector<double>(row * samples.size(), 0), row, samples.size());
-    // for(int i = 0; i < iterations; i++) {
-    //     Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
-    //     if (subsample) {
-    //         rarefyMatrix = RarefactionCalculation(communityObject,
-    //             size, threshold, numberOfThreads, seed);
-    //     }
-    //     diversityMatrix += CalculateDiversity(rarefyMatrix, index);
-    //     p.update(static_cast<float>(i)/static_cast<float>(iterations));
-    // }
-    // Rcpp::NumericMatrix rarefyMatrix = communityObject.get()->GetCommunityMatrix();
     const std::vector<std::vector<uint64_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
     const std::vector<std::vector<uint64_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityObject.get()->GetColumnEligibleIndexes();
     const std::vector<uint64_t>& sums = communityObject.get()->GetSums();
-    std::vector<ParallelRandomNumberSitmo> rngEngines(numberOfThreads);
-    for (int i = 0; i < numberOfThreads; ++i) {
+    std::vector<ParallelRandomNumberSitmo> rngEngines(iterations);
+    for (int i = 0; i < iterations; ++i) {
         rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
     }
-    std::unordered_map<std::thread::id, ParallelRandomNumberSitmo> rngThreadMap;
     std::mutex mutex;
     int columnSize = communityObject.get()->GetColumn();
     int currentProgress = 0;
     int currentThreadRng = 0;
     const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
     RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
-        &diversityMatrix, &rngEngines, &numberOfThreads, &sums, &matrixRowSize, &columnSize, &size, &threshold, &subsample, &index,
-        &rngThreadMap, &iterations, &mutex, &p, &currentProgress, &currentThreadRng](int i) {
+        &diversityMatrix, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold,
+        &subsample, &index, &iterations, &mutex, &p, &currentProgress, &currentThreadRng](int i) {
         CppMatrix rarefyMatrix;
 
-        mutex.lock();
-        if (rngThreadMap.find(std::this_thread::get_id()) == rngThreadMap.end()) {
-            rngThreadMap[std::this_thread::get_id()] = rngEngines[currentThreadRng++];
-        }
-        mutex.unlock();
-
         if (subsample) {
-            rarefyMatrix = RarefactionCalculation2(communityAbundances, eligibleIndexes,
-                 abundanceRanges, sums, rngThreadMap[std::this_thread::get_id()], matrixRowSize, columnSize, size, threshold);
+            rarefyMatrix = RarefactionCalculationParallelized(communityAbundances, eligibleIndexes,
+                 abundanceRanges, sums, rngEngines[i], matrixRowSize, columnSize, size, threshold);
         }
         mutex.lock();
-        RcppThread::Rcout << std::this_thread::get_id() << std::endl;
         if (subsample)
             diversityMatrix += CalculateDiversity(rarefyMatrix, index);
-        // else
-        //     diversityMatrix += CalculateDiversity(matrix, index);
-        // p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
+        else
+            diversityMatrix += CalculateDiversity(matrix, index);
+        p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
         mutex.unlock();
     }, numberOfThreads,numberOfThreads);
     diversityMatrix/=iterations;
@@ -275,51 +258,15 @@ void DestroyProgressBar(SEXP& progressBar) {
 // [[Rcpp::export]]
 Rcpp::NumericMatrix Test() {
     std::vector<std::vector<double>> mat(3);
-    mat[0] = {1,2,3};
-    mat[1] = {4,5,6};
-    mat[2] = {7,8,9};
-    std::vector<std::vector<double>> mat2(3);
-    mat2[0] = {1,2.2,3};
-    mat2[1] = {4,5.2,6.1};
-    mat2[2] = {7,8,9};
-    const CppMatrix matrix(mat);
-    const CppMatrix matrix2(mat2);
-    const auto res = matrix + matrix2;
+    mat[0] = {5,5,5};
+    mat[1] = {10,10,10};
+    mat[2] = {15,15,15};
+    CppMatrix matrix(mat);
     std::vector<std::vector<double>> expectedResult(3);
-    expectedResult[0] = {2,4,6};
-    expectedResult[1] = {8,10,12};
-    expectedResult[2] = {14,16,18};
+    expectedResult[0] = {1,1,1};
+    expectedResult[1] = {2,2,2};
+    expectedResult[2] = {3,3,3};
     const CppMatrix expectedMatrix(expectedResult);
-    return matrix2.ToRcppMatrix();
-}
-
-// [[Rcpp::export]]
-void TestNumericMatrix(Rcpp::NumericVector& vector) {
-    vector.attr("dim") = Rcpp::Dimension(100, 100);
-    Rcpp::NumericMatrix m = Rcpp::as<Rcpp::NumericMatrix>(vector);
-    Rcpp::NumericMatrix m2 = Rcpp::as<Rcpp::NumericMatrix>(vector);
-    m + m2;
-
-}
-
-// [[Rcpp::export]]
-
-void TestCppMatrix() {
-    std::vector<double> mat(std::vector<double>(10000, 1));
-    std::vector<double> mat2(std::vector<double>(10000, 1));
-    const CppMatrix matrix(mat, 100, 100);
-    const CppMatrix matrix2(mat2, 100, 100);
-    const auto res = matrix + matrix2;
-}
-
-// [[Rcpp::export]]
-void TestTraditional() {
-    std::vector<std::vector<double>> mat(100, std::vector<double>(100, 1));
-    std::vector<std::vector<double>> mat2(100, std::vector<double>(100, 1));
-    std::vector<std::vector<double>> result(100, std::vector<double>(100, 0));
-    for (int i = 0 ; i < mat.size() ; i++) {
-        for (int j = 0 ; j < mat[0].size() ; j++) {
-            result[i][j] = mat[i][j] + mat2[i][j];
-        }
-    }
+    matrix/=5;
+    return matrix.ToRcppMatrix();
 }

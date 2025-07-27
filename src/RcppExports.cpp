@@ -192,34 +192,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// TestNumericMatrix
-void TestNumericMatrix(Rcpp::NumericVector& vector);
-RcppExport SEXP _mums2_TestNumericMatrix(SEXP vectorSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type vector(vectorSEXP);
-    TestNumericMatrix(vector);
-    return R_NilValue;
-END_RCPP
-}
-// TestCppMatrix
-void TestCppMatrix();
-RcppExport SEXP _mums2_TestCppMatrix() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    TestCppMatrix();
-    return R_NilValue;
-END_RCPP
-}
-// TestTraditional
-void TestTraditional();
-RcppExport SEXP _mums2_TestTraditional() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    TestTraditional();
-    return R_NilValue;
-END_RCPP
-}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -260,9 +232,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
-    {"_mums2_TestNumericMatrix", (DL_FUNC) &_mums2_TestNumericMatrix, 1},
-    {"_mums2_TestCppMatrix", (DL_FUNC) &_mums2_TestCppMatrix, 0},
-    {"_mums2_TestTraditional", (DL_FUNC) &_mums2_TestTraditional, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
