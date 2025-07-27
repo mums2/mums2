@@ -4,9 +4,9 @@
 
 #include "DiversityMetrics/BetaDiversityCalculators/SorensonIndex.h"
 
-double SorensonIndex::Calculate(const Rcpp::List& abundanceVectors) const {
-    const Rcpp::NumericVector& sampleOne = abundanceVectors[0];
-    const Rcpp::NumericVector& sampleTwo = abundanceVectors[1];
+double SorensonIndex::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
+    const std::vector<double>& sampleOne = abundanceVectors[0];
+    const std::vector<double>& sampleTwo = abundanceVectors[1];
     double sharedOmus = 0;
     double sampleOneOmus = 0;
     double sampleTwoOmus = 0;

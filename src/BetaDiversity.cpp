@@ -6,28 +6,31 @@
 
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
-Rcpp::NumericMatrix BetaDiversity::CalculateDiversity(const Rcpp::NumericMatrix &communityMatrix,
+CppMatrix BetaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
                                                       const std::string &index) {
     const DiversityCalculator* calculator = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(index);
-    const auto sampleSize = static_cast<size_t>(communityMatrix.nrow());
-    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
+    const auto sampleSize = communityMatrix.GetRowSize();
+    // const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
     Rcpp::NumericMatrix brayCurtisMatrix(sampleSize, sampleSize);
-    Rcpp::List diversityList(2);
+    std::vector<double> brayCurtis(sampleSize * sampleSize);
+    // Rcpp::List diversityList(2);
+    std::vector<std::vector<double>> diversityList(2);
     for(size_t i = 0; i < sampleSize; i++) {
         // Rcpp::NumericVector abundance = communityMatrix(i, Rcpp::_);
-        diversityList[0] = communityMatrix(i, Rcpp::_);
+        diversityList[0] = communityMatrix.GetRow(i);
         // std::vector<double> currentCommunity = Rcpp::as<std::vector<double>>(abundance);
         for(size_t j = i; j < sampleSize; j++) {
             if(j == i) continue;
-            diversityList[1] = communityMatrix(j, Rcpp::_);
+            diversityList[1] = communityMatrix.GetRow(j);
             // const std::vector<double> otherCommunity = Rcpp::as<std::vector<double>>(tempCommunity);
             const double result = calculator->Calculate(diversityList);
-            brayCurtisMatrix(i,j) += result;
-            brayCurtisMatrix(j,i) += result;
+            // brayCurtisMatrix(i,j) += result;
+            // brayCurtisMatrix(j,i) += result;
+            brayCurtis[i * sampleSize + j] = result;
         }
     }
-    Rcpp::colnames(brayCurtisMatrix) = samples;
-    Rcpp::rownames(brayCurtisMatrix) = samples;
+    // Rcpp::colnames(brayCurtisMatrix) = samples;
+    // Rcpp::rownames(brayCurtisMatrix) = samples;
     delete calculator;
-    return brayCurtisMatrix;
+    return CppMatrix(brayCurtis, sampleSize, sampleSize);
 }

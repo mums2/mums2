@@ -11,11 +11,11 @@
 
 class Rarefaction {
 public:
-    static std::vector<uint32_t> Rarefy(const std::vector<uint32_t> &abundance, const std::vector<uint32_t> &eligibleIndex,
-                                        const std::vector<uint32_t> &abundancesRanges,
+    static std::vector<uint64_t> Rarefy(const std::vector<uint64_t> &abundance, const std::vector<uint64_t> &eligibleIndex,
+                                        const std::vector<uint64_t> &abundancesRanges,
                                         ParallelRandomNumberSitmo& rngEngine,
-                                        uint32_t size, uint32_t sum,
-                                        uint32_t threshold);
+                                        uint64_t size, uint64_t sum,
+                                        uint64_t threshold);
 };
 
 

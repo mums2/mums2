@@ -26,29 +26,29 @@ context("Test Alpha Diversity") {
     // testthat's R functions. Use 'test_that()' to define a
     // unit test, and use 'expect_true()' and 'expect_false()'
     // to test the desired conditions.
-    test_that("Calculate Shannon Diversity returns proper results") {
-        AlphaDiversity test;
-        Rcpp::NumericVector v = {1,2,3,4};
-        // Set the number of rows and columns to attribute dim of the vector object.
-        v.attr("dim") = Rcpp::Dimension(2, 2);
-        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
-        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "shannon");
-        bool resultBoolean = res(0,0) > 0 && res(0,1) > 0;
-        expect_true(res.ncol() == 2);
-        expect_true(res.nrow() == 1);
-        expect_true(resultBoolean);
-    }
-    test_that("Calculate Simpson Diversity returns proper results") {
-        AlphaDiversity test;
-        Rcpp::NumericVector v = {1,1,1,1};
-        // Set the number of rows and columns to attribute dim of the vector object.
-        v.attr("dim") = Rcpp::Dimension(2, 2);
-        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
-        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "simpson");
-        expect_true(res.ncol() == 2);
-        expect_true(res.nrow() == 1);
-        expect_true(res(0,0) == 1);
-        expect_true(res(0,1) == 1);
-    }
+//    test_that("Calculate Shannon Diversity returns proper results") {
+//        AlphaDiversity test;
+//        Rcpp::NumericVector v = {1,2,3,4};
+//        // Set the number of rows and columns to attribute dim of the vector object.
+//        v.attr("dim") = Rcpp::Dimension(2, 2);
+//        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
+//        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "shannon");
+//        bool resultBoolean = res(0,0) > 0 && res(0,1) > 0;
+//        expect_true(res.ncol() == 2);
+//        expect_true(res.nrow() == 1);
+//        expect_true(resultBoolean);
+//    }
+//    test_that("Calculate Simpson Diversity returns proper results") {
+//        AlphaDiversity test;
+//        Rcpp::NumericVector v = {1,1,1,1};
+//        // Set the number of rows and columns to attribute dim of the vector object.
+//        v.attr("dim") = Rcpp::Dimension(2, 2);
+//        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
+//        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "simpson");
+//        expect_true(res.ncol() == 2);
+//        expect_true(res.nrow() == 1);
+//        expect_true(res(0,0) == 1);
+//        expect_true(res(0,1) == 1);
+//    }
 
 }

@@ -11,7 +11,7 @@ class SorensonIndex final : public DiversityCalculator{
 public:
     SorensonIndex() = default;
     ~SorensonIndex() override = default;
-    double Calculate(const Rcpp::List &) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 

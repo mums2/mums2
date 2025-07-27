@@ -9,10 +9,6 @@ distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPe
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks)
 }
 
-CalculateDiversityCommunityObject <- function(communityMatrix, diversityIndex) {
-    .Call(`_mums2_CalculateDiversityCommunityObject`, communityMatrix, diversityIndex)
-}
-
 CreateCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_CreateCommunityMatrix`, communityMatrix)
 }
@@ -55,6 +51,22 @@ IncrementProgressBar <- function(progressBar, progress) {
 
 DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
+}
+
+Test <- function() {
+    .Call(`_mums2_Test`)
+}
+
+TestNumericMatrix <- function(vector) {
+    invisible(.Call(`_mums2_TestNumericMatrix`, vector))
+}
+
+TestCppMatrix <- function() {
+    invisible(.Call(`_mums2_TestCppMatrix`))
+}
+
+TestTraditional <- function() {
+    invisible(.Call(`_mums2_TestTraditional`))
 }
 
 squareRootNormalize <- function(vec) {

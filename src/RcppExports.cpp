@@ -45,18 +45,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CalculateDiversityCommunityObject
-Rcpp::NumericMatrix CalculateDiversityCommunityObject(const SEXP& communityMatrix, const std::string& diversityIndex);
-RcppExport SEXP _mums2_CalculateDiversityCommunityObject(SEXP communityMatrixSEXP, SEXP diversityIndexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type diversityIndex(diversityIndexSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateDiversityCommunityObject(communityMatrix, diversityIndex));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CreateCommunityMatrix
 SEXP CreateCommunityMatrix(Rcpp::NumericMatrix communityMatrix);
 RcppExport SEXP _mums2_CreateCommunityMatrix(SEXP communityMatrixSEXP) {
@@ -80,14 +68,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // RarefactionCalculation
-Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size, const uint32_t threshold, const int numberOfThreads, const int seed);
+Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint64_t size, const uint64_t threshold, const int numberOfThreads, const int seed);
 RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP numberOfThreadsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
     rcpp_result_gen = Rcpp::wrap(RarefactionCalculation(communityMatrix, size, threshold, numberOfThreads, seed));
@@ -95,15 +83,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // FasterAvgDist
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint32_t size, const uint32_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
+Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
 RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const bool >::type subsample(subsampleSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
@@ -194,6 +182,44 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// Test
+Rcpp::NumericMatrix Test();
+RcppExport SEXP _mums2_Test() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(Test());
+    return rcpp_result_gen;
+END_RCPP
+}
+// TestNumericMatrix
+void TestNumericMatrix(Rcpp::NumericVector& vector);
+RcppExport SEXP _mums2_TestNumericMatrix(SEXP vectorSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector& >::type vector(vectorSEXP);
+    TestNumericMatrix(vector);
+    return R_NilValue;
+END_RCPP
+}
+// TestCppMatrix
+void TestCppMatrix();
+RcppExport SEXP _mums2_TestCppMatrix() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    TestCppMatrix();
+    return R_NilValue;
+END_RCPP
+}
+// TestTraditional
+void TestTraditional();
+RcppExport SEXP _mums2_TestTraditional() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    TestTraditional();
+    return R_NilValue;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -222,7 +248,6 @@ RcppExport SEXP run_testthat_tests(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 5},
-    {"_mums2_CalculateDiversityCommunityObject", (DL_FUNC) &_mums2_CalculateDiversityCommunityObject, 2},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
@@ -234,6 +259,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
+    {"_mums2_Test", (DL_FUNC) &_mums2_Test, 0},
+    {"_mums2_TestNumericMatrix", (DL_FUNC) &_mums2_TestNumericMatrix, 1},
+    {"_mums2_TestCppMatrix", (DL_FUNC) &_mums2_TestCppMatrix, 0},
+    {"_mums2_TestTraditional", (DL_FUNC) &_mums2_TestTraditional, 0},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},

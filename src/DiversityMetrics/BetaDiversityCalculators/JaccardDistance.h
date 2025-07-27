@@ -11,7 +11,7 @@ class JaccardDistance final : public DiversityCalculator{
 public:
     JaccardDistance() = default;
     ~JaccardDistance() override = default;
-    double Calculate(const Rcpp::List &) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 

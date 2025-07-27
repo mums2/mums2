@@ -21,17 +21,17 @@ context("Test Rarefaction") {
         const Rcpp::Function setSeed = base["set.seed"];
         setSeed(2);
         Rarefaction rarefaction;
-        std::vector<uint32_t> abundances = {3, 2, 1, 8};
-        std::vector<uint32_t> abundanceRanges = {3, 5, 6, 14};
-        const std::vector<uint32_t> eligible = {0, 1, 2, 3};
-        const uint32_t size = 10;
-        const uint32_t threshold = 2;
-        const uint32_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
+        std::vector<uint64_t> abundances = {3, 2, 1, 8};
+        std::vector<uint64_t> abundanceRanges = {3, 5, 6, 14};
+        const std::vector<uint64_t> eligible = {0, 1, 2, 3};
+        const uint64_t size = 10;
+        const uint64_t threshold = 2;
+        const uint64_t currentSum = std::accumulate(abundances.begin(), abundances.end(), 0L);
         ParallelRandomNumberSitmo rngEngine(2120);
         const auto vec = rarefaction.Rarefy(abundances,
                 eligible, abundanceRanges, rngEngine, size, currentSum, threshold);
         const auto sum = std::accumulate(vec.begin(), vec.end(), 0LL);
-        std::vector<uint32_t> expected = {4,0,0,6};
+        std::vector<uint64_t> expected = {4,0,0,6};
         expect_true(sum == size);
         expect_true(vec.size() == 4);
         expect_true(vec == expected);

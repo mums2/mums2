@@ -12,7 +12,7 @@ class ShannonDiversityIndex final : public DiversityCalculator{
 public:
     ShannonDiversityIndex() = default;
     ~ShannonDiversityIndex() override = default;
-    double Calculate(const Rcpp::List&) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 

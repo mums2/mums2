@@ -9,15 +9,15 @@
 
 #include "Math/ParallelRandomNumberSitmo.h"
 
-std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance,
-                                          const std::vector<uint32_t>& eligibleIndex,
-                                          const std::vector<uint32_t>& abundancesRanges,
+std::vector<uint64_t> Rarefaction::Rarefy(const std::vector<uint64_t>& abundance,
+                                          const std::vector<uint64_t>& eligibleIndex,
+                                          const std::vector<uint64_t>& abundancesRanges,
                                           ParallelRandomNumberSitmo& rngEngine,
-                                          const uint32_t size, const uint32_t sum,
-                                          const uint32_t threshold) {
+                                          const uint64_t size, const uint64_t sum,
+                                          const uint64_t threshold) {
 
     if(eligibleIndex.empty()) return abundance;
-    uint32_t aboveThresholdSum = 0;
+    uint64_t aboveThresholdSum = 0;
     for(const auto& abund : abundance) {
         if(abund >= threshold)
             aboveThresholdSum += abund;
@@ -26,10 +26,10 @@ std::vector<uint32_t> Rarefaction::Rarefy(const std::vector<uint32_t>& abundance
         return abundance;
 
     const size_t vectorSize = abundance.size();
-    uint32_t grandTotal = 0;
-    uint32_t incrementer = size;
+    uint64_t grandTotal = 0;
+    uint64_t incrementer = size;
 
-    std::vector<uint32_t> counter(vectorSize, 0);
+    std::vector<uint64_t> counter(vectorSize, 0);
     std::unordered_map<size_t, size_t> indexSwap;
     size_t currentIndex = 0;
     while(grandTotal <= size) {

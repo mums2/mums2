@@ -5,8 +5,8 @@
 #include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 
 
-double ShannonDiversityIndex::Calculate(const Rcpp::List &abundances) const {
-    const Rcpp::NumericVector& abundanceList = abundances[0];
+double ShannonDiversityIndex::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
+    const std::vector<double>& abundanceList = abundanceVectors[0];
     const double sum = std::accumulate(abundanceList.begin(), abundanceList.end(), 0.0);
     double speciesProportion = 0;
     for (const auto &abundance : abundanceList) {

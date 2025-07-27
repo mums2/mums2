@@ -5,11 +5,11 @@
 #ifndef DIVERSITY_H
 #define DIVERSITY_H
 #include <Rcpp.h>
-
+#include "../DataStructures/CppMatrix.h"
 class Diversity {
 public:
     virtual ~Diversity();
-    virtual Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
+    virtual CppMatrix CalculateDiversity(const CppMatrix& communityMatrix,
         const std::string& index) = 0;
 };
 
