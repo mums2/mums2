@@ -102,7 +102,7 @@ CppMatrix RarefactionCalculation2(const std::vector<std::vector<uint64_t>>& comm
     const std::vector<std::vector<uint64_t>>& eligibleIndexes,
     const std::vector<std::vector<uint64_t>>& abundanceRanges,
     const std::vector<uint64_t>& sums,
-    std::vector<ParallelRandomNumberSitmo>& rngEngines,
+    ParallelRandomNumberSitmo& rngEngine,
     const int rows,
     const int columns,
     const uint64_t size,
@@ -111,7 +111,7 @@ CppMatrix RarefactionCalculation2(const std::vector<std::vector<uint64_t>>& comm
     std::vector<double> resultantMatrix(rows * columns);
     for (int i = 0; i < rows; i++) {
         const std::vector<uint64_t> data = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
-        abundanceRanges[i],rngEngines[i], size, sums[i], threshold);
+        abundanceRanges[i],rngEngine, size, sums[i], threshold);
         size_t counter = 0;
         for (int j = columns * i; j < columns * i + columns; j++) {
             resultantMatrix[j] = static_cast<double>(data[counter++]);
@@ -156,28 +156,38 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     const std::vector<std::vector<uint64_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityObject.get()->GetColumnEligibleIndexes();
     const std::vector<uint64_t>& sums = communityObject.get()->GetSums();
-    std::vector<ParallelRandomNumberSitmo> rngEngines(matrixRowSize);
-    for (int i = 0; i < matrixRowSize; ++i) {
+    std::vector<ParallelRandomNumberSitmo> rngEngines(numberOfThreads);
+    for (int i = 0; i < numberOfThreads; ++i) {
         rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
     }
+    std::unordered_map<std::thread::id, ParallelRandomNumberSitmo> rngThreadMap;
     std::mutex mutex;
     int columnSize = communityObject.get()->GetColumn();
     int currentProgress = 0;
+    int currentThreadRng = 0;
     const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
     RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
-        &diversityMatrix, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold, &subsample, &index,
-        &iterations, &mutex, &p, &currentProgress](int i) {
+        &diversityMatrix, &rngEngines, &numberOfThreads, &sums, &matrixRowSize, &columnSize, &size, &threshold, &subsample, &index,
+        &rngThreadMap, &iterations, &mutex, &p, &currentProgress, &currentThreadRng](int i) {
         CppMatrix rarefyMatrix;
+
+        mutex.lock();
+        if (rngThreadMap.find(std::this_thread::get_id()) == rngThreadMap.end()) {
+            rngThreadMap[std::this_thread::get_id()] = rngEngines[currentThreadRng++];
+        }
+        mutex.unlock();
+
         if (subsample) {
             rarefyMatrix = RarefactionCalculation2(communityAbundances, eligibleIndexes,
-                 abundanceRanges, sums, rngEngines, matrixRowSize, columnSize, size, threshold);
+                 abundanceRanges, sums, rngThreadMap[std::this_thread::get_id()], matrixRowSize, columnSize, size, threshold);
         }
         mutex.lock();
+        RcppThread::Rcout << std::this_thread::get_id() << std::endl;
         if (subsample)
             diversityMatrix += CalculateDiversity(rarefyMatrix, index);
         // else
         //     diversityMatrix += CalculateDiversity(matrix, index);
-        p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
+        // p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
         mutex.unlock();
     }, numberOfThreads,numberOfThreads);
     diversityMatrix/=iterations;
