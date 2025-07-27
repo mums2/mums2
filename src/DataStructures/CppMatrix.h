@@ -73,7 +73,7 @@ public:
         return true;
     }
     std::vector<double> GetRow(const size_t rowIndex) const{
-        std::vector<double> result(rowSize);
+        std::vector<double> result(colSize);
         for (size_t i = 0; i < colSize; i++) {
             result[i] = data[rowIndex * colSize + i];
         }

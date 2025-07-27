@@ -22,5 +22,5 @@ CppMatrix AlphaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
     }
     // Rcpp::colnames(results) = samples;
     delete calculator;
-    return CppMatrix(results, 1, rowSize);
+    return CppMatrix(results, rowSize, rowSize);
 }

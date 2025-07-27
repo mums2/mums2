@@ -112,8 +112,9 @@ CppMatrix RarefactionCalculation2(const std::vector<std::vector<uint64_t>>& comm
     for (int i = 0; i < rows; i++) {
         const std::vector<uint64_t> data = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
         abundanceRanges[i],rngEngines[i], size, sums[i], threshold);
+        size_t counter = 0;
         for (int j = columns * i; j < columns * i + columns; j++) {
-            resultantMatrix[j] = static_cast<double>(data[j]);
+            resultantMatrix[j] = static_cast<double>(data[counter++]);
         }
     }
     return CppMatrix(resultantMatrix, rows, columns);
@@ -136,6 +137,7 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
+    const size_t matrixRowSize = samples.size();
     int row = samples.size();
     if (index == "simpson" || index == "shannon")
         row = 1;
@@ -154,8 +156,8 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     const std::vector<std::vector<uint64_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
     const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityObject.get()->GetColumnEligibleIndexes();
     const std::vector<uint64_t>& sums = communityObject.get()->GetSums();
-    std::vector<ParallelRandomNumberSitmo> rngEngines(row);
-    for (int i = 0; i < row; ++i) {
+    std::vector<ParallelRandomNumberSitmo> rngEngines(matrixRowSize);
+    for (int i = 0; i < matrixRowSize; ++i) {
         rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
     }
     std::mutex mutex;
@@ -163,26 +165,30 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     int currentProgress = 0;
     const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
     RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
-        &diversityMatrix, &rngEngines, &sums, &row, &columnSize, &size, &threshold, &subsample, &index,
+        &diversityMatrix, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold, &subsample, &index,
         &iterations, &mutex, &p, &currentProgress](int i) {
         CppMatrix rarefyMatrix;
         if (subsample) {
-             rarefyMatrix = RarefactionCalculation2(communityAbundances, eligibleIndexes,
-                 abundanceRanges, sums, rngEngines, row, columnSize, size, threshold);
+            rarefyMatrix = RarefactionCalculation2(communityAbundances, eligibleIndexes,
+                 abundanceRanges, sums, rngEngines, matrixRowSize, columnSize, size, threshold);
         }
         mutex.lock();
-
-        diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+        if (subsample)
+            diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+        // else
+        //     diversityMatrix += CalculateDiversity(matrix, index);
         p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
         mutex.unlock();
-    }, numberOfThreads);
+    }, numberOfThreads,numberOfThreads);
     diversityMatrix/=iterations;
     p.end_display();
-    // Rcpp::colnames(diversityMatrix) = samples;
-    if(diversityMatrix.GetRowSize() <= 1) return diversityMatrix.ToRcppMatrix(); // alpha diversity
-    // Rcpp::rownames(diversityMatrix) = samples;
 
-    return diversityMatrix.ToRcppMatrix();
+    Rcpp::NumericMatrix resultantMatrix = diversityMatrix.ToRcppMatrix();
+    Rcpp::colnames(resultantMatrix) = samples;
+    Rcpp::Rcout << resultantMatrix << std::endl;
+    if(diversityMatrix.GetRowSize() <= 1) return resultantMatrix; // alpha diversity
+    Rcpp::rownames(resultantMatrix) = samples;
+    return resultantMatrix;
 }
 
 // [[Rcpp::export]]
@@ -264,8 +270,8 @@ Rcpp::NumericMatrix Test() {
     mat[1] = {4,5,6};
     mat[2] = {7,8,9};
     std::vector<std::vector<double>> mat2(3);
-    mat2[0] = {1,2,3};
-    mat2[1] = {4,5,6};
+    mat2[0] = {1,2.2,3};
+    mat2[1] = {4,5.2,6.1};
     mat2[2] = {7,8,9};
     const CppMatrix matrix(mat);
     const CppMatrix matrix2(mat2);
