@@ -10,9 +10,9 @@ double SorensonIndex::Calculate(const std::vector<std::vector<double>>& abundanc
     double sharedOmus = 0;
     double sampleOneOmus = 0;
     double sampleTwoOmus = 0;
-    for(int i = 0; i < sampleOne.size(); i++) {
-        double firstCurrentOmu = sampleOne[i];
-        double secondCurrentOmu = sampleTwo[i];
+    for(size_t i = 0; i < sampleOne.size(); i++) {
+        const double firstCurrentOmu = sampleOne[i];
+        const double secondCurrentOmu = sampleTwo[i];
         if(firstCurrentOmu > 0 && secondCurrentOmu > 0) {
             sharedOmus++;
             sampleOneOmus++;

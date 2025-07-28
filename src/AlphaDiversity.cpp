@@ -13,7 +13,7 @@ CppMatrix AlphaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
     const DiversityCalculator* calculator = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(index);
     const size_t rowSize = communityMatrix.GetRowSize();
     std::vector<double> results(rowSize);
-    for(int i = 0; i < rowSize; i++) {
+    for(size_t i = 0; i < rowSize; i++) {
         std::vector<std::vector<double>> temp(1);
         temp[0] = communityMatrix.GetRow(i);
         results[i] = calculator->Calculate(temp);

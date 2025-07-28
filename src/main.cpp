@@ -4,7 +4,6 @@
 #include <iostream>
 #include <Rcpp.h>
 #include <cstdint>
-#include <numeric>
 #include <algorithm>
 #include <RcppThread.h>
 #include <mutex>
@@ -16,7 +15,6 @@
 #include "DiversityMetrics/Diversity.h"
 #include "Rarefy/Rarefaction.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
-#include "DiversityMetrics/BetaDiversityCalculators/BetaDiversity.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
 #include "Math/ParallelRandomNumberSitmo.h"
@@ -34,21 +32,6 @@ CppMatrix CalculateDiversity(const CppMatrix& abundances, const std::string& div
     delete diversity;
     return results;
 }
-
-
-// Rcpp::NumericMatrix CalculateDiversityCommunityObject(const SEXP& communityMatrix, const std::string& diversityIndex) {
-//     const Rcpp::XPtr<CommunityMatrix> matrix(communityMatrix);
-//     const Rcpp::NumericMatrix abundances = matrix.get()->GetCommunityMatrix();
-//     std::string index = diversityIndex;
-//     std::transform(index.begin(), index.end(), index.begin(), tolower);
-//     Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex(index);
-//     if(diversity == nullptr) {
-//         Rcpp::stop("Diversity Metric not found");
-//     }
-//     Rcpp::NumericMatrix results = diversity->CalculateDiversity(abundances, index);
-//     delete diversity;
-//     return results;
-// }
 
 // [[Rcpp::export]]
 SEXP CreateCommunityMatrix(Rcpp::NumericMatrix communityMatrix) {
@@ -121,16 +104,6 @@ CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint6
     return CppMatrix(resultantMatrix, rows, columns);
 }
 
-Rcpp::NumericMatrix TwoDimVectorToNumericMatrix(const std::vector<std::vector<uint64_t>>& matrix){
-    Rcpp::NumericMatrix result(matrix.size(), matrix[0].size());
-    for (int i = 0; i < matrix.size(); ++i) {
-        for (int j = 0; j < matrix[i].size(); ++j) {
-            result(i, j) = matrix[i][j];
-        }
-    }
-    return result;
-}
-
 // [[Rcpp::export]]
 Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index,
     const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
@@ -154,11 +127,10 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
     std::mutex mutex;
     int columnSize = communityObject.get()->GetColumn();
     int currentProgress = 0;
-    int currentThreadRng = 0;
     const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
     RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
         &diversityMatrix, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold,
-        &subsample, &index, &iterations, &mutex, &p, &currentProgress, &currentThreadRng](int i) {
+        &subsample, &index, &iterations, &mutex, &p, &currentProgress](int i) {
         CppMatrix rarefyMatrix;
 
         if (subsample) {
@@ -253,20 +225,4 @@ void IncrementProgressBar(SEXP& progressBar, const float progress) {
 void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericMatrix Test() {
-    std::vector<std::vector<double>> mat(3);
-    mat[0] = {5,5,5};
-    mat[1] = {10,10,10};
-    mat[2] = {15,15,15};
-    CppMatrix matrix(mat);
-    std::vector<std::vector<double>> expectedResult(3);
-    expectedResult[0] = {1,1,1};
-    expectedResult[1] = {2,2,2};
-    expectedResult[2] = {3,3,3};
-    const CppMatrix expectedMatrix(expectedResult);
-    matrix/=5;
-    return matrix.ToRcppMatrix();
 }

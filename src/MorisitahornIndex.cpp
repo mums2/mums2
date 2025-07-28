@@ -7,14 +7,14 @@
 double MorisitahornIndex::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
     const std::vector<double>& sampleOne = abundanceVectors[0];
     const std::vector<double>& sampleTwo = abundanceVectors[1];
-    double totalSampleOne = std::accumulate(sampleOne.begin(), sampleOne.end(), 0.0);
-    double totalSampleTwo = std::accumulate(sampleTwo.begin(), sampleTwo.end(), 0.0);
+    const double totalSampleOne = std::accumulate(sampleOne.begin(), sampleOne.end(), 0.0);
+    const double totalSampleTwo = std::accumulate(sampleTwo.begin(), sampleTwo.end(), 0.0);
     double summationOfSampleOneAndTwo = 0;
     double summationSampleOne = 0;
     double summationSampleTwo = 0;
-    for(int i = 0; i < sampleOne.size(); i++) {
-        double currentSampleOne = sampleOne[i];
-        double currentSampleTwo = sampleTwo[i];
+    for(size_t i = 0; i < sampleOne.size(); i++) {
+        const double currentSampleOne = sampleOne[i];
+        const double currentSampleTwo = sampleTwo[i];
         summationOfSampleOneAndTwo += (currentSampleOne / totalSampleOne)
         * (currentSampleTwo / totalSampleTwo);
 
