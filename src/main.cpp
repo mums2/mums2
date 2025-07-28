@@ -144,7 +144,7 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
             diversityMatrix += CalculateDiversity(matrix, index);
         p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
         mutex.unlock();
-    }, numberOfThreads,numberOfThreads);
+    }, numberOfThreads);
     diversityMatrix/=iterations;
     p.end_display();
 
