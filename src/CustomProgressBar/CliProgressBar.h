@@ -14,7 +14,7 @@ public:
     ~CliProgressBar() = default;
 
 public:
-    void display() override { RcppThread::Rcout << "\033[37mRunning simulations "; }
+    void display() override { RcppThread::Rcout << "\033[37mComputing: "; }
 
     void update(const float progress) override {
         if (_firstTime) {
@@ -57,15 +57,14 @@ protected:
 
     void _finalize_display() {
         if (_finalized) return;
-
-        RcppThread::Rcout << std::endl;
+        RcppThread::Rcout << std::endl << std::flush;
         _finalized = true;
     }
 
     int _compute_nb_ticks(const float progress) const { return static_cast<int>(progress * _max_ticks); }
 
     void _display_ticks(const double progress) const {
-        RcppThread::Rcout << "\033[37mRunning simulations ";
+        RcppThread::Rcout << "\033[37mComputing ";
         // calculate passed time and remaining time (in seconds)
         const double pas_time = std::difftime(end, start);
         const double rem_time = (pas_time / progress) * (1 - progress);
