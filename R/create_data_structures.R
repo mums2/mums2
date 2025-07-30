@@ -122,7 +122,6 @@ generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_
   # Add samples
   samples <- matched_data$samples
   sample_columns <- matched_data$ms1_data[, which(colnames(matched_data$ms1_data) %in% samples), with = FALSE]
-  sample_columns[[6]]
   for(i in 1:ncol(sample_columns)) {
     env[[samples[i]]] <- sample_columns[[i]]
   }
