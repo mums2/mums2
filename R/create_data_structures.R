@@ -104,3 +104,72 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
   colnames(triplicate_averages) <- sample_codes
   return(t(triplicate_averages))
 }
+
+
+generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_data = NULL) {
+  size <- length(matched_data$ms1_data$Compound)
+  env <- new.env(hash = TRUE)
+  env$ms1_id <- matched_data$ms1_data$Compound
+  env$ms2_id <- rep("", size)
+  collected_column_names <- c("ms1_id", "ms2_id")
+  ms2_data_idx <- which(matched_data$ms1_data$Compound  %in% matched_data$ms2_matches$ms1_compound_id)
+  count <- 1
+  for(i in ms2_data_idx) {
+    env$ms2_id[[i]] <- matched_data$ms2_matches$ms2_spectrum_id[[count]]
+    count <- count + 1
+  }
+  
+  # Add samples
+  samples <- matched_data$samples
+  sample_columns <- matched_data$ms1_data[, which(colnames(matched_data$ms1_data) %in% samples), with = FALSE]
+  sample_columns[[6]]
+  for(i in 1:ncol(sample_columns)) {
+    env[[samples[i]]] <- sample_columns[[i]]
+  }
+  
+  # add omus
+  if(!is.null(cluster_data)) {
+    list_data <- clustur::split_clusters_to_list(cluster_data)
+    omus <- lapply(list_data, function(x)  which(env$ms1_id %in% x))
+    env$omus <- rep("", size)
+    for(i in seq_along(omus)){
+      env$omus[omus[[i]]] <- names(omus[i])
+    }    
+    collected_column_names <- c(collected_column_names, "omus")
+  }
+  
+  m <- matrix(0, size, 0)
+  df <- as.data.frame(cbind(env$ms1_id, env$ms2_id, env$omus))
+  colnames(df) <- collected_column_names
+  
+  # add annotations
+  # Will be added as a list: index_annotation
+  if(!is.null(annotations)) {
+    df$annotations <- rep("", size)
+    annotation_index <- apply(annotations, 1, function(x) {
+      list(env_id = which(env$ms1_id == x["query_ms1_id"]), annotation_name = x["name"])
+    })
+    
+    env$annotations <- replicate(size, list())
+    for(i in annotation_index) {
+      env$annotations[[i$env_id]] <- unique(c(i$annotation_name ,env$annotations[[i$env_id]]))
+    }
+  }
+  
+ 
+  for(i in seq_along(env$annotations)) {
+    if(is.null(annotations)) {
+      break
+    }
+    if(length(env$annotations[[i]]) <= 0) {
+      next
+    }
+    df$annotations[[i]] <- paste(env$annotations[[i]], collapse = ",")
+  }
+  current_column_count <- ncol(df)
+  for(i in samples) {
+    df <- cbind(df, env[[i]])
+  }
+  colnames(df)[current_column_count + 1: length(samples)] <- samples
+  return(df)  
+  }
