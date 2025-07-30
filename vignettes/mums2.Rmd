@@ -287,3 +287,16 @@ Sometimes, it is useful to see a visual map of your annotations. We can accompli
 distance_df_annotations <- annotations[, c("query_ms2_id", "name", "score")]
 simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
 ```
+
+# Heat map
+```{r}
+bray_dist <- dist_shared(community_w_omus, 4000, 100) |>
+  as.matrix() |>
+  reshape2::melt()
+colnames(bray_dist) <- c("A", "B", "distances")
+
+bray_dist |> 
+  ggplot(aes(x = A, y = B, fill = distances)) +
+  geom_tile()
+```
+
