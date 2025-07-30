@@ -1,5 +1,6 @@
 test_that("read_mgf will read an mgf data properly", {
-  mgf_files <- list.files(test_path("exttestdata"), pattern = ".mgf", full.names = TRUE)
+  
+  mgf_files <- test_path("exttestdata", "12152023_Coculture_with_new_JC1.gnps.mgf")
   mgf_data <- read_mgf(mgf_files)
   expect_true(length(mgf_data) == 2)
   expect_true(length(mgf_data$peak_data[[1]]) == nrow(mgf_data$mass_spec_data)) 
