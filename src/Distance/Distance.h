@@ -21,7 +21,7 @@ public:
 
 private:
     std::vector<Spectra> spectraList;
-    std::vector<SparseValue> sparseMatrix;
+    std::queue<SparseValue> sparseMatrix;
 };
 
 #endif //DISTANCE

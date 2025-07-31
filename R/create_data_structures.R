@@ -105,7 +105,13 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
   return(t(triplicate_averages))
 }
 
-
+#' @export
+#' @title Create a combined table
+#' @description combined
+#' @param matched_data description
+#' @param annotations annotations
+#' @param cluster_data cluster
+#' @returns a `data.frame` object.
 generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_data = NULL) {
   size <- length(matched_data$ms1_data$Compound)
   env <- new.env(hash = TRUE)
