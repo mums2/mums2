@@ -41,7 +41,6 @@ double Entropy::CalculateEntropySimilarity(const std::vector<double>& listOneMz,
     std::vector<double> peaks_b_vec = convert_matrix_to_vector(listTwoMz, listTwoInt);
     const int peaks_b_len = peaks_b_vec.size() / 2;
     double* peaks_b_ptr = peaks_b_vec.data();
-    NumericVector vec = Rcpp::wrap(peaks_a_vec);
     if (weighted_param)
         return calculate_entropy_similarity(
         peaks_a_ptr, peaks_a_len,

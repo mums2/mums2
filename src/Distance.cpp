@@ -1,5 +1,8 @@
 #include "Distance/Distance.h"
+#include <RcppThread.h>
+#include <mutex>
 
+#include "CustomProgressBar/CliProgressBar.h"
 
 void Distance::CreateSpectraList(Rcpp::List data) {
     std::vector<double> pmz =  Rcpp::as<std::vector<double>>(data["pmz"]);
@@ -14,27 +17,50 @@ void Distance::CreateSpectraList(Rcpp::List data) {
     }
 }
 
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
 void Distance::CalculateDistances(const double prec_threshold, const double cutoff,
     const ScoringFactory& scoreMethod, const int minPeaks) {
     const auto size = static_cast<int>(spectraList.size());
+    CliProgressBar p;
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];
-        for(int j = i + 1; j < size; j++){
-            Spectra secondSpectra = spectraList[j];
-            
-            if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) > prec_threshold) {
-                continue;
-            }
-            const double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra, minPeaks);
+        std::mutex mutex;
+        RcppThread::parallelFor(i + 1, size, [this, &firstSpectra, &prec_threshold,
+            &minPeaks, &scoreMethod, &i, &cutoff, &mutex](int j) {
+            const Spectra secondSpectra = spectraList[j];
+            bool hasScored = false;
+            double score = -1;
+              if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) < prec_threshold) {
+                  score = 1 - scoreMethod.CalculateScore(firstSpectra, secondSpectra, minPeaks);
+                  hasScored = true;
+              }
+              if (hasScored && score < cutoff) {
+                  mutex.lock();
+                  const SparseValue dist(i, j, score);
+                  sparseMatrix.push(dist);
+                  mutex.unlock();
+              }
 
-            if ((1 - score) > cutoff) {
-                continue;
-            }
-            
-            SparseValue dist(i, j, (1 - score));
-            sparseMatrix.push(dist);
-        }
+        }, 16);
+        p.update(static_cast<float>(i)/static_cast<float>(size));
+        // for(int j = i + 1; j < size; j++){
+        //     Spectra secondSpectra = spectraList[j];
+        //
+        //     if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) > prec_threshold) {
+        //         continue;
+        //     }
+        //     const double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra, minPeaks);
+        //
+        //     if ((1 - score) > cutoff) {
+        //         continue;
+        //     }
+        //
+        //     SparseValue dist(i, j, (1 - score));
+        //     sparseMatrix.push(dist);
+        // }
     }
+    p.end_display();
 } 
 
 Rcpp::DataFrame Distance::ExtractMatrix() {
