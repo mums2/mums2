@@ -20,7 +20,7 @@ void Distance::CreateSpectraList(Rcpp::List data) {
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 void Distance::CalculateDistances(const double prec_threshold, const double cutoff,
-    const ScoringFactory& scoreMethod, const int minPeaks) {
+    const ScoringFactory& scoreMethod, const int minPeaks, const int numberOfThreads) {
     const auto size = static_cast<int>(spectraList.size());
     CliProgressBar p;
     for(int i = 0; i < size; i++) {
@@ -42,23 +42,8 @@ void Distance::CalculateDistances(const double prec_threshold, const double cuto
                   mutex.unlock();
               }
 
-        }, 16);
+        }, numberOfThreads);
         p.update(static_cast<float>(i)/static_cast<float>(size));
-        // for(int j = i + 1; j < size; j++){
-        //     Spectra secondSpectra = spectraList[j];
-        //
-        //     if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) > prec_threshold) {
-        //         continue;
-        //     }
-        //     const double score = scoreMethod.CalculateScore(firstSpectra, secondSpectra, minPeaks);
-        //
-        //     if ((1 - score) > cutoff) {
-        //         continue;
-        //     }
-        //
-        //     SparseValue dist(i, j, (1 - score));
-        //     sparseMatrix.push(dist);
-        // }
     }
     p.end_display();
 } 

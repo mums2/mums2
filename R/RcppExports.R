@@ -5,8 +5,8 @@ AnnotateMs2Features <- function(queryList, querySpectra, referenceList, scoringP
     .Call(`_mums2_AnnotateMs2Features`, queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
 }
 
-distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks) {
-    .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks)
+distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {
+    .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
 
 CreateCommunityMatrix <- function(communityMatrix) {

@@ -31,8 +31,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // distMS2
-Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks);
-RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP) {
+Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
+RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -41,7 +41,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type precursor_thresh(precursor_threshSEXP);
     Rcpp::traits::input_parameter< const double >::type cutoff(cutoffSEXP);
     Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks));
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -209,7 +210,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
-    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 5},
+    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
