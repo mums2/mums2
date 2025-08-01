@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Rcpp.h>
 #include <cmath>
+#include <queue>
 #include "../ScoringMethods/ScoringFactory.h"
 
 
