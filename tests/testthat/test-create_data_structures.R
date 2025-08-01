@@ -126,7 +126,7 @@ data <- import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"),
     gnps_params(0.5), 2000, 0, 0, min_peaks = 0)
   
   
-  expect_error(generate_a_combined_table(matched_data = ms2_data, annotations = annotations[, 1:10]), 
+  expect_error(generate_a_combined_table(matched_data = ms2_data, annotations = annotations[, 1:5]), 
   "annotations must contain a column named 'name'")
   expect_error(generate_a_combined_table(matched_data = ms2_data, annotations = annotations[, c("name", "query_ms2_id")]),
    "annotations must contain a column named 'query_ms1_id'")
