@@ -290,13 +290,13 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
 
 # Heat map
 ```{r}
-bray_dist <- dist_shared(community_w_omus, 4000, 100) |>
-  as.matrix() |>
-  reshape2::melt()
-colnames(bray_dist) <- c("A", "B", "distances")
+# bray_dist <- dist_shared(community_w_omus, 4000, 100) |>
+#   as.matrix() |>
+#   reshape2::melt()
+# colnames(bray_dist) <- c("A", "B", "distances")
 
-bray_dist |> 
-  ggplot(aes(x = A, y = B, fill = distances)) +
-  geom_tile()
+# bray_dist |> 
+#   ggplot(aes(x = A, y = B, fill = distances)) +
+#   geom_tile()
 ```
 
