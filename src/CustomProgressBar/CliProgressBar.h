@@ -80,7 +80,8 @@ protected:
         for (int i = 0; i < (_max_ticks - _ticks_displayed); i++) {
             RcppThread::Rcout << " " << std::flush;
         }
-        RcppThread::Rcout << "\033[37m | " << static_cast<int>(progress * 100) << "%" << "  ETA: " << time_string;
+        RcppThread::Rcout << "\033[37m | " << static_cast<int>(progress * 100) << "%" << "  ETA: "
+        << time_string << "...";
     }
     static std::string _time_to_string(const double seconds) {
 
