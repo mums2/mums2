@@ -113,11 +113,26 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' @param cluster_data cluster
 #' @returns a `data.frame` object.
 generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_data = NULL) {
+
+  if(!("mass_data" %in% class(matched_data))) {
+    stop("matched_data must be an object created from `ms2_ms1_compare()`.")
+  }
+
+
   size <- length(matched_data$ms1_data$Compound)
   env <- new.env(hash = TRUE)
   env$ms1_id <- matched_data$ms1_data$Compound
+  env$mz <- matched_data$ms1_data$mz
+  retention_time_string <- "rt"
+  if("RTINMINUTES" %in% colnames(matched_data$ms1_data)){
+    retention_time_string <- "RTINMINUTES"
+  }
+  if("RTINSECONDS" %in% colnames(matched_data$ms1_data)){
+    retention_time_string <- "RTINSECONDS"
+  }
+  env$rt <- matched_data$ms1_data[[retention_time_string]]
   env$ms2_id <- rep("", size)
-  collected_column_names <- c("ms1_id", "ms2_id")
+  collected_column_names <- c("ms1_id", "ms2_id", "mz", retention_time_string)
   ms2_data_idx <- which(matched_data$ms1_data$Compound  %in% matched_data$ms2_matches$ms1_compound_id)
   count <- 1
   for(i in ms2_data_idx) {
@@ -134,6 +149,9 @@ generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_
   
   # add omus
   if(!is.null(cluster_data)) {
+    if(length(cluster_data) != 5) {
+      stop("cluster_data must be an object created from `cluster_data()`.")
+    }
     list_data <- clustur::split_clusters_to_list(cluster_data)
     omus <- lapply(list_data, function(x)  which(env$ms1_id %in% x))
     env$omus <- rep("", size)
@@ -144,12 +162,21 @@ generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_
   }
   
   m <- matrix(0, size, 0)
-  df <- as.data.frame(cbind(env$ms1_id, env$ms2_id, env$omus))
+  df <- as.data.frame(cbind(env$ms1_id, env$ms2_id, env$mz, env$rt, env$omus))
   colnames(df) <- collected_column_names
   
   # add annotations
   # Will be added as a list: index_annotation
   if(!is.null(annotations)) {
+    if(!("data.frame" %in% class(annotations))) {
+      stop("annotations must be a data.frame object.")
+    }
+    if(!("name" %in% tolower(colnames(annotations)))) {
+      stop("annotations must contain a column named 'name'.")
+    }
+    if(!("query_ms1_id" %in% tolower(colnames(annotations)))){
+      stop("annotations must contain a column named 'query_ms1_id'.")
+    }
     df$annotations <- rep("", size)
     annotation_index <- apply(annotations, 1, function(x) {
       list(env_id = which(env$ms1_id == x["query_ms1_id"]), annotation_name = x["name"])
@@ -161,15 +188,13 @@ generate_a_combined_table <- function(matched_data, annotations = NULL, cluster_
     }
   }
   
- 
-  for(i in seq_along(env$annotations)) {
-    if(is.null(annotations)) {
-      break
+  if(!is.null(annotations)){
+    for(i in seq_along(env$annotations)) {
+      if(length(env$annotations[[i]]) <= 0) {
+        next
+      }
+      df$annotations[[i]] <- paste(env$annotations[[i]], collapse = ",")
     }
-    if(length(env$annotations[[i]]) <= 0) {
-      next
-    }
-    df$annotations[[i]] <- paste(env$annotations[[i]], collapse = ",")
   }
   current_column_count <- ncol(df)
   for(i in samples) {
