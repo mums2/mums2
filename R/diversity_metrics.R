@@ -107,6 +107,10 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, 
-                       subsample, number_of_threads, iterations, seed))
+
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, 
+                       subsample, number_of_threads, iterations, seed)
+  result[which(is.nan(result))] <- 0
+  
+  return(result)
 }
