@@ -291,7 +291,7 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
 
 
 ## Using Group Averages
-```{r}
+```{r group_average}
   matched_avg <- convert_samples_to_group_averages(matched_data, filtered_data)
   dist_avg <- dist <- dist_ms2(
     data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
@@ -301,9 +301,23 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
     distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
     cluster_method = "opticlust")
 
+  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = gnps_params(0.5), 
+                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
+
   community_object_avg <- create_community_matrix_object(cluster_results_avg)
 ```
 
+
+### Combined data frames
+```{r combined_df}
+  # For normal data
+  head(generate_a_combined_table(matched_data, annotations, cluster_results))
+
+  # For group averaged data
+  head(generate_a_combined_table(matched_avg, annotations_avg, cluster_results_avg))
+
+
+```
 
 
 ### Heat map
