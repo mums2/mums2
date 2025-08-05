@@ -75,7 +75,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         intensityContainer.pop_front();
         mzContainer.pop_front();
     }
-
+    p.end_display();
     return Rcpp::List::create(Rcpp::Named("ms2_table") = dataFrame,
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
@@ -173,5 +173,6 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         mzContainer.pop_front();
         metaDataKeyContainer.pop_front();
     }
+    p.end_display();
     return mspList;
 }
