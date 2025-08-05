@@ -4,7 +4,7 @@
 #' reference list.
 #'
 #' `annotate_ms2()` allows for annotation of mass spectrometry features.
-#' Similaritity between query and refrence level 2 spectra are determined via
+#' Similaritity between query and reference level 2 spectra are determined via
 #' spectral scoring methods. Currently scoring methods `"gnps"` and
 #' `"spectral_entropy"` are supported. The scoring method is specified by the
 #' `score_params` argument. `score_params` is a list of parameters for the

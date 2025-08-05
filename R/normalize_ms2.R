@@ -8,7 +8,7 @@
 #' `normalize_ms2` takes a vector of intensity values from a single
 #' ms2 scan and returns normalized values.
 #'
-#' normalization methods are controlled withing the `method` argument,
+#' normalization methods are controlled within the `method` argument,
 #' which currently supports square root (`method = "sqrt"`) and scale
 #' (`method = "scale"`) normalization.
 #'

@@ -3,10 +3,10 @@
 #' @description
 #' `rarefy_ms()` performs a single subsampling of MS1 features in sample.
 #'  Feature intensities are subsampled to the supplied `size` and accounts
-#'  for intesnity thresholds due to machine limits and background noise.
+#'  for intensity thresholds due to machine limits and background noise.
 #'  Specifically, features whose abundance falls below the `threshold`
-#'  after rarefying are removed. This allows for accurate represetation
-#'  of samples at diffrent dilutions regardless of the desired
+#'  after rarefying are removed. This allows for accurate representation
+#'  of samples at different dilutions regardless of the desired
 #'  submsampling `size`.
 #' 
 #' @param community_object A `community_object`

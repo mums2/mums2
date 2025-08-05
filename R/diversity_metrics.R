@@ -1,6 +1,6 @@
 #' @title Distance Shared
 #' @export
-#' @description dissimiliarty via beta diversity
+#' @description dissimilarity via beta diversity
 #' @param community_object the object created from the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
 #' @param threshold the threshold you want your species to reach before it is included

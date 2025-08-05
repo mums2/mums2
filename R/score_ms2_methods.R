@@ -50,7 +50,7 @@ gnps_params <- function(frag_tolerance) {
 #' Defaults to `-1`.
 #' @param clean_spectra Either `TRUE` or `FALSE` to clean the spectra prior to
 #' calculating similarity. See `msentropy::clean_spectrum` for more information.
-#' Defualts to `TRUE`.
+#' Defaults to `TRUE`.
 #' @param min_mz `numeric`, minimum mz to keep, set to -1 to disable. Defaults
 #' to `0`.
 #' @param max_mz `numeric`, maximum mz to keep, set to -1 to disable. Defaults

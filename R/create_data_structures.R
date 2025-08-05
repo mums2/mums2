@@ -46,7 +46,7 @@ create_community_matrix <- function(cluster_object) {
 #' @title Convert Samples to Group Averages
 #' @description
 #' To account for users measuring there data in triplicates or other forms of measurement,
-#' we have implemented a function that can tranform your matched data object to use
+#' we have implemented a function that can transform your matched data object to use
 #' group averages instead of each sample individually. 
 #' @param matched_data your mass data set object generated from `ms2_ms1_compare()`.
 #' @param mpactr_object The object created from `import_all_data()`.
@@ -72,8 +72,8 @@ convert_samples_to_group_averages <- function(matched_data, mpactr_object) {
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
   meta_data <- get_meta_data(mpactr_object)
   injection_samples <- meta_data$Injection
-  modifed_peak_table <- matched_data$ms1_data[,which(!(colnames(matched_data$ms1_data) %in% injection_samples)), with = FALSE]
-  matched_data$ms1_data <- cbind(modifed_peak_table, trips)
+  modified_peak_table <- matched_data$ms1_data[,which(!(colnames(matched_data$ms1_data) %in% injection_samples)), with = FALSE]
+  matched_data$ms1_data <- cbind(modified_peak_table, trips)
   matched_data$samples <- unique(meta_data$Sample_Code)
   return(matched_data)
 }
