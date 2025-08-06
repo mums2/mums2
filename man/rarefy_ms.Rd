@@ -30,10 +30,10 @@ A \code{external_pointer} that references a community matrix of rarefied feature
 \description{
 \code{rarefy_ms()} performs a single subsampling of MS1 features in sample.
 Feature intensities are subsampled to the supplied \code{size} and accounts
-for intesnity thresholds due to machine limits and background noise.
+for intensity thresholds due to machine limits and background noise.
 Specifically, features whose abundance falls below the \code{threshold}
-after rarefying are removed. This allows for accurate represetation
-of samples at diffrent dilutions regardless of the desired
+after rarefying are removed. This allows for accurate representation
+of samples at different dilutions regardless of the desired
 submsampling \code{size}.
 }
 \examples{

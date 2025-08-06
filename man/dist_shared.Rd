@@ -39,7 +39,7 @@ Default is TRUE.}
 a \code{data.frame} object that shows the dissimilarity between all samples.
 }
 \description{
-dissimiliarty via beta diversity
+dissimilarity via beta diversity
 }
 \examples{
 data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 

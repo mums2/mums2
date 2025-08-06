@@ -15,7 +15,7 @@
 #' @param cutoff The maximum distance value (`numeric`) to store a pairwise
 #'  comparison. The default of .3 corresponds to a cosine score of .7,
 #'  meaning pairs with a score of .7 or higher will be stored in the matrix.
-#' @param precursor_thresh Precursor mz tolerance. MS2 scans with a
+#' @param precursor_threshold Precursor mz tolerance. MS2 scans with a
 #'  difference in precursor mz less than or equal to this value will be scored.
 #' @param score_params Parameters for scoring method to be applied.
 #'  See [gnps_params()] and [spec_entropy_params()] for more details.
@@ -37,26 +37,26 @@
 #' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
 #'  filtered_data, 2, 6)
 #' 
-#' dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+#' dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
 #'  score_params = gnps_params(0.5), min_peaks = 0)
 #' 
-#' dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+#' dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
 #'  score_params = spec_entropy_params(), min_peaks = 0)
 #'
 #' @return A sparse matrix of class `"data.frame"`
 #' @export
-dist_ms2 <- function(data, cutoff, precursor_thresh, score_params, min_peaks = 6, number_of_threads = detectCores()) {
+dist_ms2 <- function(data, cutoff, precursor_threshold, score_params, min_peaks = 6, number_of_threads = detectCores()) {
   UseMethod("dist_ms2", data)
 }
 
 #' @method dist_ms2 mass_data
 #' @export
-dist_ms2.mass_data <- function(data, cutoff, precursor_thresh, score_params, min_peaks = 6, number_of_threads = detectCores()) {
+dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params, min_peaks = 6, number_of_threads = detectCores()) {
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)
 
-  dist <- distMS2(data_list, score_params, precursor_thresh, cutoff, min_peaks, number_of_threads)
+  dist <- distMS2(data_list, score_params, precursor_threshold, cutoff, min_peaks, number_of_threads)
 
   return(dist)
 }

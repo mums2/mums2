@@ -11,9 +11,9 @@ ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 
 \item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
 
-\item{mz_tolerance}{your mass-charge ratio tolerance}
+\item{mz_tolerance}{your mass-charge ratio tolerance in ppm (parts per million).}
 
-\item{rt_tolerance}{your retention time tolerance}
+\item{rt_tolerance}{your retention time tolerance.}
 }
 \value{
 returns a \code{mass_data} object of all of the matches.

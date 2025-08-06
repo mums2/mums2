@@ -70,14 +70,14 @@ Retention time(rt) is the amount of time a compound spends in a column and it is
 
 ```{r convert_rt_to_minutes_or_seconds}
 
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
 filtered_data
 
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "seconds")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "seconds")
 filtered_data
 
 # Changing back to minutes so we can continue the analysis
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
 ```
 
 ### Preprocess MS2 data
@@ -96,7 +96,7 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 
 ```{r preprocess_ms2_data}
 matched_data <- ms2_ms1_compare(
-  mums2_example("full_mix_ms2.mgf"), filtered_data, 2, 6)
+  ms2_files = mums2_example("full_mix_ms2.mgf"),mpactr_object = filtered_data, mz_tolerance = 2, rt_tolerance = 6)
 
 head(matched_data$ms2_matches)
 
@@ -120,8 +120,8 @@ It is possible for a formula to be unable to be generated. In this case we retur
 Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-matched_data <- compute_molecular_formulas(matched_data, 3)
-matched_data$predicted_molecular_formulas
+# matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
+# matched_data$predicted_molecular_formulas
 ```
 
 ### Annotations
@@ -131,10 +131,10 @@ Beyond predicting the molecular formula, it is possible to use the `annotate_ms2
 It is recommended to use the `read_msp()` function with your reference database path for the reference parameter. If you store the returned data of `read_msp()` in a variable it may cause lag if it is too big (over \~100mbs). But we show both ways below.
 
 ```{r annotations}
-psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
+psu_msmls <- read_msp(msp_file = mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
-  scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
+  scoring_params = gnps_params(0.5), ppm = 1000,
   min_score =  0.1, chemical_min_score = 0)
 
 annotations[1:5,]
@@ -150,7 +150,7 @@ We have implemented two different distance calculations to generate distances be
 
 ```{r  scoring_distance, R.options=list(max.print=15)}
 dist <- dist_ms2(
-  data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+  data = matched_data, cutoff = 0.3, precursor_threshold = 2,
   score_params = gnps_params(0.5), min_peaks = 0)
 dist
 ```
@@ -175,7 +175,7 @@ After your data has been clustered, if you wish to see which OMUs the annotated 
 
 ```{r omu_annotations}
 annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
-                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
+                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
 ```
@@ -191,14 +191,14 @@ Now that the data have been clustered into OMUs, it is possible to use the abund
 Packages like vegan opt for using a `matrix` object as input for ecological analyses (see more `vegan::rarefy()`). However, if we were to use the same methodology, the computation would take far too long. In particular, the rarefaction algorithm. Rarefaction is the process of randomly selecting n number of samples without replacement. With n being the user defined sum threshold. However, in mass spectrometry, in order to account for machine limits and background noise, we have to define a sample threshold. So, rarefaction is the process of randomly selecting n number of samples without replacement, with n being the user defined sum threshold. **After selecting n number of samples, we only add the samples that are above the size threshold. If the total is below the sum threshold, we continue until we are equal to or above the sum threshold.** Therefore, adding the size threshold adds another layer complexity to the algorithm. In order to retain efficiency, we create a custom object that contains all of the necessary data for the calculation.
 
 ```{r  community_object, R.options=list(max.print=15)}
-community_w_omus <- create_community_matrix_object(cluster_results)
+community_w_omus <- create_community_matrix_object(data = cluster_results)
 community_w_omus
 ```
 
 You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together.
 
 ```{r community_object_no_omus, R.options=list(max.print=30)}
-community_wo_omus <- create_community_matrix_object(matched_data)
+community_wo_omus <- create_community_matrix_object(data = matched_data)
 community_wo_omus
 ```
 
@@ -207,7 +207,7 @@ community_wo_omus
 The vegan package uses an object called a "community matrix." A community matrix is a `matrix` that represents samples as rows, and species as columns. Vegan does not account for machine limits and background noise, so there is no threshold needed when vegan rarefies data. In are effort to make a fast and efficient tool, we have opted to create a `community object`. It is the same as a community matrix, but it is created and held in a Rcpp class for speedy access. However, if you wish to use vegan for other analysis, we have created a `get_community_matrix()` function. This function will convert your community object into a community matrix for ease of use.
 
 ```{r community_matrix, R.options=list(max.print=30)}
-  get_community_matrix(community_w_omus)
+  get_community_matrix(community_object = community_w_omus)
 ```
 
 ### Alpha Diversity
@@ -295,7 +295,7 @@ Another feature included inside of mums2, is the ability to run your analysis us
 
 Below, you can see a copy of the functions we ran above. But this time, we are using group averages.  
 ```{r group_average}
-  matched_avg <- convert_samples_to_group_averages(matched_data, filtered_data)
+  matched_avg <- convert_samples_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
   dist_avg <- dist <- dist_ms2(
     data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
     score_params = gnps_params(0.5), min_peaks = 0)
@@ -305,10 +305,10 @@ Below, you can see a copy of the functions we ran above. But this time, we are u
     cluster_method = "opticlust")
 
   annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = gnps_params(0.5), 
-                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
+                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
 
-  community_object_avg <- create_community_matrix_object(cluster_results_avg)
-  head(get_community_matrix(community_object_avg))
+  community_object_avg <- create_community_matrix_object(data = cluster_results_avg)
+  head(get_community_matrix(community_object = community_object_avg))
 ```
 
 You can also see how the samples in the matched object have been adjusted based on the information supplied in the metadata file.
@@ -327,10 +327,10 @@ You can also see how the samples in the matched object have been adjusted based 
 mums2 also allows you to view your all of your generated data as a whole using the `generate_a_combined_table()` function. This function will take your matched object (gnenerated from `ms2_ms1_compare()`), your annotations object (generated from `annotate_ms2()`) and your cluster data (generated from `cluster_data()`). It will then generate a combined data.frame with all of the generate data. 
 ```{r combined_df}
   # For normal data
-  head(generate_a_combined_table(matched_data, annotations, cluster_results))
+  head(generate_a_combined_table(matched_data = matched_data, annotations = annotations, cluster_data = cluster_results))
 
   # For group averaged data
-  head(generate_a_combined_table(matched_avg, annotations_avg, cluster_results_avg))
+  head(generate_a_combined_table(matched_data = matched_avg, annotations = annotations_avg, cluster_data = cluster_results_avg))
 
 
 ```

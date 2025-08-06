@@ -13,7 +13,7 @@ convert_samples_to_group_averages(matched_data, mpactr_object)
 }
 \description{
 To account for users measuring there data in triplicates or other forms of measurement,
-we have implemented a function that can tranform your matched data object to use
+we have implemented a function that can transform your matched data object to use
 group averages instead of each sample individually.
 }
 \examples{

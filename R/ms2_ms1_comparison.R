@@ -3,8 +3,8 @@
 #' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
 #' @param ms2_files a list of all your mgf, mzml, or mzxml files. 
 #' @param mpactr_object your mpactr object creatd from `import_all_data()`
-#' @param mz_tolerance your mass-charge ratio tolerance
-#' @param rt_tolerance your retention time tolerance
+#' @param mz_tolerance your mass-charge ratio tolerance in ppm (parts per million).
+#' @param rt_tolerance your retention time tolerance.
 #' @examples
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 

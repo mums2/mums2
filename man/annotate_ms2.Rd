@@ -13,7 +13,7 @@ annotate_ms2(mass_data, reference, scoring_params,
   mass_data,
   reference,
   scoring_params,
-  precursor_tolerance,
+  ppm,
   min_score,
   chemical_min_score,
   cluster_data = NULL,
@@ -29,8 +29,8 @@ We currently only support msp files.}
 \item{scoring_params}{Parameters for scoring method to be applied. This can be either
 \code{gnps_params()} or \code{spec_entropy_params()}.}
 
-\item{precursor_tolerance}{Precursor mz tolerance. MS2 scans with a
-difference in precursor mz less than or equal to this value will be scored.}
+\item{ppm}{Parts per million. MS2 scans with a
+difference in ppm less than or equal to this value will be scored.}
 
 \item{min_score}{Similarity score threshold to determine a match for
 annotation. Comparisons with scores below this value will not be reported.}
@@ -61,7 +61,7 @@ Annotate query LC-MS/MS features in a \code{mass_data} object given a
 reference list.
 
 \code{annotate_ms2()} allows for annotation of mass spectrometry features.
-Similaritity between query and refrence level 2 spectra are determined via
+Similaritity between query and reference level 2 spectra are determined via
 spectral scoring methods. Currently scoring methods \code{"gnps"} and
 \code{"spectral_entropy"} are supported. The scoring method is specified by the
 \code{score_params} argument. \code{score_params} is a list of parameters for the
