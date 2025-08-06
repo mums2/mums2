@@ -6,7 +6,7 @@
 \title{Annotate LC-MS/MS features}
 \usage{
 annotate_ms2(mass_data, reference, scoring_params, 
-                         precursor_tolerance, min_score, 
+                         ppm, min_score, 
                          chemical_min_score, cluster_data = NULL, min_peaks = 0)
 
 \method{annotate_ms2}{mass_data}(
@@ -86,7 +86,7 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
  annotations <- annotate_ms2(mass_data = matched_data, 
    reference = psu_msmls, scoring_params = gnps_params(0.5),
-   precursor_tolerance = 1000, 
+   ppm = 1000, 
    min_score =  0.1, chemical_min_score = .1)
 
 }
