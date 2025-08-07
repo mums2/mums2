@@ -2,7 +2,7 @@
 #' @export
 #' @description We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
 #' @param ms2_files a list of all your mgf, mzml, or mzxml files. 
-#' @param mpactr_object your mpactr object creatd from `import_all_data()`
+#' @param mpactr_object your mpactr object created from `import_all_data()`
 #' @param mz_tolerance your mass-charge ratio tolerance in ppm (parts per million).
 #' @param rt_tolerance your retention time tolerance.
 #' @examples

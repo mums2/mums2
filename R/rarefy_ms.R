@@ -14,7 +14,7 @@
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
 #' @param number_of_threads the amount of threads you want the calculation to use.
-#' @param seed the rng (random number generator) seed you would like to use.
+#' @param seed the RNG (random number generator) seed you would like to use.
 #' @return A `external_pointer` that references a community matrix of rarefied feature intensities.
 #' @export
 #' 

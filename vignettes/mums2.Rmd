@@ -157,7 +157,7 @@ dist
 
 ### Operational Metabolomic Units (OMUs)
 
-OMUs or Operational Metabolomic Units are clusters of metabolites. We cluster metabolites based on how similar their ms2s are to eachother. In our case, we are have a function that is able to do just this, the `dist_ms2()` function. This function generates a distance `data.frame`, or a `data.frame` of closeness between metabolites. Using the generate object along with the matched_ms2_ms1 object, we are able to cluster are data together to generate OMUs using the `cluster_data()` function. This function returns a list with five slots; label, abundance, cluster, cluster_metrics, and iteration metrics.
+OMUs or Operational Metabolomic Units are clusters of metabolites. We cluster metabolites based on how similar their ms2s are to each other. In our case, we are have a function that is able to do just this, the `dist_ms2()` function. This function generates a distance `data.frame`, or a `data.frame` of closeness between metabolites. Using the generate object along with the matched_ms2_ms1 object, we are able to cluster are data together to generate OMUs using the `cluster_data()` function. This function returns a list with five slots; label, abundance, cluster, cluster_metrics, and iteration metrics.
 
 **label** - Represents the cutoff distance used for the cluster. **abundance** - A `data.frame()` that shows the absolute abundance of the clusters by sample. **cluster** - A `data.frame()` that shows which features clustered together **cluster_metrics** - A `data.frame()` representing metrics for how the clusters were formed. **iteration_metrics** - A `data.frame()` that shows how the data was clustered at each iteration.
 
@@ -243,7 +243,7 @@ There are a few different ways to visualize the data generated from this package
 
 ### PCOA
 
-Principal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at your beta diversity results visually and shows us how similar samples are to eachother.
+Principal Coordinate Analysis (PCOA) is a statistical technique used to show similarities between data. PCOA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCOA is a great way to look at your beta diversity results visually and shows us how similar samples are to each other.
 
 ```{r pcoa, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj <- bray_no_omus
@@ -324,7 +324,7 @@ You can also see how the samples in the matched object have been adjusted based 
 ```
 
 ### Combined data frames
-mums2 also allows you to view your all of your generated data as a whole using the `generate_a_combined_table()` function. This function will take your matched object (gnenerated from `ms2_ms1_compare()`), your annotations object (generated from `annotate_ms2()`) and your cluster data (generated from `cluster_data()`). It will then generate a combined data.frame with all of the generate data. 
+mums2 also allows you to view your all of your generated data as a whole using the `generate_a_combined_table()` function. This function will take your matched object (generated from `ms2_ms1_compare()`), your annotations object (generated from `annotate_ms2()`) and your cluster data (generated from `cluster_data()`). It will then generate a combined data.frame with all of the generate data. 
 ```{r combined_df}
   # For normal data
   head(generate_a_combined_table(matched_data = matched_data, annotations = annotations, cluster_data = cluster_results))
@@ -337,7 +337,7 @@ mums2 also allows you to view your all of your generated data as a whole using t
 
 
 ### Heat map
-Another way to visualize diversity data is to use a heat map. A heat map is a 2d representation of data that visulizes the magnitude of data. We can easily see how correlated data is between samples with a heatmap.
+Another way to visualize diversity data is to use a heat map. A heat map is a 2d representation of data that visualizes the magnitude of data. We can easily see how correlated data is between samples with a heatmap.
 ```{r heat_map, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_shared(community_object_avg, 4000, 100, "jaccard") |> 
   as.matrix() |>
@@ -349,7 +349,7 @@ dist_shared(community_object_avg, 4000, 100, "jaccard") |>
 
 
 ### Box Plot
-A box plot (or box and whisker plot) will use a box to depict the variation of the data. We can take advantage of this to look at the distubitions inside of our generate beta and alpha diversity data.
+A box plot (or box and whisker plot) will use a box to depict the variation of the data. We can take advantage of this to look at the distributions inside of our generate beta and alpha diversity data.
 ```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>

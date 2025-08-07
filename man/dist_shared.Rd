@@ -33,7 +33,7 @@ Default is TRUE.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
 
-\item{seed}{the rng (random number generator) seed you would like to use.}
+\item{seed}{the RNG (random number generator) seed you would like to use.}
 }
 \value{
 a \code{data.frame} object that shows the dissimilarity between all samples.

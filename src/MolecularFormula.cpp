@@ -101,7 +101,7 @@ int MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormul
         else thisFormula = false;
     }
     // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
-    // are subformulas of eachother
+    // are subformulas of each other
     // But we only represent the first formula with the link so its not cyclic
     if (thisFormula) return 1;
     // if it reached this far, the only option is that the other formula is true so we return a 2

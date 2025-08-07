@@ -11,7 +11,7 @@
 #' Default is TRUE.
 #' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
-#' @param seed the rng (random number generator) seed you would like to use.
+#' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
@@ -68,7 +68,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' Default is TRUE.
 #' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
-#' @param seed the rng (random number generator) seed you would like to use.
+#' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 

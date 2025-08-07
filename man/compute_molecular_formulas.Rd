@@ -21,7 +21,7 @@ compute_molecular_formulas(
 your mass_data object with an additional \code{character} vector of all the predicted formulas.
 }
 \description{
-De-novo algorithm for computing molecular formulas. Using fragmentation trees we are able to generate
+de novo algorithm for computing molecular formulas. Using fragmentation trees we are able to generate
 a resultant molecular formula. To ensure efficient we are using a greedy heurstic to generate the resultant formula.
 Although this may not always result in the correct prediction, it allows us to efficiently calculate a multitude
 of chemical formulas.
