@@ -23,6 +23,7 @@ library(mums2)
 library(ggplot2)
 library(mpactr)
 library(networkD3)
+library(reshape2)
 ```
 
 ## Preprocess data
@@ -31,7 +32,7 @@ Before we even begin the process of analyzing your data, we have to preprocess i
 
 ### Import
 
-The `import_all_data()` function takes in a peak_table and meta_data table as input and converts it into a `mpactr` object (its a wrapper for `mpactr::import_data()`). The format parameter accepts three different formats: Metaboscape, Progenesis, and None. If you are using a feature table that was exported from metaboscape, use the "Metaboscape" format. If its from Progenesis, use the "Progenesis" format. In order for "Metaboscape" and "Progenesis" to work, mpactr transforms the data behind the scenes into a universal peak table. The "None" format is only used when you are using the "universal peak table" as the "peak table" parameter. You can read up more about each of the formats here(`mpactr::import_data()`).
+The `import_all_data()` function takes in a peak_table and meta_data table as input and converts it into a `mpactr` object (its a wrapper for `mpactr::import_data()`). The format parameter accepts three different formats: Metaboscape, Progenesis, and None. If you are using a feature table that was exported from metaboscape, use the "Metaboscape" format. If its from Progenesis, use the "Progenesis" format. In order for "Metaboscape" and "Progenesis" to work, mpactr transforms the data behind the scenes into a universal peak table. The "None" format is only used when you are using the "universal peak table" as the "peak table" parameter. You can read up more about each of the formats here(`mpactr::import_data()`). If you need a deeper understanding of what format the peak table and meta data file show be in, look at mpactr's [getting started page](https://www.mums2.org/mpactr/articles/mpactr.html)
 
 Meta data is a csv that provides information about the samples. In order for your meta data to be valid, it needs the following columns: "Injection", "Sample_Code", " Biological_Group." The "Injection" column is the name of the samples, it should match the samples inside of the peak_table. "Sample_Code" is the id for you technical replicates. Finally, "Biological_Group" is another id, but for your biological replicate groups (you can learn more here `mpactr::import_data()`).
 
@@ -69,14 +70,14 @@ Retention time(rt) is the amount of time a compound spends in a column and it is
 
 ```{r convert_rt_to_minutes_or_seconds}
 
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
 filtered_data
 
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "seconds")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "seconds")
 filtered_data
 
 # Changing back to minutes so we can continue the analysis
-filtered_data <- change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
 ```
 
 ### Preprocess MS2 data
@@ -95,7 +96,7 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 
 ```{r preprocess_ms2_data}
 matched_data <- ms2_ms1_compare(
-  mums2_example("full_mix_ms2.mgf"), filtered_data, 2, 6)
+  ms2_files = mums2_example("full_mix_ms2.mgf"),mpactr_object = filtered_data, mz_tolerance = 2, rt_tolerance = 6)
 
 head(matched_data$ms2_matches)
 
@@ -112,15 +113,15 @@ Once you preprocess your data, we can start to generate additional metadata like
 
 ### Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take at least three minutes to run.
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take at least five minutes to run.
 
 It is possible for a formula to be unable to be generated. In this case we return a empty string to represent an unknown molecular formula.
 
 Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-matched_data <- compute_molecular_formulas(matched_data, 3)
-matched_data$predicted_molecular_formulas
+# matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
+# matched_data$predicted_molecular_formulas
 ```
 
 ### Annotations
@@ -130,10 +131,10 @@ Beyond predicting the molecular formula, it is possible to use the `annotate_ms2
 It is recommended to use the `read_msp()` function with your reference database path for the reference parameter. If you store the returned data of `read_msp()` in a variable it may cause lag if it is too big (over \~100mbs). But we show both ways below.
 
 ```{r annotations}
-psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
+psu_msmls <- read_msp(msp_file = mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
-  scoring_params = gnps_params(0.5), precursor_tolerance = 1000,
+  scoring_params = gnps_params(0.5), ppm = 1000,
   min_score =  0.1, chemical_min_score = 0)
 
 annotations[1:5,]
@@ -149,7 +150,7 @@ We have implemented two different distance calculations to generate distances be
 
 ```{r  scoring_distance, R.options=list(max.print=15)}
 dist <- dist_ms2(
-  data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+  data = matched_data, cutoff = 0.3, precursor_threshold = 2,
   score_params = gnps_params(0.5), min_peaks = 0)
 dist
 ```
@@ -174,7 +175,7 @@ After your data has been clustered, if you wish to see which OMUs the annotated 
 
 ```{r omu_annotations}
 annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
-                            precursor_tolerance = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
+                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
 ```
@@ -190,14 +191,14 @@ Now that the data have been clustered into OMUs, it is possible to use the abund
 Packages like vegan opt for using a `matrix` object as input for ecological analyses (see more `vegan::rarefy()`). However, if we were to use the same methodology, the computation would take far too long. In particular, the rarefaction algorithm. Rarefaction is the process of randomly selecting n number of samples without replacement. With n being the user defined sum threshold. However, in mass spectrometry, in order to account for machine limits and background noise, we have to define a sample threshold. So, rarefaction is the process of randomly selecting n number of samples without replacement, with n being the user defined sum threshold. **After selecting n number of samples, we only add the samples that are above the size threshold. If the total is below the sum threshold, we continue until we are equal to or above the sum threshold.** Therefore, adding the size threshold adds another layer complexity to the algorithm. In order to retain efficiency, we create a custom object that contains all of the necessary data for the calculation.
 
 ```{r  community_object, R.options=list(max.print=15)}
-community_w_omus <- create_community_matrix_object(cluster_results)
+community_w_omus <- create_community_matrix_object(data = cluster_results)
 community_w_omus
 ```
 
 You have the option of not clustering your data to generate a community object as well. However, by not creating OMUs, it may be difficult to determine unknown metabolites. When creating OMUs, all alike data is clustered together to create an OMU, which means similar species stay together.
 
 ```{r community_object_no_omus, R.options=list(max.print=30)}
-community_wo_omus <- create_community_matrix_object(matched_data)
+community_wo_omus <- create_community_matrix_object(data = matched_data)
 community_wo_omus
 ```
 
@@ -206,7 +207,7 @@ community_wo_omus
 The vegan package uses an object called a "community matrix." A community matrix is a `matrix` that represents samples as rows, and species as columns. Vegan does not account for machine limits and background noise, so there is no threshold needed when vegan rarefies data. In are effort to make a fast and efficient tool, we have opted to create a `community object`. It is the same as a community matrix, but it is created and held in a Rcpp class for speedy access. However, if you wish to use vegan for other analysis, we have created a `get_community_matrix()` function. This function will convert your community object into a community matrix for ease of use.
 
 ```{r community_matrix, R.options=list(max.print=30)}
-  get_community_matrix(community_w_omus)
+  get_community_matrix(community_object = community_w_omus)
 ```
 
 ### Alpha Diversity
@@ -242,7 +243,7 @@ There are a few different ways to visualize the data generated from this package
 
 ### PCOA
 
-Princpal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at your beta diversity results visually and shows us how similar samples are to eachother.
+Principal Coordinate Analysis (PCoA) is a statistical technique used to show similarities between data. PCoA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCoA is a great way to look at your beta diversity results visually and shows us how similar samples are to eachother.
 
 ```{r pcoa, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_obj <- bray_no_omus
@@ -279,11 +280,94 @@ par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
 
-# Network Plot
+### Network Plot
 
 Sometimes, it is useful to see a visual map of your annotations. We can accomplish this using a network plot. By creating a network of data, we can see which compounds matched certain features. Its very useful for looking at relationships between compounds and features. And using `networkD3::simpleNetwork()` we can generate a very simple network plot.
 
 ```{r network_plot}
 distance_df_annotations <- annotations[, c("query_ms2_id", "name", "score")]
 simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
+```
+
+
+###  Using Group Averages
+Another feature included inside of mums2, is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in triplicates. Meaning, they run the experiment using three of the same samples to account for noise. Since we know all three samples are the same, we can average out all of the samples into one group and work with one group. We are able to generate group averages by using the metadata file that was supplied when you imported your data. We can accomplish this by using the `convert_samples_to_group_averages()` function. 
+
+Below, you can see a copy of the functions we ran above. But this time, we are using group averages.  
+```{r group_average}
+  matched_avg <- convert_samples_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
+  dist_avg <- dist <- dist_ms2(
+    data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
+    score_params = gnps_params(0.5), min_peaks = 0)
+
+  cluster_results_avg <- cluster_data(
+    distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
+    cluster_method = "opticlust")
+
+  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = gnps_params(0.5), 
+                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
+
+  community_object_avg <- create_community_matrix_object(data = cluster_results_avg)
+  head(get_community_matrix(community_object = community_object_avg))
+```
+
+You can also see how the samples in the matched object have been adjusted based on the information supplied in the metadata file.
+```{r samples}
+  # Normal
+  head(matched_data$samples)
+
+  # Group Average
+  head(matched_avg$samples)
+
+  # The items in the Injection have been converted into the corresponding sample code.
+  get_meta_data(filtered_data)[, c("Injection", "Sample_Code")]
+```
+
+### Combined data frames
+mums2 also allows you to view your all of your generated data as a whole using the `generate_a_combined_table()` function. This function will take your matched object (gnenerated from `ms2_ms1_compare()`), your annotations object (generated from `annotate_ms2()`) and your cluster data (generated from `cluster_data()`). It will then generate a combined data.frame with all of the generate data. 
+```{r combined_df}
+  # For normal data
+  head(generate_a_combined_table(matched_data = matched_data, annotations = annotations, cluster_data = cluster_results))
+
+  # For group averaged data
+  head(generate_a_combined_table(matched_data = matched_avg, annotations = annotations_avg, cluster_data = cluster_results_avg))
+
+
+```
+
+
+### Heat map
+Another way to visualize diversity data is to use a heat map. A heat map is a 2d representation of data that visulizes the magnitude of data. We can easily see how correlated data is between samples with a heatmap.
+```{r heat_map, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+dist_shared(community_object_avg, 4000, 100, "jaccard") |> 
+  as.matrix() |>
+  reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
+  ggplot(aes(x = A, y = B, fill = distances)) +
+  geom_tile() +
+  scale_fill_gradient(low="#FF0000", high = "#FFFFFF")
+```
+
+
+### Box Plot
+A box plot (or box and whisker plot) will use a box to depict the variation of the data. We can take advantage of this to look at the distubitions inside of our generate beta and alpha diversity data.
+```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+
+alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
+  t() |> 
+  as.data.frame()
+alpha$name <- rownames(alpha)
+alpha$group <- as.factor(1)
+colnames(alpha) <- c("distances", "name", "group")
+alpha |>
+  ggplot(aes(x = name, y = distances, group = group)) +
+  geom_point()  + 
+  geom_boxplot(alpha = 0.3)
+
+
+dist_shared(community_object_avg, 4000, 100, "bray") |>
+  as.matrix() |>
+  reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
+  ggplot(aes(x = A, y = distances, colour = A)) +
+  geom_point(aes(color = B))  + 
+  geom_boxplot(alpha = 0.1)
 ```

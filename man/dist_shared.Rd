@@ -10,7 +10,9 @@ dist_shared(
   threshold,
   diversity_index = "bray",
   subsample = TRUE,
-  iterations = 100
+  number_of_threads = detectCores(),
+  iterations = 100,
+  seed = 123
 )
 }
 \arguments{
@@ -27,13 +29,17 @@ bray, jaccard, soren, hamming, morista, and thetayc.}
 \item{subsample}{if true, we will rarefy the data before we run the diversity calculations.
 Default is TRUE.}
 
+\item{number_of_threads}{the amount of threads you want the calculation to use.}
+
 \item{iterations}{the amount of times you wish to run your calculation.}
+
+\item{seed}{the rng (random number generator) seed you would like to use.}
 }
 \value{
 a \code{data.frame} object that shows the dissimilarity between all samples.
 }
 \description{
-dissimiliarty via beta diversity
+dissimilarity via beta diversity
 }
 \examples{
 data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 

@@ -4,7 +4,14 @@
 \alias{dist_ms2}
 \title{Calculate pairwise distance between MS/MS features.}
 \usage{
-dist_ms2(data, cutoff, precursor_thresh, score_params, min_peaks = 6)
+dist_ms2(
+  data,
+  cutoff,
+  precursor_threshold,
+  score_params,
+  min_peaks = 6,
+  number_of_threads = detectCores()
+)
 }
 \arguments{
 \item{data}{the object generated from \code{ms2_ms1_compare()}.}
@@ -13,7 +20,7 @@ dist_ms2(data, cutoff, precursor_thresh, score_params, min_peaks = 6)
 comparison. The default of .3 corresponds to a cosine score of .7,
 meaning pairs with a score of .7 or higher will be stored in the matrix.}
 
-\item{precursor_thresh}{Precursor mz tolerance. MS2 scans with a
+\item{precursor_threshold}{Precursor mz tolerance. MS2 scans with a
 difference in precursor mz less than or equal to this value will be scored.}
 
 \item{score_params}{Parameters for scoring method to be applied.
@@ -21,6 +28,8 @@ See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_para
 
 \item{min_peaks}{the minimum number of peaks that need to be present before
 you compare the ms2 spectra.}
+
+\item{number_of_threads}{the number of threads you want to use for this calculation.}
 }
 \value{
 A sparse matrix of class \code{"data.frame"}
@@ -50,10 +59,10 @@ filtered_data <- data |>
 matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
  filtered_data, 2, 6)
 
-dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
  score_params = gnps_params(0.5), min_peaks = 0)
 
-dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
  score_params = spec_entropy_params(), min_peaks = 0)
 
 }

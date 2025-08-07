@@ -31,7 +31,7 @@ a \code{mpactr} object that has been filter based on the supplied parameters.
 }
 \description{
 This function is a wrapper for all of mpactr's filter functions.
-When called with a list of paramters that was generated from one of the following functions,
+When called with a list of parameters that was generated from one of the following functions,
 it will call the subsequent filter: \code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()},
 \code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}. You can also find more information
 on these functions in\code{mpactr} documentation.

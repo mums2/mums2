@@ -3,21 +3,21 @@
 //
 
 #include "DiversityMetrics/AlphaDiversityCalculators/AlphaDiversity.h"
+
+#include "DataStructures/CppMatrix.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
 
-Rcpp::NumericMatrix AlphaDiversity::CalculateDiversity(const Rcpp::NumericMatrix &communityMatrix,
+CppMatrix AlphaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
                                                        const std::string &index) {
     const DiversityCalculator* calculator = DiversityMetricFactory::ChooseDiversityMetricBasedOnName(index);
-    const int size = communityMatrix.nrow();
-    const Rcpp::CharacterVector samples = Rcpp::rownames(communityMatrix);
-    Rcpp::NumericMatrix results(1, size);
-    for(int i = 0; i < size; i++) {
-        Rcpp::NumericVector abundance = communityMatrix(i, Rcpp::_);
-        Rcpp::List diversities = Rcpp::List::create(abundance);
-        results(0, i) = calculator->Calculate(diversities);
+    const size_t rowSize = communityMatrix.GetRowSize();
+    std::vector<double> results(rowSize);
+    for(size_t i = 0; i < rowSize; i++) {
+        std::vector<std::vector<double>> temp(1);
+        temp[0] = communityMatrix.GetRow(i);
+        results[i] = calculator->Calculate(temp);
     }
-    Rcpp::colnames(results) = samples;
     delete calculator;
-    return results;
+    return CppMatrix(results, rowSize, rowSize);
 }

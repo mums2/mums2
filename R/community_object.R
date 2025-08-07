@@ -49,8 +49,6 @@ create_community_matrix_object.mass_data <- function(data)
   return(community_matrix)
 }
 
-
-
 #' @export
 #' @rdname create_community_matrix_object
 create_community_matrix_object.list <- function(data)

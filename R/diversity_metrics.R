@@ -1,6 +1,6 @@
 #' @title Distance Shared
 #' @export
-#' @description dissimiliarty via beta diversity
+#' @description dissimilarity via beta diversity
 #' @param community_object the object created from the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
 #' @param threshold the threshold you want your species to reach before it is included
@@ -9,7 +9,9 @@
 #' bray, jaccard, soren, hamming, morista, and thetayc.
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
+#' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
@@ -36,7 +38,7 @@
 #' dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
 #' @return a `data.frame` object that shows the dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold, diversity_index = "bray", subsample = TRUE, 
-                        iterations = 100) {
+                        number_of_threads = detectCores(), iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren", "hamming", "morisita", "thetayc")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -46,7 +48,8 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations)
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, subsample,
+                          number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(as.dist(result))
 }
@@ -63,7 +66,9 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' shannon or simpson.
 #' @param subsample if true, we will rarefy the data before we run the diversity calculations.
 #' Default is TRUE.
+#' @param number_of_threads the amount of threads you want the calculation to use.
 #' @param iterations the amount of times you wish to run your calculation.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @examples 
 #' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
 #'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
@@ -89,9 +94,9 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' community_object <- create_community_matrix_object(cluster_results)
 #' 
 #' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
-#' @return a `data.frame` object that shows the dissimilarity between all samples.
+#' @return a `data.frame` object that shows the dissimilarity in samples.
 alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
-                          subsample = TRUE, iterations = 1000) {
+                          subsample = TRUE, number_of_threads = detectCores(), iterations = 1000, seed = 123) {
   diversity_index_list <- c("shannon", "simpson")
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
@@ -102,5 +107,10 @@ alpha_summary <- function(community_object, size, threshold, diversity_index = "
                 paste(diversity_index_list, collapse = ', '))
     )
   }
-  return(FasterAvgDist(community_object, diversity_index, size, threshold, subsample, iterations))
+
+  result <- FasterAvgDist(community_object, diversity_index, size, threshold, 
+                       subsample, number_of_threads, iterations, seed)
+  result[which(is.nan(result))] <- 0
+  
+  return(result)
 }

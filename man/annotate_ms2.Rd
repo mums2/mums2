@@ -6,14 +6,14 @@
 \title{Annotate LC-MS/MS features}
 \usage{
 annotate_ms2(mass_data, reference, scoring_params, 
-                         precursor_tolerance, min_score, 
+                         ppm, min_score, 
                          chemical_min_score, cluster_data = NULL, min_peaks = 0)
 
 \method{annotate_ms2}{mass_data}(
   mass_data,
   reference,
   scoring_params,
-  precursor_tolerance,
+  ppm,
   min_score,
   chemical_min_score,
   cluster_data = NULL,
@@ -29,8 +29,8 @@ We currently only support msp files.}
 \item{scoring_params}{Parameters for scoring method to be applied. This can be either
 \code{gnps_params()} or \code{spec_entropy_params()}.}
 
-\item{precursor_tolerance}{Precursor mz tolerance. MS2 scans with a
-difference in precursor mz less than or equal to this value will be scored.}
+\item{ppm}{Parts per million. MS2 scans with a
+difference in ppm less than or equal to this value will be scored.}
 
 \item{min_score}{Similarity score threshold to determine a match for
 annotation. Comparisons with scores below this value will not be reported.}
@@ -55,13 +55,15 @@ location for the matching reference molecule in \code{"reference"}. Scores
 are reported in the \code{"score"} column. \code{query_formula} and \code{chemical_similarity}
 are also reported. Annotation information is returned
 given the information provided in the reference used as input.
+
+a \code{data.frame} object containing annotations
 }
 \description{
 Annotate query LC-MS/MS features in a \code{mass_data} object given a
 reference list.
 
 \code{annotate_ms2()} allows for annotation of mass spectrometry features.
-Similaritity between query and refrence level 2 spectra are determined via
+Similaritity between query and reference level 2 spectra are determined via
 spectral scoring methods. Currently scoring methods \code{"gnps"} and
 \code{"spectral_entropy"} are supported. The scoring method is specified by the
 \code{score_params} argument. \code{score_params} is a list of parameters for the
@@ -86,7 +88,7 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
  annotations <- annotate_ms2(mass_data = matched_data, 
    reference = psu_msmls, scoring_params = gnps_params(0.5),
-   precursor_tolerance = 1000, 
+   ppm = 1000, 
    min_score =  0.1, chemical_min_score = .1)
 
 }

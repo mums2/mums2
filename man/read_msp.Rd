@@ -9,10 +9,13 @@ read_msp(msp_file)
 \arguments{
 \item{msp_file}{the file path of your msp file}
 }
+\value{
+a \code{list} object that contains all of the data present in your msp file.
+}
 \description{
 Reader function msp files
 }
 \examples{
 read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
-
+ 
 }

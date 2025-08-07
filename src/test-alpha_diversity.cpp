@@ -26,29 +26,30 @@ context("Test Alpha Diversity") {
     // testthat's R functions. Use 'test_that()' to define a
     // unit test, and use 'expect_true()' and 'expect_false()'
     // to test the desired conditions.
-    test_that("Calculate Shannon Diversity returns proper results") {
-        AlphaDiversity test;
-        Rcpp::NumericVector v = {1,2,3,4};
-        // Set the number of rows and columns to attribute dim of the vector object.
-        v.attr("dim") = Rcpp::Dimension(2, 2);
-        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
-        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "shannon");
-        bool resultBoolean = res(0,0) > 0 && res(0,1) > 0;
-        expect_true(res.ncol() == 2);
-        expect_true(res.nrow() == 1);
-        expect_true(resultBoolean);
-    }
     test_that("Calculate Simpson Diversity returns proper results") {
+        std::vector<std::vector<double>> mat(1);
+        mat[0] = {1,1,1};
+        CppMatrix matrix(mat);
         AlphaDiversity test;
-        Rcpp::NumericVector v = {1,1,1,1};
-        // Set the number of rows and columns to attribute dim of the vector object.
-        v.attr("dim") = Rcpp::Dimension(2, 2);
-        const Rcpp::NumericMatrix mat = Rcpp::as<Rcpp::NumericMatrix>(v);
-        const Rcpp::NumericMatrix res = test.CalculateDiversity(mat, "simpson");
-        expect_true(res.ncol() == 2);
-        expect_true(res.nrow() == 1);
-        expect_true(res(0,0) == 1);
-        expect_true(res(0,1) == 1);
+        std::vector<std::vector<double>> expectedResult(1);
+        expectedResult[0] = {1};
+        CppMatrix expectedMatrix(expectedResult);
+        const CppMatrix res = test.CalculateDiversity(matrix, "simpson");
+        bool val = expectedMatrix == res;
+        expect_true(val == true);
+    }
+    test_that("Calculate Shannon Diversity returns proper results") {
+        std::vector<std::vector<double>> mat(1);
+        mat[0] = {1,1,1};
+        CppMatrix matrix(mat);
+        AlphaDiversity test;
+        std::vector<std::vector<double>> expectedResult(1);
+        expectedResult[0] = {1};
+        CppMatrix expectedMatrix(expectedResult);
+        const CppMatrix res = test.CalculateDiversity(matrix, "shannon");
+        const Rcpp::NumericMatrix resultMatrix = res.ToRcppMatrix();
+        bool val = resultMatrix(0,0) > 1;
+        expect_true(val == true);
     }
 
 }

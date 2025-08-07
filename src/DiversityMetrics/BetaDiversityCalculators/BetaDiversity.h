@@ -8,11 +8,11 @@
 #include <Rcpp.h>
 
 #include "../Diversity.h"
-
+#include "../../DataStructures/CppMatrix.h"
 
 class BetaDiversity final : public Diversity {
 public:
-    Rcpp::NumericMatrix CalculateDiversity(const Rcpp::NumericMatrix& communityMatrix,
+    CppMatrix CalculateDiversity(const CppMatrix& communityMatrix,
         const std::string& index) override;
     ~BetaDiversity() override = default;
 };

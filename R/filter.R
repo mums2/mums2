@@ -3,7 +3,7 @@
 #' @export
 #' @title Filter Peak Table
 #' @description This function is a wrapper for all of mpactr's filter functions. 
-#' When called with a list of paramters that was generated from one of the following functions, 
+#' When called with a list of parameters that was generated from one of the following functions, 
 #' it will call the subsequent filter: `filter_mispicked_ions_parameters()`, `filter_group_parameters()`,
 #' `filter_cv_parameters()`, and `filter_insource_ions_parameters()`. You can also find more information
 #' on these functions in`mpactr` documentation.

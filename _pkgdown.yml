@@ -54,4 +54,6 @@ reference:
 - title: Helper Functions
   contents:
   - change_rt_to_seconds_or_minutes
+  - generate_a_combined_table
+  - convert_samples_to_group_averages
 

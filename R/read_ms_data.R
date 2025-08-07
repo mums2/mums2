@@ -75,7 +75,8 @@ read_mgf <- function(file) {
 #' @param msp_file the file path of your msp file
 #' @examples
 #' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
-#' 
+#'  
+#' @return a `list` object that contains all of the data present in your msp file.
 read_msp <- function(msp_file) {
   extension <- tail(strsplit(msp_file, split = "\\.")[[1]], 1)
   if(tolower(extension) != "msp") {

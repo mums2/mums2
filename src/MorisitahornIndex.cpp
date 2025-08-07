@@ -4,17 +4,17 @@
 
 #include "DiversityMetrics/BetaDiversityCalculators/MorisitahornIndex.h"
 
-double MorisitahornIndex::Calculate(const Rcpp::List& abundanceVectors) const {
-    const Rcpp::NumericVector& sampleOne = abundanceVectors[0];
-    const Rcpp::NumericVector& sampleTwo = abundanceVectors[1];
-    double totalSampleOne = Rcpp::sum(sampleOne);
-    double totalSampleTwo = Rcpp::sum(sampleTwo);
+double MorisitahornIndex::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
+    const std::vector<double>& sampleOne = abundanceVectors[0];
+    const std::vector<double>& sampleTwo = abundanceVectors[1];
+    const double totalSampleOne = std::accumulate(sampleOne.begin(), sampleOne.end(), 0.0);
+    const double totalSampleTwo = std::accumulate(sampleTwo.begin(), sampleTwo.end(), 0.0);
     double summationOfSampleOneAndTwo = 0;
     double summationSampleOne = 0;
     double summationSampleTwo = 0;
-    for(int i = 0; i < sampleOne.size(); i++) {
-        double currentSampleOne = sampleOne[i];
-        double currentSampleTwo = sampleTwo[i];
+    for(size_t i = 0; i < sampleOne.size(); i++) {
+        const double currentSampleOne = sampleOne[i];
+        const double currentSampleTwo = sampleTwo[i];
         summationOfSampleOneAndTwo += (currentSampleOne / totalSampleOne)
         * (currentSampleTwo / totalSampleTwo);
 

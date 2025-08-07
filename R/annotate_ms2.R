@@ -4,7 +4,7 @@
 #' reference list.
 #'
 #' `annotate_ms2()` allows for annotation of mass spectrometry features.
-#' Similaritity between query and refrence level 2 spectra are determined via
+#' Similaritity between query and reference level 2 spectra are determined via
 #' spectral scoring methods. Currently scoring methods `"gnps"` and
 #' `"spectral_entropy"` are supported. The scoring method is specified by the
 #' `score_params` argument. `score_params` is a list of parameters for the
@@ -18,8 +18,8 @@
 #' We currently only support msp files.
 #' @param scoring_params Parameters for scoring method to be applied. This can be either
 #' `gnps_params()` or `spec_entropy_params()`.
-#' @param precursor_tolerance Precursor mz tolerance. MS2 scans with a
-#'  difference in precursor mz less than or equal to this value will be scored.
+#' @param ppm Parts per million. MS2 scans with a
+#'  difference in ppm less than or equal to this value will be scored.
 #' @param min_score Similarity score threshold to determine a match for
 #'  annotation. Comparisons with scores below this value will not be reported.
 #' @param chemical_min_score data2
@@ -55,16 +55,17 @@
 #'  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data, 
 #'    reference = psu_msmls, scoring_params = gnps_params(0.5),
-#'    precursor_tolerance = 1000, 
+#'    ppm = 1000, 
 #'    min_score =  0.1, chemical_min_score = .1)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params, 
-#'                          precursor_tolerance, min_score, 
+#'                          ppm, min_score, 
 #'                          chemical_min_score, cluster_data = NULL, min_peaks = 0)
 #'
 #' @export
+#' @return a `data.frame` object containing annotations
 annotate_ms2 <- function(mass_data, reference, scoring_params, 
-                           precursor_tolerance, min_score, 
+                           ppm, min_score, 
                            chemical_min_score, cluster_data = NULL, min_peaks = 0) {
   UseMethod("annotate_ms2", mass_data)
 }
@@ -72,14 +73,14 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
 #' @rdname annotate_ms2
 #' @export
 annotate_ms2.mass_data <- function(mass_data, reference, scoring_params, 
-                           precursor_tolerance, min_score, 
+                           ppm, min_score, 
                            chemical_min_score, cluster_data = NULL, min_peaks = 0) {
   preds <- vector("character", nrow(mass_data$ms2_matches))
   if("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data, reference, scoring_params, 
-  preds, precursor_tolerance, min_score, chemical_min_score, min_peaks)
+  preds, ppm, min_score, chemical_min_score, min_peaks)
 
   for(i in seq_along(1:ncol(annotations))){
     annotations[, i] <- trimws(annotations[ ,i], "right")
@@ -91,13 +92,13 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
 
   list_data <- clustur::split_clusters_to_list(cluster_data)
   annotations$omu <- rep("", times = nrow(annotations))
-  annotaion_omus <- lapply(list_data, function(x)  which(annotations$query_ms1_id %in% x))
+  annotation_omus <- lapply(list_data, function(x)  which(annotations$query_ms1_id %in% x))
 
-  for(i in seq_along(annotaion_omus)){
-    if(length(annotaion_omus[[i]]) <= 0){
+  for(i in seq_along(annotation_omus)){
+    if(length(annotation_omus[[i]]) <= 0){
       next
     }
-    annotations$omu[annotaion_omus[[i]]] <- names(annotaion_omus[i])
+    annotations$omu[annotation_omus[[i]]] <- names(annotation_omus[i])
   }                           
   return(annotations)
 }

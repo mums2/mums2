@@ -31,8 +31,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // distMS2
-Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks);
-RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP) {
+Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
+RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -41,19 +41,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type precursor_thresh(precursor_threshSEXP);
     Rcpp::traits::input_parameter< const double >::type cutoff(cutoffSEXP);
     Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CalculateDiversityCommunityObject
-Rcpp::NumericMatrix CalculateDiversityCommunityObject(const SEXP& communityMatrix, const std::string& diversityIndex);
-RcppExport SEXP _mums2_CalculateDiversityCommunityObject(SEXP communityMatrixSEXP, SEXP diversityIndexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type diversityIndex(diversityIndexSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalculateDiversityCommunityObject(communityMatrix, diversityIndex));
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -80,31 +69,35 @@ BEGIN_RCPP
 END_RCPP
 }
 // RarefactionCalculation
-Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint32_t size, const uint32_t threshold);
-RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP) {
+Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const uint64_t size, const uint64_t threshold, const int numberOfThreads, const int seed);
+RcppExport SEXP _mums2_RarefactionCalculation(SEXP communityMatrixSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP numberOfThreadsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type threshold(thresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(RarefactionCalculation(communityMatrix, size, threshold));
+    Rcpp::traits::input_parameter< const uint64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(RarefactionCalculation(communityMatrix, size, threshold, numberOfThreads, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 // FasterAvgDist
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint32_t size, const uint32_t threshold, const bool subsample, const int iterations);
-RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP iterationsSEXP) {
+Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
+RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const uint32_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< const bool >::type subsample(subsampleSEXP);
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, subsample, iterations));
+    Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -217,12 +210,11 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
-    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 5},
-    {"_mums2_CalculateDiversityCommunityObject", (DL_FUNC) &_mums2_CalculateDiversityCommunityObject, 2},
+    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
-    {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 3},
-    {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 6},
+    {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
+    {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},

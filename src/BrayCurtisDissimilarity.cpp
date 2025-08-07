@@ -7,9 +7,9 @@
 #include <numeric>
 
 // Assume there are only two vectors for this calculation
-double BrayCurtisDissimilarity::Calculate(const Rcpp::List& abundanceVectors) const {
-    const Rcpp::NumericVector& sampleOne = abundanceVectors[0];
-    const Rcpp::NumericVector& sampleTwo = abundanceVectors[1];
+double BrayCurtisDissimilarity::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
+    const std::vector<double>& sampleOne = abundanceVectors[0];
+    const std::vector<double>& sampleTwo = abundanceVectors[1];
     const size_t size = sampleOne.size();
     const double abundanceSum = std::accumulate(sampleOne.begin(), sampleOne.end(), 0.0) +
         std::accumulate(sampleTwo.begin(), sampleTwo.end(), 0.0);

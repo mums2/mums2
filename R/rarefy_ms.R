@@ -3,16 +3,18 @@
 #' @description
 #' `rarefy_ms()` performs a single subsampling of MS1 features in sample.
 #'  Feature intensities are subsampled to the supplied `size` and accounts
-#'  for intesnity thresholds due to machine limits and background noise.
+#'  for intensity thresholds due to machine limits and background noise.
 #'  Specifically, features whose abundance falls below the `threshold`
-#'  after rarefying are removed. This allows for accurate represetation
-#'  of samples at diffrent dilutions regardless of the desired
+#'  after rarefying are removed. This allows for accurate representation
+#'  of samples at different dilutions regardless of the desired
 #'  submsampling `size`.
 #' 
 #' @param community_object A `community_object`
 #' @param size The desired total sample intensity to subsample to.
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
+#' @param number_of_threads the amount of threads you want the calculation to use.
+#' @param seed the rng (random number generator) seed you would like to use.
 #' @return A `external_pointer` that references a community matrix of rarefied feature intensities.
 #' @export
 #' 
@@ -41,9 +43,10 @@
 #' community_object <- create_community_matrix_object(cluster_results)
 #' rarefy_ms(community_object, 4000, 100)
 #' 
-rarefy_ms <- function(community_object, size, threshold) {
+#' @return returns a `matrix` object that contains your rarefied data.
+rarefy_ms <- function(community_object, size, threshold, number_of_threads = detectCores(), seed = 123) {
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")
   }
-  return(RarefactionCalculation(community_object, size, threshold))
+  return(RarefactionCalculation(community_object, size, threshold, number_of_threads, seed))
 }
