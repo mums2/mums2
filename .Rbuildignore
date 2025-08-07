@@ -15,3 +15,4 @@
 ^CMakeLists\.txt$
 ^src/CMakeLists\.txt$
 ^\.github$
+^cran-comments\.md$
