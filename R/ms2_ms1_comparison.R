@@ -20,7 +20,7 @@
 #' 
 #' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
 #'  filtered_data, 2, 6)
-#' @return returns a `mass_data` object of all of the matches.
+#' @return returns a `mass_data` object of all of the ms2 and ms1 matches.
 ms2_ms1_compare <- function(ms2_files, mpactr_object, mz_tolerance, rt_tolerance) {
   ms2_data <- list()
   extension <- tail(strsplit(as.list(ms2_files)[[1]], split = "\\.")[[1]], 1)

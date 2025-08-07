@@ -43,6 +43,7 @@
 #' community_object <- create_community_matrix_object(cluster_results)
 #' rarefy_ms(community_object, 4000, 100)
 #' 
+#' @return returns a `matrix` object that contains your rarefied data.
 rarefy_ms <- function(community_object, size, threshold, number_of_threads = detectCores(), seed = 123) {
   if(!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the `create_community_object` function.")

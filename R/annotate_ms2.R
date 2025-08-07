@@ -63,6 +63,7 @@
 #'                          chemical_min_score, cluster_data = NULL, min_peaks = 0)
 #'
 #' @export
+#' @return a `data.frame` object containing annotations
 annotate_ms2 <- function(mass_data, reference, scoring_params, 
                            ppm, min_score, 
                            chemical_min_score, cluster_data = NULL, min_peaks = 0) {

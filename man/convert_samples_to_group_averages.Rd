@@ -11,6 +11,9 @@ convert_samples_to_group_averages(matched_data, mpactr_object)
 
 \item{mpactr_object}{The object created from \code{import_all_data()}.}
 }
+\value{
+a \code{mass_data} object using group averages
+}
 \description{
 To account for users measuring there data in triplicates or other forms of measurement,
 we have implemented a function that can transform your matched data object to use
@@ -33,5 +36,4 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
  filtered_data, 2, 6)
 
 matched_data_avg <- convert_samples_to_group_averages(matched_data, filtered_data)
-
 }

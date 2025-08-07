@@ -26,6 +26,8 @@ must be >= this value to be retained.}
 }
 \value{
 A \code{external_pointer} that references a community matrix of rarefied feature intensities.
+
+returns a \code{matrix} object that contains your rarefied data.
 }
 \description{
 \code{rarefy_ms()} performs a single subsampling of MS1 features in sample.

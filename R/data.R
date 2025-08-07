@@ -13,6 +13,7 @@
 #' mums2_example()
 #'
 #' mums2_example("PSUMSMLS_Adenine.csv")
+#' @return returns a `character` object
 mums2_example <- function(file = NULL) {
   path <- ""
   if (is.null(file)) {

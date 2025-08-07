@@ -55,6 +55,8 @@ location for the matching reference molecule in \code{"reference"}. Scores
 are reported in the \code{"score"} column. \code{query_formula} and \code{chemical_similarity}
 are also reported. Annotation information is returned
 given the information provided in the reference used as input.
+
+a \code{data.frame} object containing annotations
 }
 \description{
 Annotate query LC-MS/MS features in a \code{mass_data} object given a

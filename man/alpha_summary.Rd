@@ -36,7 +36,7 @@ Default is TRUE.}
 \item{seed}{the rng (random number generator) seed you would like to use.}
 }
 \value{
-a \code{data.frame} object that shows the dissimilarity between all samples.
+a \code{data.frame} object that shows the dissimilarity in samples.
 }
 \description{
 alpha diversity

@@ -94,7 +94,7 @@ dist_shared <- function(community_object, size, threshold, diversity_index = "br
 #' community_object <- create_community_matrix_object(cluster_results)
 #' 
 #' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
-#' @return a `data.frame` object that shows the dissimilarity between all samples.
+#' @return a `data.frame` object that shows the dissimilarity in samples.
 alpha_summary <- function(community_object, size, threshold, diversity_index = "shannon",
                           subsample = TRUE, number_of_threads = detectCores(), iterations = 1000, seed = 123) {
   diversity_index_list <- c("shannon", "simpson")
