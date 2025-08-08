@@ -120,8 +120,8 @@ It is possible for a formula to be unable to be generated. In this case we retur
 Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-# matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
-# matched_data$predicted_molecular_formulas
+matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
+matched_data$predicted_molecular_formulas
 ```
 
 ### Annotations
