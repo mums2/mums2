@@ -43,6 +43,22 @@ data <- import_all_data(
   format = "Metaboscape")
 ```
 
+
+#### Peak Table
+
+Below is the expected format for a progenesis peak table. It contains feature data such as m/z (or pepmass) and retention time. The sample intenesities are also inside of this table.
+
+```{r peak_table, R.options=list(max.print=40)}
+read.csv(mums2::mums2_example("full_mix_peak_table.csv"), check.names = FALSE)
+```
+
+#### Metadata
+
+The expected format for metadata is below. The metadata file needs to contain at minimum columns for "Injection", "Sample_Code", and " Biological_Group." 
+```{r metadata, R.options=list(max.print=40)}
+read.csv(mums2::mums2_example("full_mix_meta_data.csv"), check.names = FALSE)
+```
+
 ### Filter
 
 After you import the data you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). You are not required to filter your data but filtering your data will help reduce noise and correct peak selecting errors. Which will also speed up the analysis.
