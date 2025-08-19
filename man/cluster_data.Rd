@@ -12,30 +12,36 @@ cluster_data(
 )
 }
 \arguments{
-\item{distance_df}{a distance df that was generated from the \code{distMs2()} function.}
+\item{distance_df}{a distance df that was generated
+from the \code{distMs2()} function.}
 
-\item{ms2_match_data}{your mass data set object generated from \code{ms2_ms1_compare()}.}
+\item{ms2_match_data}{your mass data set object generated
+from \code{ms2_ms1_compare()}.}
 
 \item{cutoff}{the cutoff value you wish to cluster to.}
 
-\item{cluster_method}{a cluster method, there are five methods to choose from:
-furthest, nearest, weighted, average, and opticlust.}
+\item{cluster_method}{a cluster method, there are five methods to choose
+from: furthest, nearest, weighted, average, and opticlust.}
 }
 \value{
-a shared \code{data.frame} displaying all the clustered and abundance data.
+a shared \code{data.frame} displaying all
+the clustered and abundance data.
 }
 \description{
 Clusters the data together
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")

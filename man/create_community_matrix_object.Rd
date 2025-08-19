@@ -13,23 +13,28 @@ create_community_matrix_object(data)
 \method{create_community_matrix_object}{list}(data)
 }
 \arguments{
-\item{data}{the result of the \code{cluster_data()} function, or just a mass_data object created from \code{ms2_ms1_compare()}.}
+\item{data}{the result of the \code{cluster_data()} function,
+or just a mass_data object created from \code{ms2_ms1_compare()}.}
 }
 \value{
 a external pointer to an Rcpp object.
 }
 \description{
-Takes you mass_data object and creates a community matrix object. This object is used to compute diversity calculations.
+Takes you mass_data object and creates a community matrix object.
+This object is used to compute diversity calculations.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")
@@ -43,7 +48,7 @@ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 
-community_object_with_cluster <- create_community_matrix_object(cluster_results)
+community_with_cluster <- create_community_matrix_object(cluster_results)
 
 community_object_mass_data <- create_community_matrix_object(matched_data)
 

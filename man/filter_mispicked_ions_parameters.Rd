@@ -35,8 +35,8 @@ should be merged. Can be one of "sum".}
 object instead of modifying the object.}
 }
 \value{
-a \code{list} object of arguments needed to call the given mpactr function when supplied to the
-\code{filter_peak_table()} wrapper function.
+a \code{list} object of arguments needed to call the given
+mpactr function when supplied to the \code{filter_peak_table()} wrapper function.
 }
 \description{
 Creates a list of filter mispicked ions arguments

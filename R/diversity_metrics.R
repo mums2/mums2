@@ -86,7 +86,7 @@ dist_shared <- function(community_object, size, threshold,
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples
-#' #' data <- import_all_data(peak_table =
+#' data <- import_all_data(peak_table =
 #'                         mums2::mums2_example("full_mix_peak_table.csv"),
 #'                         meta_data =
 #'                         mums2::mums2_example("full_mix_meta_data.csv"),

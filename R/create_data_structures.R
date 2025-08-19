@@ -20,7 +20,7 @@
 #'    filter_peak_table(filter_insource_ions_parameters())
 #' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' mathed_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
 #'  filtered_data, 2, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,

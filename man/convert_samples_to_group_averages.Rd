@@ -7,7 +7,8 @@
 convert_samples_to_group_averages(matched_data, mpactr_object)
 }
 \arguments{
-\item{matched_data}{your mass data set object generated from \code{ms2_ms1_compare()}.}
+\item{matched_data}{your mass data set
+object generated from \code{ms2_ms1_compare()}.}
 
 \item{mpactr_object}{The object created from \code{import_all_data()}.}
 }
@@ -15,19 +16,23 @@ convert_samples_to_group_averages(matched_data, mpactr_object)
 a \code{mass_data} object using group averages
 }
 \description{
-To account for users measuring there data in triplicates or other forms of measurement,
-we have implemented a function that can transform your matched data object to use
-group averages instead of each sample individually.
+To account for users measuring there data in triplicates or other
+forms of measurement, we have implemented a function that can
+transform your matched data object to use group averages instead of
+each sample individually.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")
@@ -35,5 +40,6 @@ change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
  filtered_data, 2, 6)
 
-matched_data_avg <- convert_samples_to_group_averages(matched_data, filtered_data)
+matched_data_avg <- convert_samples_to_group_averages(matched_data,
+                                                      filtered_data)
 }

@@ -13,20 +13,23 @@ create_community_matrix(cluster_object)
 a \code{data.frame} object of your community_object.
 }
 \description{
-Using your community_object, we are able to convert it into a community matrix for easier
+Using your community_object, we are able to
+convert it into a community matrix for easier
 usability of the object.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
-
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 
 matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),

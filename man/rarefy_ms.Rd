@@ -20,12 +20,14 @@ rarefy_ms(
 \item{threshold}{The individual feature threshold. Each subsampled feature
 must be >= this value to be retained.}
 
-\item{number_of_threads}{the amount of threads you want the calculation to use.}
+\item{number_of_threads}{the amount of threads
+you want the calculation to use.}
 
 \item{seed}{the RNG (random number generator) seed you would like to use.}
 }
 \value{
-A \code{external_pointer} that references a community matrix of rarefied feature intensities.
+A \code{external_pointer} that references a community
+matrix of rarefied feature intensities.
 
 returns a \code{matrix} object that contains your rarefied data.
 }
@@ -39,14 +41,17 @@ of samples at different dilutions regardless of the desired
 submsampling \code{size}.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")

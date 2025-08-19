@@ -10,20 +10,22 @@ change_rt_to_seconds_or_minutes(mpactr_object, rt_type = "seconds")
 \item{mpactr_object}{The object created from \code{import_all_data()}
 file.}
 
-\item{rt_type}{how you want to convert your retention time, your options are minutes, or seconds.
-defaults to seconds.}
+\item{rt_type}{how you want to convert your retention time,
+your options are minutes, or seconds. defaults to seconds.}
 }
 \value{
 a modified \code{mpactr} object.
 }
 \description{
 This function will change your ms1 peak table rt time to
-rt time in seconds or minutes. This modification happens in place (or by reference),
-so the \code{mpactr_object} will be updated.
+rt time in seconds or minutes. This modification happens in place
+(or by reference), so the \code{mpactr_object} will be updated.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 change_rt_to_seconds_or_minutes(data, "minutes")
 }

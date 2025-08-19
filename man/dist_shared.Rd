@@ -16,40 +16,47 @@ dist_shared(
 )
 }
 \arguments{
-\item{community_object}{the object created from the \code{create_community_object()} function.}
+\item{community_object}{the object created from
+the \code{create_community_object()} function.}
 
 \item{size}{the size you wish to rarefy your diversity matrix to.}
 
-\item{threshold}{the threshold you want your species to reach before it is included
-in the rarefaction sum.}
+\item{threshold}{the threshold you want your species to
+reach before it is included in the rarefaction sum.}
 
-\item{diversity_index}{the diversity index you wish to calculate diversity. You can choose from:
+\item{diversity_index}{the diversity index you wish
+to calculate diversity. You can choose from:
 bray, jaccard, soren, hamming, morista, and thetayc.}
 
-\item{subsample}{if true, we will rarefy the data before we run the diversity calculations.
-Default is TRUE.}
+\item{subsample}{if true, we will rarefy the data before we run
+the diversity calculations. Default is TRUE.}
 
-\item{number_of_threads}{the amount of threads you want the calculation to use.}
+\item{number_of_threads}{the amount of threads you want the
+calculation to use.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
 
 \item{seed}{the RNG (random number generator) seed you would like to use.}
 }
 \value{
-a \code{data.frame} object that shows the dissimilarity between all samples.
+a \code{data.frame} object that shows the
+dissimilarity between all samples.
 }
 \description{
 dissimilarity via beta diversity
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
  change_rt_to_seconds_or_minutes(filtered_data, "minutes")
@@ -59,7 +66,8 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = gnps_params(0.5), min_peaks = 0)
 
-cluster_results <- cluster_data(distance_df = dist, ms2_match_data = matched_data,
+cluster_results <- cluster_data(distance_df = dist,
+ ms2_match_data = matched_data,
  cutoff = 0.3, cluster_method = "opticlust")
 
 community_object <- create_community_matrix_object(cluster_results)

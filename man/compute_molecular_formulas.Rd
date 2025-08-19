@@ -13,28 +13,34 @@ compute_molecular_formulas(
 \arguments{
 \item{mass_data}{your mass_data object generated from \code{ms2_ms1_compare()}}
 
-\item{parent_ppm}{the ppm you wish to generate the candidate molecular formulas.}
+\item{parent_ppm}{the ppm you wish to generate the candidate
+molecular formulas.}
 
 \item{num_threads}{the amount of threads we the algorithm will use.}
 }
 \value{
-your mass_data object with an additional \code{character} vector of all the predicted formulas.
+your mass_data object with an additional \code{character}
+vector of all the predicted formulas.
 }
 \description{
-de novo algorithm for computing molecular formulas. Using fragmentation trees we are able to generate
-a resultant molecular formula. To ensure efficient we are using a greedy heurstic to generate the resultant formula.
-Although this may not always result in the correct prediction, it allows us to efficiently calculate a multitude
-of chemical formulas.
+de novo algorithm for computing molecular formulas. Using fragmentation trees
+we are able to generate a resultant molecular formula. To ensure efficient
+we are using a greedy heurstic to generate the resultant formula. Although
+this may not always result in the correct prediction, it allows us to
+efficiently calculate a multitudeof chemical formulas.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 

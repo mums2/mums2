@@ -6,7 +6,7 @@
 #' @param data the result of the `cluster_data()` function,
 #'  or just a mass_data object created from `ms2_ms1_compare()`.
 #' @examples
-#' #' data <- import_all_data(peak_table =
+#' data <- import_all_data(peak_table =
 #'                         mums2::mums2_example("full_mix_peak_table.csv"),
 #'                         meta_data =
 #'                         mums2::mums2_example("full_mix_meta_data.csv"),

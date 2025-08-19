@@ -7,23 +7,28 @@
 get_community_matrix(community_object)
 }
 \arguments{
-\item{community_object}{the object created from the \code{create_community_object()} function.}
+\item{community_object}{the object created from
+the \code{create_community_object()} function.}
 }
 \value{
 returns \code{matrix}, based on the community object.
 }
 \description{
-Returns the community \code{matrix} or the data that you used to create the object.
+Returns the community \code{matrix} or the data
+that you used to create the object.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <- import_all_data(peak_table =
+                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        meta_data =
+                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        format = "Metaboscape")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_parameters()) |>
    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
+   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+                                             "Blanks")) |>
    filter_peak_table(filter_insource_ions_parameters())
 
 change_rt_to_seconds_or_minutes(filtered_data, "minutes")
@@ -37,7 +42,7 @@ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 
-community_object_with_cluster <- create_community_matrix_object(cluster_results)
+community_with_cluster <- create_community_matrix_object(cluster_results)
 
 community_object_mass_data <- create_community_matrix_object(matched_data)
 }
