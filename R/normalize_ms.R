@@ -20,8 +20,8 @@
 #' @examples
 #' sample_1 <- c(210.1333, 35.984, 21.264, 100.320, 3752.399)
 #' sample_1_norm <- relative_abundance(sample_1)
-#' @noRd 
+#' @noRd
 relative_abundance <- function(data) {
   data <- data / sum(data)
-  return(data)
+  data
 }
