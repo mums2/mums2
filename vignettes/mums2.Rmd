@@ -131,7 +131,7 @@ Once you preprocess your data, we can start to generate additional metadata like
 
 To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take at least five minutes to run.
 
-It is possible for a formula to be unable to be generated. In this case we return a empty string to represent an unknown molecular formula.
+It is possible for a formula to be unable to be generated. In this case we return a NA to represent an unknown molecular formula.
 
 Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
 
@@ -365,7 +365,7 @@ dist_shared(community_object_avg, 4000, 100, "jaccard") |>
 
 
 ### Box Plot
-A box plot (or box and whisker plot) will use a box to depict the variation of the data. We can take advantage of this to look at the distributions inside of our generate beta and alpha diversity data.
+A box plot (or box and whisker plot) will use a box to depict the variation of the data. We can take advantage of this to look at the distributions inside of our generate beta and alpha diversity data. Below is a box plot using alpha diversity.
 ```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
@@ -380,10 +380,17 @@ alpha |>
   geom_boxplot(alpha = 0.3)
 
 
+
+```
+
+
+You can also look at the dissimilarities in the communities by using a box plot with beta diversity.
+```{r box_plot_beta, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 dist_shared(community_object_avg, 4000, 100, "bray") |>
   as.matrix() |>
   reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
   ggplot(aes(x = A, y = distances, colour = A)) +
   geom_point(aes(color = B))  + 
   geom_boxplot(alpha = 0.1)
+
 ```
