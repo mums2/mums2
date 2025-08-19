@@ -85,14 +85,14 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
                                    chemical_min_score,
                                    cluster_data = NULL, min_peaks = 0) {
   preds <- vector("character", nrow(mass_data$ms2_matches))
-  if("predicted_molecular_formulas" %in% names(mass_data)) {
+  if ("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
                                      min_score, chemical_min_score, min_peaks)
 
-  for (i in seq_along(1:ncol(annotations))){
+  for (i in seq_len(ncol(annotations))){
     annotations[, i] <- trimws(annotations[, i], "right")
   }
   colnames(annotations) <- tolower(colnames(annotations))

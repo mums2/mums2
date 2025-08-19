@@ -59,7 +59,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
                                "ms1_compound_id", "spectra_index",
                                "ms2_spectrum_id")
   row_index <- 1
-  for (i in seq_along(1:length(result))) {
+  for (i in seq_len(length(result))) {
     if (result[[i]] < 0) {
       next
     }

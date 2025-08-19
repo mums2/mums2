@@ -202,7 +202,7 @@ generate_a_combined_table <- function(matched_data,
                                           which(
                                                 colnames(matched_data$ms1_data)
                                                 %in% samples), with = FALSE]
-  for (i in 1:ncol(sample_columns)) {
+  for (i in seq_len(ncol(sample_columns))) {
     env[[samples[i]]] <- sample_columns[[i]]
   }
 
@@ -260,6 +260,6 @@ generate_a_combined_table <- function(matched_data,
   for (i in samples) {
     df <- cbind(df, env[[i]])
   }
-  colnames(df)[current_column_count + 1: length(samples)] <- samples
+  colnames(df)[current_column_count + seq_len(length(samples))] <- samples
   return(df)
 }

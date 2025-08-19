@@ -1,6 +1,6 @@
 #' @export
 #' @title Import all data
-#' @description This function is a wrapper for the mpactr import_data function. 
+#' @description This function is a wrapper for the mpactr import_data function.
 #' It will import your peak table and meta data and create a mpactr_object.
 #' @param peak_table The file path to your feature table
 #' file.
@@ -54,7 +54,7 @@ change_rt_to_seconds_or_minutes <- function(mpactr_object,
       stop("There are no colnames that are equal to rt or RTINMINUTES")
     }
     peak_table[[column_index]] <- peak_table[[column_index]] * 60
-    colnames(peak_table)[column_index] = "RTINSECONDS"
+    colnames(peak_table)[column_index] <- "RTINSECONDS"
     mpactr_object$mpactr_data$set_peak_table(peak_table)
   }
   if (rt_type == "minutes" && !("RTINMINUTES" %in% colnames(peak_table))) {
@@ -64,7 +64,7 @@ change_rt_to_seconds_or_minutes <- function(mpactr_object,
       stop("There are no colnames that are equal to rt or RTINSECONDS")
     }
     peak_table[[column_index]] <- peak_table[[column_index]] / 60
-    colnames(peak_table)[column_index] = "RTINMINUTES"
+    colnames(peak_table)[column_index] <- "RTINMINUTES"
     mpactr_object$mpactr_data$set_peak_table(peak_table)
   }
   return(mpactr_object)

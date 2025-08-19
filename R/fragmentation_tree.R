@@ -48,7 +48,7 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
   DestroyProgressBar(pb)
   rm(pb)
   results <- as.character(molecular_formula_list)
-  mass_data$predicted_molecular_formulas = results
+  mass_data$predicted_molecular_formulas <- results
   failed_amount <- length(which(is.na(results)))
   message(paste0(abs(length(results) - failed_amount), "/", length(results),
                  " chemical formulas were predicted"))
