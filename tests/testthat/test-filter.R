@@ -39,10 +39,11 @@ test_that("filter_groups_parameters return correct data", {
 })
 
 test_that("filter_cv_parameters return correct data", {
-  params <- filter_cv_parameters(0.2, FALSE)
-  ls <- list(cv_threshold = 0, copy_object = 0)
+  params <- filter_cv_parameters(cv_threshold = 0.2)
+  ls <- list(cv_threshold = 0, fix_peaks = FALSE,
+             copy_object = FALSE)
   expect_true(all(names(ls) == names(params)))
-  expect_true(length(params) == 2)
+  expect_true(length(params) == 3)
 })
 
 test_that("filter_insource_ions_parameters return correct data", {
