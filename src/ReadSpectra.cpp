@@ -100,9 +100,11 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     spectraData.close();
     spectraData.open(filePath);
     float currentLine = 0;
+    auto isSpaces = [](unsigned char const c) { return std::isspace(c); };
     while(std::getline(spectraData,  line)) {
         p.update(++currentLine/line_count);
-        if(line.empty()) { // end of the current block
+        bool whiteSpace = std::all_of(line.begin(), line.end(), isSpaces);
+        if(line.empty() || whiteSpace) { // end of the current block
             mzContainer.emplace_back(mz);
             intensityContainer.emplace_back(intensity);
             metaDataKeyContainer.emplace_back(metaDataKeys);
@@ -139,12 +141,12 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         mz.emplace_back(std::stod(mzValue));
         intensity.emplace_back(std::stod(intensityValue));
 
+
     }
     spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     Rcpp::List mspList(spectraPeaks);
-
     for (int i = 0; i < spectraPeaks; i++) {
         Rcpp::List peaksDf = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
             Rcpp::Named("intensity") = intensityContainer.front());
