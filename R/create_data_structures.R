@@ -225,6 +225,7 @@ generate_a_combined_table <- function(matched_data,
 
   # add annotations
   # Will be added as a list: index_annotation
+
   if (!is.null(annotations)) {
     if (!("data.frame" %in% class(annotations))) {
       stop("annotations must be a data.frame object.")
@@ -237,6 +238,7 @@ generate_a_combined_table <- function(matched_data,
     }
     df$annotations <- rep("", size)
     annotation_index <- apply(annotations, 1, function(x) {
+      which(env$ms1_id == x["query_ms1_id"])
       list(env_id = which(env$ms1_id == x["query_ms1_id"]),
            annotation_name = x["name"])
     })
@@ -249,11 +251,50 @@ generate_a_combined_table <- function(matched_data,
   }
 
   if (!is.null(annotations)) {
-    for (i in seq_along(env$annotations)) {
-      if (length(env$annotations[[i]]) <= 0) {
+    # Expand env data
+    final_count <- 0
+    for(i in seq_along(env$annotations)) {
+      count <- length(env$annotations[[i]])
+      if(count == 0) {
+        count <- 1
+      }
+      final_count <- final_count + count 
+    }
+    expand_count <- length(unique(annotations$name))
+    collected_column_names <- c(collected_column_names, "annotations", samples)
+    matrix_df <- as.data.frame(matrix("", nrow = final_count, ncol = length(collected_column_names)))
+    colnames(matrix_df) <- collected_column_names
+    rt_strings <- mget(retention_time_string, envir = env)[[1]]
+    sample_start_index <- length(collected_column_names) - length(samples) + 1
+    current_index <- 1
+    i <- 1
+    i <- i + 1
+    for (i in seq_along(env$ms1_id)) {
+      if (length(env$annotations[[i]]) > 0) {
+        for(j in seq_len(length(env$annotations[[i]]))) {
+            matrix_df$ms1_id[[current_index]] <- env$ms1_id[[i]]
+            matrix_df$ms2_id[[current_index]] <- env$ms2_id[[i]]
+            matrix_df$mz[[current_index]] <- env$mz[[i]]
+            matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
+            matrix_df$omus[[current_index]] <- env$omus[[i]]
+            matrix_df$annotations[[current_index]] <- env$annotations[[i]][[j]]
+            for(sample in samples) {
+              matrix_df[[sample]][[current_index]] <- env[[sample]][[i]]
+            }
+            current_index <- current_index + 1
+          }
         next
       }
-      df$annotations[[i]] <- paste(env$annotations[[i]], collapse = ",")
+      matrix_df$ms1_id[[current_index]] <- env$ms1_id[[i]]
+      matrix_df$ms2_id[[current_index]] <- env$ms2_id[[i]]
+      matrix_df$mz[[current_index]] <- env$mz[[i]]
+      matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
+      matrix_df$omus[[current_index]] <- env$omus[[i]]
+      matrix_df$annotations[[current_index]] <- NA
+      for(sample in samples) {
+          matrix_df[[sample]][[current_index]] <- env[[sample]][[i]]
+      }
+      current_index <- current_index + 1
     }
   }
   current_column_count <- ncol(df)

@@ -211,6 +211,15 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
 }
 
 // [[Rcpp::export]]
+Rcpp::DataFrame CreateCombinedDataFrame(std::list<std::string>& ms1_id, std::list<std::string>& ms2_id,
+    std::list<std::string> annotations, std::list<std::string>& omus, std::list<double>& mz,
+    std::list<double>& rt) {
+
+}
+
+
+
+// [[Rcpp::export]]
 SEXP CreateProgressBarObject() {
     auto* progressBar = new CliProgressBar();
     return Rcpp::XPtr<CliProgressBar>(progressBar);

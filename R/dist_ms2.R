@@ -17,6 +17,7 @@
 #'  meaning pairs with a score of .7 or higher will be stored in the matrix.
 #' @param precursor_threshold Precursor mz tolerance. MS2 scans with a
 #'  difference in precursor mz less than or equal to this value will be scored.
+#'  Disable this by setting this value to -1 or less.
 #' @param score_params Parameters for scoring method to be applied.
 #'  See [gnps_params()] and [spec_entropy_params()] for more details.
 #' @param min_peaks the minimum number of peaks that need to be present before
