@@ -116,6 +116,10 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
     generate_a_combined_table(matched_data = ms2_data)
   expect_true("RTINSECONDS" %in% colnames(with_rt_in_seconds_column))
 
+  with_rt_in_seconds_column <-
+    generate_a_combined_table(matched_data = ms2_data, annotations, cluster_results)
+  expect_true("RTINSECONDS" %in% colnames(with_rt_in_seconds_column))
+
   data <- change_rt_to_seconds_or_minutes(data, "minutes")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 100)
   with_rt_in_minutes_column <-

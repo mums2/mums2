@@ -264,11 +264,9 @@ generate_a_combined_table <- function(matched_data,
     collected_column_names <- c(collected_column_names, "annotations", samples)
     matrix_df <- as.data.frame(matrix("", nrow = final_count, ncol = length(collected_column_names)))
     colnames(matrix_df) <- collected_column_names
-    rt_strings <- mget(retention_time_string, envir = env)[[1]]
+    rt_strings <- mget("rt", envir = env)[[1]]
     sample_start_index <- length(collected_column_names) - length(samples) + 1
     current_index <- 1
-    i <- 1
-    i <- i + 1
     for (i in seq_along(env$ms1_id)) {
       if (length(env$annotations[[i]]) > 0) {
         for(j in seq_len(length(env$annotations[[i]]))) {
@@ -296,6 +294,8 @@ generate_a_combined_table <- function(matched_data,
       }
       current_index <- current_index + 1
     }
+    colnames(matrix_df)[which(colnames(matrix_df) == "rt")] <- retention_time_string
+    return(matrix_df)
   }
   current_column_count <- ncol(df)
   for (i in samples) {

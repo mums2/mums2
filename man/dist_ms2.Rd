@@ -21,7 +21,8 @@ comparison. The default of .3 corresponds to a cosine score of .7,
 meaning pairs with a score of .7 or higher will be stored in the matrix.}
 
 \item{precursor_threshold}{Precursor mz tolerance. MS2 scans with a
-difference in precursor mz less than or equal to this value will be scored.}
+difference in precursor mz less than or equal to this value will be scored.
+Disable this by setting this value to -1 or less.}
 
 \item{score_params}{Parameters for scoring method to be applied.
 See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
