@@ -40,7 +40,7 @@ Meta data is a csv that provides information about the samples. In order for you
 data <- import_all_data(
   peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
   meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-  format = "Metaboscape")
+  format = "None")
 ```
 
 
@@ -86,14 +86,11 @@ Retention time(rt) is the amount of time a compound spends in a column and it is
 
 ```{r convert_rt_to_minutes_or_seconds}
 
-filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
-filtered_data
-
 filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "seconds")
 filtered_data
 
-# Changing back to minutes so we can continue the analysis
 filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
+filtered_data
 ```
 
 ### Preprocess MS2 data
@@ -279,7 +276,7 @@ for(i in 1:nrow(pcoa_points)) {
 
 pcoa_points |>
   ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
-    geom_point() +
+    geom_point(size = 5.5) +
     theme(
       legend.text = element_text(size = 10), 
       legend.title = element_text(size = 15)
