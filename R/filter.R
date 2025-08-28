@@ -148,7 +148,7 @@ filter_group_parameters <- function(group_threshold = 0.01, group_to_remove,
 #' filter_cv_parameters(0.2)
 #' @return a `list` object of arguments needed to call the given mpactr
 #'  function when supplied to the `filter_peak_table()` wrapper function.
-filter_cv_parameters <- function(cv_threshold = NULL, fix_peaks = FALSE, 
+filter_cv_parameters <- function(cv_threshold = NULL, fix_peaks = FALSE,
                                  copy_object = FALSE) {
   params <- list(cv_threshold = cv_threshold,
                  fix_peaks = fix_peaks, copy_object = copy_object)

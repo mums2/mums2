@@ -117,7 +117,8 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
   expect_true("RTINSECONDS" %in% colnames(with_rt_in_seconds_column))
 
   with_rt_in_seconds_column <-
-    generate_a_combined_table(matched_data = ms2_data, annotations, cluster_results)
+    generate_a_combined_table(matched_data = ms2_data,
+                              annotations, cluster_results)
   expect_true("RTINSECONDS" %in% colnames(with_rt_in_seconds_column))
 
   data <- change_rt_to_seconds_or_minutes(data, "minutes")
