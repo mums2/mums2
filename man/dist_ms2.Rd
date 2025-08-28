@@ -48,9 +48,9 @@ or \code{"spectral_entropy"}. A sparse matrix is returned.
 }
 \examples{
 data <- import_all_data(peak_table =
-                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        mums2::mums2_example("full_mix_peak_table_small.csv"),
                         meta_data =
-                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        mums2::mums2_example("full_mix_meta_data_small.csv"),
                         format = "Metaboscape")
 
 filtered_data <- data |>
@@ -62,7 +62,7 @@ filtered_data <- data |>
 
 
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  filtered_data, 2, 6)
 
 dist_gnps <- dist_ms2(data = matched_data,

@@ -26,9 +26,9 @@
 #' threads you want to use for this calculation.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -40,7 +40,7 @@
 #'
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #'
 #' dist_gnps <- dist_ms2(data = matched_data,
@@ -63,6 +63,9 @@ dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
 dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
                                min_peaks = 6,
                                number_of_threads = detectCores()) {
+  if(nrow(data$ms2_matches) <= 0) {
+    stop("Cannot calculate distances, there are no matched ms2.")
+  }
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)

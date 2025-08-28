@@ -17,9 +17,9 @@
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -31,7 +31,7 @@
 #'
 #'  change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = gnps_params(0.5), min_peaks = 0)
@@ -87,9 +87,9 @@ dist_shared <- function(community_object, size, threshold,
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -101,7 +101,7 @@ dist_shared <- function(community_object, size, threshold,
 #'
 #'  change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = gnps_params(0.5), min_peaks = 0)

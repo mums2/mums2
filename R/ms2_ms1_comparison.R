@@ -9,9 +9,9 @@
 #' @param rt_tolerance your retention time tolerance.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -23,7 +23,7 @@
 #'
 #' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #' @return returns a `mass_data` object of all of the ms2 and ms1 matches.
 ms2_ms1_compare <- function(ms2_files, mpactr_object,

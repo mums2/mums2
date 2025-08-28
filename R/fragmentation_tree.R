@@ -14,9 +14,9 @@
 #' @param num_threads the amount of threads we the algorithm will use.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -27,7 +27,7 @@
 #'    filter_peak_table(filter_insource_ions_parameters())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #' compute_molecular_formulas(matched_data)
 #' @return your mass_data object with an additional `character`

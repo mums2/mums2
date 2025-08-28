@@ -7,9 +7,9 @@
 #'  or just a mass_data object created from `ms2_ms1_compare()`.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -21,7 +21,7 @@
 #'
 #' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
@@ -85,9 +85,9 @@ create_community_matrix_object.list <- function(data) {
 #'  the `create_community_object()` function.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -99,7 +99,7 @@ create_community_matrix_object.list <- function(data) {
 #'
 #' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
@@ -128,9 +128,9 @@ get_community_matrix <- function(community_object) {
 #' @param ... other parameters that are included in the print function.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #'
 #' filtered_data <- data |>
@@ -142,7 +142,7 @@ get_community_matrix <- function(community_object) {
 #'
 #' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,

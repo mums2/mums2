@@ -9,9 +9,9 @@
 #' one of "Progenesis", "Metaboscape", "None".
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
@@ -32,9 +32,9 @@ import_all_data <- function(peak_table, meta_data, format) {
 #' your options are minutes, or seconds. defaults to seconds.
 #' @examples
 #' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table.csv"),
+#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
 #'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data.csv"),
+#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
 #'                         format = "Metaboscape")
 #' change_rt_to_seconds_or_minutes(data, "minutes")
 #' @returns a modified `mpactr` object.

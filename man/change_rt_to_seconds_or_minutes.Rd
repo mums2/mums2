@@ -23,9 +23,9 @@ rt time in seconds or minutes. This modification happens in place
 }
 \examples{
 data <- import_all_data(peak_table =
-                        mums2::mums2_example("full_mix_peak_table.csv"),
+                        mums2::mums2_example("full_mix_peak_table_small.csv"),
                         meta_data =
-                        mums2::mums2_example("full_mix_meta_data.csv"),
+                        mums2::mums2_example("full_mix_meta_data_small.csv"),
                         format = "Metaboscape")
 change_rt_to_seconds_or_minutes(data, "minutes")
 }
