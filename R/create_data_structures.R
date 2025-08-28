@@ -202,6 +202,7 @@ generate_a_combined_table <- function(matched_data,
                                           which(
                                                 colnames(matched_data$ms1_data)
                                                 %in% samples), with = FALSE]
+  samples <- colnames(sample_columns)
   for (i in seq_len(ncol(sample_columns))) {
     env[[samples[i]]] <- sample_columns[[i]]
   }
@@ -261,11 +262,12 @@ generate_a_combined_table <- function(matched_data,
       final_count <- final_count + count 
     }
     expand_count <- length(unique(annotations$name))
-    collected_column_names <- c(collected_column_names, "annotations", samples)
+    collected_column_names <- c(collected_column_names, "annotations")
     matrix_df <- as.data.frame(matrix("", nrow = final_count, ncol = length(collected_column_names)))
+    matrix_samples <- matrix("", nrow = final_count, ncol = length(samples))
+    colnames(matrix_samples) <- samples
     colnames(matrix_df) <- collected_column_names
     rt_strings <- mget("rt", envir = env)[[1]]
-    sample_start_index <- length(collected_column_names) - length(samples) + 1
     current_index <- 1
     for (i in seq_along(env$ms1_id)) {
       if (length(env$annotations[[i]]) > 0) {
@@ -276,11 +278,11 @@ generate_a_combined_table <- function(matched_data,
             matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
             matrix_df$omus[[current_index]] <- env$omus[[i]]
             matrix_df$annotations[[current_index]] <- env$annotations[[i]][[j]]
-            for(sample in samples) {
-              matrix_df[[sample]][[current_index]] <- env[[sample]][[i]]
+            for(sample_index in seq_len(length(samples))) {
+              matrix_samples[current_index, sample_index] <- env[[samples[sample_index]]][[i]]
             }
             current_index <- current_index + 1
-          }
+        }
         next
       }
       matrix_df$ms1_id[[current_index]] <- env$ms1_id[[i]]
@@ -289,13 +291,13 @@ generate_a_combined_table <- function(matched_data,
       matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
       matrix_df$omus[[current_index]] <- env$omus[[i]]
       matrix_df$annotations[[current_index]] <- NA
-      for(sample in samples) {
-          matrix_df[[sample]][[current_index]] <- env[[sample]][[i]]
+      for(sample_index in seq_len(length(samples))) {
+        matrix_samples[current_index, sample_index] <- env[[samples[sample_index]]][[i]]
       }
       current_index <- current_index + 1
     }
     colnames(matrix_df)[which(colnames(matrix_df) == "rt")] <- retention_time_string
-    return(matrix_df)
+    return(cbind(matrix_df, matrix_samples))
   }
   current_column_count <- ncol(df)
   for (i in samples) {
