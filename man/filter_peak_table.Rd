@@ -24,9 +24,9 @@ filter_peak_table(mpactr_object, params)
 This is how we begin our pipeline.}
 
 \item{params}{the list of arguments generated from calling one of these
-functions: \code{filter_mispicked_ions_parameters()},
-\code{filter_group_parameters()}, \code{filter_cv_parameters()},
-and \code{filter_insource_ions_parameters()}.}
+functions: \code{filter_mispicked_ions_params()},
+\code{filter_group_params()}, \code{filter_cv_params()},
+and \code{filter_insource_ions_params()}.}
 }
 \value{
 a \code{mpactr} object that has been filter based on
@@ -36,22 +36,22 @@ the supplied parameters.
 This function is a wrapper for all of mpactr's filter functions.
 When called with a list of parameters that was generated from one of the
 following functions, it will call the subsequent filter:
-\code{filter_mispicked_ions_parameters()}, \code{filter_group_parameters()},
-\code{filter_cv_parameters()}, and \code{filter_insource_ions_parameters()}.
+\code{filter_mispicked_ions_params()}, \code{filter_group_params()},
+\code{filter_cv_params()}, and \code{filter_insource_ions_params()}.
 You can also find more information on these functions in\code{mpactr}
 documentation.
 }
 \examples{
-data <- import_all_data(peak_table =
-                        mums2::mums2_example("full_mix_peak_table_small.csv"),
-                        meta_data =
-                        mums2::mums2_example("full_mix_meta_data_small.csv"),
-                        format = "Metaboscape")
-
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
                                              "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+   filter_peak_table(filter_insource_ions_params())
 }

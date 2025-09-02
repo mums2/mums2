@@ -8,16 +8,17 @@
 #' @param format The expected exported type of your peak table, can be
 #' one of "Progenesis", "Metaboscape", "None".
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, meta_data, format) {
-  format_data_to_uft8_and_remove_commas(import_data(peak_table = peak_table,
-                                                    meta_data = meta_data,
-                                                    format = format))
+  format_to_uft8_remove_commas(import_data(peak_table = peak_table,
+                                           meta_data = meta_data,
+                                           format = format))
 }
 
 
@@ -31,15 +32,16 @@ import_all_data <- function(peak_table, meta_data, format) {
 #' @param rt_type how you want to convert your retention time,
 #' your options are minutes, or seconds. defaults to seconds.
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
-#' change_rt_to_seconds_or_minutes(data, "minutes")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
+#' change_rt_to_seconds_or_minute(data, "minutes")
 #' @returns a modified `mpactr` object.
-change_rt_to_seconds_or_minutes <- function(mpactr_object,
-                                            rt_type = "seconds") {
+change_rt_to_seconds_or_minute <- function(mpactr_object,
+                                           rt_type = "seconds") {
   if (!("filter_pactr" %in% class(mpactr_object))) {
     stop("Make sure you are using the object created from `import_all_data()`")
   }
@@ -72,7 +74,7 @@ change_rt_to_seconds_or_minutes <- function(mpactr_object,
 
 
 
-format_data_to_uft8_and_remove_commas <- function(mpactr_object) {
+format_to_uft8_remove_commas <- function(mpactr_object) {
   message("If peak table has corrupted compound names they will be converted to
       utf-8 and if there are any commas, they will be converted to periods(.).")
   peak_table <- get_peak_table(mpactr_object)

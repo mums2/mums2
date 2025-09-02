@@ -6,11 +6,11 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
                           format = "Progenesis")
 
   data_filtered <- data |>
-    filter_peak_table(filter_mispicked_ions_parameters()) |>
-    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
-                                              "Blanks")) |>
-    filter_peak_table(filter_insource_ions_parameters())
+    filter_peak_table(filter_mispicked_ions_params()) |>
+    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+    filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                          "Blanks")) |>
+    filter_peak_table(filter_insource_ions_params())
 
   mgf_file <-  test_path("exttestdata",
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
@@ -26,11 +26,11 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
                           format = "Progenesis")
 
   data_filtered <- data |>
-    filter_peak_table(filter_mispicked_ions_parameters()) |>
-    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
-                                              "Blanks")) |>
-    filter_peak_table(filter_insource_ions_parameters())
+    filter_peak_table(filter_mispicked_ions_params()) |>
+    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+    filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                          "Blanks")) |>
+    filter_peak_table(filter_insource_ions_params())
 
   mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
   ms2_matches <- ms2_ms1_compare(mzxml_files, data, 100000, 150)

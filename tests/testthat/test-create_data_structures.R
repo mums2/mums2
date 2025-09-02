@@ -44,7 +44,7 @@ test_that("We can convert a mass_data object to an averaged mass data object", {
   mgf_files <- test_path("exttestdata",
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
-  ms2_avg_data <- convert_samples_to_group_averages(ms2_data, data)
+  ms2_avg_data <- convert_to_group_averages(ms2_data, data)
   meta_data <- get_meta_data(data)
   expect_true(all(meta_data$Sample_Code %in% ms2_avg_data$samples))
   expect_true(all(meta_data$Sample_Code %in% colnames(ms2_avg_data$ms1_data)))
@@ -110,7 +110,7 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
   expect_true(length(which(all_data$annotations != "")) > 0)
 
 
-  data <- change_rt_to_seconds_or_minutes(data, "seconds")
+  data <- change_rt_to_seconds_or_minute(data, "seconds")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 100)
   with_rt_in_seconds_column <-
     generate_a_combined_table(matched_data = ms2_data)
@@ -121,7 +121,7 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
                               annotations, cluster_results)
   expect_true("RTINSECONDS" %in% colnames(with_rt_in_seconds_column))
 
-  data <- change_rt_to_seconds_or_minutes(data, "minutes")
+  data <- change_rt_to_seconds_or_minute(data, "minutes")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 100)
   with_rt_in_minutes_column <-
     generate_a_combined_table(matched_data = ms2_data)

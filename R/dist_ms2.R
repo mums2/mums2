@@ -25,18 +25,19 @@
 #' @param number_of_threads the number of
 #' threads you want to use for this calculation.
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #'
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
 #'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
+#'    filter_peak_table(filter_insource_ions_params())
 #'
 #'
 #'
@@ -63,7 +64,7 @@ dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
 dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
                                min_peaks = 6,
                                number_of_threads = detectCores()) {
-  if(nrow(data$ms2_matches) <= 0) {
+  if (nrow(data$ms2_matches) <= 0) {
     stop("Cannot calculate distances, there are no matched ms2.")
   }
   data_list <- list("pmz" = data$ms2_matches$mz,

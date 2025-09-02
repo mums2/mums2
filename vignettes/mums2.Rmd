@@ -28,7 +28,7 @@ library(reshape2)
 
 ## Preprocess data
 
-Before we even begin the process of analyzing your data, we have to preprocess it. It is import that we process your data into a readable `data.frame` or object that we can view and transform. To process your data we need to run a two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting the imported data, and `ms2_ms1_compare()` assigns ms2 spectra to your ms1 data. However, some of your data could be noise, or may need to be transformed before you can properly analysis it. To accommodate for those issues, we have two other functions: `filter_peak_table()`, `change_rt_to_seconds_or_minutes()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minutes()` allows you to transform your retention to minutes or seconds. This allows you to ensure your retention time matches your ms2 data retention time. Below will explain in more detail what each function does and how to go through the pipeline.
+Before we even begin the process of analyzing your data, we have to preprocess it. It is import that we process your data into a readable `data.frame` or object that we can view and transform. To process your data we need to run a two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting the imported data, and `ms2_ms1_compare()` assigns ms2 spectra to your ms1 data. However, some of your data could be noise, or may need to be transformed before you can properly analysis it. To accommodate for those issues, we have two other functions: `filter_peak_table()`, `change_rt_to_seconds_or_minute()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minute()` allows you to transform your retention to minutes or seconds. This allows you to ensure your retention time matches your ms2 data retention time. Below will explain in more detail what each function does and how to go through the pipeline.
 
 ### Import
 
@@ -65,18 +65,18 @@ After you import the data you can use functions from mpactR to filter the data. 
 
 ```{r filter_data}
 filtered_data <- data |>
-  filter_peak_table(filter_mispicked_ions_parameters()) |>
-  filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-  filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+  filter_peak_table(filter_mispicked_ions_params()) |>
+  filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+  filter_peak_table(filter_group_params(group_threshold = 0.1,
                                             "Blanks")) |>
-  filter_peak_table(filter_insource_ions_parameters())
+  filter_peak_table(filter_insource_ions_params())
 
 head(get_peak_table(filtered_data), 3)
 ```
 
 ### Convert from rt to "RT in minutes" or "rt in seconds"
 
-Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minutes()` function allows users to synthesize data with different units. Be aware that this function modifies the mpactr object in place. Therefore, you will need to call the function again to revert the units. Below will display a vector of retention time.
+Sometimes a MS2 file will report the retention time in minutes but the MS1 file will use seconds. This mismatch will cause the MS1 data to match incorrect peaks in the MS2 data. The `change_rt_to_seconds_or_minute()` function allows users to synthesize data with different units. Be aware that this function modifies the mpactr object in place. Therefore, you will need to call the function again to revert the units. Below will display a vector of retention time.
 
 ```{r show_rt_of_filtered_data, R.options=list(max.print=15)}
 get_peak_table(filtered_data)$rt
@@ -86,10 +86,10 @@ Retention time(rt) is the amount of time a compound spends in a column and it is
 
 ```{r convert_rt_to_minutes_or_seconds}
 
-filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "seconds")
+filtered_data <- change_rt_to_seconds_or_minute(mpactr_object = filtered_data, rt_type = "seconds")
 head(get_peak_table(filtered_data), 1)
 
-filtered_data <- change_rt_to_seconds_or_minutes(mpactr_object = filtered_data, rt_type = "minutes")
+filtered_data <- change_rt_to_seconds_or_minute(mpactr_object = filtered_data, rt_type = "minutes")
 head(get_peak_table(filtered_data), 1)
 ```
 
@@ -133,8 +133,8 @@ It is possible for a formula to be unable to be generated. In this case we retur
 Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
-matched_data$predicted_molecular_formulas
+# matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
+# matched_data$predicted_molecular_formulas
 ```
 
 ### Annotations
@@ -304,11 +304,11 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
 
 
 ###  Using Group Averages
-Another feature included inside of mums2, is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in triplicates. Meaning, they run the experiment using three of the same samples to account for noise. Since we know all three samples are the same, we can average out all of the samples into one group and work with one group. We are able to generate group averages by using the metadata file that was supplied when you imported your data. We can accomplish this by using the `convert_samples_to_group_averages()` function. 
+Another feature included inside of mums2, is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in triplicates. Meaning, they run the experiment using three of the same samples to account for noise. Since we know all three samples are the same, we can average out all of the samples into one group and work with one group. We are able to generate group averages by using the metadata file that was supplied when you imported your data. We can accomplish this by using the `convert_to_group_averages()` function. 
 
 Below, you can see a copy of the functions we ran above. But this time, we are using group averages.  
 ```{r group_average}
-  matched_avg <- convert_samples_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
+  matched_avg <- convert_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
   dist_avg <- dist <- dist_ms2(
     data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
     score_params = gnps_params(0.5), min_peaks = 0)

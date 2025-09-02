@@ -47,18 +47,19 @@ no distance value. Distance can be calculated with method \code{"gnps"}
 or \code{"spectral_entropy"}. A sparse matrix is returned.
 }
 \examples{
-data <- import_all_data(peak_table =
-                        mums2::mums2_example("full_mix_peak_table_small.csv"),
-                        meta_data =
-                        mums2::mums2_example("full_mix_meta_data_small.csv"),
-                        format = "Metaboscape")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
 filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
                                              "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+   filter_peak_table(filter_insource_ions_params())
 
 
 

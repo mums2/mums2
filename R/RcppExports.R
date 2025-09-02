@@ -53,6 +53,10 @@ DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
 }
 
+TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, shift) {
+    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, shift)
+}
+
 squareRootNormalize <- function(vec) {
     .Call(`_mums2_squareRootNormalize`, vec)
 }

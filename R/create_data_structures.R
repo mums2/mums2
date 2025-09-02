@@ -5,20 +5,20 @@
 #'  convert it into a community matrix for easier
 #' usability of the object.
 #' @param cluster_object the result of the `cluster_data()` function.
-#' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #'
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
 #'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
-#' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+#'    filter_peak_table(filter_insource_ions_params())
+#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
@@ -60,28 +60,29 @@ create_community_matrix <- function(cluster_object) {
 #'  object generated from `ms2_ms1_compare()`.
 #' @param mpactr_object The object created from `import_all_data()`.
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #'
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
 #'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
+#'    filter_peak_table(filter_insource_ions_params())
 #'
-#' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
 #'
-#' matched_data_avg <- convert_samples_to_group_averages(matched_data,
+#' matched_data_avg <- convert_to_group_averages(matched_data,
 #'                                                       filtered_data)
 #' @return a `mass_data` object using group averages
-convert_samples_to_group_averages <- function(matched_data, mpactr_object) {
+convert_to_group_averages <- function(matched_data, mpactr_object) {
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
   meta_data <- get_meta_data(mpactr_object)
   injection_samples <- meta_data$Injection
@@ -133,20 +134,21 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' @param annotations annotations
 #' @param cluster_data cluster
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #'
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
 #'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
+#'    filter_peak_table(filter_insource_ions_params())
 #'
-#' change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)

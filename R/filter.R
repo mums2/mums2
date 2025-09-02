@@ -5,30 +5,30 @@
 #' @description This function is a wrapper for all of mpactr's filter functions.
 #' When called with a list of parameters that was generated from one of the
 #'  following functions, it will call the subsequent filter:
-#' `filter_mispicked_ions_parameters()`, `filter_group_parameters()`,
-#' `filter_cv_parameters()`, and `filter_insource_ions_parameters()`.
+#' `filter_mispicked_ions_params()`, `filter_group_params()`,
+#' `filter_cv_params()`, and `filter_insource_ions_params()`.
 #' You can also find more information on these functions in`mpactr`
 #' documentation.
 #' @param mpactr_object the mpactr_object is an object generated from the
 #' `import_all_data()` function.
 #' This is how we begin our pipeline.
 #' @param params the list of arguments generated from calling one of these
-#' functions: `filter_mispicked_ions_parameters()`,
-#' `filter_group_parameters()`, `filter_cv_parameters()`,
-#' and `filter_insource_ions_parameters()`.
+#' functions: `filter_mispicked_ions_params()`,
+#' `filter_group_params()`, `filter_cv_params()`,
+#' and `filter_insource_ions_params()`.
 #' @examples
-#' data <- import_all_data(peak_table =
-#'                         mums2::mums2_example("full_mix_peak_table_small.csv"),
-#'                         meta_data =
-#'                         mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                         format = "Metaboscape")
-#'
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1,
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
 #'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
+#'    filter_peak_table(filter_insource_ions_params())
 #' @returns a `mpactr` object that has been filter based on
 #' the supplied parameters.
 filter_peak_table <- function(mpactr_object, params) {
@@ -92,15 +92,15 @@ filter_peak_table.filter_insource_ions <- function(mpactr_object, params) {
 #' @param copy_object A `boolean` parameter that allows users to return a copied
 #' object instead of modifying the object.
 #' @examples
-#' filter_mispicked_ions_parameters()
+#' filter_mispicked_ions_params()
 #'
 #' @return a `list` object of arguments needed to call the given
 #'  mpactr function when supplied to the `filter_peak_table()` wrapper function.
-filter_mispicked_ions_parameters <- function(ringwin = 0.5, isowin = 0.01,
-                                             trwin = 0.005, max_iso_shift = 3,
-                                             merge_peaks = TRUE,
-                                             merge_method = "sum",
-                                             copy_object = FALSE) {
+filter_mispicked_ions_params <- function(ringwin = 0.5, isowin = 0.01,
+                                         trwin = 0.005, max_iso_shift = 3,
+                                         merge_peaks = TRUE,
+                                         merge_method = "sum",
+                                         copy_object = FALSE) {
   params <- list(ringwin = ringwin,
                  isowin = isowin, trwin = trwin, max_iso_shift = max_iso_shift,
                  merge_peaks = merge_peaks, merge_method = merge_method,
@@ -121,11 +121,11 @@ filter_mispicked_ions_parameters <- function(ringwin = 0.5, isowin = 0.01,
 #' @param copy_object A `boolean` parameter that allows users to return a copied
 #' object instead of modifying the object.
 #' @examples
-#' filter_group_parameters(group_to_remove = "blank")
+#' filter_group_params(group_to_remove = "blank")
 #' @return a `list` object of arguments needed to call the given mpactr
 #'  function when supplied to the `filter_peak_table()` wrapper function.
-filter_group_parameters <- function(group_threshold = 0.01, group_to_remove,
-                                    remove_ions = TRUE, copy_object = FALSE) {
+filter_group_params <- function(group_threshold = 0.01, group_to_remove,
+                                remove_ions = TRUE, copy_object = FALSE) {
   params <- list(group_threshold = group_threshold,
                  group_to_remove = group_to_remove, remove_ions = remove_ions,
                  copy_object = copy_object)
@@ -144,12 +144,12 @@ filter_group_parameters <- function(group_threshold = 0.01, group_to_remove,
 #' @param copy_object A `boolean` parameter that allows users to return a copied
 #' object instead of modifying the object.
 #' @examples
-#' filter_cv_parameters(0.2)
-#' filter_cv_parameters(0.2)
+#' filter_cv_params(0.2)
+#' filter_cv_params(0.2)
 #' @return a `list` object of arguments needed to call the given mpactr
 #'  function when supplied to the `filter_peak_table()` wrapper function.
-filter_cv_parameters <- function(cv_threshold = NULL, fix_peaks = FALSE,
-                                 copy_object = FALSE) {
+filter_cv_params <- function(cv_threshold = NULL, fix_peaks = FALSE,
+                             copy_object = FALSE) {
   params <- list(cv_threshold = cv_threshold,
                  fix_peaks = fix_peaks, copy_object = copy_object)
   class(params) <- "filter_cv"
@@ -165,11 +165,11 @@ filter_cv_parameters <- function(cv_threshold = NULL, fix_peaks = FALSE,
 #' @param copy_object A `boolean` parameter that allows users to return
 #' a copied object instead of modifying the object.
 #' @examples
-#' filter_insource_ions_parameters()
+#' filter_insource_ions_params()
 #' @return a `list` object of arguments needed to call the given mpactr function
 #' when supplied to the `filter_peak_table()` wrapper function.
-filter_insource_ions_parameters <- function(cluster_threshold = 0.95,
-                                            copy_object = FALSE) {
+filter_insource_ions_params <- function(cluster_threshold = 0.95,
+                                        copy_object = FALSE) {
   params <- list(cluster_threshold = cluster_threshold,
                  copy_object = copy_object)
   class(params) <- "filter_insource_ions"

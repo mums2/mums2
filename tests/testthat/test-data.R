@@ -3,6 +3,6 @@ test_that("mums2_example returns proper paths to test data", {
   expect_true("character" %in% class(mums2_example("full_mix_peak_table.csv")))
   expect_true("character" %in% class(mums2_example("full_mix_meta_data.csv")))
   expect_true("character" %in% class(mums2_example()))
-  expect_true(length(mums2_example()) == 9)
+  expect_true(length(mums2_example()) == 10)
   expect_error(mums2_example("dat"))
 })
