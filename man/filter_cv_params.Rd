@@ -4,14 +4,12 @@
 \alias{filter_cv_params}
 \title{Filter Cv Parameters}
 \usage{
-filter_cv_params(cv_threshold = NULL, fix_peaks = FALSE, copy_object = FALSE)
+filter_cv_params(cv_threshold = NULL, copy_object = FALSE)
 }
 \arguments{
 \item{cv_threshold}{Coefficient of variation threshold.
 A lower cv_threshold will result in more stringent filtering and higher
 reproducibility. Recommended values between 0.2 - 0.5.}
-
-\item{fix_peaks}{fix peaks}
 
 \item{copy_object}{A \code{boolean} parameter that allows users to return a copied
 object instead of modifying the object.}

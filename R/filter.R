@@ -62,7 +62,7 @@ filter_peak_table.filter_group <- function(mpactr_object, params) {
 #' @rdname filter_peak_table
 filter_peak_table.filter_cv <- function(mpactr_object, params) {
   filter_cv(mpactr_object = mpactr_object, cv_threshold = params$cv_threshold,
-            fix_peaks = params$fix_peaks, copy_object = params$copy_object)
+            copy_object = params$copy_object)
 }
 
 #' @export
@@ -140,7 +140,6 @@ filter_group_params <- function(group_threshold = 0.01, group_to_remove,
 #' @param cv_threshold Coefficient of variation threshold.
 #' A lower cv_threshold will result in more stringent filtering and higher
 #' reproducibility. Recommended values between 0.2 - 0.5.
-#' @param fix_peaks fix peaks
 #' @param copy_object A `boolean` parameter that allows users to return a copied
 #' object instead of modifying the object.
 #' @examples
@@ -148,10 +147,10 @@ filter_group_params <- function(group_threshold = 0.01, group_to_remove,
 #' filter_cv_params(0.2)
 #' @return a `list` object of arguments needed to call the given mpactr
 #'  function when supplied to the `filter_peak_table()` wrapper function.
-filter_cv_params <- function(cv_threshold = NULL, fix_peaks = FALSE,
+filter_cv_params <- function(cv_threshold = NULL,
                              copy_object = FALSE) {
   params <- list(cv_threshold = cv_threshold,
-                 fix_peaks = fix_peaks, copy_object = copy_object)
+                 copy_object = copy_object)
   class(params) <- "filter_cv"
   return(params)
 }
