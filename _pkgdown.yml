@@ -30,7 +30,7 @@ reference:
 - title: Scoring
   contents:
   - dist_ms2
-  - gnps_params
+  - modified_cosine_params
   - spec_entropy_params
 - title: Cluster
   contents: cluster_data

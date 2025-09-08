@@ -29,7 +29,7 @@ annotate_ms2(mass_data, reference, scoring_params,
 We currently only support msp files.}
 
 \item{scoring_params}{Parameters for scoring method to be applied.
-This can be either \code{gnps_params()} or \code{spec_entropy_params()}.}
+This can be either \code{modified_cosine_params()} or \code{spec_entropy_params()}.}
 
 \item{ppm}{Parts per million. MS2 scans with a
 difference in ppm less than or equal to this value will be scored.}
@@ -72,8 +72,8 @@ spectral scoring methods. Currently scoring methods \code{"gnps"} and
 \code{"spectral_entropy"} are supported. The scoring method is specified by the
 \code{score_params} argument. \code{score_params} is a list of parameters for the
 chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
-created with functions \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}},
-respectively.
+created with functions \code{\link[=modified_cosine_params]{modified_cosine_params()}} and
+\code{\link[=spec_entropy_params]{spec_entropy_params()}}, respectively.
 }
 \examples{
 data <-
@@ -95,7 +95,7 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  filtered_data, 2, 6)
  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
  annotations <- annotate_ms2(mass_data = matched_data,
-   reference = psu_msmls, scoring_params = gnps_params(0.5),
+   reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
    ppm = 1000,
    min_score =  0.1, chemical_min_score = .1)
 

@@ -19,7 +19,7 @@
 #'  difference in precursor mz less than or equal to this value will be scored.
 #'  Disable this by setting this value to -1 or less.
 #' @param score_params Parameters for scoring method to be applied.
-#'  See [gnps_params()] and [spec_entropy_params()] for more details.
+#'  See [modified_cosine_params()] and [spec_entropy_params()] for more details.
 #' @param min_peaks the minimum number of peaks that need to be present before
 #' you compare the ms2 spectra.
 #' @param number_of_threads the number of
@@ -46,7 +46,7 @@
 #'
 #' dist_gnps <- dist_ms2(data = matched_data,
 #'  cutoff = 0.3, precursor_threshold = 2,
-#'  score_params = gnps_params(0.5), min_peaks = 0)
+#'  score_params = modified_cosine_params(0.5), min_peaks = 0)
 #'
 #' dist_entropy <- dist_ms2(data = matched_data,
 #'  cutoff = 0.3, precursor_threshold = 2,

@@ -1,6 +1,6 @@
 test_that("test that we can create a community matrix", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5), min_peaks = 0)
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5), min_peaks = 0)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
   mat <- create_community_matrix(results)
@@ -13,7 +13,8 @@ test_that("test that we can create a community matrix", {
 test_that("test that create a community matrix errors
           when given wrong inputs", {
             dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-            distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5), min_peaks = 0)
+            distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
+                                  min_peaks = 0)
             results <- cluster_data(distances, dat,  0.3, "opticlust")
             community_object <- create_community_matrix_object(results)
             expect_error(create_community_matrix(community_object))
@@ -86,7 +87,8 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
   expect_true(ncol(matched_data_only) == 22)
   expect_true(all(ms2_data$samples %in% colnames(matched_data_only)))
 
-  distances <- dist_ms2(ms2_data, 0.3, 2, gnps_params(0.5), min_peaks = 0)
+  distances <- dist_ms2(ms2_data, 0.3, 2, modified_cosine_params(0.5),
+                        min_peaks = 0)
   cluster_results <- cluster_data(distances, ms2_data,  0.3, "opticlust")
   matched_data_and_cluster_data <-
     generate_a_combined_table(matched_data = ms2_data,
@@ -99,7 +101,8 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
 
   psu_msmls <- read_msp(test_path("exttestdata", "database_data/PSU-MSMLS.msp"))
   annotations <- annotate_ms2(ms2_data, psu_msmls,
-                              gnps_params(0.5), 2000, 0, 0, min_peaks = 0)
+                              modified_cosine_params(0.5), 2000, 0, 0,
+                              min_peaks = 0)
 
   all_data <- generate_a_combined_table(matched_data = ms2_data,
                                         annotations = annotations,
@@ -152,7 +155,8 @@ test_that("generate_a_combined_table will fail if sent the wrong parameters", {
 
   psu_msmls <- read_msp(test_path("exttestdata", "database_data/PSU-MSMLS.msp"))
   annotations <- annotate_ms2(ms2_data, psu_msmls,
-                              gnps_params(0.5), 2000, 0, 0, min_peaks = 0)
+                              modified_cosine_params(0.5),
+                              2000, 0, 0, min_peaks = 0)
 
   expect_error(generate_a_combined_table(matched_data = ms2_data,
                                          annotations = annotations[, 1:5]),

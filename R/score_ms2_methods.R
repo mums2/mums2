@@ -1,23 +1,23 @@
 #' GNPS-like similarity between two MS/MS spectra
 #'
 #' @description
-#' `gnps_params()` generates a parameter list to perform GNPS-like cosine
-#' similarity score calculation between two MS2 spectra.
+#' `modified_cosine_params()` generates a parameter list to perform GNPS-like
+#' cosine similarity score calculation between two MS2 spectra.
 #'
 #' @details
-#' `gnps_params()` will initiate cosine scoring based on the Python code by
-#' Wang et al. (2016), which is currently used for cosine scoring in GNPS, to
-#' calculate similarity between two MS2 spectra. This scoring method will
-#' compare peaks data, apply a square root normalization to peak intensities,
-#' align peaks both with and without correction for mass shifts, and calculate
-#' similarity.
+#' `modified_cosine_params()` will initiate cosine scoring based on the Python
+#' code by Wang et al. (2016), which is currently used for cosine scoring
+#' in GNPS, to calculate similarity between two MS2 spectra. This scoring
+#' method will compare peaks data, apply a square root normalization
+#' to peak intensities, align peaks both with and without correction
+#' for mass shifts, and calculate similarity.
 #'
 #'
 #' @param frag_tolerance The mz fragment tolerance threshold for aligning
 #' fragment peaks from two ms2 spectra. GNPS default = 0.5.
 #'
 #' @examples
-#' gnps_params(0.5)
+#' modified_cosine_params(0.5)
 #'
 #' @return A parameters list for similarity scoring method "gnps"
 #' @references
@@ -27,7 +27,7 @@
 #' Networking." Nature biotechnology 34, no. 8 (2016): 828. PMID: 27504778
 #'
 #' @export
-gnps_params <- function(frag_tolerance) {
+modified_cosine_params <- function(frag_tolerance) {
   list("tolerance" = frag_tolerance,
        "method" = "gnps")
 }

@@ -126,14 +126,29 @@ Once you preprocess your data, we can start to generate additional metadata like
 
 ### Chemical formula prediction
 
-To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. This function below will take at least five minutes to run.
+To add annotation information to the data, mums2 will generate *de novo* chemical formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained chemical formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained chemical formula simply means the chemical formula that is explained by the most peaks in the compound. In order to create a fragmentation tree we have to generate every possible chemical formula the parent mass can create (using only CHNOPS). We call these formulas the candidate formulas, formulas that have the potential to be the predicted formulas. We then look at every mass and intensity pair inside of the compound and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a subformula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes uses methods like Ring Double Bond equivalents, compute molecular formula score, etc. You can learn how other open-sourced software such as [MZMine](https://mzio.io/mzmine-news/) and [Sirirus](https://github.com/sirius-ms/sirius) generate chemical formula. Due to the time this function will take to run, we are going to use a small testset.
 
 It is possible for a formula to be unable to be generated. In this case we return a NA to represent an unknown molecular formula.
 
-Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula.
+Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula. 
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=15)}
-matched_data <- compute_molecular_formulas(mass_data = matched_data, parent_ppm = 3)
+
+data_small <- import_all_data(
+  peak_table = mums2::mums2_example("full_mix_peak_table_small.csv"), 
+  meta_data = mums2::mums2_example("full_mix_meta_data_small.csv"), 
+  format = "Metaboscape") |> 
+    filter_peak_table(filter_mispicked_ions_params()) |>
+    filter_peak_table(filter_cv_params(cv_threshold = 0.05)) |>
+    filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                              "Blanks")) |>
+    filter_peak_table(filter_insource_ions_params())
+
+matched_data_small <- ms2_ms1_compare(
+  ms2_files = mums2_example("full_mix_ms2_small.mgf"),mpactr_object = data_small, mz_tolerance = 2, rt_tolerance = 170)
+
+
+matched_data_small <- compute_molecular_formulas(mass_data = matched_data_small, parent_ppm = 3)
 matched_data$predicted_molecular_formulas
 ```
 
@@ -147,7 +162,7 @@ It is recommended to use the `read_msp()` function with your reference database 
 psu_msmls <- read_msp(msp_file = mums2_example("PSU-MSMLS.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
-  scoring_params = gnps_params(0.5), ppm = 1000,
+  scoring_params = modified_cosine_params(0.5), ppm = 1000,
   min_score =  0.1, chemical_min_score = 0)
 
 annotations[1:5,]
@@ -159,12 +174,12 @@ Lets look into generating OMUs. OMUs are cluster of metabolites and can be used 
 
 ### Scoring/Distance
 
-We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`gnps_params()`) or an algorithm called spectral entropy (`spec_entropy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
+We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`modified_cosine_params()`) or an algorithm called spectral entropy (`spec_entropy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster and annotate the data but we can also use the similarity distances to generate a simple distance data.frame for later use.
 
 ```{r  scoring_distance, R.options=list(max.print=15)}
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_threshold = 2,
-  score_params = gnps_params(0.5), min_peaks = 0)
+  score_params = modified_cosine_params(0.5), min_peaks = 0)
 dist
 ```
 
@@ -187,7 +202,7 @@ cluster_results
 After your data has been clustered, if you wish to see which OMUs the annotated features are in, you can supply that to the annotation function using the "cluster_data" parameter. Doing so will add a column named OMU. This column will display the OMU the feature is represented in.
 
 ```{r omu_annotations}
-annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = gnps_params(0.5), 
+annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = modified_cosine_params(0.5), 
                             ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
@@ -311,13 +326,13 @@ Below, you can see a copy of the functions we ran above. But this time, we are u
   matched_avg <- convert_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
   dist_avg <- dist <- dist_ms2(
     data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
-    score_params = gnps_params(0.5), min_peaks = 0)
+    score_params = modified_cosine_params(0.5), min_peaks = 0)
 
   cluster_results_avg <- cluster_data(
     distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
     cluster_method = "opticlust")
 
-  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = gnps_params(0.5), 
+  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = modified_cosine_params(0.5), 
                             ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
 
   community_object_avg <- create_community_matrix_object(data = cluster_results_avg)

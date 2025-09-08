@@ -25,7 +25,7 @@ difference in precursor mz less than or equal to this value will be scored.
 Disable this by setting this value to -1 or less.}
 
 \item{score_params}{Parameters for scoring method to be applied.
-See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
+See \code{\link[=modified_cosine_params]{modified_cosine_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
 
 \item{min_peaks}{the minimum number of peaks that need to be present before
 you compare the ms2 spectra.}
@@ -68,7 +68,7 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 
 dist_gnps <- dist_ms2(data = matched_data,
  cutoff = 0.3, precursor_threshold = 2,
- score_params = gnps_params(0.5), min_peaks = 0)
+ score_params = modified_cosine_params(0.5), min_peaks = 0)
 
 dist_entropy <- dist_ms2(data = matched_data,
  cutoff = 0.3, precursor_threshold = 2,

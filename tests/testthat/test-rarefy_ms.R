@@ -1,6 +1,6 @@
 test_that("rarefy_ms returns the correct rowSum totals", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, gnps_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   communiy_object <- create_community_matrix_object(results)
   size <- 400

@@ -9,8 +9,8 @@
 #' `"spectral_entropy"` are supported. The scoring method is specified by the
 #' `score_params` argument. `score_params` is a list of parameters for the
 #' chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
-#' created with functions [gnps_params()] and [spec_entropy_params()],
-#' respectively.
+#' created with functions [modified_cosine_params()] and
+#' [spec_entropy_params()], respectively.
 #'
 #'
 #' @param mass_data The object generated from `ms2_ms1_compare()`.
@@ -18,7 +18,7 @@
 #' `read_msp()` function.
 #' We currently only support msp files.
 #' @param scoring_params Parameters for scoring method to be applied.
-#'  This can be either `gnps_params()` or `spec_entropy_params()`.
+#'  This can be either `modified_cosine_params()` or `spec_entropy_params()`.
 #' @param ppm Parts per million. MS2 scans with a
 #'  difference in ppm less than or equal to this value will be scored.
 #' @param min_score Similarity score threshold to determine a match for
@@ -61,7 +61,7 @@
 #'  filtered_data, 2, 6)
 #'  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
-#'    reference = psu_msmls, scoring_params = gnps_params(0.5),
+#'    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
 #'    ppm = 1000,
 #'    min_score =  0.1, chemical_min_score = .1)
 #'
