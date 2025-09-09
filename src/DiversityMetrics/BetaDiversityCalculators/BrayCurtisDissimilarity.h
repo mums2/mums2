@@ -5,6 +5,7 @@
 #ifndef BRAYCURTISDISSIMILARITY_H
 #define BRAYCURTISDISSIMILARITY_H
 #include "../DiversityCalculator.h"
+#include "../../DataStructures/CppMatrix.h"
 
 
 class BrayCurtisDissimilarity final : public DiversityCalculator {
@@ -12,7 +13,7 @@ public:
     BrayCurtisDissimilarity() = default;
     ~BrayCurtisDissimilarity() override = default;
 
-    double Calculate(const Rcpp::List&) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 

@@ -24,7 +24,7 @@ Defaults to \code{-1}.}
 
 \item{clean_spectra}{Either \code{TRUE} or \code{FALSE} to clean the spectra prior to
 calculating similarity. See \code{msentropy::clean_spectrum} for more information.
-Defualts to \code{TRUE}.}
+Defaults to \code{TRUE}.}
 
 \item{min_mz}{\code{numeric}, minimum mz to keep, set to -1 to disable. Defaults
 to \code{0}.}

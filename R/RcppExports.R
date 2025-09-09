@@ -5,12 +5,8 @@ AnnotateMs2Features <- function(queryList, querySpectra, referenceList, scoringP
     .Call(`_mums2_AnnotateMs2Features`, queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
 }
 
-distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks) {
-    .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks)
-}
-
-CalculateDiversityCommunityObject <- function(communityMatrix, diversityIndex) {
-    .Call(`_mums2_CalculateDiversityCommunityObject`, communityMatrix, diversityIndex)
+distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {
+    .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
 
 CreateCommunityMatrix <- function(communityMatrix) {
@@ -21,12 +17,12 @@ GetCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_GetCommunityMatrix`, communityMatrix)
 }
 
-RarefactionCalculation <- function(communityMatrix, size, threshold) {
-    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold)
+RarefactionCalculation <- function(communityMatrix, size, threshold, numberOfThreads, seed = 123L) {
+    .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numberOfThreads, seed)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, iterations = 1000L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, iterations)
+FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
+    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
 ReadMgf <- function(path) {
@@ -43,6 +39,22 @@ CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
 
 ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
     .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
+}
+
+CreateProgressBarObject <- function() {
+    .Call(`_mums2_CreateProgressBarObject`)
+}
+
+IncrementProgressBar <- function(progressBar, progress) {
+    invisible(.Call(`_mums2_IncrementProgressBar`, progressBar, progress))
+}
+
+DestroyProgressBar <- function(progressBar) {
+    invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
+}
+
+TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, shift) {
+    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, shift)
 }
 
 squareRootNormalize <- function(vec) {

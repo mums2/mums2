@@ -1,9 +1,15 @@
 #include "Utils/Utils.h"
 #include <Rcpp.h>
-
+#include <algorithm>
 #include "AnnotateMs2/DataStructures/AnnotationNode.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
+#include "CustomProgressBar/CliProgressBar.h"
 #include "ScoringMethods/ScoringFactory.h"
+
+
+bool IsWhiteSpace(const unsigned char c) {
+    return c == '\r' || c == '\n';
+}
 
 // [[Rcpp::export]]
 Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
@@ -62,6 +68,9 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
     std::list<int> ref_idx;
     std::list<double> formulaSimilarity;
     std::list<double> score;
+    CliProgressBar progressBar;
+    int currentProgress = 0;
+    const auto maxProgress = static_cast<float>(querySpectaList.size());
     for (const auto& query : querySpectaList) {
         double currentPrecursorMz = query.GetPrecursorMz();
         Spectra currentSpectra = query.GetSpectra();
@@ -81,8 +90,9 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
             formulaSimilarity.emplace_back(chemicalComparison);
             score.emplace_back(comparisonScore);
         }
+        progressBar.update(static_cast<float>(currentProgress++)/maxProgress);
     }
-
+    progressBar.end_display();
 
     Rcpp::DataFrame df = Rcpp::DataFrame::create(Rcpp::Named("query_ms1_id") = query_ms1_id,
                                                 Rcpp::Named("query_ms2_id") = query_ms2_id,

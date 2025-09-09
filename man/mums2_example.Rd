@@ -12,6 +12,8 @@ mums2_example(file = NULL)
 \value{
 A file path to example data stored in the \code{inst/extdata} directory
 of the package.
+
+returns a \code{character} object
 }
 \description{
 mums2 contains a number of example files in the \code{inst/extdata} directory.

@@ -1,0 +1,31 @@
+Injection,File Text,Sample_Notes,MS method,LC method,Vial_Position,Injection volume,Sample_Code,Biological_Group
+240927_50MeOH_pos_P2A1_1_9665,NA,NA,NA,NA,NA,NA,Blanks,Blanks
+240927_50MeOH_pos_P2A1_1_9666,NA,NA,NA,NA,NA,NA,Blanks,Blanks
+240927_50MeOH_pos_P2A1_1_9667,NA,NA,NA,NA,NA,NA,Blanks,Blanks
+240927_0.1mgmL_GroupMix1_HSST3_pos_P2E2_1_9669,NA,NA,NA,NA,NA,NA,SCFA,SCFA
+240927_0.1mgmL_GroupMix1_HSST3_pos_P2E2_1_9733,NA,NA,NA,NA,NA,NA,SCFA,SCFA
+240927_0.1mgmL_GroupMix1_HSST3_pos_P2E2_1_9789,NA,NA,NA,NA,NA,NA,SCFA,SCFA
+240927_0.1mgmL_GroupMix2_ValericAcid_HSST3_pos_P2E3_1_9673,NA,NA,NA,NA,NA,NA,BileAcid,BileAcid
+240927_0.1mgmL_GroupMix2_ValericAcid_HSST3_pos_P2E3_1_9729,NA,NA,NA,NA,NA,NA,BileAcid,BileAcid
+240927_0.1mgmL_GroupMix2_ValericAcid_HSST3_pos_P2E3_1_9785,NA,NA,NA,NA,NA,NA,BileAcid,BileAcid
+240927_0.1mgmL_GroupMix3_IsovalericAcid_HSST3_pos_P2E4_1_9668,NA,NA,NA,NA,NA,NA,AminoAcid,AminoAcid
+240927_0.1mgmL_GroupMix3_IsovalericAcid_HSST3_pos_P2E4_1_9725,NA,NA,NA,NA,NA,NA,AminoAcid,AminoAcid
+240927_0.1mgmL_GroupMix3_IsovalericAcid_HSST3_pos_P2E4_1_9783,NA,NA,NA,NA,NA,NA,AminoAcid,AminoAcid
+240927_0.1mgmL_GroupMix4_HSST3_pos_P2E5_1_9670,NA,NA,NA,NA,NA,NA,Nucleosides,Nucleosides
+240927_0.1mgmL_GroupMix4_HSST3_pos_P2E5_1_9730,NA,NA,NA,NA,NA,NA,Nucleosides,Nucleosides
+240927_0.1mgmL_GroupMix4_HSST3_pos_P2E5_1_9786,NA,NA,NA,NA,NA,NA,Nucleosides,Nucleosides
+240927_0.1mgmL_GroupMix5_ValericAcid_HSST3_pos_P2E6_1_9672,NA,NA,NA,NA,NA,NA,nicotidamide,nicotidamide
+240927_0.1mgmL_GroupMix5_ValericAcid_HSST3_pos_P2E6_1_9732,NA,NA,NA,NA,NA,NA,nicotidamide,nicotidamide
+240927_0.1mgmL_GroupMix5_ValericAcid_HSST3_pos_P2E6_1_9782,NA,NA,NA,NA,NA,NA,nicotidamide,nicotidamide
+240927_0.1mgmL_GroupMix6_HSST3_pos_P2E7_1_9671,NA,NA,NA,NA,NA,NA,Organic Acids,Organic Acids
+240927_0.1mgmL_GroupMix6_HSST3_pos_P2E7_1_9728,NA,NA,NA,NA,NA,NA,Organic Acids,Organic Acids
+240927_0.1mgmL_GroupMix6_HSST3_pos_P2E7_1_9787,NA,NA,NA,NA,NA,NA,Organic Acids,Organic Acids
+240927_0.1mgmL_GroupMix7_ValericAcid_HSST3_pos_P2E8_1_9676,NA,NA,NA,NA,NA,NA,Vitamins,Vitamins
+240927_0.1mgmL_GroupMix7_ValericAcid_HSST3_pos_P2E8_1_9727,NA,NA,NA,NA,NA,NA,Vitamins,Vitamins
+240927_0.1mgmL_GroupMix7_ValericAcid_HSST3_pos_P2E8_1_9784,NA,NA,NA,NA,NA,NA,Vitamins,Vitamins
+240927_0.1mgmL_GroupMix8_IsovalericAcid_HSST3_pos_P2E9_1_9675,NA,NA,NA,NA,NA,NA,Antibiotics,Antibiotics
+240927_0.1mgmL_GroupMix8_IsovalericAcid_HSST3_pos_P2E9_1_9731,NA,NA,NA,NA,NA,NA,Antibiotics,Antibiotics
+240927_0.1mgmL_GroupMix8_IsovalericAcid_HSST3_pos_P2E9_1_9790,NA,NA,NA,NA,NA,NA,Antibiotics,Antibiotics
+240927_0.1mgmL_FullMix_HSST3_pos_P2F1_1_9674,NA,NA,NA,NA,NA,NA,Full_Mix,Full_Mix
+240927_0.1mgmL_FullMix_HSST3_pos_P2F1_1_9726,NA,NA,NA,NA,NA,NA,Full_Mix,Full_Mix
+240927_0.1mgmL_FullMix_HSST3_pos_P2F1_1_9788,NA,NA,NA,NA,NA,NA,Full_Mix,Full_Mix

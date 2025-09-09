@@ -9,6 +9,7 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 
+#include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"
 
 Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
@@ -21,15 +22,16 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
     std::unordered_map<std::string, std::vector<std::string>> map;
     spectraData.unsetf(std::ios_base::skipws);
     // count the newlines with an algorithm specialized for counting:
-    unsigned long line_count = std::count(
-        std::istream_iterator<char>(spectraData),
-        std::istream_iterator<char>(),
-        '\n');
-    Progress p(line_count, true);
+    float line_count = static_cast<float>(std::count(
+         std::istream_iterator<char>(spectraData),
+         std::istream_iterator<char>(),
+         '\n'));
+    CliProgressBar p;
     spectraData.close();
     spectraData.open(filePath);
+    float currentLine = 0;
     while(std::getline(spectraData,  line)) {
-        p.increment();
+        p.update(++currentLine/line_count);
         if(line.find("BEGIN IONS") != std::string::npos) continue;
         if(line.find("END IONS") != std::string::npos) { // ending
 
@@ -73,7 +75,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         intensityContainer.pop_front();
         mzContainer.pop_front();
     }
-
+    p.end_display();
     return Rcpp::List::create(Rcpp::Named("ms2_table") = dataFrame,
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
@@ -90,16 +92,19 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     std::list<MetaDataValuePair> metaDataKeys;
     spectraData.unsetf(std::ios_base::skipws);
     // count the newlines with an algorithm specialized for counting:
-    unsigned long line_count = std::count(
+    float line_count = static_cast<float>(std::count(
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
-        '\n');
-    Progress p(line_count, true);
+        '\n'));
+    CliProgressBar p;
     spectraData.close();
     spectraData.open(filePath);
+    float currentLine = 0;
+    auto isSpaces = [](unsigned char const c) { return std::isspace(c); };
     while(std::getline(spectraData,  line)) {
-        p.increment();
-        if(line.empty()) { // end of the current block
+        p.update(++currentLine/line_count);
+        bool whiteSpace = std::all_of(line.begin(), line.end(), isSpaces);
+        if(line.empty() || whiteSpace) { // end of the current block
             mzContainer.emplace_back(mz);
             intensityContainer.emplace_back(intensity);
             metaDataKeyContainer.emplace_back(metaDataKeys);
@@ -126,19 +131,22 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         if (line.find(' ') != std::string::npos)
             delimiter = ' ';
         // peak mz/intensities
+        
         std::vector<std::string> values;
         const auto pos = line.find(delimiter);
         const std::string mzValue = line.substr(0, pos);
         const std::string intensityValue = line.substr(pos + delimiter.length(), line.size());
+        if (mzValue.empty() || intensityValue.empty()) continue;
+        if (!std::isdigit(mzValue[0]) || !std::isdigit(intensityValue[0])) continue;
         mz.emplace_back(std::stod(mzValue));
         intensity.emplace_back(std::stod(intensityValue));
+
 
     }
     spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     Rcpp::DataFrame dataFrame;
     Rcpp::List mspList(spectraPeaks);
-
     for (int i = 0; i < spectraPeaks; i++) {
         Rcpp::List peaksDf = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
             Rcpp::Named("intensity") = intensityContainer.front());
@@ -167,5 +175,6 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         mzContainer.pop_front();
         metaDataKeyContainer.pop_front();
     }
+    p.end_display();
     return mspList;
 }

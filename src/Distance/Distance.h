@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Rcpp.h>
 #include <cmath>
+#include <queue>
 #include "../ScoringMethods/ScoringFactory.h"
 
 
@@ -16,12 +17,13 @@ public:
     Distance() = default;
     ~Distance() = default;
     void CreateSpectraList(Rcpp::List data);
-    void CalculateDistances(double prec_threshold, double cutoff, const ScoringFactory &scoreMethod, int minPeaks);
+    void CalculateDistances(double prec_threshold, double cutoff, const ScoringFactory &scoreMethod, int minPeaks,
+        int numberOfThreads);
     Rcpp::DataFrame ExtractMatrix();
 
 private:
     std::vector<Spectra> spectraList;
-    std::vector<SparseValue> sparseMatrix;
+    std::queue<SparseValue> sparseMatrix;
 };
 
 #endif //DISTANCE

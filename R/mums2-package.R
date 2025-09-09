@@ -2,7 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom cli cli_abort
 #' @importFrom clustur cluster
 #' @importFrom clustur create_sparse_matrix
 #' @importFrom clustur get_abundance

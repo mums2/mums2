@@ -7,31 +7,39 @@
 ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 }
 \arguments{
-\item{ms2_files}{a list of either \emph{all} mgf files, mzml, or mzxml files.}
+\item{ms2_files}{a list of all your mgf, mzml, or mzxml files.}
 
-\item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
+\item{mpactr_object}{your mpactr object created from \code{import_all_data()}}
 
-\item{mz_tolerance}{your mass-charge ratio tolerance}
+\item{mz_tolerance}{your mass-charge ratio tolerance in ppm
+(parts per million).}
 
-\item{rt_tolerance}{your retention time tolerance}
+\item{rt_tolerance}{your retention time tolerance.}
 }
 \value{
-returns a \code{mass_data} object of all of the matches.
+returns a \code{mass_data} object of all of the ms2 and ms1 matches.
 }
 \description{
-We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
+We are matching your ms1 to your supplied ms2 by looking at
+the difference between the mz and rt.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-                             format = "None")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
-squid_filter <- squid_data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+filtered_data <- data |>
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                             "Blanks")) |>
+   filter_peak_table(filter_insource_ions_params())
 
+change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"), squid_filter, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
+ filtered_data, 2, 6)
 }

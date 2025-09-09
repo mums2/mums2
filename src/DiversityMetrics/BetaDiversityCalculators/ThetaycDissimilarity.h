@@ -11,7 +11,7 @@ class ThetaycDissimilarity final : public DiversityCalculator{
 public:
     ThetaycDissimilarity() = default;
     ~ThetaycDissimilarity() override = default;
-    double Calculate(const Rcpp::List &) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 

@@ -4,7 +4,14 @@
 \alias{dist_ms2}
 \title{Calculate pairwise distance between MS/MS features.}
 \usage{
-dist_ms2(data, cutoff, precursor_thresh, score_params, min_peaks = 6)
+dist_ms2(
+  data,
+  cutoff,
+  precursor_threshold,
+  score_params,
+  min_peaks = 6,
+  number_of_threads = detectCores()
+)
 }
 \arguments{
 \item{data}{the object generated from \code{ms2_ms1_compare()}.}
@@ -13,14 +20,18 @@ dist_ms2(data, cutoff, precursor_thresh, score_params, min_peaks = 6)
 comparison. The default of .3 corresponds to a cosine score of .7,
 meaning pairs with a score of .7 or higher will be stored in the matrix.}
 
-\item{precursor_thresh}{Precursor mz tolerance. MS2 scans with a
-difference in precursor mz less than or equal to this value will be scored.}
+\item{precursor_threshold}{Precursor mz tolerance. MS2 scans with a
+difference in precursor mz less than or equal to this value will be scored.
+Disable this by setting this value to -1 or less.}
 
 \item{score_params}{Parameters for scoring method to be applied.
-See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
+See \code{\link[=modified_cosine_params]{modified_cosine_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
 
 \item{min_peaks}{the minimum number of peaks that need to be present before
 you compare the ms2 spectra.}
+
+\item{number_of_threads}{the number of
+threads you want to use for this calculation.}
 }
 \value{
 A sparse matrix of class \code{"data.frame"}
@@ -36,24 +47,31 @@ no distance value. Distance can be calculated with method \code{"gnps"}
 or \code{"spectral_entropy"}. A sparse matrix is returned.
 }
 \examples{
-squid_data <- import_all_data(peak_table = mums2::mums2_example("squid_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("squid_meta_data.csv"), 
-                             format = "None")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
-squid_filter <- squid_data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2, cv_param = "mean")) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+filtered_data <- data |>
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                             "Blanks")) |>
+   filter_peak_table(filter_insource_ions_params())
 
 
-matched_data <- ms2_ms1_compare(mums2_example("12152023_Coculture_with_new_JC1.gnps.mgf"),
- squid_filter, 2, 6)
 
-dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
- score_params = gnps_params(0.5), min_peaks = 0)
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
+ filtered_data, 2, 6)
 
-dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
+dist_gnps <- dist_ms2(data = matched_data,
+ cutoff = 0.3, precursor_threshold = 2,
+ score_params = modified_cosine_params(0.5), min_peaks = 0)
+
+dist_entropy <- dist_ms2(data = matched_data,
+ cutoff = 0.3, precursor_threshold = 2,
  score_params = spec_entropy_params(), min_peaks = 0)
 
 }

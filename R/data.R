@@ -13,6 +13,7 @@
 #' mums2_example()
 #'
 #' mums2_example("PSUMSMLS_Adenine.csv")
+#' @return returns a `character` object
 mums2_example <- function(file = NULL) {
   path <- ""
   if (is.null(file)) {
@@ -21,4 +22,5 @@ mums2_example <- function(file = NULL) {
     path <- system.file("extdata", file, package = "mums2", mustWork = TRUE)
   }
   return(path)
+
 }

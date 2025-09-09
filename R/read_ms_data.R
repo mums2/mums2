@@ -3,35 +3,43 @@ read_mzml_mzxml <- function(file) {
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
                                                basePeakMZ = as.numeric(),
                                                retentionTime = as.numeric(),
-                                               file = as.character()), 
-                  peak_data = list())
-  for(file in file_list) {
-    extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
-    if(!(tolower(extension) %in% c("mzml", "mzxml"))) {
-      stop(paste0("Please ensure the input file is a .mzml/mzxml, it is currently a .", extension))
+                                               file = as.character()),
+                   peak_data = list())
+  for (file in file_list) {
+    if (!file.exists(file)) {
+      stop(paste0("file: ", file,
+                  " does not exist. Please ensure all files exist."))
     }
-    
+    extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
+    if (!(tolower(extension) %in% c("mzml", "mzxml"))) {
+      stop(paste0("Please ensure the input file is a .mzml/mzxml,
+                  it is currently a .", extension))
+    }
+
     print(paste0("Reading: ", file, " ..."))
     file_reader <- openMSfile(file)
     peak_length <- length(peaks(file_reader))
-    mass_spec_data <- header(file_reader,
-                            1:peak_length)[c("seqNum", "msLevel", "basePeakMZ", "retentionTime")]
-    
+    mass_spec_data <- header(file_reader, 1:peak_length)[c("seqNum",
+                                                           "msLevel",
+                                                           "basePeakMZ",
+                                                           "retentionTime")]
+
     mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
     mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
     mass_spec_data$file <- rep(file, times = peak_length)
     mass_spec_data$SpectraIndex <- 1:peak_length
     mass_spec_data <- mass_spec_data[mass_spec_data$msLevel == 2, ]
-   
+
     peak_data <- vector("list", nrow(mass_spec_data))
-    for(i in seq_along(peak_data)) {
-      peak_data[[i]] <- as.data.frame(peaks(file_reader, mass_spec_data$seqNum[i]))
+    for (i in seq_along(peak_data)) {
+      peak_data[[i]] <- as.data.frame(peaks(file_reader,
+                                            mass_spec_data$seqNum[i]))
     }
     close(file_reader)
     all_data$mass_spec_data <- rbind(all_data$mass_spec_data, mass_spec_data)
     all_data$peak_data[[file]] <- peak_data
   }
-  return(all_data)
+  all_data
 
 }
 
@@ -40,12 +48,17 @@ read_mgf <- function(file) {
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
                                                basePeakMZ = as.numeric(),
                                                retentionTime = as.numeric(),
-                                               file = as.character()), 
-                  peak_data = list())
-  for(file in file_list) {
+                                               file = as.character()),
+                   peak_data = list())
+  for (file in file_list) {
+    if (!file.exists(file)) {
+      stop(paste0("file: ", file,
+                  " does not exist. Please ensure all files exist."))
+    }
     extension <- tail(strsplit(file, split = "\\.")[[1]], 1)
-    if(tolower(extension) != "mgf") {
-      stop(paste0("Please ensure the input file is a .mgf, it is currently a .", extension))
+    if (tolower(extension) != "mgf") {
+      stop(paste0("Please ensure the input file is a
+                  .mgf, it is currently a .", extension))
     }
     print(paste0("Reading: ", file, " ..."))
     result_data_list <- ReadMgf(file)
@@ -54,24 +67,32 @@ read_mgf <- function(file) {
     rt_type <- which(columns %in% c("RTINMINUTES", "RTINSECONDS"))
     filtered_df <- data.frame(SpectraIndex = 1:row_length,
                               file = rep(file, time = row_length),
-                              result_data_list$ms2_table[c("PEPMASS", columns[rt_type])])
-    colnames(filtered_df) <- c("SpectraIndex", "file", "basePeakMZ", "retentionTime")
-   
+                              result_data_list$ms2_table[c("PEPMASS",
+                                                           columns[rt_type])])
+    colnames(filtered_df) <- c("SpectraIndex", "file",
+                               "basePeakMZ", "retentionTime")
+
     all_data$mass_spec_data <- rbind(all_data$mass_spec_data, filtered_df)
     all_data$peak_data[[file]] <- result_data_list$mzIntensityList
   }
-  return(all_data)
+  all_data
 }
 
 #' @title Read msp files
 #' @export
 #' @description Reader function msp files
 #' @param msp_file the file path of your msp file
+#' @examples
+#' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#'
+#' @return a `list` object that contains all
+#'  of the data present in your msp file.
 read_msp <- function(msp_file) {
   extension <- tail(strsplit(msp_file, split = "\\.")[[1]], 1)
-  if(tolower(extension) != "msp") {
-    stop(paste0("Please ensure the input file is a msp, it is currently a .", extension))
+  if (tolower(extension) != "msp") {
+    stop(paste0("Please ensure the input file is a msp,
+                it is currently a .", extension))
   }
   print(paste0("Reading: ", msp_file, " ..."))
-  return(ReadMsp(msp_file))
+  ReadMsp(msp_file)
 }

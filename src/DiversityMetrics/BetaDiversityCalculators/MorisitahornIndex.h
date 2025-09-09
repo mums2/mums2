@@ -11,7 +11,7 @@ class MorisitahornIndex final : public DiversityCalculator{
 public:
     MorisitahornIndex() = default;
     ~MorisitahornIndex() override = default;
-    double Calculate(const Rcpp::List &) const override;
+    double Calculate(const std::vector<std::vector<double>>&) const override;
 };
 
 
