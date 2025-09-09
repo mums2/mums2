@@ -21,15 +21,17 @@ comparison. The default of .3 corresponds to a cosine score of .7,
 meaning pairs with a score of .7 or higher will be stored in the matrix.}
 
 \item{precursor_threshold}{Precursor mz tolerance. MS2 scans with a
-difference in precursor mz less than or equal to this value will be scored.}
+difference in precursor mz less than or equal to this value will be scored.
+Disable this by setting this value to -1 or less.}
 
 \item{score_params}{Parameters for scoring method to be applied.
-See \code{\link[=gnps_params]{gnps_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
+See \code{\link[=modified_cosine_params]{modified_cosine_params()}} and \code{\link[=spec_entropy_params]{spec_entropy_params()}} for more details.}
 
 \item{min_peaks}{the minimum number of peaks that need to be present before
 you compare the ms2 spectra.}
 
-\item{number_of_threads}{the number of threads you want to use for this calculation.}
+\item{number_of_threads}{the number of
+threads you want to use for this calculation.}
 }
 \value{
 A sparse matrix of class \code{"data.frame"}
@@ -45,24 +47,31 @@ no distance value. Distance can be calculated with method \code{"gnps"}
 or \code{"spectral_entropy"}. A sparse matrix is returned.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
 filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                             "Blanks")) |>
+   filter_peak_table(filter_insource_ions_params())
 
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  filtered_data, 2, 6)
 
-dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
- score_params = gnps_params(0.5), min_peaks = 0)
+dist_gnps <- dist_ms2(data = matched_data,
+ cutoff = 0.3, precursor_threshold = 2,
+ score_params = modified_cosine_params(0.5), min_peaks = 0)
 
-dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
+dist_entropy <- dist_ms2(data = matched_data,
+ cutoff = 0.3, precursor_threshold = 2,
  score_params = spec_entropy_params(), min_peaks = 0)
 
 }

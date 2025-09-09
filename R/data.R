@@ -22,4 +22,5 @@ mums2_example <- function(file = NULL) {
     path <- system.file("extdata", file, package = "mums2", mustWork = TRUE)
   }
   return(path)
+
 }

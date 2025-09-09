@@ -20,12 +20,14 @@ rarefy_ms(
 \item{threshold}{The individual feature threshold. Each subsampled feature
 must be >= this value to be retained.}
 
-\item{number_of_threads}{the amount of threads you want the calculation to use.}
+\item{number_of_threads}{the amount of threads
+you want the calculation to use.}
 
-\item{seed}{the rng (random number generator) seed you would like to use.}
+\item{seed}{the RNG (random number generator) seed you would like to use.}
 }
 \value{
-A \code{external_pointer} that references a community matrix of rarefied feature intensities.
+A \code{external_pointer} that references a community
+matrix of rarefied feature intensities.
 
 returns a \code{matrix} object that contains your rarefied data.
 }
@@ -39,23 +41,27 @@ of samples at different dilutions regardless of the desired
 submsampling \code{size}.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
 filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                             "Blanks")) |>
+   filter_peak_table(filter_insource_ions_params())
 
-change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  filtered_data, 2, 6)
 
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
- score_params = gnps_params(0.5), min_peaks = 0)
+ score_params = modified_cosine_params(0.5), min_peaks = 0)
 
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")

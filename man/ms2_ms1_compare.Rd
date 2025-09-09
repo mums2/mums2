@@ -9,9 +9,10 @@ ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 \arguments{
 \item{ms2_files}{a list of all your mgf, mzml, or mzxml files.}
 
-\item{mpactr_object}{your mpactr object creatd from \code{import_all_data()}}
+\item{mpactr_object}{your mpactr object created from \code{import_all_data()}}
 
-\item{mz_tolerance}{your mass-charge ratio tolerance in ppm (parts per million).}
+\item{mz_tolerance}{your mass-charge ratio tolerance in ppm
+(parts per million).}
 
 \item{rt_tolerance}{your retention time tolerance.}
 }
@@ -19,21 +20,26 @@ ms2_ms1_compare(ms2_files, mpactr_object, mz_tolerance, rt_tolerance)
 returns a \code{mass_data} object of all of the ms2 and ms1 matches.
 }
 \description{
-We are matching your ms1 to your supplied ms2 by looking at the difference between the mz and rt.
+We are matching your ms1 to your supplied ms2 by looking at
+the difference between the mz and rt.
 }
 \examples{
-data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-                            meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-                             format = "Metaboscape")
+data <-
+   import_all_data(peak_table =
+                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   meta_data =
+                   mums2::mums2_example("full_mix_meta_data_small.csv"),
+                   format = "Metaboscape")
 
 filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_parameters()) |>
-   filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-   filter_peak_table(filter_insource_ions_parameters())
+   filter_peak_table(filter_mispicked_ions_params()) |>
+   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+   filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                             "Blanks")) |>
+   filter_peak_table(filter_insource_ions_params())
 
-change_rt_to_seconds_or_minutes(filtered_data, "minutes")
+change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  filtered_data, 2, 6)
 }

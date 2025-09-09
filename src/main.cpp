@@ -19,6 +19,8 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 #include "Math/ParallelRandomNumberSitmo.h"
 #include "Math/VectorMath.h"
+#include "ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h"
+#include "ScoringMethods/SpectralEntropy/entropy.h"
 #include "Spectra/ReadSpectra.h"
 
 CppMatrix CalculateDiversity(const CppMatrix& abundances, const std::string& diversityIndex) {
@@ -210,6 +212,7 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     return GreedyHeuristic::CalculateHeuristic(tree);
 }
 
+
 // [[Rcpp::export]]
 SEXP CreateProgressBarObject() {
     auto* progressBar = new CliProgressBar();
@@ -226,4 +229,16 @@ void IncrementProgressBar(SEXP& progressBar, const float progress) {
 void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
+}
+
+// [[Rcpp::export]]
+std::vector<double> TestSimilarity(const std::vector<double>& mzOne,  std::vector<double>& intOne,
+    const std::vector<double>& mzTwo,  std::vector<double>& intTwo, const double shift) {
+    GNPSScoringDynamicPriorityQueue gnps;
+    Entropy entropy;
+    double res = entropy.CalculateEntropySimilarity(mzOne, intOne, mzTwo, intTwo);
+    const auto res2 = gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift);
+    Rcpp::Rcout << "SpectralEntropy: " << res << std::endl;
+    Rcpp::Rcout << "GNPS: " << res2[0] << std::endl;
+    return(gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift));
 }

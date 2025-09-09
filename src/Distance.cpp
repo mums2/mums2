@@ -23,15 +23,16 @@ void Distance::CalculateDistances(const double prec_threshold, const double cuto
     const ScoringFactory& scoreMethod, const int minPeaks, const int numberOfThreads) {
     const auto size = static_cast<int>(spectraList.size());
     CliProgressBar p;
+    bool disablePPMFilter = prec_threshold <= -1;
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];
         std::mutex mutex;
         RcppThread::parallelFor(i + 1, size, [this, &firstSpectra, &prec_threshold,
-            &minPeaks, &scoreMethod, &i, &cutoff, &mutex](int j) {
+            &minPeaks, &scoreMethod, &disablePPMFilter, &i, &cutoff, &mutex](int j) {
             const Spectra secondSpectra = spectraList[j];
             bool hasScored = false;
             double score = -1;
-              if (std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) < prec_threshold) {
+              if (disablePPMFilter || std::abs(firstSpectra.precursorMz - secondSpectra.precursorMz) < prec_threshold) {
                   score = 1 - scoreMethod.CalculateScore(firstSpectra, secondSpectra, minPeaks);
                   hasScored = true;
               }

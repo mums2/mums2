@@ -1,24 +1,24 @@
 #' GNPS-like similarity between two MS/MS spectra
 #'
 #' @description
-#' `gnps_params()` generates a parameter list to perform GNPS-like cosine
-#' similarity score calculation between two MS2 spectra.
+#' `modified_cosine_params()` generates a parameter list to perform GNPS-like
+#' cosine similarity score calculation between two MS2 spectra.
 #'
 #' @details
-#' `gnps_params()` will initiate cosine scoring based on the Python code by
-#' Wang et al. (2016), which is currently used for cosine scoring in GNPS, to
-#' calculate similarity between two MS2 spectra. This scoring method will
-#' compare peaks data, apply a square root normalization to peak intensities,
-#' align peaks both with and without correction for mass shifts, and calculate
-#' similarity.
+#' `modified_cosine_params()` will initiate cosine scoring based on the Python
+#' code by Wang et al. (2016), which is currently used for cosine scoring
+#' in GNPS, to calculate similarity between two MS2 spectra. This scoring
+#' method will compare peaks data, apply a square root normalization
+#' to peak intensities, align peaks both with and without correction
+#' for mass shifts, and calculate similarity.
 #'
 #'
 #' @param frag_tolerance The mz fragment tolerance threshold for aligning
 #' fragment peaks from two ms2 spectra. GNPS default = 0.5.
 #'
 #' @examples
-#' gnps_params(0.5)
-#' 
+#' modified_cosine_params(0.5)
+#'
 #' @return A parameters list for similarity scoring method "gnps"
 #' @references
 #' Mingxun Wang, Jeremy J. Carver, Vanessa V. Phelan, Laura M. Sanchez,
@@ -27,10 +27,9 @@
 #' Networking." Nature biotechnology 34, no. 8 (2016): 828. PMID: 27504778
 #'
 #' @export
-gnps_params <- function(frag_tolerance) {
-  p <- list("tolerance" = frag_tolerance,
-            "method" = "gnps")
-  return(p)
+modified_cosine_params <- function(frag_tolerance) {
+  list("tolerance" = frag_tolerance,
+       "method" = "gnps")
 }
 
 #' Entropy similarity between two MS/MS spectra
@@ -62,7 +61,7 @@ gnps_params <- function(frag_tolerance) {
 #' calculation. Set to -1 to disable. Defaults to `100`.
 #' @param weighted `logical` whether weighted or unweighted entropy similarity
 #' will be calculated. Defaults to `TRUE`.
-#' @examples 
+#' @examples
 #' spec_entropy_params()
 #' @return A parameters list for similarity scoring method "spectral_entropy"
 #'
@@ -77,14 +76,13 @@ spec_entropy_params <- function(ms2_tolerance_in_da = 0.02,
                                 clean_spectra = TRUE, min_mz = 0, max_mz = 1000,
                                 noise_threshold = 0.01, max_peak_num = 100,
                                 weighted = TRUE) {
-  p <- list("ms2_tolerance_in_da" = ms2_tolerance_in_da,
-            "ms2_tolerance_in_ppm" = ms2_tolerance_in_ppm,
-            "clean_spectra" = clean_spectra,
-            "min_mz" = min_mz,
-            "max_mz" = max_mz,
-            "noise_threshold" = noise_threshold,
-            "max_peak_num" = max_peak_num,
-            "weighted" = weighted,
-            "method" = "entropy")
-  return(p)
+  list("ms2_tolerance_in_da" = ms2_tolerance_in_da,
+       "ms2_tolerance_in_ppm" = ms2_tolerance_in_ppm,
+       "clean_spectra" = clean_spectra,
+       "min_mz" = min_mz,
+       "max_mz" = max_mz,
+       "noise_threshold" = noise_threshold,
+       "max_peak_num" = max_peak_num,
+       "weighted" = weighted,
+       "method" = "entropy")
 }

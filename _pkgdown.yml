@@ -16,10 +16,10 @@ reference:
 - title: Filters
   contents:
   - filter_peak_table
-  - filter_mispicked_ions_parameters
-  - filter_group_parameters
-  - filter_cv_parameters
-  - filter_insource_ions_parameters
+  - filter_mispicked_ions_params
+  - filter_group_params
+  - filter_cv_params
+  - filter_insource_ions_params
   - filter_peak_table.filter_mispicked_ions
   - filter_peak_table.filter_group
   - filter_peak_table.filter_cv
@@ -30,7 +30,7 @@ reference:
 - title: Scoring
   contents:
   - dist_ms2
-  - gnps_params
+  - modified_cosine_params
   - spec_entropy_params
 - title: Cluster
   contents: cluster_data
@@ -53,7 +53,7 @@ reference:
   - compute_molecular_formulas
 - title: Helper Functions
   contents:
-  - change_rt_to_seconds_or_minutes
+  - change_rt_to_seconds_or_minute
   - generate_a_combined_table
-  - convert_samples_to_group_averages
+  - convert_to_group_averages
 

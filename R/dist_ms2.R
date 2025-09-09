@@ -17,46 +17,62 @@
 #'  meaning pairs with a score of .7 or higher will be stored in the matrix.
 #' @param precursor_threshold Precursor mz tolerance. MS2 scans with a
 #'  difference in precursor mz less than or equal to this value will be scored.
+#'  Disable this by setting this value to -1 or less.
 #' @param score_params Parameters for scoring method to be applied.
-#'  See [gnps_params()] and [spec_entropy_params()] for more details.
+#'  See [modified_cosine_params()] and [spec_entropy_params()] for more details.
 #' @param min_peaks the minimum number of peaks that need to be present before
 #' you compare the ms2 spectra.
-#' @param number_of_threads the number of threads you want to use for this calculation.
+#' @param number_of_threads the number of
+#' threads you want to use for this calculation.
 #' @examples
-#' data <- import_all_data(peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-#'                             meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-#'                              format = "Metaboscape")
-#' 
+#' data <-
+#'    import_all_data(peak_table =
+#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    meta_data =
+#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
+#'                    format = "Metaboscape")
+#'
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_parameters()) |>
-#'    filter_peak_table(filter_cv_parameters(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_parameters(group_threshold = 0.1, "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_parameters())
+#'    filter_peak_table(filter_mispicked_ions_params()) |>
+#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
+#'                                              "Blanks")) |>
+#'    filter_peak_table(filter_insource_ions_params())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2.mgf"),
+#'
+#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
 #'  filtered_data, 2, 6)
-#' 
-#' dist_gnps <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
-#'  score_params = gnps_params(0.5), min_peaks = 0)
-#' 
-#' dist_entropy <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_threshold = 2,
+#'
+#' dist_gnps <- dist_ms2(data = matched_data,
+#'  cutoff = 0.3, precursor_threshold = 2,
+#'  score_params = modified_cosine_params(0.5), min_peaks = 0)
+#'
+#' dist_entropy <- dist_ms2(data = matched_data,
+#'  cutoff = 0.3, precursor_threshold = 2,
 #'  score_params = spec_entropy_params(), min_peaks = 0)
 #'
 #' @return A sparse matrix of class `"data.frame"`
 #' @export
-dist_ms2 <- function(data, cutoff, precursor_threshold, score_params, min_peaks = 6, number_of_threads = detectCores()) {
+dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
+                     min_peaks = 6, number_of_threads = detectCores()) {
   UseMethod("dist_ms2", data)
 }
 
 #' @method dist_ms2 mass_data
 #' @export
-dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params, min_peaks = 6, number_of_threads = detectCores()) {
+dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
+                               min_peaks = 6,
+                               number_of_threads = detectCores()) {
+  if (nrow(data$ms2_matches) <= 0) {
+    stop("Cannot calculate distances, there are no matched ms2.")
+  }
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)
 
-  dist <- distMS2(data_list, score_params, precursor_threshold, cutoff, min_peaks, number_of_threads)
+  dist <- distMS2(data_list, score_params, precursor_threshold,
+                  cutoff, min_peaks, number_of_threads)
 
   return(dist)
 }

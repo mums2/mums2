@@ -183,6 +183,21 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// TestSimilarity
+std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, const double shift);
+RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP shiftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzOne(mzOneSEXP);
+    Rcpp::traits::input_parameter< std::vector<double>& >::type intOne(intOneSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzTwo(mzTwoSEXP);
+    Rcpp::traits::input_parameter< std::vector<double>& >::type intTwo(intTwoSEXP);
+    Rcpp::traits::input_parameter< const double >::type shift(shiftSEXP);
+    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, shift));
+    return rcpp_result_gen;
+END_RCPP
+}
 // squareRootNormalize
 std::vector<double> squareRootNormalize(std::vector<double>& vec);
 RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
@@ -222,6 +237,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
+    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 5},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
