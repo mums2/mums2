@@ -17,3 +17,5 @@
 ^\.github$
 ^cran-comments\.md$
 ^\.lintr$
+^MassBank_NIST\.msp$
+^MassBank_RIKEN\.msp$
