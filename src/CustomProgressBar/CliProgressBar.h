@@ -97,13 +97,18 @@ protected:
         time = time % 60;
         sec = time;
 
-        std::stringstream time_strs;
-        if (hour != 0) time_strs << hour << "h ";
-        if (min != 0) time_strs << min << "min ";
-        if (sec != 0) time_strs << sec << "s ";
-        std::string time_str = time_strs.str();
+        //std::stringstream time_strs;
+        std::string timeString;
+        if (hour != 0) timeString += std::to_string(hour) + "h ";
+        if (min != 0) timeString += std::to_string(min) + "min ";
+        if (sec != 0) timeString += std::to_string(sec) + "s ";
 
-        return time_str;
+        // if (hour != 0) time_strs << hour << "h ";
+        // if (min != 0) time_strs << min << "min ";
+        // if (sec != 0) time_strs << sec << "s ";
+        // std::string time_str = time_strs.str();
+
+        return timeString;
     }
 
 
