@@ -73,7 +73,7 @@ protected:
 
         std::string time_string = _time_to_string(rem_time);
         if (_firstTime)
-            time_string = "-";
+            time_string6 = "-";
         for (int i = 0; i < _ticks_displayed; ++i) {
             RcppThread::Rcout << "\033[32m\u25A0" << std::flush;
         }
@@ -117,6 +117,6 @@ private:
     int _ticks_displayed;  // the nb of ticks already displayed
     bool _finalized;
     bool _firstTime = true;
-    time_t start, end;
+    time_t start{}, end{};
 };
 #endif //CLIPROGRESSBAR_H
