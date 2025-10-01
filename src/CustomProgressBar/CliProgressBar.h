@@ -117,6 +117,6 @@ private:
     int _ticks_displayed;  // the nb of ticks already displayed
     bool _finalized;
     bool _firstTime = true;
-    time_t start, end;
+    time_t start{}, end{};
 };
 #endif //CLIPROGRESSBAR_H
