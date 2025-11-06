@@ -39,7 +39,10 @@
 #' the clustered and abundance data.
 cluster_data <- function(distance_df, ms2_match_data,
                          cutoff = 0.3, cluster_method = "opticlust") {
-
+  
+  if(nrow(distance_df) <= 0) {
+    stop("distance_df must have more than 0 rows")
+  }
   sparse_matrix <- create_sparse_matrix(distance_df$i,
                                         distance_df$j, distance_df$dist)
   # Create Count Table

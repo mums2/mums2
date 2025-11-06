@@ -121,6 +121,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
             std::string delimiter = ": ";
             const auto pos = line.find(delimiter);
             std::string valueName = line.substr(0, pos);
+            std::transform(valueName.begin(), valueName.end(), valueName.begin(), ::tolower);
             std::string value = line.substr(pos + delimiter.length(), line.size());
             metaDataKeys.emplace_back(valueName, value);
             continue;

@@ -211,7 +211,7 @@ generate_a_combined_table <- function(matched_data,
 
   # add omus
   if (!is.null(cluster_data)) {
-    if (length(cluster_data) != 5) {
+    if (class(cluster_data) != "list") {
       stop("cluster_data must be an object created from `cluster_data()`.")
     }
     list_data <- clustur::split_clusters_to_list(cluster_data)
