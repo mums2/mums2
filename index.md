@@ -1,0 +1,42 @@
+# mums2
+
+mums2 is a package that was created to supply researchers with a
+collection of tools that they can use to analyze untargeted metabolomics
+data. This package will supply tools to analysis of tandem Mass
+spectrometry (MS) data in a easy and efficient manner. The package
+supports importation and filtration of MS1 feature tables, annotations,
+de novo molecular formula predictions, scoring of MS2 spectra,
+clustering, alpha and beta diversity calculations, and community
+distance calculations.
+
+## Installation
+
+You can install the CRAN version with:
+
+``` r
+install.packages("mums2")
+```
+
+You can install the development version of mpactr from
+[GitHub](https://github.com/mums2/mums2) with:
+
+``` r
+devtools::install_github("mums2/mums2")
+```
+
+## Get started
+
+See the [Getting
+Started](https://www.mums2.org/mpactr/articles/mpactr.html) page to get
+started.
+
+## Getting help
+
+If you encounter an issue, please file an issue on
+[GitHub](https://github.com/mums2/mums2/issues). Please include a
+minimal reproducible example with your issue.
+
+## Contributing
+
+Is there a feature you’d like to see included, please let us know! Pull
+requests are welcome on [GitHub](https://github.com/mums2/mums2/pulls).

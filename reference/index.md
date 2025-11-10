@@ -1,0 +1,87 @@
+# Package index
+
+## Import Data
+
+- [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md)
+  : Import all data
+
+## Add Ms2 Data
+
+- [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
+  : Match your ms1 spectra to a ms2
+
+## Mass Spectrometry Data Readers
+
+- [`read_msp()`](https://www.mums2.org/mums2/reference/read_msp.md) :
+  Read msp files
+
+## Filters
+
+- [`filter_peak_table()`](https://www.mums2.org/mums2/reference/filter_peak_table.md)
+  : Filter Peak Table
+- [`filter_mispicked_ions_params()`](https://www.mums2.org/mums2/reference/filter_mispicked_ions_params.md)
+  : Filter Mispicked Ions Parameters
+- [`filter_group_params()`](https://www.mums2.org/mums2/reference/filter_group_params.md)
+  : Filter Group Parameters
+- [`filter_cv_params()`](https://www.mums2.org/mums2/reference/filter_cv_params.md)
+  : Filter Cv Parameters
+- [`filter_insource_ions_params()`](https://www.mums2.org/mums2/reference/filter_insource_ions_params.md)
+  : Filter Insource Ions Parameters
+
+## Annotation
+
+- [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
+  : Annotate LC-MS/MS features
+
+## Scoring
+
+- [`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md) :
+  Calculate pairwise distance between MS/MS features.
+- [`modified_cosine_params()`](https://www.mums2.org/mums2/reference/modified_cosine_params.md)
+  : GNPS-like similarity between two MS/MS spectra
+- [`spec_entropy_params()`](https://www.mums2.org/mums2/reference/spec_entropy_params.md)
+  : Entropy similarity between two MS/MS spectra
+
+## Cluster
+
+- [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
+  : Cluster
+
+## Diversity Metrics
+
+- [`rarefy_ms()`](https://www.mums2.org/mums2/reference/rarefy_ms.md) :
+  Rarefy MS1 Feature Table
+- [`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md)
+  : Distance Shared
+- [`alpha_summary()`](https://www.mums2.org/mums2/reference/alpha_summary.md)
+  : Alpha Diversity Summary
+
+## Community Object
+
+- [`create_community_matrix()`](https://www.mums2.org/mums2/reference/create_community_matrix.md)
+  : create community matrix
+- [`create_community_matrix_object()`](https://www.mums2.org/mums2/reference/create_community_matrix_object.md)
+  : Create Community Matrix
+- [`print(`*`<community_object>`*`)`](https://www.mums2.org/mums2/reference/print.community_object.md)
+  : Print Community Object
+- [`get_community_matrix()`](https://www.mums2.org/mums2/reference/get_community_matrix.md)
+  : Get Community Matrix
+
+## Example Data
+
+- [`mums2_example()`](https://www.mums2.org/mums2/reference/mums2_example.md)
+  : Get file paths for examples
+
+## De-novo Molecular Formula Predictions
+
+- [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
+  : Compute Molecular formula
+
+## Helper Functions
+
+- [`change_rt_to_seconds_or_minute()`](https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.md)
+  : Change RT time to minutes or seconds
+- [`generate_a_combined_table()`](https://www.mums2.org/mums2/reference/generate_a_combined_table.md)
+  : Create a combined table
+- [`convert_to_group_averages()`](https://www.mums2.org/mums2/reference/convert_to_group_averages.md)
+  : Convert Samples to Group Averages
