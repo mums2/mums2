@@ -10,6 +10,7 @@
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"
+#include <regex>
 #include "DataStructures/CommunityMatrix.h"
 #include "DataStructures/CppMatrix.h"
 #include "DiversityMetrics/Diversity.h"
@@ -17,8 +18,10 @@
 #include "DiversityMetrics/DiversityMetricFactory.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
+#include "HMDB/HumanMetabolomicsDB.h"
 #include "Math/ParallelRandomNumberSitmo.h"
 #include "Math/VectorMath.h"
+#include "ScoringMethods/ScoringFactory.h"
 #include "ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h"
 #include "ScoringMethods/SpectralEntropy/entropy.h"
 #include "Spectra/ReadSpectra.h"
@@ -160,14 +163,12 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
 
 // [[Rcpp::export]]
 Rcpp::List ReadMgf(const std::string& path) {
-    ReadSpectra spectra;
-    return spectra.ReadMGF(path);
+    return ReadSpectra::ReadMGF(path);
 }
 
 // [[Rcpp::export]]
 Rcpp::List ReadMsp(const std::string& path) {
-    ReadSpectra spectra;
-    return spectra.ReadMSP(path);
+    return ReadSpectra::ReadMSP(path);
 }
 
 // [[Rcpp::export]]
@@ -233,7 +234,9 @@ void DestroyProgressBar(SEXP& progressBar) {
 
 // [[Rcpp::export]]
 std::vector<double> TestSimilarity(const std::vector<double>& mzOne,  std::vector<double>& intOne,
-    const std::vector<double>& mzTwo,  std::vector<double>& intTwo, const double shift) {
+    const std::vector<double>& mzTwo,  std::vector<double>& intTwo, Rcpp::List scoringParamsSpectral,
+    Rcpp::List ScoringParamsCosine, const double shift) {
+    const ScoringFactory factory(ScoringParamsCosine);
     GNPSScoringDynamicPriorityQueue gnps;
     Entropy entropy;
     double res = entropy.CalculateEntropySimilarity(mzOne, intOne, mzTwo, intTwo);
@@ -241,4 +244,177 @@ std::vector<double> TestSimilarity(const std::vector<double>& mzOne,  std::vecto
     Rcpp::Rcout << "SpectralEntropy: " << res << std::endl;
     Rcpp::Rcout << "GNPS: " << res2[0] << std::endl;
     return(gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift));
+}
+
+// [[Rcpp::export]]
+void DistanceToPhylipFile(const Rcpp::NumericMatrix& mat, const std::vector<std::string>& names, const std::string& fileName) {
+    const int size = mat.rows();
+    std::ofstream output(fileName);
+    // output.open(fileName);
+    if (!output.is_open()) {
+        Rcpp::stop("file not open");
+    }
+    output << size << std::endl;
+    const size_t  nameSize = names.size();
+    for (size_t i = 0; i < nameSize; i++) {
+        output << names[i] << "\t";
+        for (size_t j = 0; j < nameSize; j++) {
+            output << mat(i, j) << "\t";
+        }
+        output << std::endl;
+    }
+    output.close();
+}
+
+// [[Rcpp::export]]
+Rcpp::List DistanceDataFrameToMatrix(const Rcpp::DataFrame& distanceDataFrame) {
+    const int size = distanceDataFrame.rows();
+    const std::vector<int>& iIndexes = distanceDataFrame["i"];
+    const std::vector<int>& jIndexes = distanceDataFrame["j"];
+    const std::vector<double>& distances = distanceDataFrame["dist"];
+    Rcpp::NumericMatrix result(size, size);
+    std::unordered_map<int, int> nameSwap;
+    int currentIndex = 0;
+
+    for (int i = 0; i < size; i++) {
+        if (nameSwap.find(iIndexes[i]) == nameSwap.end()) {
+            nameSwap[iIndexes[i]] = currentIndex;
+            currentIndex++;
+        }
+        if (nameSwap.find(jIndexes[i]) == nameSwap.end()) {
+            nameSwap[jIndexes[i]] = currentIndex;
+            currentIndex++;
+        }
+        result(nameSwap[iIndexes[i]], nameSwap[jIndexes[i]]) = distances[i];
+        result(nameSwap[jIndexes[i]], nameSwap[iIndexes[i]]) = distances[i];
+    }
+    const int nameSize = nameSwap.size();
+    Rcpp::IntegerVector iNames(nameSize);
+    Rcpp::IntegerVector jNames(nameSize);
+    int count = 0;
+    for (const auto& keyPairs: nameSwap) {
+        iNames[count] = keyPairs.first;
+        jNames[count++] = keyPairs.second;
+    }
+    return Rcpp::List::create(Rcpp::Named("i") = iNames,
+                              Rcpp::Named("j") = jNames,
+                              Rcpp::Named("result") = result);
+    // return result;
+}
+// [[Rcpp::export]]
+void ToColumnFile(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names,
+    const std::string& fileName) {
+    std::ofstream output(fileName);
+    if (!output.is_open()) {
+        Rcpp::stop("File not open");
+    }
+    const std::vector<int>& currentIndexes = matrix["i"];
+    const std::vector<int>& otherIndexes = matrix["j"];
+    const std::vector<double>& distances = matrix["dist"];
+
+   for (size_t i = 0; i < currentIndexes.size(); i++) {
+       const std::string& name = names[currentIndexes[i] - 1];
+       const std::string& otherNames = names[otherIndexes[i] - 1];
+       output << name << "\t" << otherNames << "\t" << distances[i] << std::endl;
+   }
+}
+
+void ToPhylip(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names,
+    const std::string& fileName) {
+    std::ofstream output(fileName);
+    if (!output.is_open()) {
+        Rcpp::stop("File not open");
+    }
+    output << names.size() << std::endl;
+    const std::vector<int>& currentIndexes = matrix["i"];
+    const std::vector<int>& otherIndexes = matrix["j"];
+    const std::vector<double>& distances = matrix["dist"];
+
+    for (size_t i = 0; i < currentIndexes.size(); i++) {
+        const std::string& name = names[currentIndexes[i] - 1];
+        const std::string& otherNames = names[otherIndexes[i] - 1];
+        output << name << "\t" << otherNames << "\t" << distances[i] << std::endl;
+    }
+}
+
+// [[Rcpp::export]]
+void AddSpectrumToHMDBData(Rcpp::List& hmdbData, const std::vector<std::string>& metaboliteNames,
+    const std::vector<std::string>& fileNames) {
+    std::unordered_map<std::string, std::vector<int>> hmdbDataMap;
+    Rcpp::List ls = hmdbData[0];
+    Rcpp::List info = ls["info"];
+    std::vector<std::string> keys = Rcpp::as<std::vector<std::string>>(info["key"]);
+    for (int i = 0; i < hmdbData.size(); i++) {
+        Rcpp::List ls = hmdbData[i];
+        Rcpp::List info = ls["info"];
+        const std::string name = Rcpp::as<std::string>(info["spectra_name"]);
+        hmdbDataMap[name] = {};
+    }
+
+    for (size_t i = 0; i < metaboliteNames.size(); i++) {
+        if (hmdbDataMap.find(metaboliteNames[i]) == hmdbDataMap.end()) continue;
+        hmdbDataMap[metaboliteNames[i]].emplace_back(i);
+    }
+    for (int i = 0; i < hmdbData.size(); i++) {
+        Rcpp::List ls = hmdbData[i];
+        Rcpp::List info = ls["info"];
+        Rcpp::List spectra = ls["spec"];
+        Rcpp::List spec = hmdbData[i];
+        const std::string name = Rcpp::as<std::string>(info["spectra_name"]);
+        for (const auto& index : hmdbDataMap[name]) {
+            std::ifstream input(fileNames[index]);
+            if (!input.is_open()) {
+                Rcpp::warning("File not found: " + fileNames[index]);
+                continue;
+            }
+            double mz, intensity;
+            std::list<double> mzValues;
+            std::list<double> intensityValues;
+            while (input >> mz >> intensity) {
+                mzValues.push_back(mz);
+                intensityValues.push_back(intensity);
+            }
+            spectra["mz"] = wrap(mzValues);
+            spectra["inÍtensity"] = wrap(intensityValues);
+        }
+    }
+
+}
+
+// [[Rcpp::export]]
+SEXP CreateHumanMetabolomicsDB() {
+    auto* hmdb = new HumanMetabolomicsDB();
+    return Rcpp::XPtr<HumanMetabolomicsDB>(hmdb);
+}
+
+// [[Rcpp::export]]
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names,
+    const std::vector<std::string>& values) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->AddHumanMetabolomicNode(HumanMetabolomicsDBNode(names,values));
+}
+
+// [[Rcpp::export]]
+void PrintHMDBNames(const SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->PrintHumanMetabolomicsDB();
+}
+// [[Rcpp::export]]
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames,
+    const std::vector<std::string>& databaseNames) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    for (size_t i = 0; i < fileNames.size(); i++) {
+       hmdbPointer.get()->AddSpectraFiles(fileNames[i], databaseNames[i]);
+    }
+}
+
+// [[Rcpp::export]]
+void ProcessMs2Files(SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->ProcessSpectraFiles();
+}
+
+// [[Rcpp::export]]
+void ReadSpectraFile(const std::string& filePath) {
+    ReadSpectra::ReadSpectraFile(filePath);
 }

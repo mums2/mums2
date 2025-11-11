@@ -184,8 +184,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // TestSimilarity
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, const double shift);
-RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP shiftSEXP) {
+std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, Rcpp::List scoringParamsSpectral, Rcpp::List ScoringParamsCosine, const double shift);
+RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP scoringParamsSpectralSEXP, SEXP ScoringParamsCosineSEXP, SEXP shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -193,9 +193,122 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double>& >::type intOne(intOneSEXP);
     Rcpp::traits::input_parameter< const std::vector<double>& >::type mzTwo(mzTwoSEXP);
     Rcpp::traits::input_parameter< std::vector<double>& >::type intTwo(intTwoSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type scoringParamsSpectral(scoringParamsSpectralSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type ScoringParamsCosine(ScoringParamsCosineSEXP);
     Rcpp::traits::input_parameter< const double >::type shift(shiftSEXP);
-    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, shift));
+    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift));
     return rcpp_result_gen;
+END_RCPP
+}
+// DistanceToPhylipFile
+void DistanceToPhylipFile(const Rcpp::NumericMatrix& mat, const std::vector<std::string>& names, const std::string& fileName);
+RcppExport SEXP _mums2_DistanceToPhylipFile(SEXP matSEXP, SEXP namesSEXP, SEXP fileNameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type fileName(fileNameSEXP);
+    DistanceToPhylipFile(mat, names, fileName);
+    return R_NilValue;
+END_RCPP
+}
+// DistanceDataFrameToMatrix
+Rcpp::List DistanceDataFrameToMatrix(const Rcpp::DataFrame& distanceDataFrame);
+RcppExport SEXP _mums2_DistanceDataFrameToMatrix(SEXP distanceDataFrameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type distanceDataFrame(distanceDataFrameSEXP);
+    rcpp_result_gen = Rcpp::wrap(DistanceDataFrameToMatrix(distanceDataFrame));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ToColumnFile
+void ToColumnFile(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names, const std::string& fileName);
+RcppExport SEXP _mums2_ToColumnFile(SEXP matrixSEXP, SEXP namesSEXP, SEXP fileNameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type matrix(matrixSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type fileName(fileNameSEXP);
+    ToColumnFile(matrix, names, fileName);
+    return R_NilValue;
+END_RCPP
+}
+// AddSpectrumToHMDBData
+void AddSpectrumToHMDBData(Rcpp::List& hmdbData, const std::vector<std::string>& metaboliteNames, const std::vector<std::string>& fileNames);
+RcppExport SEXP _mums2_AddSpectrumToHMDBData(SEXP hmdbDataSEXP, SEXP metaboliteNamesSEXP, SEXP fileNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List& >::type hmdbData(hmdbDataSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type metaboliteNames(metaboliteNamesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
+    AddSpectrumToHMDBData(hmdbData, metaboliteNames, fileNames);
+    return R_NilValue;
+END_RCPP
+}
+// CreateHumanMetabolomicsDB
+SEXP CreateHumanMetabolomicsDB();
+RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CreateHumanMetabolomicsDB());
+    return rcpp_result_gen;
+END_RCPP
+}
+// AddHumanMetabolomicNode
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names, const std::vector<std::string>& values);
+RcppExport SEXP _mums2_AddHumanMetabolomicNode(SEXP hmdbPtrSEXP, SEXP namesSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    AddHumanMetabolomicNode(hmdbPtr, names, values);
+    return R_NilValue;
+END_RCPP
+}
+// PrintHMDBNames
+void PrintHMDBNames(const SEXP& hmdbPtr);
+RcppExport SEXP _mums2_PrintHMDBNames(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    PrintHMDBNames(hmdbPtr);
+    return R_NilValue;
+END_RCPP
+}
+// AddSpectra
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames);
+RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type databaseNames(databaseNamesSEXP);
+    AddSpectra(hmdbPtr, fileNames, databaseNames);
+    return R_NilValue;
+END_RCPP
+}
+// ProcessMs2Files
+void ProcessMs2Files(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_ProcessMs2Files(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    ProcessMs2Files(hmdbPtr);
+    return R_NilValue;
+END_RCPP
+}
+// ReadSpectraFile
+void ReadSpectraFile(const std::string& filePath);
+RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
+    ReadSpectraFile(filePath);
+    return R_NilValue;
 END_RCPP
 }
 // squareRootNormalize
@@ -237,7 +350,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 5},
+    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 7},
+    {"_mums2_DistanceToPhylipFile", (DL_FUNC) &_mums2_DistanceToPhylipFile, 3},
+    {"_mums2_DistanceDataFrameToMatrix", (DL_FUNC) &_mums2_DistanceDataFrameToMatrix, 1},
+    {"_mums2_ToColumnFile", (DL_FUNC) &_mums2_ToColumnFile, 3},
+    {"_mums2_AddSpectrumToHMDBData", (DL_FUNC) &_mums2_AddSpectrumToHMDBData, 3},
+    {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
+    {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
+    {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
+    {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
+    {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
+    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},

@@ -53,8 +53,48 @@ DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
 }
 
-TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, shift) {
-    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, shift)
+TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift) {
+    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift)
+}
+
+DistanceToPhylipFile <- function(mat, names, fileName) {
+    invisible(.Call(`_mums2_DistanceToPhylipFile`, mat, names, fileName))
+}
+
+DistanceDataFrameToMatrix <- function(distanceDataFrame) {
+    .Call(`_mums2_DistanceDataFrameToMatrix`, distanceDataFrame)
+}
+
+ToColumnFile <- function(matrix, names, fileName) {
+    invisible(.Call(`_mums2_ToColumnFile`, matrix, names, fileName))
+}
+
+AddSpectrumToHMDBData <- function(hmdbData, metaboliteNames, fileNames) {
+    invisible(.Call(`_mums2_AddSpectrumToHMDBData`, hmdbData, metaboliteNames, fileNames))
+}
+
+CreateHumanMetabolomicsDB <- function() {
+    .Call(`_mums2_CreateHumanMetabolomicsDB`)
+}
+
+AddHumanMetabolomicNode <- function(hmdbPtr, names, values) {
+    invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values))
+}
+
+PrintHMDBNames <- function(hmdbPtr) {
+    invisible(.Call(`_mums2_PrintHMDBNames`, hmdbPtr))
+}
+
+AddSpectra <- function(hmdbPtr, fileNames, databaseNames) {
+    invisible(.Call(`_mums2_AddSpectra`, hmdbPtr, fileNames, databaseNames))
+}
+
+ProcessMs2Files <- function(hmdbPtr) {
+    invisible(.Call(`_mums2_ProcessMs2Files`, hmdbPtr))
+}
+
+ReadSpectraFile <- function(filePath) {
+    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }
 
 squareRootNormalize <- function(vec) {
