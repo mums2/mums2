@@ -93,6 +93,10 @@ ProcessMs2Files <- function(hmdbPtr) {
     invisible(.Call(`_mums2_ProcessMs2Files`, hmdbPtr))
 }
 
+GetList <- function(hmdbPtr) {
+    .Call(`_mums2_GetList`, hmdbPtr)
+}
+
 ReadSpectraFile <- function(filePath) {
     invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }

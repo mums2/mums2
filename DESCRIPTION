@@ -34,13 +34,13 @@ Imports:
     stats,
     parallel,
     progress,
-    Rdisop
+    Rdisop,
+    xml2
 Suggests: 
     knitr,
     rmarkdown,
     reshape2,
     testthat (>= 3.0.0),
-    xml2,
     ggplot2,
     networkD3
 Config/testthat/edition: 3

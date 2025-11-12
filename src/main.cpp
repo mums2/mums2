@@ -415,6 +415,12 @@ void ProcessMs2Files(SEXP& hmdbPtr) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List GetList(SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    return hmdbPointer.get()->ConstructDataBase();
+}
+
+// [[Rcpp::export]]
 void ReadSpectraFile(const std::string& filePath) {
     ReadSpectra::ReadSpectraFile(filePath);
 }

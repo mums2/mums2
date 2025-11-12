@@ -14,6 +14,7 @@ struct HumanMetabolomicsDBNode {
      HumanMetabolomicsDBNode(const std::vector<std::string>& names,
           const std::vector<std::string>& dataValues) {
           int count = 0;
+          int precursorMassIndex = 0;
           for (int i = 0; i < names.size(); i++) {
                if (count >= 2)
                     break;
@@ -23,27 +24,17 @@ struct HumanMetabolomicsDBNode {
                     continue;
                }
                if (names[i] == "average_molecular_weight") {
-                    precursorMz = std::stod(dataValues[i]);
+                    precursorMassIndex = i;
                     count++;
                }
           }
           keys = names;
+          keys[precursorMassIndex] = "precursormz";
           values = dataValues;
-     }
-     Rcpp::List ToList() {
-          Rcpp::List list = Rcpp::List::create(
-               Rcpp::Named("info") = Rcpp::List::create(
-                    Rcpp::Named("key") = keys,
-                    Rcpp::Named("value") = values),
-               Rcpp::Named("spec") = Rcpp::List::create(
-                    Rcpp::Named("mz") = spectraList.front().mz,
-                    Rcpp::Named("intensity") = spectraList.front().intensity));
-          return list;
      }
      std::vector<std::string> keys;
      std::vector<std::string> values;
      std::string databaseName;
-     double precursorMz;
      std::list<Spectra> spectraList;
 };
 #endif //MUMS2_HUMANMETABOLOMICSDBNODE_H

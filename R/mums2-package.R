@@ -30,6 +30,11 @@
 #' @importFrom stats as.dist
 #' @importFrom utils head
 #' @importFrom utils tail
+#' @importFrom xml2 read_xml
+#' @importFrom xml2 xml_children
+#' @importFrom xml2 xml_find_all
+#' @importFrom xml2 xml_name
+#' @importFrom xml2 xml_text
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
 NULL

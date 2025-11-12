@@ -96,3 +96,52 @@ read_msp <- function(msp_file) {
   print(paste0("Reading: ", msp_file, " ..."))
   ReadMsp(msp_file)
 }
+
+
+
+#' @title Read msp files
+#' @export
+#' @param hmdb_file the xml hmdb file
+#' @param ms2_folder the folder path of your ms2 files
+#' @examples
+#' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#'
+#' @return a `list` object that contains all
+#'  of the data present in your hmdb file.
+read_hmdb <- function(hmdb_file, ms2_folder) {
+  database <- process_xml(hmdb_file)
+  read_and_match_spectra_files(ms2_folder, database)
+  annotations <- GetList(database)
+  class(annotations) <- "annotation"
+  return(annotations)
+}
+
+
+process_xml <- function(xml_file) {
+  records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
+  database <- CreateHumanMetabolomicsDB()
+  for(xml in records) {
+    tags <- xml_name(xml_children(xml))
+    data <- xml_text(xml_children(xml))
+    AddHumanMetabolomicNode(database, tags, data)
+  }
+  return(database)
+}
+
+
+read_and_match_spectra_files <- function(ms2_files, database) {
+  ls <- list.files(ms2_files, full.names = T)
+  database_names <- sub("_.*", "", list.files(ms2_files, full.names = F))
+  AddSpectra(database, ls, database_names)
+  ProcessMs2Files(database)
+}
+
+#' @export
+#' @title Print Annotation Object
+#' @description
+#' function for print the annotation object object
+#' @param x the object created from the read_hmdb
+#' @param ... other parameters that are included in the print function.
+print.annotation <- function(x, ...) {
+  print(paste0("There are ", length(x), " annotations proccessed"), ...)
+}
