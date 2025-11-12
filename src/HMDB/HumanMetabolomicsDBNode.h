@@ -31,6 +31,9 @@ struct HumanMetabolomicsDBNode {
           keys = names;
           keys[precursorMassIndex] = "precursormz";
           values = dataValues;
+          if (values[precursorMassIndex].empty()) {
+               values[precursorMassIndex] = "NA";
+          }
      }
      std::vector<std::string> keys;
      std::vector<std::string> values;
