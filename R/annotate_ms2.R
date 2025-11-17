@@ -89,9 +89,15 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
   if ("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
-  annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data,
+  annotations <- AnnotateMs2Features2(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
                                      min_score, chemical_min_score, min_peaks)
+  cols <- which(!(colnames(annotations) %in% c("query_ms1_id", "query_ms2_id", "query_mz", "query_rt",
+                                       "ref_idx", "query_formula", "chemical_similarity", "score")))
+  annotations <- cbind(annotations[, c("query_ms1_id", "query_ms2_id", "query_mz",
+                              "query_rt", "ref_idx", "query_formula", "chemical_similarity", "score")]
+                    , annotations[, cols])
+  
 
   for (i in seq_len(ncol(annotations))){
     annotations[, i] <- trimws(annotations[, i], "right")

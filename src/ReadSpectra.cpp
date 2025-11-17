@@ -246,7 +246,6 @@ std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &f
     spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
     std::vector<AnnotationNodeData> results(spectraPeaks);
-
     for (int i = 0; i < spectraPeaks; i++) {
         AnnotationNodeData data;
         const std::list<MetaDataValuePair>& keyPairs = metaDataKeyContainer.front();
@@ -255,16 +254,21 @@ std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &f
         const std::list<double>& intList = intensityContainer.front();
 
         for (const auto& metaData: keyPairs) {
+            data.keyValues.emplace_back(KeyValues{metaData.key, metaData.value});
             data.keys.push_back(metaData.key);
             data.values.push_back(metaData.value);
-            if (metaData.key == "precursormz")
+            if (metaData.key == "precursormz" && metaData.value != "NA" && metaData.value != "NULL") {
                 precursorMz = std::stod(metaData.value);
+            }
         }
+        data.referenceIndex = i;
+        data.precursorMz = precursorMz;
         data.spectra = Spectra("", {mzList.begin(), mzList.end()},
         {intList.begin(), intList.end()}, precursorMz);
         results[i] = data;
         mzContainer.pop_front();
         intensityContainer.pop_front();
+        metaDataKeyContainer.pop_front();
     }
 
     p.end_display();

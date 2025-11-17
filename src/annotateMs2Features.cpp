@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <algorithm>
 #include "AnnotateMs2/DataStructures/AnnotationNode.h"
+#include "AnnotationStructure/Annotation.h"
 #include "AnnotationStructure/AnnotationController.h"
 #include "AnnotationStructure/Feature.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
@@ -133,7 +134,7 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
 
 
 // [[Rcpp::export]]
-void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
+Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
     const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
     const double precursorThreshold,const double minScoreThreshold, const double chemicalMinScore,
     const size_t minPeaks) {
@@ -160,5 +161,6 @@ void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List que
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
     const std::queue<AnnotatedNode> results = ptr.get()->AnnotateFeature(queryFeatures, factory, minScoreThreshold,
         chemicalMinScore, precursorThreshold, minPeaks);
-    Rcpp::Rcout << results.size() << std::endl;
+    Annotation annotation(results);
+    return annotation.CreateAnnotationDataFrame();
 }

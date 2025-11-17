@@ -12,6 +12,7 @@ class MolecularFormulaSimilarity {
     public:
     static double ComputeSimilarity(const Rcpp::String& formula, const Rcpp::String& other) {
         if (formula == NA_STRING|| other == NA_STRING) return 0;
+        if (formula == "" || other == "") return 0;
 
         const MolecularMakeup makeup(formula);
         const MolecularMakeup otherMolecularMakeup(other);

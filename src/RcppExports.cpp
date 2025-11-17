@@ -31,9 +31,10 @@ BEGIN_RCPP
 END_RCPP
 }
 // AnnotateMs2Features2
-void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks);
+Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks);
 RcppExport SEXP _mums2_AnnotateMs2Features2(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type queryList(queryListSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type querySpectra(querySpectraSEXP);
@@ -44,8 +45,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type minScoreThreshold(minScoreThresholdSEXP);
     Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
     Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
-    AnnotateMs2Features2(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features2(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks));
+    return rcpp_result_gen;
 END_RCPP
 }
 // distMS2
