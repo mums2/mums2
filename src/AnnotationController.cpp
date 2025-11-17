@@ -37,10 +37,9 @@ const double precursorThreshold, const size_t minPeaks) const {
     const auto maxProgress = static_cast<float>(features.size());
     for (const auto& feature: features) {
         for (const auto& node : annotations) {
-            double val = (std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz ;
             if ((std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz > precursorThreshold) continue;
-            const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(Rcpp::wrap(feature.formula),
-                Rcpp::wrap(node.chemicalFormula));
+            const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity2(feature.formula,
+                node.chemicalFormula);
             if (chemicalSimilarity < chemicalMinScore) continue;
             const double score = factory.CalculateScore(feature.spectra, node.spectra, minPeaks);
             if (score < minScoreThreshold) continue;
