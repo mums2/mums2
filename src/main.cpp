@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <RcppThread.h>
 #include <mutex>
+
+#include "AnnotationStructure/AnnotationController.h"
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"

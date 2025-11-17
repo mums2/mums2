@@ -179,3 +179,82 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     p.end_display();
     return mspList;
 }
+
+std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &filePath) {
+        std::ifstream spectraData(filePath);
+    std::string line;
+    std::list<std::list<double>> mzContainer;
+    std::list<std::list<double>> intensityContainer;
+    std::list<double> mz;
+    std::list<double> intensity;
+    std::list<std::list<MetaDataValuePair>> metaDataKeyContainer;
+    std::list<MetaDataValuePair> metaDataKeys;
+    spectraData.unsetf(std::ios_base::skipws);
+    // count the newlines with an algorithm specialized for counting:
+    float line_count = static_cast<float>(std::count(
+        std::istream_iterator<char>(spectraData),
+        std::istream_iterator<char>(),
+        '\n'));
+    CliProgressBar p;
+    spectraData.close();
+    spectraData.open(filePath);
+    float currentLine = 0;
+    auto isSpaces = [](unsigned char const c) { return std::isspace(c); };
+    while(std::getline(spectraData,  line)) {
+        p.update(++currentLine/line_count);
+        bool whiteSpace = std::all_of(line.begin(), line.end(), isSpaces);
+        if(line.empty() || whiteSpace) { // end of the current block
+            mzContainer.emplace_back(mz);
+            intensityContainer.emplace_back(intensity);
+            metaDataKeyContainer.emplace_back(metaDataKeys);
+            metaDataKeys.clear();
+            mz.clear();
+            intensity.clear();
+            getline(spectraData, line);
+            if (line.empty())
+                continue;
+
+        }
+        if(line.find(':') != std::string::npos) { // headers and/or metadata
+            std::vector<std::string> values;
+            std::string delimiter = ": ";
+            const auto pos = line.find(delimiter);
+            std::string valueName = line.substr(0, pos);
+            std::transform(valueName.begin(), valueName.end(), valueName.begin(), ::tolower);
+            std::string value = line.substr(pos + delimiter.length(), line.size());
+            metaDataKeys.emplace_back(valueName, value);
+            continue;
+        }
+
+        if(line.find('\t') == std::string::npos && line.find(' ') == std::string::npos) continue;
+        std::string delimiter = "\t";
+        if (line.find(' ') != std::string::npos)
+            delimiter = ' ';
+        // peak mz/intensities
+
+        std::vector<std::string> values;
+        const auto pos = line.find(delimiter);
+        const std::string mzValue = line.substr(0, pos);
+        const std::string intensityValue = line.substr(pos + delimiter.length(), line.size());
+        if (mzValue.empty() || intensityValue.empty()) continue;
+        if (!std::isdigit(mzValue[0]) || !std::isdigit(intensityValue[0])) continue;
+        mz.emplace_back(std::stod(mzValue));
+        intensity.emplace_back(std::stod(intensityValue));
+
+
+    }
+    spectraData.close();
+    const int spectraPeaks = static_cast<int>(mzContainer.size());
+    std::vector<AnnotationNodeData> results(spectraPeaks);
+    for (int i = 0; i < spectraPeaks; i++) {
+        const std::list<MetaDataValuePair>& keyPairs = metaDataKeyContainer.front();
+        const double precursorMz = 0;
+        const std::list<double>& mzList = mzContainer.front();
+        const std::list<double>& intList = intensityContainer.front();
+        Spectra spectra("", {mzList.begin(), mzList.end()},
+            {intList.begin(), intList.end()}, precursorMz);
+
+    }
+    p.end_display();
+
+}
