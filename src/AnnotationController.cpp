@@ -3,15 +3,13 @@
 //
 
 #include "AnnotationStructure/AnnotationController.h"
-
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 
 
 
 
-AnnotationController::AnnotationController(const std::vector<AnnotationNodeData> &annotations, const double minScoreThreshold,
-                                           const double chemicalMinScore, const double precursorThreshold, const size_t minPeaks): annotations(annotations), minScoreThreshold(minScoreThreshold),
-chemicalMinScore(chemicalMinScore), precursorThreshold(precursorThreshold), minPeaks(minPeaks) {}
+AnnotationController::AnnotationController(const std::vector<AnnotationNodeData> &annotations):
+annotations(annotations) {}
 
 bool AnnotationController::AddNodes(const std::vector<AnnotationNodeData> &nodes) {
     annotations.insert(annotations.end(), nodes.begin(), nodes.end());
@@ -31,7 +29,8 @@ std::vector<AnnotationNodeData> AnnotationController::GetNodes(const std::vector
 }
 
 std::queue<AnnotatedNode> AnnotationController::AnnotateFeature(const Feature &feature,
-    const ScoringFactory& factory) {
+const ScoringFactory& factory, const double minScoreThreshold, const double chemicalMinScore,
+const double precursorThreshold, const size_t minPeaks) const {
     std::queue<AnnotatedNode> result;
     for (const auto& node : annotations) {
         if ((std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz > precursorThreshold) continue;

@@ -4,6 +4,7 @@
 
 #ifndef MUMS2_ANNOTATIONCONTROLLER_H
 #define MUMS2_ANNOTATIONCONTROLLER_H
+#include <queue>
 #include "AnnotatedNode.h"
 #include "AnnotationNode.h"
 #include "../ScoringMethods/ScoringFactory.h"
@@ -12,17 +13,17 @@
 class AnnotationController {
 public:
     AnnotationController() = default;
-    explicit AnnotationController(const std::vector<AnnotationNodeData>& annotations,
-        double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks);
+    ~AnnotationController() = default;
+    explicit AnnotationController(const std::vector<AnnotationNodeData>& annotations);
     bool AddNodes(const std::vector<AnnotationNodeData>& nodes);
     AnnotationNodeData GetNode(int index);
+    size_t NodeCount() const {return annotations.size();}
     std::vector<AnnotationNodeData> GetNodes(const std::vector<int>& index) const;
-    std::queue<AnnotatedNode> AnnotateFeature(const Feature& feature, const ScoringFactory& factory);
+    std::queue<AnnotatedNode> AnnotateFeature(const Feature& feature, const ScoringFactory& factory,
+        double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks) const;
 
 private:
     std::vector<AnnotationNodeData> annotations;
-    double minScoreThreshold, chemicalMinScore, precursorThreshold;
-    size_t minPeaks;
 };
 
 

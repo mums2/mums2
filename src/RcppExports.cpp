@@ -30,6 +30,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// AnnotateMs2Features2
+void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP references, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks);
+RcppExport SEXP _mums2_AnnotateMs2Features2(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP referencesSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type queryList(queryListSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type querySpectra(querySpectraSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type references(referencesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type scoringParameters(scoringParametersSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::StringVector& >::type formulas(formulasSEXP);
+    Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
+    Rcpp::traits::input_parameter< const double >::type minScoreThreshold(minScoreThresholdSEXP);
+    Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
+    AnnotateMs2Features2(queryList, querySpectra, references, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks);
+    return R_NilValue;
+END_RCPP
+}
 // distMS2
 Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
 RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
@@ -120,6 +138,40 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
     rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ReadMsp2
+SEXP ReadMsp2(const std::string& path);
+RcppExport SEXP _mums2_ReadMsp2(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMsp2(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetNodeCount
+size_t GetNodeCount(const SEXP& annotationController);
+RcppExport SEXP _mums2_GetNodeCount(SEXP annotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNodeCount(annotationController));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetNode
+SEXP GetNode(const SEXP& annotationController, const int index);
+RcppExport SEXP _mums2_GetNode(SEXP annotationControllerSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNode(annotationController, index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -225,6 +277,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
+    {"_mums2_AnnotateMs2Features2", (DL_FUNC) &_mums2_AnnotateMs2Features2, 9},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
@@ -232,6 +285,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
+    {"_mums2_ReadMsp2", (DL_FUNC) &_mums2_ReadMsp2, 1},
+    {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
+    {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},

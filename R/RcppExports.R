@@ -5,6 +5,10 @@ AnnotateMs2Features <- function(queryList, querySpectra, referenceList, scoringP
     .Call(`_mums2_AnnotateMs2Features`, queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
 }
 
+AnnotateMs2Features2 <- function(queryList, querySpectra, references, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks) {
+    invisible(.Call(`_mums2_AnnotateMs2Features2`, queryList, querySpectra, references, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks))
+}
+
 distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
@@ -31,6 +35,18 @@ ReadMgf <- function(path) {
 
 ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
+}
+
+ReadMsp2 <- function(path) {
+    .Call(`_mums2_ReadMsp2`, path)
+}
+
+GetNodeCount <- function(annotationController) {
+    .Call(`_mums2_GetNodeCount`, annotationController)
+}
+
+GetNode <- function(annotationController, index) {
+    .Call(`_mums2_GetNode`, annotationController, index)
 }
 
 CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {

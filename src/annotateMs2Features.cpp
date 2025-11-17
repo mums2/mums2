@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <algorithm>
 #include "AnnotateMs2/DataStructures/AnnotationNode.h"
+#include "AnnotationStructure/Feature.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 #include "CustomProgressBar/CliProgressBar.h"
 #include "ScoringMethods/ScoringFactory.h"
@@ -125,4 +126,34 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
         df.push_back(value.second, value.first);
     }
     return df;
+}
+
+
+
+
+// [[Rcpp::export]]
+void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
+    const SEXP references, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
+    const double precursorThreshold,const double minScoreThreshold, const double chemicalMinScore,
+    const size_t minPeaks) {
+    const ScoringFactory factory(scoringParameters);
+    const auto querySpectraSize = static_cast<size_t>(querySpectra.size());
+    std::vector<Feature> queryFeatures(querySpectraSize);
+    const Rcpp::NumericVector& queryMz = queryList["mz"];
+    const Rcpp::NumericVector& queryRt = queryList["rt"];
+    const Rcpp::StringVector& queryMs1Id = queryList["ms1_compound_id"];
+    const Rcpp::StringVector& queryMs2Id = queryList["ms2_spectrum_id"];
+
+    for (size_t i = 0; i < querySpectraSize; ++i) {
+        Feature feature;
+        const Rcpp::List& spectra = querySpectra[i];
+        feature.formula = formulas[i];
+        feature.ms1_id = queryMs1Id[i];
+        feature.ms2_id = queryMs2Id[i];
+        feature.mz = queryMz[i];
+        feature.rt = queryRt[i];
+        feature.spectra = Spectra("", spectra["mz"], spectra["intensity"], feature.mz);
+        queryFeatures[i] = feature;
+    }
+    Rcpp::Rcout << queryFeatures.size() << std::endl;
 }

@@ -47,7 +47,7 @@ context("Test Annotation Controller") {
         anno.AddNodes(nodes);
         Rcpp::List a = Rcpp::List::create();
         ScoringFactory score(a);
-        std::queue<AnnotatedNode> annotations = anno.AnnotateFeature(feature, score);
+        std::queue<AnnotatedNode> annotations = anno.AnnotateFeature(feature, score, 0, 0, 2, 0);
         expect_true(annotations.empty());
     }
 
