@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <algorithm>
 #include "AnnotateMs2/DataStructures/AnnotationNode.h"
+#include "AnnotationStructure/AnnotationController.h"
 #include "AnnotationStructure/Feature.h"
 #include "Chemicals/MolecularFormula/MolecularFormulaSimilarity.h"
 #include "CustomProgressBar/CliProgressBar.h"
@@ -133,7 +134,7 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
 
 // [[Rcpp::export]]
 void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
-    const SEXP references, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
+    const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
     const double precursorThreshold,const double minScoreThreshold, const double chemicalMinScore,
     const size_t minPeaks) {
     const ScoringFactory factory(scoringParameters);
@@ -155,5 +156,7 @@ void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List que
         feature.spectra = Spectra("", spectra["mz"], spectra["intensity"], feature.mz);
         queryFeatures[i] = feature;
     }
-    Rcpp::Rcout << queryFeatures.size() << std::endl;
+
+    const Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    ptr.get()->
 }
