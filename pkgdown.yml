@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   mums2: mums2.html
-last_built: 2025-11-10T04:37Z
+last_built: 2025-11-17T04:35Z
 urls:
   reference: https://www.mums2.org/mums2/reference
   article: https://www.mums2.org/mums2/articles
