@@ -158,5 +158,4 @@ void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List que
     }
 
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
-    ptr.get()->
 }

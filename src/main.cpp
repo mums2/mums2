@@ -189,7 +189,13 @@ size_t GetNodeCount(const SEXP& annotationController) {
 SEXP GetNode(const SEXP& annotationController, const int index) {
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
     const AnnotationNodeData data = ptr.get()->GetNode(index);
-    return Rcpp::List::create(Rcpp::Named("keys") = data.keys, Rcpp::Named("values") = data.values);
+    return Rcpp::List::create(Rcpp::Named("info") =
+                Rcpp::List::create(Rcpp::Named("keys") = data.keys,
+                    Rcpp::Named("values") = data.values),
+            Rcpp::Named("spec") = Rcpp::List::create(Rcpp::Named("mz") = data.spectra.mz,
+                Rcpp::Named("intensity") = data.spectra.intensity));
+
+
 }
 
 

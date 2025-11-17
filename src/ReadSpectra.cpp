@@ -260,9 +260,11 @@ std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &f
             if (metaData.key == "precursormz")
                 precursorMz = std::stod(metaData.value);
         }
-        Spectra spectra("", {mzList.begin(), mzList.end()},
+        data.spectra = Spectra("", {mzList.begin(), mzList.end()},
         {intList.begin(), intList.end()}, precursorMz);
         results[i] = data;
+        mzContainer.pop_front();
+        intensityContainer.pop_front();
     }
 
     p.end_display();
