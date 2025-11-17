@@ -158,4 +158,7 @@ void AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List que
     }
 
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    const std::queue<AnnotatedNode> results = ptr.get()->AnnotateFeature(queryFeatures, factory, minScoreThreshold,
+        chemicalMinScore, precursorThreshold, minPeaks);
+    Rcpp::Rcout << results.size() << std::endl;
 }
