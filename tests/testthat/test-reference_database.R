@@ -5,6 +5,8 @@ test_that("We can get one of the reference by index from the database", {
   expect_equal(names(data), c("info", "spec"))
   expect_true(length(data$info$keys) == 15)
   expect_true(length(data$spec$mz) == 43)
+  expect_error(get_reference_data(psu_msmls_data, ""), "index has to be a numeric")
+  expect_error(get_reference_data("", 1), "Ensure reference is the object")
 })
 
 test_that("You can add another database file to the reference data", {
