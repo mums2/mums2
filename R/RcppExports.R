@@ -5,8 +5,8 @@ AnnotateMs2Features <- function(queryList, querySpectra, referenceList, scoringP
     .Call(`_mums2_AnnotateMs2Features`, queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
 }
 
-AnnotateMs2Features2 <- function(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks) {
-    .Call(`_mums2_AnnotateMs2Features2`, queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks)
+AnnotateMs2Features2 <- function(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount) {
+    .Call(`_mums2_AnnotateMs2Features2`, queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount)
 }
 
 distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {

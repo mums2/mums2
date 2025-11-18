@@ -66,16 +66,18 @@
 #'    min_score =  0.1, chemical_min_score = .1)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params,
-#'                          ppm, min_score,
-#'                          chemical_min_score,
-#'                    cluster_data = NULL, min_peaks = 0)
+#'                     ppm, min_score,
+#'                     chemical_min_score,
+#'                     cluster_data = NULL, min_peaks = 0,
+#'                     number_of_threads = detectCores())
 #'
 #' @export
 #' @return a `data.frame` object containing annotations
 annotate_ms2 <- function(mass_data, reference, scoring_params,
                          ppm, min_score,
                          chemical_min_score,
-                         cluster_data = NULL, min_peaks = 0) {
+                         cluster_data = NULL, min_peaks = 0,
+                         number_of_threads = detectCores()) {
   UseMethod("annotate_ms2", mass_data)
 }
 
@@ -84,14 +86,19 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
 annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
                                    ppm, min_score,
                                    chemical_min_score,
-                                   cluster_data = NULL, min_peaks = 0) {
+                                   cluster_data = NULL, min_peaks = 0,
+                                   number_of_threads = detectCores()) {
   preds <- vector("character", nrow(mass_data$ms2_matches))
   if ("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
   annotations <- AnnotateMs2Features2(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
-                                     min_score, chemical_min_score, min_peaks)
+                                     min_score, chemical_min_score, min_peaks, number_of_threads)
+  if(nrow(annotations) <= 0) {
+    warning("No annotations have been found. Try adjusting your variables.")
+    return(annotations)
+  }
   cols <- which(!(colnames(annotations) %in% c("query_ms1_id", "query_ms2_id", "query_mz", "query_rt",
                                        "ref_idx", "query_formula", "chemical_similarity", "score")))
   annotations <- cbind(annotations[, c("query_ms1_id", "query_ms2_id", "query_mz",

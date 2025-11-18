@@ -30,7 +30,7 @@ std::vector<AnnotationNodeData> AnnotationController::GetNodes(const std::vector
 // [[Rcpp::depends(RcppThread)]]
 std::queue<AnnotatedNode> AnnotationController::AnnotateFeature(const std::vector<Feature> &features,
 const ScoringFactory& factory, const double minScoreThreshold, const double chemicalMinScore,
-const double precursorThreshold, const size_t minPeaks) const {
+const double precursorThreshold, const size_t minPeaks, const int threadCount) const {
 
     std::queue<AnnotatedNode> result;
     CliProgressBar progressBar;
@@ -59,7 +59,7 @@ const double precursorThreshold, const size_t minPeaks) const {
                     }
                 }
             }
-        }, 12);
+        }, threadCount);
         progressBar.update(static_cast<float>(currentProgress++)/maxProgress);
     }
     progressBar.end_display();

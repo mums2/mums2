@@ -20,7 +20,8 @@ public:
     size_t NodeCount() const {return annotations.size();}
     std::vector<AnnotationNodeData> GetNodes(const std::vector<int>& index) const;
     std::queue<AnnotatedNode> AnnotateFeature(const std::vector<Feature>& features, const ScoringFactory& factory,
-        double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks) const;
+        double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks,
+        int threadCount) const;
 
 private:
     std::vector<AnnotationNodeData> annotations;

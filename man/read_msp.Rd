@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_ms_data.R
 \name{read_msp}
 \alias{read_msp}
-\title{Read msp files}
+\title{Create Reference Database}
 \usage{
 read_msp(msp_file)
 }
@@ -17,6 +17,6 @@ of the data present in your msp file.
 Reader function msp files
 }
 \examples{
-read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+read_msp(mums2_example("PSU-MSMLS.msp"))
 
 }

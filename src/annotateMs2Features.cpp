@@ -137,7 +137,7 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
 Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
     const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
     const double precursorThreshold,const double minScoreThreshold, const double chemicalMinScore,
-    const size_t minPeaks) {
+    const size_t minPeaks, const int threadCount) {
     const ScoringFactory factory(scoringParameters);
     const auto querySpectraSize = static_cast<size_t>(querySpectra.size());
     std::vector<Feature> queryFeatures(querySpectraSize);
@@ -160,7 +160,7 @@ Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcp
 
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
     const std::queue<AnnotatedNode> results = ptr.get()->AnnotateFeature(queryFeatures, factory, minScoreThreshold,
-        chemicalMinScore, precursorThreshold, minPeaks);
+        chemicalMinScore, precursorThreshold, minPeaks, threadCount);
     Annotation annotation(results);
     return annotation.CreateAnnotationDataFrame();
 }
