@@ -8,12 +8,13 @@
 #include <Rcpp.h>
 #include <fstream>
 
+#include "../AnnotationStructure/AnnotationNode.h"
+
 
 class ReadSpectra {
 public:
     Rcpp::List ReadMGF(const std::string &filePath);
-    Rcpp::List ReadMSP(const std::string &filePath);
-
+    std::vector<AnnotationNode> ReadMSP(const std::string &filePath);
 };
 
 

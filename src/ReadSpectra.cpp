@@ -80,9 +80,8 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
 
-
-Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
-    std::ifstream spectraData(filePath);
+std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
+        std::ifstream spectraData(filePath);
     std::string line;
     std::list<std::list<double>> mzContainer;
     std::list<std::list<double>> intensityContainer;
@@ -132,7 +131,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
         if (line.find(' ') != std::string::npos)
             delimiter = ' ';
         // peak mz/intensities
-        
+
         std::vector<std::string> values;
         const auto pos = line.find(delimiter);
         const std::string mzValue = line.substr(0, pos);
@@ -146,36 +145,32 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     }
     spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
-    Rcpp::DataFrame dataFrame;
-    Rcpp::List mspList(spectraPeaks);
+    std::vector<AnnotationNode> results(spectraPeaks);
     for (int i = 0; i < spectraPeaks; i++) {
-        Rcpp::List peaksDf = Rcpp::List::create(Rcpp::Named("mz") = mzContainer.front(),
-            Rcpp::Named("intensity") = intensityContainer.front());
+        AnnotationNode data;
+        const std::list<MetaDataValuePair>& keyPairs = metaDataKeyContainer.front();
+        double precursorMz = 0;
+        const std::list<double>& mzList = mzContainer.front();
+        const std::list<double>& intList = intensityContainer.front();
 
-        const std::list<MetaDataValuePair> keyPairs = metaDataKeyContainer.front();
-        std::unordered_map<std::string, std::vector<std::list<std::string>::iterator>> duplicateNames;
-        std::list<std::string> keys;
-        // std::list<std::string>::iterator k = keys.begin();
-        std::list<std::string> values;
-        for (const auto& value : metaDataKeyContainer.front()) {
-            if (!duplicateNames[value.key].empty()) {
-                // We have a duplicate, we now need to combine the values
-                const auto firstFoundIndex = duplicateNames[value.key][0];
-                firstFoundIndex->append(";" + value.value);
-                continue;
+        for (const auto& metaData: keyPairs) {
+            data.keyValues.emplace_back(KeyValues{metaData.key, metaData.value});
+            data.keys.push_back(metaData.key);
+            data.values.push_back(metaData.value);
+            if (metaData.key == "precursormz" && metaData.value != "NA" && metaData.value != "NULL") {
+                precursorMz = std::stod(metaData.value);
             }
-            keys.emplace_back(value.key);
-            values.emplace_back(value.value);
-            duplicateNames[value.key].emplace_back(--values.end());
         }
-        Rcpp::List metaData = Rcpp::List::create(Rcpp::Named("key") = keys,
-            Rcpp::Named("value") = values);
-        mspList[i] = Rcpp::List::create(Rcpp::Named("info") = metaData,
-            Rcpp::Named("spec") = peaksDf);
-        intensityContainer.pop_front();
+        data.referenceIndex = i;
+        data.precursorMz = precursorMz;
+        data.spectra = Spectra("", {mzList.begin(), mzList.end()},
+        {intList.begin(), intList.end()}, precursorMz);
+        results[i] = data;
         mzContainer.pop_front();
+        intensityContainer.pop_front();
         metaDataKeyContainer.pop_front();
     }
+
     p.end_display();
-    return mspList;
+    return results;
 }

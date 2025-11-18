@@ -6,9 +6,10 @@
 \title{Annotate LC-MS/MS features}
 \usage{
 annotate_ms2(mass_data, reference, scoring_params,
-                         ppm, min_score,
-                         chemical_min_score,
-                   cluster_data = NULL, min_peaks = 0)
+                    ppm, min_score,
+                    chemical_min_score,
+                    cluster_data = NULL, min_peaks = 0,
+                    number_of_threads = detectCores())
 
 \method{annotate_ms2}{mass_data}(
   mass_data,
@@ -18,7 +19,8 @@ annotate_ms2(mass_data, reference, scoring_params,
   min_score,
   chemical_min_score,
   cluster_data = NULL,
-  min_peaks = 0
+  min_peaks = 0,
+  number_of_threads = detectCores()
 )
 }
 \arguments{
