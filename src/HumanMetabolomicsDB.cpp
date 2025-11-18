@@ -39,28 +39,41 @@ void HumanMetabolomicsDB::PrintHumanMetabolomicsDB() {
 
 Rcpp::List HumanMetabolomicsDB::ConstructDataBase() {
 
-    size_t size = 0;
+    // size_t size = 0;
+    // for (const auto& node : nodeMap) {
+    //     if (node.second.spectraList.empty())
+    //         continue;
+    //     size += node.second.spectraList.size();
+    // }
+    //
+    // Rcpp::List database(static_cast<int>(size));
+    // int counter = 0;
+
+
     for (const auto& node : nodeMap) {
         if (node.second.spectraList.empty())
             continue;
-        size += node.second.spectraList.size();
-    }
+        const size_t size = node.second.keys.size();
+        AnnotationNode annotation;
+        annotation.precursorMz = node.second.precursorMz;
+        for (size_t i = 0; i < node.second.keys.size(); i++) {
+            annotation.keyValues.emplace_back(KeyValues{node.second.keys[i], node.second.values[i]});
+            annotation.keys.emplace_back(node.second.keys[i]);
+            annotation.values.emplace_back(node.second.values[i]);
+        }
 
-    Rcpp::List database(static_cast<int>(size));
-    int counter = 0;
-
-
-    for (const auto& node : nodeMap) {
-        if (node.second.spectraList.empty())
-            continue;
         for (const auto& spectra : node.second.spectraList) {
-            database[counter++]  = Rcpp::List::create(
-              Rcpp::Named("info") = Rcpp::List::create(
-                   Rcpp::Named("key") = node.second.keys,
-                   Rcpp::Named("value") = node.second.values),
-              Rcpp::Named("spec") = Rcpp::List::create(
-                   Rcpp::Named("mz") = spectra.mz,
-                   Rcpp::Named("intensity") = spectra.intensity));
+
+            // node.second.
+            // database[counter++]  = Rcpp::List::create(
+            //   Rcpp::Named("info") = Rcpp::List::create(
+            //        Rcpp::Named("key") = node.second.keys,
+            //        Rcpp::Named("value") = node.second.values),
+            //   Rcpp::Named("spec") = Rcpp::List::create(
+            //        Rcpp::Named("mz") = spectra.mz,
+            //        Rcpp::Named("intensity") = spectra.intensity));
+
+
         }
     }
     return database;
