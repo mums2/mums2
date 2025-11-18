@@ -81,10 +81,6 @@ ToColumnFile <- function(matrix, names, fileName) {
     invisible(.Call(`_mums2_ToColumnFile`, matrix, names, fileName))
 }
 
-AddSpectrumToHMDBData <- function(hmdbData, metaboliteNames, fileNames) {
-    invisible(.Call(`_mums2_AddSpectrumToHMDBData`, hmdbData, metaboliteNames, fileNames))
-}
-
 CreateHumanMetabolomicsDB <- function() {
     .Call(`_mums2_CreateHumanMetabolomicsDB`)
 }

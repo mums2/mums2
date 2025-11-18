@@ -49,7 +49,11 @@ AnnotationController* HumanMetabolomicsDB::ConstructDataBase() const {
     for (const auto& node : nodeMap) {
         if (node.second.spectraList.empty())
             continue;
+        if (node.second.annoName == "Azithromycin") {
+            Rcpp::Rcout << "Azithromycin" << std::endl;
+        }
         AnnotationNode annotation;
+        annotation.name = node.second.annoName;
         annotation.precursorMz = node.second.precursorMz;
         annotation.chemicalFormula = node.second.chemicalFormula;
         for (size_t i = 0; i < node.second.keys.size(); i++) {

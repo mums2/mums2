@@ -370,50 +370,6 @@ void ToPhylip(const Rcpp::DataFrame& matrix, const std::vector<std::string>& nam
 }
 
 // [[Rcpp::export]]
-void AddSpectrumToHMDBData(Rcpp::List& hmdbData, const std::vector<std::string>& metaboliteNames,
-    const std::vector<std::string>& fileNames) {
-    std::unordered_map<std::string, std::vector<int>> hmdbDataMap;
-    Rcpp::List ls = hmdbData[0];
-    Rcpp::List info = ls["info"];
-    std::vector<std::string> keys = Rcpp::as<std::vector<std::string>>(info["key"]);
-    for (int i = 0; i < hmdbData.size(); i++) {
-        Rcpp::List ls = hmdbData[i];
-        Rcpp::List info = ls["info"];
-        const std::string name = Rcpp::as<std::string>(info["spectra_name"]);
-        hmdbDataMap[name] = {};
-    }
-
-    for (size_t i = 0; i < metaboliteNames.size(); i++) {
-        if (hmdbDataMap.find(metaboliteNames[i]) == hmdbDataMap.end()) continue;
-        hmdbDataMap[metaboliteNames[i]].emplace_back(i);
-    }
-    for (int i = 0; i < hmdbData.size(); i++) {
-        Rcpp::List ls = hmdbData[i];
-        Rcpp::List info = ls["info"];
-        Rcpp::List spectra = ls["spec"];
-        Rcpp::List spec = hmdbData[i];
-        const std::string name = Rcpp::as<std::string>(info["spectra_name"]);
-        for (const auto& index : hmdbDataMap[name]) {
-            std::ifstream input(fileNames[index]);
-            if (!input.is_open()) {
-                Rcpp::warning("File not found: " + fileNames[index]);
-                continue;
-            }
-            double mz, intensity;
-            std::list<double> mzValues;
-            std::list<double> intensityValues;
-            while (input >> mz >> intensity) {
-                mzValues.push_back(mz);
-                intensityValues.push_back(intensity);
-            }
-            spectra["mz"] = wrap(mzValues);
-            spectra["inÍtensity"] = wrap(intensityValues);
-        }
-    }
-
-}
-
-// [[Rcpp::export]]
 SEXP CreateHumanMetabolomicsDB() {
     auto* hmdb = new HumanMetabolomicsDB();
     return Rcpp::XPtr<HumanMetabolomicsDB>(hmdb);

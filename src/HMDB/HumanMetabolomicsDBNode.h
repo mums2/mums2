@@ -16,21 +16,28 @@ struct HumanMetabolomicsDBNode {
           int count = 0;
           int precursorMassIndex = 0;
           for (int i = 0; i < names.size(); i++) {
-               if (count >= 2)
+               if (count >= 4)
                     break;
                if (names[i] == "accession") {
                     databaseName = dataValues[i];
                     count++;
                     continue;
                }
-               if (names[i] == "average_molecular_weight") {
+               if (names[i] == "monisotopic_molecular_weight") {
                     precursorMassIndex = i;
-                    if (dataValues[i] != "NA" || dataValues[i] != "NULL")
+                    if (dataValues[i] != "NA" && dataValues[i] != "NULL" && !dataValues[i].empty())
                          precursorMz = std::stod(dataValues[i]);
                     count++;
+                    continue;
                }
                if (names[i] == "chemical_formula") {
                     chemicalFormula = dataValues[i];
+                    count++;
+                    continue;
+               }
+               if (names[i] == "name") {
+                    annoName = dataValues[i];
+                    count++;
                }
           }
           keys = names;
@@ -44,6 +51,7 @@ struct HumanMetabolomicsDBNode {
      std::vector<std::string> values;
      std::string databaseName;
      std::list<Spectra> spectraList;
+     std::string annoName;
      std::string chemicalFormula;
      double precursorMz;
 };

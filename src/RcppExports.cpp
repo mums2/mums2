@@ -271,18 +271,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// AddSpectrumToHMDBData
-void AddSpectrumToHMDBData(Rcpp::List& hmdbData, const std::vector<std::string>& metaboliteNames, const std::vector<std::string>& fileNames);
-RcppExport SEXP _mums2_AddSpectrumToHMDBData(SEXP hmdbDataSEXP, SEXP metaboliteNamesSEXP, SEXP fileNamesSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List& >::type hmdbData(hmdbDataSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type metaboliteNames(metaboliteNamesSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
-    AddSpectrumToHMDBData(hmdbData, metaboliteNames, fileNames);
-    return R_NilValue;
-END_RCPP
-}
 // CreateHumanMetabolomicsDB
 SEXP CreateHumanMetabolomicsDB();
 RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
@@ -404,7 +392,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_DistanceToPhylipFile", (DL_FUNC) &_mums2_DistanceToPhylipFile, 3},
     {"_mums2_DistanceDataFrameToMatrix", (DL_FUNC) &_mums2_DistanceDataFrameToMatrix, 1},
     {"_mums2_ToColumnFile", (DL_FUNC) &_mums2_ToColumnFile, 3},
-    {"_mums2_AddSpectrumToHMDBData", (DL_FUNC) &_mums2_AddSpectrumToHMDBData, 3},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
     {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
