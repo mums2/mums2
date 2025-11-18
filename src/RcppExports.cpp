@@ -147,6 +147,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// AddOtherDatabase
+SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController);
+RcppExport SEXP _mums2_AddOtherDatabase(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(AddOtherDatabase(annotationController, otherAnnotationController));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CompareMS2Ms1
 Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::NumericVector& mz1, const Rcpp::NumericVector& rt2, const Rcpp::NumericVector& rt1, const double mzThreshold, const double rtThreshold);
 RcppExport SEXP _mums2_CompareMS2Ms1(SEXP mz2SEXP, SEXP mz1SEXP, SEXP rt2SEXP, SEXP rt1SEXP, SEXP mzThresholdSEXP, SEXP rtThresholdSEXP) {
@@ -258,6 +270,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
+    {"_mums2_AddOtherDatabase", (DL_FUNC) &_mums2_AddOtherDatabase, 2},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},

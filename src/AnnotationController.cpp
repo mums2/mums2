@@ -15,6 +15,11 @@ bool AnnotationController::AddNodes(const std::vector<AnnotationNode> &nodes) {
     return true;
 }
 
+bool AnnotationController::AddNodes(const AnnotationController &node) {
+    annotations.insert(annotations.end(), node.annotations.begin(), node.annotations.end());
+    return true;
+}
+
 AnnotationNode AnnotationController::GetNode(const int index) {
     return annotations[index];
 }

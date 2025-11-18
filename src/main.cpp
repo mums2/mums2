@@ -193,7 +193,14 @@ SEXP GetNode(const SEXP& annotationController, const int index) {
 
 }
 
-
+// [[Rcpp::export]]
+SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController) {
+    Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    const Rcpp::XPtr<AnnotationController> other(otherAnnotationController);
+    const AnnotationController controller = *other.get();
+    ptr.get()->AddNodes(controller);
+    return ptr;
+}
 
 // [[Rcpp::export]]
 Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::NumericVector& mz1,

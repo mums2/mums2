@@ -41,6 +41,10 @@ GetNode <- function(annotationController, index) {
     .Call(`_mums2_GetNode`, annotationController, index)
 }
 
+AddOtherDatabase <- function(annotationController, otherAnnotationController) {
+    .Call(`_mums2_AddOtherDatabase`, annotationController, otherAnnotationController)
+}
+
 CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
     .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
 }

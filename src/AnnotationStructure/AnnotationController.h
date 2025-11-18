@@ -16,6 +16,7 @@ public:
     ~AnnotationController() = default;
     explicit AnnotationController(const std::vector<AnnotationNode>& annotations);
     bool AddNodes(const std::vector<AnnotationNode>& nodes);
+    bool AddNodes(const AnnotationController& node);
     AnnotationNode GetNode(int index);
     size_t NodeCount() const {return annotations.size();}
     std::vector<AnnotationNode> GetNodes(const std::vector<int>& index) const;
