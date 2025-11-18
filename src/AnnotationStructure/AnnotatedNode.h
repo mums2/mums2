@@ -12,7 +12,7 @@
 struct AnnotatedNode {
     AnnotatedNode() = default;
     Feature feature;
-    AnnotationNodeData node;
+    AnnotationNode node;
     double score = 0;
     double formulaSimilarity = 0;
 

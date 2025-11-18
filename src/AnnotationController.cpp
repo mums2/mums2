@@ -7,20 +7,20 @@
 #include "CustomProgressBar/CliProgressBar.h"
 
 
-AnnotationController::AnnotationController(const std::vector<AnnotationNodeData> &annotations):
+AnnotationController::AnnotationController(const std::vector<AnnotationNode> &annotations):
 annotations(annotations) {}
 
-bool AnnotationController::AddNodes(const std::vector<AnnotationNodeData> &nodes) {
+bool AnnotationController::AddNodes(const std::vector<AnnotationNode> &nodes) {
     annotations.insert(annotations.end(), nodes.begin(), nodes.end());
     return true;
 }
 
-AnnotationNodeData AnnotationController::GetNode(const int index) {
+AnnotationNode AnnotationController::GetNode(const int index) {
     return annotations[index];
 }
 
-std::vector<AnnotationNodeData> AnnotationController::GetNodes(const std::vector<int>& index) const {
-    std::vector<AnnotationNodeData> nodes(index.size());
+std::vector<AnnotationNode> AnnotationController::GetNodes(const std::vector<int>& index) const {
+    std::vector<AnnotationNode> nodes(index.size());
     for (size_t i = 0; i < index.size(); ++i) {
         nodes[i] = annotations[index[i]];
     }
@@ -41,9 +41,9 @@ const double precursorThreshold, const size_t minPeaks, const int threadCount) c
     for (const auto& feature: features) {
         RcppThread::parallelFor(0, size, [this, &feature, &factory, &result,
             &minScoreThreshold, &chemicalMinScore, &precursorThreshold, &minPeaks, &mutex](int i) {
-            const AnnotationNodeData& node = annotations[i];
+            const AnnotationNode& node = annotations[i];
             if ((std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz <= precursorThreshold) {
-                const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity2(feature.formula,
+                const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(feature.formula,
                node.chemicalFormula);
                 if (chemicalSimilarity >= chemicalMinScore) {
                     const double score = factory.CalculateScore(feature.spectra, node.spectra, minPeaks);

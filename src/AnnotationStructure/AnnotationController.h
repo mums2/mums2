@@ -14,17 +14,17 @@ class AnnotationController {
 public:
     AnnotationController() = default;
     ~AnnotationController() = default;
-    explicit AnnotationController(const std::vector<AnnotationNodeData>& annotations);
-    bool AddNodes(const std::vector<AnnotationNodeData>& nodes);
-    AnnotationNodeData GetNode(int index);
+    explicit AnnotationController(const std::vector<AnnotationNode>& annotations);
+    bool AddNodes(const std::vector<AnnotationNode>& nodes);
+    AnnotationNode GetNode(int index);
     size_t NodeCount() const {return annotations.size();}
-    std::vector<AnnotationNodeData> GetNodes(const std::vector<int>& index) const;
+    std::vector<AnnotationNode> GetNodes(const std::vector<int>& index) const;
     std::queue<AnnotatedNode> AnnotateFeature(const std::vector<Feature>& features, const ScoringFactory& factory,
         double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks,
         int threadCount) const;
 
 private:
-    std::vector<AnnotationNodeData> annotations;
+    std::vector<AnnotationNode> annotations;
 };
 
 

@@ -21,7 +21,7 @@ Rcpp::DataFrame Annotation::CreateAnnotationDataFrame() {
         columnData["query_formula"].emplace_back(node.feature.formula);
         columnData["chemical_similarity"].emplace_back(std::to_string(node.formulaSimilarity));
         columnData["score"].emplace_back(std::to_string(node.score));
-        const AnnotationNodeData& data = node.node;
+        const AnnotationNode& data = node.node;
         for (const auto& keyValue : data.keyValues) {
             if (columnData.find(keyValue.key) == columnData.end()) {
                 std::vector<std::string> values(size);

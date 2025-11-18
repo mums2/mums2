@@ -10,32 +10,7 @@
 
 class MolecularFormulaSimilarity {
     public:
-    static double ComputeSimilarity(const Rcpp::String& formula, const Rcpp::String& other) {
-        if (formula == NA_STRING|| other == NA_STRING) return 0;
-        if (formula == "" || other == "") return 0;
-
-        const MolecularMakeup makeup(formula);
-        const MolecularMakeup otherMolecularMakeup(other);
-        const auto& alphabet = makeup.GetAlphabet();
-        const auto& otherAlphabet =  otherMolecularMakeup.GetAlphabet();
-        std::unordered_set<std::string> uniqueAlphabet;
-        for (const auto& element : alphabet) {
-            uniqueAlphabet.insert(element);
-        }
-        for (const auto& element : otherAlphabet) {
-            uniqueAlphabet.insert(element);
-        }
-        const int size = static_cast<int>(uniqueAlphabet.size());
-        Rcpp::NumericVector formulaAtoms(size);
-        Rcpp::NumericVector otherFormulaAtoms(size);
-        int count = 0;
-        for (const auto& element : uniqueAlphabet) {
-            formulaAtoms[count] = makeup.GetAtomsForElement(element);
-            otherFormulaAtoms[count++] = otherMolecularMakeup.GetAtomsForElement(element);
-        }
-        return VectorMath::CosineScore(formulaAtoms, otherFormulaAtoms);
-    }
-    static double ComputeSimilarity2(const std::string& formula, const std::string& other) {
+    static double ComputeSimilarity(const std::string& formula, const std::string& other) {
         if (formula.empty() || other.empty()) return 0;
 
         const MolecularMakeup makeup(formula);

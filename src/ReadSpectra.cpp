@@ -180,7 +180,7 @@ Rcpp::List ReadSpectra::ReadMSP(const std::string& filePath) {
     return mspList;
 }
 
-std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &filePath) {
+std::vector<AnnotationNode> ReadSpectra::ReadMSPSpectra(const std::string &filePath) {
         std::ifstream spectraData(filePath);
     std::string line;
     std::list<std::list<double>> mzContainer;
@@ -245,9 +245,9 @@ std::vector<AnnotationNodeData> ReadSpectra::ReadMSPSpectra(const std::string &f
     }
     spectraData.close();
     const int spectraPeaks = static_cast<int>(mzContainer.size());
-    std::vector<AnnotationNodeData> results(spectraPeaks);
+    std::vector<AnnotationNode> results(spectraPeaks);
     for (int i = 0; i < spectraPeaks; i++) {
-        AnnotationNodeData data;
+        AnnotationNode data;
         const std::list<MetaDataValuePair>& keyPairs = metaDataKeyContainer.front();
         double precursorMz = 0;
         const std::list<double>& mzList = mzContainer.front();

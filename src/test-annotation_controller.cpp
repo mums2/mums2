@@ -22,16 +22,16 @@ context("Test Annotation Controller") {
     // to test the desired conditions.
     test_that("The AddNode and AddNodes Function returns true") {
         AnnotationController anno;
-        AnnotationNodeData node;
-        std::vector<AnnotationNodeData> nodes;
+        AnnotationNode node;
+        std::vector<AnnotationNode> nodes;
         nodes.emplace_back(node);
         expect_true(anno.AddNodes(nodes));
     }
 
     test_that("GetNode Function returns node at the proper index") {
         AnnotationController anno;
-        AnnotationNodeData node;
-        std::vector<AnnotationNodeData> nodes;
+        AnnotationNode node;
+        std::vector<AnnotationNode> nodes;
         nodes.emplace_back(node);
         anno.AddNodes(nodes);
         auto node2 = anno.GetNode(0);

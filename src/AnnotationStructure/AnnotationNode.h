@@ -12,7 +12,7 @@ struct KeyValues {
     std::string key;
     std::string value;
 };
-struct AnnotationNodeData {
+struct AnnotationNode {
     double precursorMz;
     std::string name;
     std::string chemicalFormula;

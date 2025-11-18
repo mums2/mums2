@@ -174,7 +174,7 @@ Rcpp::List ReadMsp(const std::string& path) {
 // [[Rcpp::export]]
 SEXP ReadMsp2(const std::string& path) {
     ReadSpectra spectra;
-    const std::vector<AnnotationNodeData> annotationData = spectra.ReadMSPSpectra(path);
+    const std::vector<AnnotationNode> annotationData = spectra.ReadMSPSpectra(path);
     AnnotationController* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }
@@ -188,7 +188,7 @@ size_t GetNodeCount(const SEXP& annotationController) {
 // [[Rcpp::export]]
 SEXP GetNode(const SEXP& annotationController, const int index) {
     const Rcpp::XPtr<AnnotationController> ptr(annotationController);
-    const AnnotationNodeData data = ptr.get()->GetNode(index);
+    const AnnotationNode data = ptr.get()->GetNode(index);
     return Rcpp::List::create(Rcpp::Named("info") =
                 Rcpp::List::create(Rcpp::Named("keys") = data.keys,
                     Rcpp::Named("values") = data.values),
