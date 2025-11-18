@@ -78,12 +78,12 @@ read_mgf <- function(file) {
   all_data
 }
 
-#' @title Read msp files
+#' @title Create Reference Database
 #' @export
 #' @description Reader function msp files
 #' @param msp_file the file path of your msp file
 #' @examples
-#' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#' read_msp(mums2_example("PSU-MSMLS.msp"))
 #'
 #' @return a `list` object that contains all
 #'  of the data present in your msp file.
@@ -94,7 +94,9 @@ read_msp <- function(msp_file) {
                 it is currently a .", extension))
   }
   print(paste0("Reading: ", msp_file, " ..."))
-  ReadMsp(msp_file)
+  reference <- ReadMsp(msp_file)
+  class(reference) <- "reference_database"
+  return(reference)
 }
 
 

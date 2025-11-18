@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <RcppThread.h>
 #include <mutex>
+
+#include "AnnotationStructure/AnnotationController.h"
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"
@@ -167,8 +169,39 @@ Rcpp::List ReadMgf(const std::string& path) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List ReadMsp(const std::string& path) {
-    return ReadSpectra::ReadMSP(path);
+SEXP ReadMsp(const std::string& path) {
+    ReadSpectra spectra;
+    const std::vector<AnnotationNode> annotationData = spectra.ReadMSP(path);
+    auto* controller = new AnnotationController(annotationData);
+    return Rcpp::XPtr<AnnotationController>(controller);
+}
+
+// [[Rcpp::export]]
+size_t GetNodeCount(const SEXP& annotationController) {
+    const Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    return ptr.get()->NodeCount();
+}
+
+// [[Rcpp::export]]
+SEXP GetNode(const SEXP& annotationController, const int index) {
+    const Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    const AnnotationNode data = ptr.get()->GetNode(index);
+    return Rcpp::List::create(Rcpp::Named("info") =
+                Rcpp::List::create(Rcpp::Named("keys") = data.keys,
+                    Rcpp::Named("values") = data.values),
+            Rcpp::Named("spec") = Rcpp::List::create(Rcpp::Named("mz") = data.spectra.mz,
+                Rcpp::Named("intensity") = data.spectra.intensity));
+
+
+}
+
+// [[Rcpp::export]]
+SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController) {
+    Rcpp::XPtr<AnnotationController> ptr(annotationController);
+    const Rcpp::XPtr<AnnotationController> other(otherAnnotationController);
+    const AnnotationController controller = *other.get();
+    ptr.get()->AddNodes(controller);
+    return ptr;
 }
 
 // [[Rcpp::export]]

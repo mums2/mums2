@@ -9,13 +9,15 @@
 #include <fstream>
 #include "../Spectra/Spectra.h"
 
+#include "../AnnotationStructure/AnnotationNode.h"
+
 
 class ReadSpectra {
 public:
     static Rcpp::List ReadMGF(const std::string &filePath);
     static Rcpp::List ReadMSP(const std::string &filePath);
     static Spectra ReadSpectraFile(const std::string& filePath);
-
+    std::vector<AnnotationNode> ReadMSP(const std::string &filePath);
 };
 
 

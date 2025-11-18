@@ -1,4 +1,4 @@
-test_that("annotate_ms_featrues returns the correct annotations in the
+test_that("annotate_ms_features returns the correct annotations in the
            first n ms features", {
             dir <- "exttestdata"
             q_file <- "matched_data.RDS"
@@ -25,7 +25,7 @@ test_that("annotate_ms_featrues returns the correct annotations in the
             expect_s3_class(annotations, "data.frame")
           })
 
-test_that("annotate_ms_featrues returns the omu where the query is present", {
+test_that("annotate_ms_features returns the omu where the query is present", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
@@ -39,7 +39,7 @@ test_that("annotate_ms_featrues returns the omu where the query is present", {
   expect_true("omu" %in% colnames(annotations))
 })
 
-test_that("annotate_ms_featrues returns the correct 
+test_that("annotate_ms_features returns the correct 
           of rows and columns", {
             dir <- "exttestdata"
             r_file <- "database_data/PSU-MSMLS.msp"
@@ -54,7 +54,7 @@ test_that("annotate_ms_featrues returns the correct
             expect_true(ncol(annotations) == 23)
           })
 
-test_that("annotate_ms_featrues works with predicted molecular formulas", {
+test_that("annotate_ms_features works with predicted molecular formulas", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
@@ -62,6 +62,17 @@ test_that("annotate_ms_featrues works with predicted molecular formulas", {
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
                               modified_cosine_params(0.5),
-                              20, .2, 0, min_peaks = 0)
+                              1000, .1, 0, min_peaks = 0)
   expect_true("query_formula" %in% colnames(annotations))
+})
+
+test_that("annotate_ms2 will return a warning if the annotations are empty", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+  dat <- compute_molecular_formulas(dat)
+  psu_msmls <- read_msp(test_path(dir, r_file))
+  expect_warning(annotate_ms2(dat, psu_msmls,
+                              modified_cosine_params(0.5),
+                              100, .1, 0, min_peaks = 0))
 })

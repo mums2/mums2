@@ -36,7 +36,7 @@ test_that("read_msp will read an msp data properly", {
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   expect_true(length(psu_msmls_data) == 576)
-  expect_true(class(psu_msmls_data) %in% "list")
+  expect_true(class(psu_msmls_data) %in% "reference_database")
 })
 
 test_that("read_msp will fail if file has the wrong extension", {
