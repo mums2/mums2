@@ -12,7 +12,7 @@ add_references(reference, database_path, file_type)
 \item{database_path}{the index of the data.}
 
 \item{file_type}{the type of file you are using, you can choose between
-msp, and xml}
+msp, and hmdb}
 }
 \value{
 prints customized message to the console

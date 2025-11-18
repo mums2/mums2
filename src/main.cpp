@@ -170,8 +170,7 @@ Rcpp::List ReadMgf(const std::string& path) {
 
 // [[Rcpp::export]]
 SEXP ReadMsp(const std::string& path) {
-    ReadSpectra spectra;
-    const std::vector<AnnotationNode> annotationData = spectra.ReadMSP(path);
+    const std::vector<AnnotationNode> annotationData = ReadSpectra::ReadMSP(path);
     auto* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }
@@ -448,9 +447,11 @@ void ProcessMs2Files(SEXP& hmdbPtr) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List GetList(SEXP& hmdbPtr) {
+SEXP CreateAnnotationController(SEXP& hmdbPtr) {
     Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
-    return hmdbPointer.get()->ConstructDataBase();
+    AnnotationController* node = hmdbPointer.get()->ConstructDataBase();
+    Rcpp::XPtr<AnnotationController> annotationPtr(node);
+    return annotationPtr;
 }
 
 // [[Rcpp::export]]

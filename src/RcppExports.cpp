@@ -337,14 +337,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// GetList
-Rcpp::List GetList(SEXP& hmdbPtr);
-RcppExport SEXP _mums2_GetList(SEXP hmdbPtrSEXP) {
+// CreateAnnotationController
+SEXP CreateAnnotationController(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_CreateAnnotationController(SEXP hmdbPtrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetList(hmdbPtr));
+    rcpp_result_gen = Rcpp::wrap(CreateAnnotationController(hmdbPtr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -410,7 +410,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
-    {"_mums2_GetList", (DL_FUNC) &_mums2_GetList, 1},
+    {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
     {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},

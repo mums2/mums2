@@ -113,8 +113,8 @@ read_msp <- function(msp_file) {
 read_hmdb <- function(hmdb_file, ms2_folder) {
   database <- process_xml(hmdb_file)
   read_and_match_spectra_files(ms2_folder, database)
-  annotations <- GetList(database)
-  class(annotations) <- "annotation"
+  annotations <- CreateAnnotationController(database)
+  class(annotations) <- "reference_database"
   return(annotations)
 }
 
@@ -136,14 +136,4 @@ read_and_match_spectra_files <- function(ms2_files, database) {
   database_names <- sub("_.*", "", list.files(ms2_files, full.names = F))
   AddSpectra(database, ls, database_names)
   ProcessMs2Files(database)
-}
-
-#' @export
-#' @title Print Annotation Object
-#' @description
-#' function for print the annotation object object
-#' @param x the object created from the read_hmdb
-#' @param ... other parameters that are included in the print function.
-print.annotation <- function(x, ...) {
-  print(paste0("There are ", length(x), " annotations proccessed"), ...)
 }

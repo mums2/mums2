@@ -105,8 +105,8 @@ ProcessMs2Files <- function(hmdbPtr) {
     invisible(.Call(`_mums2_ProcessMs2Files`, hmdbPtr))
 }
 
-GetList <- function(hmdbPtr) {
-    .Call(`_mums2_GetList`, hmdbPtr)
+CreateAnnotationController <- function(hmdbPtr) {
+    .Call(`_mums2_CreateAnnotationController`, hmdbPtr)
 }
 
 ReadSpectraFile <- function(filePath) {

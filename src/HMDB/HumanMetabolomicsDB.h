@@ -11,6 +11,8 @@
 #include "../Spectra/Spectra.h"
 #include <vector>
 
+#include "../AnnotationStructure/AnnotationController.h"
+
 
 class HumanMetabolomicsDB {
 public:
@@ -19,7 +21,7 @@ public:
     void AddHumanMetabolomicNode(const HumanMetabolomicsDBNode& node);
     void AddSpectraFiles(const std::string& spectraFiles, const std::string& databaseName);
     void ProcessSpectraFiles();
-    Rcpp::List ConstructDataBase();
+    AnnotationController* ConstructDataBase() const;
     void PrintHumanMetabolomicsDB();
 private: // We could probably remove the unordered map and use a list. Add the spectra to the node
     std::unordered_map<std::string, HumanMetabolomicsDBNode> nodeMap;

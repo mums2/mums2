@@ -160,6 +160,9 @@ std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
             if (metaData.key == "precursormz" && metaData.value != "NA" && metaData.value != "NULL") {
                 precursorMz = std::stod(metaData.value);
             }
+            if (metaData.key == "formula") {
+                data.chemicalFormula = metaData.value;
+            }
         }
         data.referenceIndex = i;
         data.precursorMz = precursorMz;

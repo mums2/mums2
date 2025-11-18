@@ -25,9 +25,12 @@ struct HumanMetabolomicsDBNode {
                }
                if (names[i] == "average_molecular_weight") {
                     precursorMassIndex = i;
-                    if (values[i] == "NA" || values[i] == "NULL")
-                         precursorMz = std::stod(values[i]);
+                    if (dataValues[i] != "NA" || dataValues[i] != "NULL")
+                         precursorMz = std::stod(dataValues[i]);
                     count++;
+               }
+               if (names[i] == "chemical_formula") {
+                    chemicalFormula = dataValues[i];
                }
           }
           keys = names;
@@ -41,6 +44,7 @@ struct HumanMetabolomicsDBNode {
      std::vector<std::string> values;
      std::string databaseName;
      std::list<Spectra> spectraList;
+     std::string chemicalFormula;
      double precursorMz;
 };
 #endif //MUMS2_HUMANMETABOLOMICSDBNODE_H

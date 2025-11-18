@@ -37,44 +37,30 @@ void HumanMetabolomicsDB::PrintHumanMetabolomicsDB() {
     }
 }
 
-Rcpp::List HumanMetabolomicsDB::ConstructDataBase() {
-
-    // size_t size = 0;
-    // for (const auto& node : nodeMap) {
-    //     if (node.second.spectraList.empty())
-    //         continue;
-    //     size += node.second.spectraList.size();
-    // }
-    //
-    // Rcpp::List database(static_cast<int>(size));
-    // int counter = 0;
-
-
+AnnotationController* HumanMetabolomicsDB::ConstructDataBase() const {
+    size_t referenceSize = 0;
     for (const auto& node : nodeMap) {
         if (node.second.spectraList.empty())
             continue;
-        const size_t size = node.second.keys.size();
+        referenceSize += node.second.spectraList.size();
+    }
+    size_t count = 0;
+    std::vector<AnnotationNode> databaseReferences(referenceSize);
+    for (const auto& node : nodeMap) {
+        if (node.second.spectraList.empty())
+            continue;
         AnnotationNode annotation;
         annotation.precursorMz = node.second.precursorMz;
+        annotation.chemicalFormula = node.second.chemicalFormula;
         for (size_t i = 0; i < node.second.keys.size(); i++) {
             annotation.keyValues.emplace_back(KeyValues{node.second.keys[i], node.second.values[i]});
             annotation.keys.emplace_back(node.second.keys[i]);
             annotation.values.emplace_back(node.second.values[i]);
         }
-
         for (const auto& spectra : node.second.spectraList) {
-
-            // node.second.
-            // database[counter++]  = Rcpp::List::create(
-            //   Rcpp::Named("info") = Rcpp::List::create(
-            //        Rcpp::Named("key") = node.second.keys,
-            //        Rcpp::Named("value") = node.second.values),
-            //   Rcpp::Named("spec") = Rcpp::List::create(
-            //        Rcpp::Named("mz") = spectra.mz,
-            //        Rcpp::Named("intensity") = spectra.intensity));
-
-
+            annotation.spectra = spectra;
+            databaseReferences[count++] = annotation;
         }
     }
-    return database;
+    return new AnnotationController(databaseReferences);
 }
