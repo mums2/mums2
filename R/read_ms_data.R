@@ -94,7 +94,7 @@ read_msp <- function(msp_file) {
                 it is currently a .", extension))
   }
   print(paste0("Reading: ", msp_file, " ..."))
-  reference <- ReadMsp2(msp_file)
+  reference <- ReadMsp(msp_file)
   class(reference) <- "reference_database"
   return(reference)
 }

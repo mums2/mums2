@@ -11,9 +11,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// AnnotateMs2Features2
-Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks, const int threadCount);
-RcppExport SEXP _mums2_AnnotateMs2Features2(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP, SEXP threadCountSEXP) {
+// AnnotateMs2Features
+Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks, const int threadCount);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP, SEXP threadCountSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -27,7 +27,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
     Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
     Rcpp::traits::input_parameter< const int >::type threadCount(threadCountSEXP);
-    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features2(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount));
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -114,24 +114,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // ReadMsp
-Rcpp::List ReadMsp(const std::string& path);
+SEXP ReadMsp(const std::string& path);
 RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
     rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ReadMsp2
-SEXP ReadMsp2(const std::string& path);
-RcppExport SEXP _mums2_ReadMsp2(SEXP pathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMsp2(path));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -259,7 +248,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mums2_AnnotateMs2Features2", (DL_FUNC) &_mums2_AnnotateMs2Features2, 10},
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
@@ -267,7 +256,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
-    {"_mums2_ReadMsp2", (DL_FUNC) &_mums2_ReadMsp2, 1},
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},

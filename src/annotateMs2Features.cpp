@@ -9,7 +9,7 @@
 #include "ScoringMethods/ScoringFactory.h"
 
 // [[Rcpp::export]]
-Rcpp::DataFrame AnnotateMs2Features2(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
+Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra,
     const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas,
     const double precursorThreshold,const double minScoreThreshold, const double chemicalMinScore,
     const size_t minPeaks, const int threadCount) {

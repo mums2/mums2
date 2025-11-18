@@ -167,15 +167,10 @@ Rcpp::List ReadMgf(const std::string& path) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List ReadMsp(const std::string& path) {
+SEXP ReadMsp(const std::string& path) {
     ReadSpectra spectra;
-    return spectra.ReadMSP(path);
-}
-// [[Rcpp::export]]
-SEXP ReadMsp2(const std::string& path) {
-    ReadSpectra spectra;
-    const std::vector<AnnotationNode> annotationData = spectra.ReadMSPSpectra(path);
-    AnnotationController* controller = new AnnotationController(annotationData);
+    const std::vector<AnnotationNode> annotationData = spectra.ReadMSP(path);
+    auto* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }
 
