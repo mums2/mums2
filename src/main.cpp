@@ -195,12 +195,15 @@ SEXP GetNode(const SEXP& annotationController, const int index) {
 }
 
 // [[Rcpp::export]]
-SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController) {
-    Rcpp::XPtr<AnnotationController> ptr(annotationController);
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController) {
+    const Rcpp::XPtr<AnnotationController> ptr(annotationController);
     const Rcpp::XPtr<AnnotationController> other(otherAnnotationController);
-    const AnnotationController controller = *other.get();
-    ptr.get()->AddNodes(controller);
-    return ptr;
+    const AnnotationController& controller = *ptr.get();
+    const AnnotationController& otherController = *other.get();
+    auto* newController = new AnnotationController();
+    newController->AddNodes(controller);
+    newController->AddNodes(otherController);
+    return XPtr<AnnotationController>(newController);
 }
 
 // [[Rcpp::export]]
@@ -262,111 +265,6 @@ void IncrementProgressBar(SEXP& progressBar, const float progress) {
 void DestroyProgressBar(SEXP& progressBar) {
     const Rcpp::XPtr<CliProgressBar> cliProgressBar(progressBar);
     cliProgressBar.get()->end_display();
-}
-
-// [[Rcpp::export]]
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne,  std::vector<double>& intOne,
-    const std::vector<double>& mzTwo,  std::vector<double>& intTwo, Rcpp::List scoringParamsSpectral,
-    Rcpp::List ScoringParamsCosine, const double shift) {
-    const ScoringFactory factory(ScoringParamsCosine);
-    GNPSScoringDynamicPriorityQueue gnps;
-    Entropy entropy;
-    double res = entropy.CalculateEntropySimilarity(mzOne, intOne, mzTwo, intTwo);
-    const auto res2 = gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift);
-    Rcpp::Rcout << "SpectralEntropy: " << res << std::endl;
-    Rcpp::Rcout << "GNPS: " << res2[0] << std::endl;
-    return(gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift));
-}
-
-// [[Rcpp::export]]
-void DistanceToPhylipFile(const Rcpp::NumericMatrix& mat, const std::vector<std::string>& names, const std::string& fileName) {
-    const int size = mat.rows();
-    std::ofstream output(fileName);
-    // output.open(fileName);
-    if (!output.is_open()) {
-        Rcpp::stop("file not open");
-    }
-    output << size << std::endl;
-    const size_t  nameSize = names.size();
-    for (size_t i = 0; i < nameSize; i++) {
-        output << names[i] << "\t";
-        for (size_t j = 0; j < nameSize; j++) {
-            output << mat(i, j) << "\t";
-        }
-        output << std::endl;
-    }
-    output.close();
-}
-
-// [[Rcpp::export]]
-Rcpp::List DistanceDataFrameToMatrix(const Rcpp::DataFrame& distanceDataFrame) {
-    const int size = distanceDataFrame.rows();
-    const std::vector<int>& iIndexes = distanceDataFrame["i"];
-    const std::vector<int>& jIndexes = distanceDataFrame["j"];
-    const std::vector<double>& distances = distanceDataFrame["dist"];
-    Rcpp::NumericMatrix result(size, size);
-    std::unordered_map<int, int> nameSwap;
-    int currentIndex = 0;
-
-    for (int i = 0; i < size; i++) {
-        if (nameSwap.find(iIndexes[i]) == nameSwap.end()) {
-            nameSwap[iIndexes[i]] = currentIndex;
-            currentIndex++;
-        }
-        if (nameSwap.find(jIndexes[i]) == nameSwap.end()) {
-            nameSwap[jIndexes[i]] = currentIndex;
-            currentIndex++;
-        }
-        result(nameSwap[iIndexes[i]], nameSwap[jIndexes[i]]) = distances[i];
-        result(nameSwap[jIndexes[i]], nameSwap[iIndexes[i]]) = distances[i];
-    }
-    const int nameSize = nameSwap.size();
-    Rcpp::IntegerVector iNames(nameSize);
-    Rcpp::IntegerVector jNames(nameSize);
-    int count = 0;
-    for (const auto& keyPairs: nameSwap) {
-        iNames[count] = keyPairs.first;
-        jNames[count++] = keyPairs.second;
-    }
-    return Rcpp::List::create(Rcpp::Named("i") = iNames,
-                              Rcpp::Named("j") = jNames,
-                              Rcpp::Named("result") = result);
-    // return result;
-}
-// [[Rcpp::export]]
-void ToColumnFile(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names,
-    const std::string& fileName) {
-    std::ofstream output(fileName);
-    if (!output.is_open()) {
-        Rcpp::stop("File not open");
-    }
-    const std::vector<int>& currentIndexes = matrix["i"];
-    const std::vector<int>& otherIndexes = matrix["j"];
-    const std::vector<double>& distances = matrix["dist"];
-
-   for (size_t i = 0; i < currentIndexes.size(); i++) {
-       const std::string& name = names[currentIndexes[i] - 1];
-       const std::string& otherNames = names[otherIndexes[i] - 1];
-       output << name << "\t" << otherNames << "\t" << distances[i] << std::endl;
-   }
-}
-
-void ToPhylip(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names,
-    const std::string& fileName) {
-    std::ofstream output(fileName);
-    if (!output.is_open()) {
-        Rcpp::stop("File not open");
-    }
-    output << names.size() << std::endl;
-    const std::vector<int>& currentIndexes = matrix["i"];
-    const std::vector<int>& otherIndexes = matrix["j"];
-    const std::vector<double>& distances = matrix["dist"];
-
-    for (size_t i = 0; i < currentIndexes.size(); i++) {
-        const std::string& name = names[currentIndexes[i] - 1];
-        const std::string& otherNames = names[otherIndexes[i] - 1];
-        output << name << "\t" << otherNames << "\t" << distances[i] << std::endl;
-    }
 }
 
 // [[Rcpp::export]]

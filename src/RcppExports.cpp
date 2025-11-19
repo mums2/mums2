@@ -147,15 +147,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// AddOtherDatabase
-SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController);
-RcppExport SEXP _mums2_AddOtherDatabase(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
+// CombineReferenceDatabases
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController);
+RcppExport SEXP _mums2_CombineReferenceDatabases(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP& >::type annotationController(annotationControllerSEXP);
-    Rcpp::traits::input_parameter< SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
-    rcpp_result_gen = Rcpp::wrap(AddOtherDatabase(annotationController, otherAnnotationController));
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(CombineReferenceDatabases(annotationController, otherAnnotationController));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -216,58 +216,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
     DestroyProgressBar(progressBar);
-    return R_NilValue;
-END_RCPP
-}
-// TestSimilarity
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, Rcpp::List scoringParamsSpectral, Rcpp::List ScoringParamsCosine, const double shift);
-RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP scoringParamsSpectralSEXP, SEXP ScoringParamsCosineSEXP, SEXP shiftSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzOne(mzOneSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intOne(intOneSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzTwo(mzTwoSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intTwo(intTwoSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type scoringParamsSpectral(scoringParamsSpectralSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type ScoringParamsCosine(ScoringParamsCosineSEXP);
-    Rcpp::traits::input_parameter< const double >::type shift(shiftSEXP);
-    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift));
-    return rcpp_result_gen;
-END_RCPP
-}
-// DistanceToPhylipFile
-void DistanceToPhylipFile(const Rcpp::NumericMatrix& mat, const std::vector<std::string>& names, const std::string& fileName);
-RcppExport SEXP _mums2_DistanceToPhylipFile(SEXP matSEXP, SEXP namesSEXP, SEXP fileNameSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type fileName(fileNameSEXP);
-    DistanceToPhylipFile(mat, names, fileName);
-    return R_NilValue;
-END_RCPP
-}
-// DistanceDataFrameToMatrix
-Rcpp::List DistanceDataFrameToMatrix(const Rcpp::DataFrame& distanceDataFrame);
-RcppExport SEXP _mums2_DistanceDataFrameToMatrix(SEXP distanceDataFrameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type distanceDataFrame(distanceDataFrameSEXP);
-    rcpp_result_gen = Rcpp::wrap(DistanceDataFrameToMatrix(distanceDataFrame));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ToColumnFile
-void ToColumnFile(const Rcpp::DataFrame& matrix, const std::vector<std::string>& names, const std::string& fileName);
-RcppExport SEXP _mums2_ToColumnFile(SEXP matrixSEXP, SEXP namesSEXP, SEXP fileNameSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type matrix(matrixSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type fileName(fileNameSEXP);
-    ToColumnFile(matrix, names, fileName);
     return R_NilValue;
 END_RCPP
 }
@@ -382,16 +330,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
-    {"_mums2_AddOtherDatabase", (DL_FUNC) &_mums2_AddOtherDatabase, 2},
+    {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 7},
-    {"_mums2_DistanceToPhylipFile", (DL_FUNC) &_mums2_DistanceToPhylipFile, 3},
-    {"_mums2_DistanceDataFrameToMatrix", (DL_FUNC) &_mums2_DistanceDataFrameToMatrix, 1},
-    {"_mums2_ToColumnFile", (DL_FUNC) &_mums2_ToColumnFile, 3},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
     {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},

@@ -41,8 +41,8 @@ GetNode <- function(annotationController, index) {
     .Call(`_mums2_GetNode`, annotationController, index)
 }
 
-AddOtherDatabase <- function(annotationController, otherAnnotationController) {
-    .Call(`_mums2_AddOtherDatabase`, annotationController, otherAnnotationController)
+CombineReferenceDatabases <- function(annotationController, otherAnnotationController) {
+    .Call(`_mums2_CombineReferenceDatabases`, annotationController, otherAnnotationController)
 }
 
 CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
@@ -63,22 +63,6 @@ IncrementProgressBar <- function(progressBar, progress) {
 
 DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
-}
-
-TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift) {
-    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, scoringParamsSpectral, ScoringParamsCosine, shift)
-}
-
-DistanceToPhylipFile <- function(mat, names, fileName) {
-    invisible(.Call(`_mums2_DistanceToPhylipFile`, mat, names, fileName))
-}
-
-DistanceDataFrameToMatrix <- function(distanceDataFrame) {
-    .Call(`_mums2_DistanceDataFrameToMatrix`, distanceDataFrame)
-}
-
-ToColumnFile <- function(matrix, names, fileName) {
-    invisible(.Call(`_mums2_ToColumnFile`, matrix, names, fileName))
 }
 
 CreateHumanMetabolomicsDB <- function() {
