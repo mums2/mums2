@@ -163,7 +163,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #'  annotations <- annotate_ms2(mass_data = matched_data,
 #'    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
 #'    ppm = 1000,
-#'    min_score =  0.1, chemical_min_score = .1)
+#'    min_score =  0.1, chemical_min_score = 0)
 #'
 #' generate_a_combined_table(matched_data, annotations, cluster_results)
 #' @returns a `data.frame` object.
@@ -211,7 +211,7 @@ generate_a_combined_table <- function(matched_data,
 
   # add omus
   if (!is.null(cluster_data)) {
-    if (class(cluster_data) != "list") {
+    if (!inherits(cluster_data, "list")) {
       stop("cluster_data must be an object created from `cluster_data()`.")
     }
     list_data <- clustur::split_clusters_to_list(cluster_data)
@@ -228,9 +228,9 @@ generate_a_combined_table <- function(matched_data,
 
   # add annotations
   # Will be added as a list: index_annotation
-
+  inherits(annotations, "data.frame")
   if (!is.null(annotations)) {
-    if (!("data.frame" %in% class(annotations))) {
+    if (!inherits(annotations, "data.frame")) {
       stop("annotations must be a data.frame object.")
     }
     if (!("name" %in% tolower(colnames(annotations)))) {

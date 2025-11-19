@@ -4,7 +4,7 @@
 \alias{length.reference_database}
 \title{Reference database length}
 \usage{
-\method{length}{reference_database}(reference)
+\method{length}{reference_database}(x)
 }
 \arguments{
 \item{x}{reference database object.}
@@ -17,6 +17,6 @@ returns the length of the database
 }
 \examples{
 reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
-length(references)
+length(reference)
 
 }

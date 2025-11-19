@@ -85,8 +85,7 @@ read_mgf <- function(file) {
 #' @examples
 #' read_msp(mums2_example("PSU-MSMLS.msp"))
 #'
-#' @return a `list` object that contains all
-#'  of the data present in your msp file.
+#' @return a `reference_database` object.
 read_msp <- function(msp_file) {
   extension <- tail(strsplit(msp_file, split = "\\.")[[1]], 1)
   if (tolower(extension) != "msp") {
@@ -106,10 +105,9 @@ read_msp <- function(msp_file) {
 #' @param hmdb_file the xml hmdb file
 #' @param ms2_folder the folder path of your ms2 files
 #' @examples
-#' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#' read_msp(mums2_example("PSU-MSMLS.msp"))
 #'
-#' @return a `list` object that contains all
-#'  of the data present in your hmdb file.
+#' @return a `reference_database` object.
 read_hmdb <- function(hmdb_file, ms2_folder) {
   database <- process_xml(hmdb_file)
   read_and_match_spectra_files(ms2_folder, database)

@@ -7,9 +7,9 @@
 get_reference_data(reference, index)
 }
 \arguments{
-\item{index}{the index of the data.}
+\item{reference}{reference database object.}
 
-\item{x}{reference database object.}
+\item{index}{the index of the data.}
 }
 \value{
 prints customized message to the console

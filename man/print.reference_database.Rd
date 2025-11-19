@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{reference database object.}
+
+\item{...}{any extra print arguments you want to include.}
 }
 \value{
 prints customized message to the console
@@ -16,7 +18,7 @@ prints customized message to the console
 print reference objects.
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
 print(reference)
 
 }

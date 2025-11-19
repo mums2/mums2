@@ -20,6 +20,6 @@ Add another database to your reference database.
 \examples{
 reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
 reference2 <- read_msp(mums2_example("PSU-MSMLS.msp"))
-add_references(reference, reference2)
+combined_reference_database(reference, reference2)
 
 }

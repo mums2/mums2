@@ -2,7 +2,7 @@
 #' @title Get Reference Data
 #' @export
 #' @description Will return the data inside the reference object based on the index given.
-#' @param x reference database object.
+#' @param reference reference database object.
 #' @param index the index of the data.
 #' @examples
 #' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
@@ -10,10 +10,10 @@
 #'
 #' @return prints customized message to the console
 get_reference_data <- function(reference, index) {
-  if(!"reference_database" %in% class(reference)) {
+  if(!inherits(reference, "reference_database")) {
     stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
   }
-  if(class(index) != "numeric") {
+  if(!inherits(index,"numeric")) {
     stop("index has to be a numeric")
   }
   return(GetNode(reference, index))
@@ -28,12 +28,12 @@ get_reference_data <- function(reference, index) {
 #' @examples
 #' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
 #' reference2 <- read_msp(mums2_example("PSU-MSMLS.msp"))
-#' add_references(reference, reference2)
+#' combined_reference_database(reference, reference2)
 #'
 #' @return prints customized message to the console
 combined_reference_database <- function(reference, other_reference) {
-  if(!"reference_database" %in% class(reference) || 
-     !"reference_database" %in% class(other_reference)) {
+  if(!inherits(reference, "reference_database") || 
+     !inherits(other_reference, "reference_database")) {
       stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
   }
   new_reference_db <- CombineReferenceDatabases(reference, other_reference)
@@ -46,8 +46,9 @@ combined_reference_database <- function(reference, other_reference) {
 #' @export
 #' @description print reference objects.
 #' @param x reference database object.
+#' @param ... any extra print arguments you want to include.
 #' @examples
-#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
 #' print(reference)
 #'
 #' @return prints customized message to the console
@@ -64,10 +65,10 @@ print.reference_database <- function(x, ...) {
 #' @param x reference database object.
 #' @examples
 #' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
-#' length(references)
+#' length(reference)
 #'
 #' @return returns the length of the regerence database
-length.reference_database <- function(reference) {
-  return(GetNodeCount(reference))
+length.reference_database <- function(x) {
+  return(GetNodeCount(x))
 }
 

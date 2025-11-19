@@ -47,6 +47,9 @@ without omu information.}
 
 \item{min_peaks}{the minimum number of peaks that need to be present before
 you compare the ms2 spectra.}
+
+\item{number_of_threads}{the number of threads you wish to use for this
+calculation. Defaults to the number of threads on your computer.}
 }
 \value{
 A \code{data.frame} with all comparisons with scores above the threshold.
@@ -80,10 +83,10 @@ created with functions \code{\link[=modified_cosine_params]{modified_cosine_para
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("full_mix_peak_table.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("full_mix_meta_data.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -99,6 +102,6 @@ matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
  annotations <- annotate_ms2(mass_data = matched_data,
    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
    ppm = 1000,
-   min_score =  0.1, chemical_min_score = .1)
+   min_score =  0.1, chemical_min_score = 0)
 
 }
