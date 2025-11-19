@@ -29,6 +29,8 @@
 #' without omu information.
 #' @param min_peaks the minimum number of peaks that need to be present before
 #' you compare the ms2 spectra.
+#' @param number_of_threads the number of threads you wish to use for this
+#' calculation. Defaults to the number of threads on your computer.
 #' @return A `data.frame` with all comparisons with scores above the threshold.
 #'  Information for the query scan include `query_ms1_id` (the variable_id
 #'  for features in expression_data of the `mass_data` object)
@@ -44,10 +46,10 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("full_mix_peak_table.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("full_mix_meta_data.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -63,7 +65,7 @@
 #'  annotations <- annotate_ms2(mass_data = matched_data,
 #'    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
 #'    ppm = 1000,
-#'    min_score =  0.1, chemical_min_score = .1)
+#'    min_score =  0.1, chemical_min_score = 0)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params,
 #'                     ppm, min_score,

@@ -10,9 +10,14 @@ reference:
 - title: Add Ms2 Data
   contents: 
   - ms2_ms1_compare
-- title: Mass Spectrometry Data Readers
+- title: Reference Database Readers
   contents:
   - read_msp
+  - read_hmdb
+  - combined_reference_database
+  - get_reference_data
+  - length.reference_database
+  - print.reference_database
 - title: Filters
   contents:
   - filter_peak_table

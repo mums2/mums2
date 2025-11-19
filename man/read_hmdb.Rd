@@ -12,13 +12,12 @@ read_hmdb(hmdb_file, ms2_folder)
 \item{ms2_folder}{the folder path of your ms2 files}
 }
 \value{
-a \code{list} object that contains all
-of the data present in your hmdb file.
+a \code{reference_database} object.
 }
 \description{
 Read msp files
 }
 \examples{
-read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+read_msp(mums2_example("PSU-MSMLS.msp"))
 
 }

@@ -5,6 +5,18 @@ AnnotateMs2Features <- function(queryList, querySpectra, annotationController, s
     .Call(`_mums2_AnnotateMs2Features`, queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount)
 }
 
+GetNodeCount <- function(annotationController) {
+    .Call(`_mums2_GetNodeCount`, annotationController)
+}
+
+GetNode <- function(annotationController, index) {
+    .Call(`_mums2_GetNode`, annotationController, index)
+}
+
+CombineReferenceDatabases <- function(annotationController, otherAnnotationController) {
+    .Call(`_mums2_CombineReferenceDatabases`, annotationController, otherAnnotationController)
+}
+
 distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
@@ -23,46 +35,6 @@ RarefactionCalculation <- function(communityMatrix, size, threshold, numberOfThr
 
 FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
     .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
-}
-
-ReadMgf <- function(path) {
-    .Call(`_mums2_ReadMgf`, path)
-}
-
-ReadMsp <- function(path) {
-    .Call(`_mums2_ReadMsp`, path)
-}
-
-GetNodeCount <- function(annotationController) {
-    .Call(`_mums2_GetNodeCount`, annotationController)
-}
-
-GetNode <- function(annotationController, index) {
-    .Call(`_mums2_GetNode`, annotationController, index)
-}
-
-CombineReferenceDatabases <- function(annotationController, otherAnnotationController) {
-    .Call(`_mums2_CombineReferenceDatabases`, annotationController, otherAnnotationController)
-}
-
-CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
-    .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
-}
-
-ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
-    .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
-}
-
-CreateProgressBarObject <- function() {
-    .Call(`_mums2_CreateProgressBarObject`)
-}
-
-IncrementProgressBar <- function(progressBar, progress) {
-    invisible(.Call(`_mums2_IncrementProgressBar`, progressBar, progress))
-}
-
-DestroyProgressBar <- function(progressBar) {
-    invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
 }
 
 CreateHumanMetabolomicsDB <- function() {
@@ -89,8 +61,12 @@ CreateAnnotationController <- function(hmdbPtr) {
     .Call(`_mums2_CreateAnnotationController`, hmdbPtr)
 }
 
-ReadSpectraFile <- function(filePath) {
-    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
+CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
+    .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
+}
+
+ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
+    .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
 }
 
 squareRootNormalize <- function(vec) {
@@ -99,5 +75,29 @@ squareRootNormalize <- function(vec) {
 
 scaleNormalize <- function(vec) {
     .Call(`_mums2_scaleNormalize`, vec)
+}
+
+CreateProgressBarObject <- function() {
+    .Call(`_mums2_CreateProgressBarObject`)
+}
+
+IncrementProgressBar <- function(progressBar, progress) {
+    invisible(.Call(`_mums2_IncrementProgressBar`, progressBar, progress))
+}
+
+DestroyProgressBar <- function(progressBar) {
+    invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
+}
+
+ReadMgf <- function(path) {
+    .Call(`_mums2_ReadMgf`, path)
+}
+
+ReadMsp <- function(path) {
+    .Call(`_mums2_ReadMsp`, path)
+}
+
+ReadSpectraFile <- function(filePath) {
+    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }
 
