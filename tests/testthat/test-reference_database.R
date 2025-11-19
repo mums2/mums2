@@ -12,11 +12,14 @@ test_that("We can get one of the reference by index from the database", {
 test_that("You can add another database file to the reference data", {
   path <- test_path("exttestdata/database_data", "PSU-MSMLS.msp")
   psu_msmls_data <- read_msp(path)
-  expect_equal(length(psu_msmls_data), 576)
-  psu_msmls_data <- add_references(psu_msmls_data, path, "msp")
-  expect_equal(length(psu_msmls_data), 1152)
-  expect_error(add_references(psu_msmls_data, path, ""), "method has to be")
-  expect_error(add_references("", "", ""), "Ensure reference is the object")
+  psu_msmls_data2 <- read_msp(path)
+  psu_msmls_data_combined <- 
+    combined_reference_database(psu_msmls_data, psu_msmls_data2)
+  expect_equal(length(psu_msmls_data_combined), 1152)
+  expect_error(combined_reference_database(psu_msmls_data, path),
+               "Ensure reference is the object")
+  expect_error(combined_reference_database("", psu_msmls_data_combined),
+   "Ensure reference is the object")
 })
 
 

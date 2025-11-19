@@ -12,6 +12,7 @@
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
 #include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"
+#include <regex>
 #include "DataStructures/CommunityMatrix.h"
 #include "DataStructures/CppMatrix.h"
 #include "DiversityMetrics/Diversity.h"
@@ -19,8 +20,10 @@
 #include "DiversityMetrics/DiversityMetricFactory.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
+#include "HMDB/HumanMetabolomicsDB.h"
 #include "Math/ParallelRandomNumberSitmo.h"
 #include "Math/VectorMath.h"
+#include "ScoringMethods/ScoringFactory.h"
 #include "ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h"
 #include "ScoringMethods/SpectralEntropy/entropy.h"
 #include "Spectra/ReadSpectra.h"
@@ -162,14 +165,12 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
 
 // [[Rcpp::export]]
 Rcpp::List ReadMgf(const std::string& path) {
-    ReadSpectra spectra;
-    return spectra.ReadMGF(path);
+    return ReadSpectra::ReadMGF(path);
 }
 
 // [[Rcpp::export]]
 SEXP ReadMsp(const std::string& path) {
-    ReadSpectra spectra;
-    const std::vector<AnnotationNode> annotationData = spectra.ReadMSP(path);
+    const std::vector<AnnotationNode> annotationData = ReadSpectra::ReadMSP(path);
     auto* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }
@@ -194,12 +195,15 @@ SEXP GetNode(const SEXP& annotationController, const int index) {
 }
 
 // [[Rcpp::export]]
-SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController) {
-    Rcpp::XPtr<AnnotationController> ptr(annotationController);
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController) {
+    const Rcpp::XPtr<AnnotationController> ptr(annotationController);
     const Rcpp::XPtr<AnnotationController> other(otherAnnotationController);
-    const AnnotationController controller = *other.get();
-    ptr.get()->AddNodes(controller);
-    return ptr;
+    const AnnotationController& controller = *ptr.get();
+    const AnnotationController& otherController = *other.get();
+    auto* newController = new AnnotationController();
+    newController->AddNodes(controller);
+    newController->AddNodes(otherController);
+    return XPtr<AnnotationController>(newController);
 }
 
 // [[Rcpp::export]]
@@ -264,13 +268,47 @@ void DestroyProgressBar(SEXP& progressBar) {
 }
 
 // [[Rcpp::export]]
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne,  std::vector<double>& intOne,
-    const std::vector<double>& mzTwo,  std::vector<double>& intTwo, const double shift) {
-    GNPSScoringDynamicPriorityQueue gnps;
-    Entropy entropy;
-    double res = entropy.CalculateEntropySimilarity(mzOne, intOne, mzTwo, intTwo);
-    const auto res2 = gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift);
-    Rcpp::Rcout << "SpectralEntropy: " << res << std::endl;
-    Rcpp::Rcout << "GNPS: " << res2[0] << std::endl;
-    return(gnps.ScoreRData(mzOne, intOne, mzTwo, intTwo, 0.5, shift));
+SEXP CreateHumanMetabolomicsDB() {
+    auto* hmdb = new HumanMetabolomicsDB();
+    return Rcpp::XPtr<HumanMetabolomicsDB>(hmdb);
+}
+
+// [[Rcpp::export]]
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names,
+    const std::vector<std::string>& values) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->AddHumanMetabolomicNode(HumanMetabolomicsDBNode(names,values));
+}
+
+// [[Rcpp::export]]
+void PrintHMDBNames(const SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->PrintHumanMetabolomicsDB();
+}
+// [[Rcpp::export]]
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames,
+    const std::vector<std::string>& databaseNames) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    for (size_t i = 0; i < fileNames.size(); i++) {
+       hmdbPointer.get()->AddSpectraFiles(fileNames[i], databaseNames[i]);
+    }
+}
+
+// [[Rcpp::export]]
+void ProcessMs2Files(SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    hmdbPointer.get()->ProcessSpectraFiles();
+}
+
+// [[Rcpp::export]]
+SEXP CreateAnnotationController(SEXP& hmdbPtr) {
+    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
+    AnnotationController* node = hmdbPointer.get()->ConstructDataBase();
+    Rcpp::XPtr<AnnotationController> annotationPtr(node);
+    return annotationPtr;
+}
+
+// [[Rcpp::export]]
+void ReadSpectraFile(const std::string& filePath) {
+    ReadSpectra::ReadSpectraFile(filePath);
 }

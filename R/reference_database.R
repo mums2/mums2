@@ -24,29 +24,21 @@ get_reference_data <- function(reference, index) {
 #' @export
 #' @description Add another database to your reference database.
 #' @param reference reference database object.
-#' @param database_path the index of the data.
-#' @param file_type the type of file you are using, you can choose between
-#' msp, and xml
+#' @param other_reference your other reference database object
 #' @examples
 #' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
-#' add_references(reference, mums2_example("PSU-MSMLS.msp"), "msp")
+#' reference2 <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' add_references(reference, reference2)
 #'
 #' @return prints customized message to the console
-add_references <- function(reference, database_path, file_type) {
-  new_reference_data <- ""
-  if(!"reference_database" %in% class(reference)) {
-    stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
+combined_reference_database <- function(reference, other_reference) {
+  if(!"reference_database" %in% class(reference) || 
+     !"reference_database" %in% class(other_reference)) {
+      stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
   }
-  if(!file_type %in% c("msp", "xml")) {
-    stop("method has to be either msp, or xml")
-  }
-  if (file_type == "msp") {
-    new_reference_data <- read_msp(database_path)
-  }
-  else {
-    new_reference_data <- read_msp(database_path)
-  }
-  return(AddOtherDatabase(reference, new_reference_data))
+  new_reference_db <- CombineReferenceDatabases(reference, other_reference)
+  class(new_reference_db) <- "reference_database"
+  return(new_reference_db)
 }
 
 

@@ -160,6 +160,9 @@ std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
             if (metaData.key == "precursormz" && metaData.value != "NA" && metaData.value != "NULL") {
                 precursorMz = std::stod(metaData.value);
             }
+            if (metaData.key == "formula") {
+                data.chemicalFormula = metaData.value;
+            }
         }
         data.referenceIndex = i;
         data.precursorMz = precursorMz;
@@ -173,4 +176,25 @@ std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
 
     p.end_display();
     return results;
+}
+
+Spectra ReadSpectra::ReadSpectraFile(const std::string &filePath) {
+    std::ifstream spectraFile(filePath);
+    if (!spectraFile.is_open()) {
+        Rcpp::stop("Could not open spectra file.");
+    }
+
+    double mz, intensity;
+    std::vector<double> mzValues;
+    std::vector<double> intensityValues;
+    mzValues.reserve(1000); // May need to read the lines
+    intensityValues.reserve(1000);
+    std::string line;
+    while (std::getline(spectraFile, line)) {
+        std::istringstream iss(line);
+        iss >> mz >> intensity;
+        mzValues.emplace_back(mz);
+        intensityValues.emplace_back(intensity);
+    }
+    return Spectra {"", mzValues, intensityValues, 0};
 }

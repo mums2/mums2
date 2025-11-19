@@ -147,15 +147,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// AddOtherDatabase
-SEXP AddOtherDatabase(SEXP& annotationController, SEXP& otherAnnotationController);
-RcppExport SEXP _mums2_AddOtherDatabase(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
+// CombineReferenceDatabases
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController);
+RcppExport SEXP _mums2_CombineReferenceDatabases(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP& >::type annotationController(annotationControllerSEXP);
-    Rcpp::traits::input_parameter< SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
-    rcpp_result_gen = Rcpp::wrap(AddOtherDatabase(annotationController, otherAnnotationController));
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(CombineReferenceDatabases(annotationController, otherAnnotationController));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -219,19 +219,79 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// TestSimilarity
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, const double shift);
-RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP shiftSEXP) {
+// CreateHumanMetabolomicsDB
+SEXP CreateHumanMetabolomicsDB();
+RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzOne(mzOneSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intOne(intOneSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzTwo(mzTwoSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intTwo(intTwoSEXP);
-    Rcpp::traits::input_parameter< const double >::type shift(shiftSEXP);
-    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, shift));
+    rcpp_result_gen = Rcpp::wrap(CreateHumanMetabolomicsDB());
     return rcpp_result_gen;
+END_RCPP
+}
+// AddHumanMetabolomicNode
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names, const std::vector<std::string>& values);
+RcppExport SEXP _mums2_AddHumanMetabolomicNode(SEXP hmdbPtrSEXP, SEXP namesSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    AddHumanMetabolomicNode(hmdbPtr, names, values);
+    return R_NilValue;
+END_RCPP
+}
+// PrintHMDBNames
+void PrintHMDBNames(const SEXP& hmdbPtr);
+RcppExport SEXP _mums2_PrintHMDBNames(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    PrintHMDBNames(hmdbPtr);
+    return R_NilValue;
+END_RCPP
+}
+// AddSpectra
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames);
+RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type databaseNames(databaseNamesSEXP);
+    AddSpectra(hmdbPtr, fileNames, databaseNames);
+    return R_NilValue;
+END_RCPP
+}
+// ProcessMs2Files
+void ProcessMs2Files(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_ProcessMs2Files(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    ProcessMs2Files(hmdbPtr);
+    return R_NilValue;
+END_RCPP
+}
+// CreateAnnotationController
+SEXP CreateAnnotationController(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_CreateAnnotationController(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    rcpp_result_gen = Rcpp::wrap(CreateAnnotationController(hmdbPtr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ReadSpectraFile
+void ReadSpectraFile(const std::string& filePath);
+RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
+    ReadSpectraFile(filePath);
+    return R_NilValue;
 END_RCPP
 }
 // squareRootNormalize
@@ -270,13 +330,19 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
-    {"_mums2_AddOtherDatabase", (DL_FUNC) &_mums2_AddOtherDatabase, 2},
+    {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 5},
+    {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
+    {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
+    {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
+    {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
+    {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
+    {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
+    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},

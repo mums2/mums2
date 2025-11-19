@@ -41,8 +41,8 @@ GetNode <- function(annotationController, index) {
     .Call(`_mums2_GetNode`, annotationController, index)
 }
 
-AddOtherDatabase <- function(annotationController, otherAnnotationController) {
-    .Call(`_mums2_AddOtherDatabase`, annotationController, otherAnnotationController)
+CombineReferenceDatabases <- function(annotationController, otherAnnotationController) {
+    .Call(`_mums2_CombineReferenceDatabases`, annotationController, otherAnnotationController)
 }
 
 CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
@@ -65,8 +65,32 @@ DestroyProgressBar <- function(progressBar) {
     invisible(.Call(`_mums2_DestroyProgressBar`, progressBar))
 }
 
-TestSimilarity <- function(mzOne, intOne, mzTwo, intTwo, shift) {
-    .Call(`_mums2_TestSimilarity`, mzOne, intOne, mzTwo, intTwo, shift)
+CreateHumanMetabolomicsDB <- function() {
+    .Call(`_mums2_CreateHumanMetabolomicsDB`)
+}
+
+AddHumanMetabolomicNode <- function(hmdbPtr, names, values) {
+    invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values))
+}
+
+PrintHMDBNames <- function(hmdbPtr) {
+    invisible(.Call(`_mums2_PrintHMDBNames`, hmdbPtr))
+}
+
+AddSpectra <- function(hmdbPtr, fileNames, databaseNames) {
+    invisible(.Call(`_mums2_AddSpectra`, hmdbPtr, fileNames, databaseNames))
+}
+
+ProcessMs2Files <- function(hmdbPtr) {
+    invisible(.Call(`_mums2_ProcessMs2Files`, hmdbPtr))
+}
+
+CreateAnnotationController <- function(hmdbPtr) {
+    .Call(`_mums2_CreateAnnotationController`, hmdbPtr)
+}
+
+ReadSpectraFile <- function(filePath) {
+    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }
 
 squareRootNormalize <- function(vec) {

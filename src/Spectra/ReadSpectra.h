@@ -7,14 +7,16 @@
 #include <string>
 #include <Rcpp.h>
 #include <fstream>
+#include "../Spectra/Spectra.h"
 
 #include "../AnnotationStructure/AnnotationNode.h"
 
 
 class ReadSpectra {
 public:
-    Rcpp::List ReadMGF(const std::string &filePath);
-    std::vector<AnnotationNode> ReadMSP(const std::string &filePath);
+    static Rcpp::List ReadMGF(const std::string &filePath);
+    static Spectra ReadSpectraFile(const std::string& filePath);
+    static std::vector<AnnotationNode> ReadMSP(const std::string &filePath);
 };
 
 
