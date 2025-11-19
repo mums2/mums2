@@ -31,6 +31,41 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// GetNodeCount
+size_t GetNodeCount(const SEXP& annotationController);
+RcppExport SEXP _mums2_GetNodeCount(SEXP annotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNodeCount(annotationController));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetNode
+SEXP GetNode(const SEXP& annotationController, const int index);
+RcppExport SEXP _mums2_GetNode(SEXP annotationControllerSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNode(annotationController, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CombineReferenceDatabases
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController);
+RcppExport SEXP _mums2_CombineReferenceDatabases(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(CombineReferenceDatabases(annotationController, otherAnnotationController));
+    return rcpp_result_gen;
+END_RCPP
+}
 // distMS2
 Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
 RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
@@ -102,123 +137,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadMgf
-Rcpp::List ReadMgf(const std::string& path);
-RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ReadMsp
-SEXP ReadMsp(const std::string& path);
-RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetNodeCount
-size_t GetNodeCount(const SEXP& annotationController);
-RcppExport SEXP _mums2_GetNodeCount(SEXP annotationControllerSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetNodeCount(annotationController));
-    return rcpp_result_gen;
-END_RCPP
-}
-// GetNode
-SEXP GetNode(const SEXP& annotationController, const int index);
-RcppExport SEXP _mums2_GetNode(SEXP annotationControllerSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
-    Rcpp::traits::input_parameter< const int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetNode(annotationController, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CombineReferenceDatabases
-SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController);
-RcppExport SEXP _mums2_CombineReferenceDatabases(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
-    Rcpp::traits::input_parameter< const SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
-    rcpp_result_gen = Rcpp::wrap(CombineReferenceDatabases(annotationController, otherAnnotationController));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CompareMS2Ms1
-Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::NumericVector& mz1, const Rcpp::NumericVector& rt2, const Rcpp::NumericVector& rt1, const double mzThreshold, const double rtThreshold);
-RcppExport SEXP _mums2_CompareMS2Ms1(SEXP mz2SEXP, SEXP mz1SEXP, SEXP rt2SEXP, SEXP rt1SEXP, SEXP mzThresholdSEXP, SEXP rtThresholdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz2(mz2SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz1(mz1SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt2(rt2SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt1(rt1SEXP);
-    Rcpp::traits::input_parameter< const double >::type mzThreshold(mzThresholdSEXP);
-    Rcpp::traits::input_parameter< const double >::type rtThreshold(rtThresholdSEXP);
-    rcpp_result_gen = Rcpp::wrap(CompareMS2Ms1(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ComputeFragmentationTree
-std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
-RcppExport SEXP _mums2_ComputeFragmentationTree(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
-    Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
-    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ComputeFragmentationTree(molecularFormulas, parentMass, numberOfThreads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CreateProgressBarObject
-SEXP CreateProgressBarObject();
-RcppExport SEXP _mums2_CreateProgressBarObject() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CreateProgressBarObject());
-    return rcpp_result_gen;
-END_RCPP
-}
-// IncrementProgressBar
-void IncrementProgressBar(SEXP& progressBar, const float progress);
-RcppExport SEXP _mums2_IncrementProgressBar(SEXP progressBarSEXP, SEXP progressSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
-    Rcpp::traits::input_parameter< const float >::type progress(progressSEXP);
-    IncrementProgressBar(progressBar, progress);
-    return R_NilValue;
-END_RCPP
-}
-// DestroyProgressBar
-void DestroyProgressBar(SEXP& progressBar);
-RcppExport SEXP _mums2_DestroyProgressBar(SEXP progressBarSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
-    DestroyProgressBar(progressBar);
-    return R_NilValue;
-END_RCPP
-}
 // CreateHumanMetabolomicsDB
 SEXP CreateHumanMetabolomicsDB();
 RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
@@ -284,14 +202,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadSpectraFile
-void ReadSpectraFile(const std::string& filePath);
-RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
+// CompareMS2Ms1
+Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::NumericVector& mz1, const Rcpp::NumericVector& rt2, const Rcpp::NumericVector& rt1, const double mzThreshold, const double rtThreshold);
+RcppExport SEXP _mums2_CompareMS2Ms1(SEXP mz2SEXP, SEXP mz1SEXP, SEXP rt2SEXP, SEXP rt1SEXP, SEXP mzThresholdSEXP, SEXP rtThresholdSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
-    ReadSpectraFile(filePath);
-    return R_NilValue;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz2(mz2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mz1(mz1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt2(rt2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type rt1(rt1SEXP);
+    Rcpp::traits::input_parameter< const double >::type mzThreshold(mzThresholdSEXP);
+    Rcpp::traits::input_parameter< const double >::type rtThreshold(rtThresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(CompareMS2Ms1(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ComputeFragmentationTree
+std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
+RcppExport SEXP _mums2_ComputeFragmentationTree(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
+    Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ComputeFragmentationTree(molecularFormulas, parentMass, numberOfThreads));
+    return rcpp_result_gen;
 END_RCPP
 }
 // squareRootNormalize
@@ -316,35 +253,98 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CreateProgressBarObject
+SEXP CreateProgressBarObject();
+RcppExport SEXP _mums2_CreateProgressBarObject() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CreateProgressBarObject());
+    return rcpp_result_gen;
+END_RCPP
+}
+// IncrementProgressBar
+void IncrementProgressBar(SEXP& progressBar, const float progress);
+RcppExport SEXP _mums2_IncrementProgressBar(SEXP progressBarSEXP, SEXP progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
+    Rcpp::traits::input_parameter< const float >::type progress(progressSEXP);
+    IncrementProgressBar(progressBar, progress);
+    return R_NilValue;
+END_RCPP
+}
+// DestroyProgressBar
+void DestroyProgressBar(SEXP& progressBar);
+RcppExport SEXP _mums2_DestroyProgressBar(SEXP progressBarSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type progressBar(progressBarSEXP);
+    DestroyProgressBar(progressBar);
+    return R_NilValue;
+END_RCPP
+}
+// ReadMgf
+Rcpp::List ReadMgf(const std::string& path);
+RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ReadMsp
+SEXP ReadMsp(const std::string& path);
+RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ReadSpectraFile
+void ReadSpectraFile(const std::string& filePath);
+RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
+    ReadSpectraFile(filePath);
+    return R_NilValue;
+END_RCPP
+}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
+    {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
+    {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
+    {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
     {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
-    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
-    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
-    {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
-    {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
-    {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
-    {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
-    {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
-    {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
-    {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
-    {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
     {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
-    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
+    {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
+    {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
     {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
+    {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
+    {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
+    {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
+    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
+    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
+    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
