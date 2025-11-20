@@ -15,7 +15,7 @@ struct HumanMetabolomicsDBNode {
           const std::vector<std::string>& dataValues) {
           int count = 0;
           int precursorMassIndex = 0;
-          for (int i = 0; i < names.size(); i++) {
+          for (size_t i = 0; i < names.size(); i++) {
                if (count >= 4)
                     break;
                if (names[i] == "accession") {
