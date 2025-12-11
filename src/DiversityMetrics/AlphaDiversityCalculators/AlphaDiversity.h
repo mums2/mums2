@@ -5,7 +5,6 @@
 #ifndef ALPHADIVERSITY_H
 #define ALPHADIVERSITY_H
 #include <vector>
-#include <Rcpp.h>
 #include "../Diversity.h"
 #include "../../DataStructures/CppMatrix.h"
 

@@ -5,8 +5,6 @@
 #ifndef BETADIVERSITY_H
 #define BETADIVERSITY_H
 
-#include <Rcpp.h>
-
 #include "../Diversity.h"
 #include "../../DataStructures/CppMatrix.h"
 
