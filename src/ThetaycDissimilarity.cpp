@@ -1,7 +1,7 @@
 //
 // Created by Gregory Johnson on 4/25/25.
 //
-
+#include <numeric>
 #include "DiversityMetrics/BetaDiversityCalculators/ThetaycDissimilarity.h"
 
 double ThetaycDissimilarity::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {

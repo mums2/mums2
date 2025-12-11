@@ -3,7 +3,7 @@
 //
 
 #include "DiversityMetrics/BetaDiversityCalculators/HammingDistance.h"
-
+#include <numeric>
 double HammingDistance::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
     const std::vector<double>& sampleOne = abundanceVectors[0];
     const std::vector<double>& sampleTwo = abundanceVectors[1];
