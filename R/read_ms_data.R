@@ -118,13 +118,22 @@ read_hmdb <- function(hmdb_file, ms2_folder) {
 
 
 process_xml <- function(xml_file) {
+  print("Reading Metabolites from XML Files...")
   records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
+  print("Processing XML Files...")
+  pb <- CreateProgressBarObject()
   database <- CreateHumanMetabolomicsDB()
+  progress <- 0
+  size <- length(records)
   for(xml in records) {
     tags <- xml_name(xml_children(xml))
     data <- xml_text(xml_children(xml))
     AddHumanMetabolomicNode(database, tags, data)
+    IncrementProgressBar(pb, progress / size)
+    progress <- progress + 1
   }
+  DestroyProgressBar(pb)
+  rm(pb)
   return(database)
 }
 

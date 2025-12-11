@@ -5,6 +5,8 @@
 #include "HMDB/HumanMetabolomicsDB.h"
 #include <ostream>
 #include <Rcpp.h>
+
+#include "CustomProgressBar/CliProgressBar.h"
 #include "Spectra/ReadSpectra.h"
 
 HumanMetabolomicsDB::HumanMetabolomicsDB(const std::vector<HumanMetabolomicsDBNode> &nodes) {
@@ -22,11 +24,17 @@ void HumanMetabolomicsDB::AddSpectraFiles(const std::string &spectraFiles, const
 }
 
 void HumanMetabolomicsDB::ProcessSpectraFiles() {
+    CliProgressBar progressBar;
+    Rcpp::Rcout << "Processing spectra files..." << std::endl;
+    const auto nodeMapCount = static_cast<float>(nodeMap.size());
+    float counter = 0;
     for (auto &nodes : nodeMap) {
         for (const auto &spectraFile : spectraMap[nodes.first]) {
             Spectra spectra = ReadSpectra::ReadSpectraFile(spectraFile);
             nodes.second.spectraList.emplace_back(spectra);
         }
+        counter++;
+        progressBar.update(counter/nodeMapCount);
     }
 }
 
@@ -49,9 +57,6 @@ AnnotationController* HumanMetabolomicsDB::ConstructDataBase() const {
     for (const auto& node : nodeMap) {
         if (node.second.spectraList.empty())
             continue;
-        if (node.second.annoName == "Azithromycin") {
-            Rcpp::Rcout << "Azithromycin" << std::endl;
-        }
         AnnotationNode annotation;
         annotation.name = node.second.annoName;
         annotation.precursorMz = node.second.precursorMz;
