@@ -37,7 +37,7 @@ Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp
     const std::queue<AnnotatedNode> results = ptr.get()->AnnotateFeature(queryFeatures, factory, minScoreThreshold,
         chemicalMinScore, precursorThreshold, minPeaks, threadCount);
     Annotation annotation(results);
-    return annotation.CreateAnnotationDataFrame();
+    return annotation.CreateAnnotationDataFrame(queryFeatures, ptr.get()->GetAnnotationNodes());
 }
 
 // [[Rcpp::export]]

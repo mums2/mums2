@@ -40,13 +40,15 @@ const double precursorThreshold, const size_t minPeaks, const int threadCount) c
     std::queue<AnnotatedNode> result;
     CliProgressBar progressBar;
     int currentProgress = 0;
-    const int size = annotations.size();
-    const auto maxProgress = static_cast<float>(features.size());
+    const int size = static_cast<int>(annotations.size());
+    const size_t featureSize = features.size();
+    const auto maxProgress = static_cast<float>(featureSize);
     std::mutex mutex;
-    for (const auto& feature: features) {
+    for (size_t i = 0; i < featureSize; ++i) {
+        const Feature& feature = features[i];
         RcppThread::parallelFor(0, size, [this, &feature, &factory, &result,
-            &minScoreThreshold, &chemicalMinScore, &precursorThreshold, &minPeaks, &mutex](int i) {
-            const AnnotationNode& node = annotations[i];
+            &minScoreThreshold, &chemicalMinScore, &precursorThreshold, &minPeaks, &mutex, &i](int j) {
+            const AnnotationNode& node = annotations[j];
             if ((std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz <= precursorThreshold) {
                 const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(feature.formula,
                node.chemicalFormula);
@@ -54,8 +56,8 @@ const double precursorThreshold, const size_t minPeaks, const int threadCount) c
                     const double score = factory.CalculateScore(feature.spectra, node.spectra, minPeaks);
                     if (score >= minScoreThreshold) {
                         AnnotatedNode annotatedNode;
-                        annotatedNode.feature = feature;
-                        annotatedNode.node = node;
+                        annotatedNode.featureIndex = i;
+                        annotatedNode.annotationNodeIndex = j;
                         annotatedNode.formulaSimilarity = chemicalSimilarity;
                         annotatedNode.score = score;
                         mutex.lock();

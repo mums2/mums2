@@ -12,7 +12,8 @@
 class Annotation {
 public:
     explicit Annotation(const std::queue<AnnotatedNode>&);
-    Rcpp::DataFrame CreateAnnotationDataFrame();
+    Rcpp::DataFrame CreateAnnotationDataFrame(const std::vector<Feature>& features,
+    const std::vector<AnnotationNode>& annotationNodes);
 private:
     std::queue<AnnotatedNode> annotatedNodes;
 };

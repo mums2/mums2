@@ -11,8 +11,8 @@
 
 struct AnnotatedNode {
     AnnotatedNode() = default;
-    Feature feature;
-    AnnotationNode node;
+    size_t featureIndex = 0;
+    size_t annotationNodeIndex = 0;
     double score = 0;
     double formulaSimilarity = 0;
 
