@@ -2,6 +2,7 @@
 // Created by Gregory Johnson on 12/9/24.
 //
 #include <numeric>
+#include <cmath>
 #include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 
 
