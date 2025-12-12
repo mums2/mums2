@@ -2,6 +2,7 @@
 // Created by Gregory Johnson on 4/25/25.
 //
 #include <numeric>
+#include <cmath>
 #include "DiversityMetrics/BetaDiversityCalculators/ThetaycDissimilarity.h"
 
 double ThetaycDissimilarity::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
@@ -11,7 +12,7 @@ double ThetaycDissimilarity::Calculate(const std::vector<std::vector<double>>& a
     const double totalSampleTwo = std::accumulate(sampleTwo.begin(), sampleTwo.end(), 0.0);
     double relativeSummationOfSamples = 0;
     double summationOfDifferenceOfSamples = 0;
-    for(size_t i = 0; i < sampleOne.size(); i++) {
+    for(std::size_t i = 0; i < sampleOne.size(); i++) {
         const double relativeSampleOne = sampleOne[i]/totalSampleOne;
         const double relativeSampleTwo = sampleTwo[i]/totalSampleTwo;
         relativeSummationOfSamples += relativeSampleOne * relativeSampleTwo;
