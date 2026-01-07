@@ -57,7 +57,7 @@ create_community_matrix_object.mass_data <- function(data) {
 
 #' @export
 #' @rdname create_community_matrix_object
-create_community_matrix_object.list <- function(data) {
+create_community_matrix_object.mothur_cluster <- function(data) {
   df <- data$abundance
   samples <- unique(df$samples)
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]),

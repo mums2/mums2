@@ -3,14 +3,14 @@
 \name{create_community_matrix_object}
 \alias{create_community_matrix_object}
 \alias{create_community_matrix_object.mass_data}
-\alias{create_community_matrix_object.list}
+\alias{create_community_matrix_object.mothur_cluster}
 \title{Create Community Matrix}
 \usage{
 create_community_matrix_object(data)
 
 \method{create_community_matrix_object}{mass_data}(data)
 
-\method{create_community_matrix_object}{list}(data)
+\method{create_community_matrix_object}{mothur_cluster}(data)
 }
 \arguments{
 \item{data}{the result of the \code{cluster_data()} function,
