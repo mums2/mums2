@@ -159,9 +159,9 @@ Beyond predicting the molecular formula, it is possible to use the `annotate_ms2
 It is recommended to use the `read_msp()` function with your reference database path for the reference parameter. If you store the returned data of `read_msp()` in a variable it may cause lag if it is too big (over \~100mbs). But we show both ways below.
 
 ```{r annotations}
-psu_msmls <- read_msp(msp_file = mums2_example("PSU-MSMLS.msp"))
+reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
 annotations <- annotate_ms2(
-  mass_data = matched_data, reference = read_msp(mums2_example("PSU-MSMLS.msp")),
+  mass_data = matched_data, reference = reference_db,
   scoring_params = modified_cosine_params(0.5), ppm = 1000,
   min_score =  0.1, chemical_min_score = 0)
 
@@ -202,8 +202,8 @@ cluster_results
 After your data has been clustered, if you wish to see which OMUs the annotated features are in, you can supply that to the annotation function using the "cluster_data" parameter. Doing so will add a column named OMU. This column will display the OMU the feature is represented in.
 
 ```{r omu_annotations}
-annotations <- annotate_ms2(mass_data = matched_data, reference = psu_msmls, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results)
+annotations <- annotate_ms2(mass_data = matched_data, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
+                            ppm = 1000, min_score = 0.6, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
 ```
@@ -332,8 +332,8 @@ Below, you can see a copy of the functions we ran above. But this time, we are u
     distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
     cluster_method = "opticlust")
 
-  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = psu_msmls, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.1, chemical_min_score = 0, cluster_data = cluster_results_avg)
+  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
+                            ppm = 1000, min_score = 0.6, chemical_min_score = 0, cluster_data = cluster_results_avg)
 
   community_object_avg <- create_community_matrix_object(data = cluster_results_avg)
   head(get_community_matrix(community_object = community_object_avg), 3)

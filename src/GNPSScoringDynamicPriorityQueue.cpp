@@ -11,8 +11,8 @@ GNPSScoringDynamicPriorityQueue::GNPSScoringDynamicPriorityQueue(const Rcpp::Lis
 std::vector<double> GNPSScoringDynamicPriorityQueue::ScoreRData(const std::vector<double>& listOneMZ, std::vector<double>& listOneInt,
     const std::vector<double>& listTwoMz, std::vector<double>& listTwoInt , const double tolerance, const double shift)
 {
-    Normalize(listOneInt);
-    Normalize(listTwoInt);
+    SquareRootNormalize::Normalize(listOneInt);
+    SquareRootNormalize::Normalize(listTwoInt);
     int sizeOfMap = 0;
     int shiftMapSize = 0;
     auto map = ConstructPeaks(listOneMZ, listTwoMz, tolerance,0, sizeOfMap);
@@ -39,18 +39,11 @@ double GNPSScoringDynamicPriorityQueue::CalculateScore(const Spectra &firstSpect
         (firstSpectra.precursorMz - secondSpectra.precursorMz))[0];
 }
 
-
-void GNPSScoringDynamicPriorityQueue::Normalize(std::vector<double>& vec)
-{
-    SquareRootNormalize normalize;
-    vec = normalize.Normalize(vec);
-}
-
 std::unordered_map<int, std::unordered_set<int>> GNPSScoringDynamicPriorityQueue::ConstructPeaks(const std::vector<double>& mzVector,
-    const std::vector<double>& otherMzVector, const double tolerance, const double shift, int& totalSizeOfIndexMap)
+    const std::vector<double>& otherMzVector, const double tol, const double shift, int& totalSizeOfIndexMap)
 {
     //Declare a vector and look at its size
-    const double adjTolerance = tolerance + 0.000001;
+    const double adjTolerance = tol + 0.000001;
     std::unordered_map<int, std::unordered_set<int>> indexMap;
     totalSizeOfIndexMap = 0;
     // Iterate over

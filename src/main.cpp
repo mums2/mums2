@@ -50,4 +50,3 @@ std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     }, numberOfThreads);
     return GreedyHeuristic::CalculateHeuristic(tree);
 }
-

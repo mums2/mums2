@@ -14,7 +14,6 @@
 
 class GNPSScoringDynamicPriorityQueue: public Score {
 private:
-    void Normalize(std::vector<double>&);
     std::unordered_map<int, std::unordered_set<int>> ConstructPeaks(const std::vector<double>&, const std::vector<double>&,
         double, double, int&);
     std::vector<ScoreValues> ConstructPriorityQueue(std::unordered_map<int, std::unordered_set<int>>&, const std::vector<double>&,
