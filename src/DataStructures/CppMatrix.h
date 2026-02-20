@@ -37,7 +37,6 @@ public:
         const size_t size = data.size();
         if (other.data.size() != size)
             Rcpp::stop("CppMatrix::operator+=, matrices are of different sizes");
-        std::vector<double> result(size);
         for (size_t i = 0; i < size; i++) {
             data[i] += other.data[i];
         }
@@ -56,7 +55,6 @@ public:
 
     void operator/=(const double other) {
         const size_t size = data.size();
-        std::vector<double> result(size);
         for (size_t i = 0; i < size; i++) {
             data[i] /= other;
         }

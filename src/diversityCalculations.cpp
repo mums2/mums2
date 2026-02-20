@@ -134,11 +134,13 @@ Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string
             rarefyMatrix = RarefactionCalculationParallelized(communityAbundances, eligibleIndexes,
                  abundanceRanges, sums, rngEngines[i], matrixRowSize, columnSize, size, threshold);
         }
-        mutex.lock();
+        CppMatrix diversityCppMatrix;
         if (subsample)
-            diversityMatrix += CalculateDiversity(rarefyMatrix, index);
+            diversityCppMatrix = CalculateDiversity(rarefyMatrix, index);
         else
-            diversityMatrix += CalculateDiversity(matrix, index);
+            diversityCppMatrix = CalculateDiversity(matrix, index);
+        mutex.lock();
+        diversityMatrix += diversityCppMatrix;
         p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
         mutex.unlock();
     }, numberOfThreads);

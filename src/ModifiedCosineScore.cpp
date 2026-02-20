@@ -2,13 +2,13 @@
 // Created by gregj on 2/21/2024.
 //
 
-#include "ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h"
+#include "ScoringMethods/GNPS/ModifiedCosineScore.h"
 #include <algorithm>
-GNPSScoringDynamicPriorityQueue::GNPSScoringDynamicPriorityQueue(const Rcpp::List& parameter):tolerance(parameter["tolerance"]) {
+ModifiedCosineScore::ModifiedCosineScore(const Rcpp::List& parameter):tolerance(parameter["tolerance"]) {
 
 }
 
-std::vector<double> GNPSScoringDynamicPriorityQueue::ScoreRData(const std::vector<double>& listOneMZ, std::vector<double>& listOneInt,
+std::vector<double> ModifiedCosineScore::ScoreRData(const std::vector<double>& listOneMZ, std::vector<double>& listOneInt,
     const std::vector<double>& listTwoMz, std::vector<double>& listTwoInt , const double tolerance, const double shift)
 {
     SquareRootNormalize::Normalize(listOneInt);
@@ -30,7 +30,7 @@ std::vector<double> GNPSScoringDynamicPriorityQueue::ScoreRData(const std::vecto
     static_cast<double>(peakCount)};
 }
 
-double GNPSScoringDynamicPriorityQueue::CalculateScore(const Spectra &firstSpectra, const Spectra &secondSpectra) {
+double ModifiedCosineScore::CalculateScore(const Spectra &firstSpectra, const Spectra &secondSpectra) {
 
     std::vector<double> intensityListFirst = firstSpectra.intensity;
     std::vector<double> intensityListSecond = secondSpectra.intensity;
@@ -39,7 +39,7 @@ double GNPSScoringDynamicPriorityQueue::CalculateScore(const Spectra &firstSpect
         (firstSpectra.precursorMz - secondSpectra.precursorMz))[0];
 }
 
-std::unordered_map<int, std::unordered_set<int>> GNPSScoringDynamicPriorityQueue::ConstructPeaks(const std::vector<double>& mzVector,
+std::unordered_map<int, std::unordered_set<int>> ModifiedCosineScore::ConstructPeaks(const std::vector<double>& mzVector,
     const std::vector<double>& otherMzVector, const double tol, const double shift, int& totalSizeOfIndexMap)
 {
     //Declare a vector and look at its size
@@ -64,7 +64,7 @@ std::unordered_map<int, std::unordered_set<int>> GNPSScoringDynamicPriorityQueue
     return indexMap;
 }
 
-std::vector<ScoreValues> GNPSScoringDynamicPriorityQueue::ConstructPriorityQueue(std::unordered_map<int, std::unordered_set<int>>& map,
+std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unordered_map<int, std::unordered_set<int>>& map,
     const std::vector<double>& intensitiesOne, const std::vector<double>& intensitiesTwo, int sizeOfHeapArray)
 {
     //std::priority_queue<ScoreValues, std::vector<ScoreValues>, CompareScores> queue;
@@ -81,7 +81,7 @@ std::vector<ScoreValues> GNPSScoringDynamicPriorityQueue::ConstructPriorityQueue
     return score_values_vector;
 }
 
-double GNPSScoringDynamicPriorityQueue::ScoreMatches(
+double ModifiedCosineScore::ScoreMatches(
     std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, int& numberOfPeakMatches) {
     std::unordered_set<int> usedPeakOne;
     std::unordered_set<int> usedPeakTwo;
