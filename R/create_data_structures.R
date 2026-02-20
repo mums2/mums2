@@ -32,6 +32,11 @@
 #' community_matrix <- create_community_matrix_object(cluster_results)
 #' @return a `data.frame` object of your community_object.
 create_community_matrix <- function(cluster_object) {
+
+  if(!inherits(cluster_object, "mothur_cluster")) {
+    stop(paste0("cluster_object must be created using the `cluster_data()`",
+            " function"))
+  }
   df <- get_abundance(cluster_object)
   samples <- unique(df$samples)
   combined_df <- data.frame(abund = df[which(df$samples == samples[[1]]),
@@ -83,6 +88,15 @@ create_community_matrix <- function(cluster_object) {
 #'                                                       filtered_data)
 #' @return a `mass_data` object using group averages
 convert_to_group_averages <- function(matched_data, mpactr_object) {
+  if(!inherits(matched_data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare()`"))
+  }
+
+  if(!inherits(mpactr_object, "filter_pactr")) {
+    stop(paste0("The mpactr object must be created using the",
+                "`import_all_data()` function"))
+  }
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
   meta_data <- get_meta_data(mpactr_object)
   injection_samples <- meta_data$Injection
@@ -171,7 +185,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 generate_a_combined_table <- function(matched_data,
                                       annotations = NULL, cluster_data = NULL) {
 
-  if (!("mass_data" %in% class(matched_data))) {
+  if(!inherits(matched_data, "mass_data")){
     stop("matched_data must be an object created from `ms2_ms1_compare()`.")
   }
 

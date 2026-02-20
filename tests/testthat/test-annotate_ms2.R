@@ -120,23 +120,29 @@ test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
   psu_msmls <- read_msp(test_path(dir, r_file))
 
   expect_error(annotate_ms2(dat, psu_msmls,
-              modified_cosine_params(0.5), "20",
-              .2, 0, min_peaks = 0),
+                            modified_cosine_params(0.5), "20",
+                            .2, 0, min_peaks = 0),
               "ppm")
   
-   expect_error(annotate_ms2(dat, psu_msmls,
-              modified_cosine_params(0.5), 20,
-              ".2", 0, min_peaks = 0),
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            ".2", 0, min_peaks = 0),
               "min_score")
   
   expect_error(annotate_ms2(dat, psu_msmls,
-              modified_cosine_params(0.5), 20,
-              .2, "0", min_peaks = 0),
+                            modified_cosine_params(0.5), 20,
+                            .2, "0", min_peaks = 0),
               "chemical_min_score")
   
   expect_error(annotate_ms2(dat, psu_msmls,
-              modified_cosine_params(0.5), 20,
-              .2, 0, min_peaks = "0"),
+                            modified_cosine_params(0.5), 20,
+                            .2, 0, min_peaks = "0"),
               "min_peaks")
+  
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            .2, 0, min_peaks = 0,
+                            number_of_threads = "1"),
+              "number_of_threads")
 })
 

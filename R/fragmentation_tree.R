@@ -34,7 +34,27 @@
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
-                                       num_threads = detectCores()) {
+                                       number_of_threads = detectCores()) {
+  if(!inherits(mass_data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare()`"))
+  }
+  if(!is.numeric(parent_ppm)) {
+    stop("parent_ppm must be numeric")
+  }
+
+  if(!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+  
+  if(nrow(mass_data$ms2_matches) <= 0) {
+    stop("Your mass_data object has no ms2 matches, cannot continue.")
+  }
+
+  if(length(mass_data$peak_data) <= 0) {
+    stop("Your mass_data object has no peak data, cannot continue.")
+  }
+
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)
   pb <- CreateProgressBarObject()
@@ -43,7 +63,7 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
     molecular_formula_list[[i]] <-
       compute_fragmentation_tree(mass_data$peak_data[[i]],
                                  mass_data$ms2_matches$mz[[i]],
-                                 parent_ppm, num_threads)
+                                 parent_ppm, number_of_threads)
     IncrementProgressBar(pb, i / size)
   }
   DestroyProgressBar(pb)

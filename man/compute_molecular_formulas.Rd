@@ -7,7 +7,7 @@
 compute_molecular_formulas(
   mass_data,
   parent_ppm = 3,
-  num_threads = detectCores()
+  number_of_threads = detectCores()
 )
 }
 \arguments{

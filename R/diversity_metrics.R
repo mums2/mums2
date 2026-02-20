@@ -52,7 +52,7 @@ dist_shared <- function(community_object, size, threshold,
                         iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren",
                             "hamming", "morisita", "thetayc")
-  if (!("community_object" %in% class(community_object))) {
+  if(!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the
          `create_community_object` function.")
   }
@@ -62,6 +62,25 @@ dist_shared <- function(community_object, size, threshold,
                 paste(diversity_index_list, collapse = ", "))
     )
   }
+  if(!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+  if(!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+  if(!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+  if(!is.numeric(iterations)) {
+    stop("iterations must be numeric")
+  }
+  if(!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+  if(!is.logical(subsample)) {
+    stop("subsample must be a boolean")
+  }
+
   result <- FasterAvgDist(community_object, diversity_index,
                           size, threshold, subsample,
                           number_of_threads, iterations, seed)
@@ -133,6 +152,26 @@ alpha_summary <- function(community_object, size, threshold,
                 paste(diversity_index_list, collapse = ", "))
     )
   }
+
+  if(!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+  if(!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+  if(!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+  if(!is.numeric(iterations)) {
+    stop("iterations must be numeric")
+  }
+  if(!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+  if(!is.logical(subsample)) {
+    stop("subsample must be a boolean")
+  }
+
 
   result <- FasterAvgDist(community_object, diversity_index, size, threshold,
                           subsample, number_of_threads, iterations, seed)

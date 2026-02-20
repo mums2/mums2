@@ -37,6 +37,11 @@
 #'
 #' @return a external pointer to an Rcpp object.
 create_community_matrix_object <- function(data) {
+  if(!inherits(data, "mass_data") &&
+     !inherits(data, "mothur_cluster")) {
+    stop(paste0("data has to be created using the",
+                " `ms2_ms1_compare()` or `cluster_data()` functions"))
+  }
   UseMethod("create_community_matrix_object", data)
 }
 

@@ -40,8 +40,21 @@
 cluster_data <- function(distance_df, ms2_match_data,
                          cutoff = 0.3, cluster_method = "opticlust") {
   
+  if(!inherits(distance_df, "mass_data_dist")) {
+    stop("distance_df should be an object created from the `dist_ms2()` function")
+  }
+
   if(nrow(distance_df) <= 0) {
     stop("distance_df must have more than 0 rows")
+  }
+
+  if(!inherits(ms2_match_data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare()`"))
+  }
+
+  if(!is.numeric(cutoff)) {
+    stop("cutoff should be a numeric value")
   }
   sparse_matrix <- create_sparse_matrix(distance_df$i,
                                         distance_df$j, distance_df$dist)

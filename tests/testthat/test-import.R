@@ -45,11 +45,6 @@ test_that("Ensure we can change rt to RTINMINUTES or RTINSECONDS", {
   expect_true("RTINMINUTES" %in% colnames(get_peak_table(data)))
 })
 
-test_that("Ensure we change_rt_to_seconds_or_minute fails if
-          given the wrong object", {
-            expect_error(change_rt_to_seconds_or_minute("a", "seconds"))
-          })
-
 test_that("Ensure we change_rt_to_seconds_or_minute fails if the data frame
           doesn't have correct columns", {
             data <- import_all_data(peak_table = test_path("exttestdata",
@@ -61,3 +56,18 @@ test_that("Ensure we change_rt_to_seconds_or_minute fails if the data frame
             expect_error(change_rt_to_seconds_or_minute(data, "seconds"))
             expect_error(change_rt_to_seconds_or_minute(data, "minutes"))
           })
+
+test_that("change_rt_to_seconds_or_minute fails if given the wrong parameters", {
+  data <- import_all_data(peak_table = test_path("exttestdata",
+                                                  "peak_table.csv"),
+                          meta_data = test_path("exttestdata",
+                                                "meta_data.csv"),
+                          format = "Progenesis")
+  
+  expect_error(change_rt_to_seconds_or_minute(data, "a"),
+              "rt_type can only be equal to 'seconds', or 'minutes'")
+  
+  expect_error(change_rt_to_seconds_or_minute("data", "seconds"),
+            "Make sure you are using the object")
+})
+

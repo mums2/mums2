@@ -42,8 +42,12 @@ import_all_data <- function(peak_table, meta_data, format) {
 #' @returns a modified `mpactr` object.
 change_rt_to_seconds_or_minute <- function(mpactr_object,
                                            rt_type = "seconds") {
-  if (!("filter_pactr" %in% class(mpactr_object))) {
+  if (!inherits(mpactr_object, "filter_pactr")) {
     stop("Make sure you are using the object created from `import_all_data()`")
+  }
+
+  if(rt_type != "seconds" && rt_type != "minutes") {
+    stop("rt_type can only be equal to 'seconds', or 'minutes'")
   }
   print(paste0("Changing rt values to ", rt_type))
   peak_table <- get_peak_table(mpactr_object)

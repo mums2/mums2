@@ -32,6 +32,16 @@
 #' @returns a `mpactr` object that has been filter based on
 #' the supplied parameters.
 filter_peak_table <- function(mpactr_object, params) {
+  if(!inherits(mpactr_object, "filter_pactr")) {
+    stop(paste0("The mpactr object must be created using the",
+                "`import_all_data()` function"))
+  }
+  if(!inherits(params, c("filter_mispicked_ions", "filter_group",
+                         "filter_cv", "filter_insource_ions"))) {
+    stop(paste0("The params object has to be created using one of these functions:", 
+                "`filter_mispicked_ions_params()`, `filter_cv_params()`, ",
+                "`filter_group_params()`, `filter_insource_ions_params()`"))
+  }
   UseMethod("filter_peak_table", params)
 }
 

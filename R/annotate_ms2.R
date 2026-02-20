@@ -97,23 +97,23 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
   }
   
   if(!is.numeric(ppm)) {
-    name <- get_variable_name(ppm)
-    stop(paste0(name, " must be a numeric"))
+    stop("ppm must be numeric")
   }
 
   if(!is.numeric(min_score)) {
-    name <- get_variable_name(min_score)
-    stop(paste0(name, " must be a numeric"))
+    stop("min_score must be numeric")
   }
   
   if(!is.numeric(chemical_min_score)) {
-    name <- get_variable_name(chemical_min_score)
-    stop(paste0(name, " must be a numeric"))
+    stop("chemical_min_score must be numeric")
   }
 
   if(!is.numeric(min_peaks)) {
-    name <- get_variable_name(min_peaks)
-    stop(paste0(name, " must be a numeric"))
+    stop("min_peaks must be numeric")
+  }
+
+  if(!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
   }
 
   preds <- vector("character", nrow(mass_data$ms2_matches))
@@ -156,9 +156,4 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
     annotations$omu[annotation_omus[[i]]] <- names(annotation_omus[i])
   }
   return(annotations)
-}
-
-
-get_variable_name <- function(var) {
-  deparse(substitute(var))
 }

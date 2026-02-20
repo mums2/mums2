@@ -36,3 +36,23 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
   ms2_matches <- ms2_ms1_compare(mzxml_files, data, 100000, 150)
   expect_true(nrow(ms2_matches$ms2_matches) > 0)
 })
+
+
+test_that("ms2_ms2_compare fails if given incorrect parameters", {
+  data <- import_all_data(peak_table = test_path("exttestdata",
+                                                 "peak_table.csv"),
+                          meta_data = test_path("exttestdata",
+                                                "meta_data.csv"),
+                          format = "Progenesis")
+
+  data_filtered <- data |>
+    filter_peak_table(filter_mispicked_ions_params()) |>
+    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
+    filter_peak_table(filter_group_params(group_threshold = 0.1,
+                                          "Blanks")) |>
+    filter_peak_table(filter_insource_ions_params())
+
+  mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
+  expect_error(ms2_ms1_compare(mzxml_files, data, 100000, 150))
+
+})
