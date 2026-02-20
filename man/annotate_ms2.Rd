@@ -2,7 +2,6 @@
 % Please edit documentation in R/annotate_ms2.R
 \name{annotate_ms2}
 \alias{annotate_ms2}
-\alias{annotate_ms2.mass_data}
 \title{Annotate LC-MS/MS features}
 \usage{
 annotate_ms2(mass_data, reference, scoring_params,
@@ -10,18 +9,6 @@ annotate_ms2(mass_data, reference, scoring_params,
                     chemical_min_score,
                     cluster_data = NULL, min_peaks = 0,
                     number_of_threads = detectCores())
-
-\method{annotate_ms2}{mass_data}(
-  mass_data,
-  reference,
-  scoring_params,
-  ppm,
-  min_score,
-  chemical_min_score,
-  cluster_data = NULL,
-  min_peaks = 0,
-  number_of_threads = detectCores()
-)
 }
 \arguments{
 \item{mass_data}{The object generated from \code{ms2_ms1_compare()}.}

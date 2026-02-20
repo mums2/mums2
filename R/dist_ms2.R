@@ -67,6 +67,10 @@ dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
   if (nrow(data$ms2_matches) <= 0) {
     stop("Cannot calculate distances, there are no matched ms2.")
   }
+  if(!inherits(score_params, "parameters")) {
+    stop(paste0("score_params must be created using the modified_cosine_params()",
+                " or spec_entropy_params() function"))
+  }
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)

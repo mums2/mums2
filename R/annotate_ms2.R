@@ -76,24 +76,51 @@
 #' @export
 #' @return a `data.frame` object containing annotations
 annotate_ms2 <- function(mass_data, reference, scoring_params,
-                         ppm, min_score,
-                         chemical_min_score,
-                         cluster_data = NULL, min_peaks = 0,
-                         number_of_threads = detectCores()) {
-  UseMethod("annotate_ms2", mass_data)
-}
-
-#' @rdname annotate_ms2
-#' @export
-annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
                                    ppm, min_score,
                                    chemical_min_score,
                                    cluster_data = NULL, min_peaks = 0,
                                    number_of_threads = detectCores()) {
+  
+  if(!inherits(mass_data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare()`"))
+  }
+
+  if(!inherits(scoring_params, "parameters")) {
+    stop(paste0("score_params must be created using the `modified_cosine_params()`",
+                " or `spec_entropy_params()` function"))
+  }
+
+  if(!inherits(cluster_data, "mothur_cluster") && !is.null(cluster_data)) {
+    stop(paste0("cluster_data must be created using the `cluster_data()`",
+                "function"))
+  }
+  
+  if(!is.numeric(ppm)) {
+    name <- get_variable_name(ppm)
+    stop(paste0(name, " must be a numeric"))
+  }
+
+  if(!is.numeric(min_score)) {
+    name <- get_variable_name(min_score)
+    stop(paste0(name, " must be a numeric"))
+  }
+  
+  if(!is.numeric(chemical_min_score)) {
+    name <- get_variable_name(chemical_min_score)
+    stop(paste0(name, " must be a numeric"))
+  }
+
+  if(!is.numeric(min_peaks)) {
+    name <- get_variable_name(min_peaks)
+    stop(paste0(name, " must be a numeric"))
+  }
+
   preds <- vector("character", nrow(mass_data$ms2_matches))
   if ("predicted_molecular_formulas" %in% names(mass_data)) {
     preds <- mass_data$predicted_molecular_formulas
   }
+
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
                                      min_score, chemical_min_score, min_peaks, number_of_threads)
@@ -129,4 +156,9 @@ annotate_ms2.mass_data <- function(mass_data, reference, scoring_params,
     annotations$omu[annotation_omus[[i]]] <- names(annotation_omus[i])
   }
   return(annotations)
+}
+
+
+get_variable_name <- function(var) {
+  deparse(substitute(var))
 }

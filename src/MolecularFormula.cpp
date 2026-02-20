@@ -50,10 +50,6 @@ molecularMass(molecularMass) {
     chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalSymbol)] = std::stoi(amountOfAtoms);
 }
 
-// MolecularFormula::MolecularFormula(const std::unordered_map<std::string, int> &elementMap,
-//     const std::vector<std::string> &elementNamesOrder):chemicalAtomMap(elementMap),
-// chemicalAtomNamesOrder(elementNamesOrder) {}
-
 double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
     return std::abs(GetMass() - other.GetMass());
 }
@@ -123,5 +119,4 @@ size_t MolecularFormula::ConvertASCIIElementToIndex(const int num) {
     //if 83 which it all it can be
     // We screen before-hand and the alphabet only contains CHNOPS
     Rcpp::stop("Chemical Element is Not CHNOPS");
-    return -1; // error
 }

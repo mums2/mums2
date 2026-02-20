@@ -28,8 +28,10 @@
 #'
 #' @export
 modified_cosine_params <- function(frag_tolerance) {
-  list("tolerance" = frag_tolerance,
-       "method" = "gnps")
+     parameters <- list("tolerance" = frag_tolerance,
+                     "method" = "gnps")
+     class(parameters) <- "parameters"
+     parameters
 }
 
 #' Entropy similarity between two MS/MS spectra
@@ -76,13 +78,15 @@ spec_entropy_params <- function(ms2_tolerance_in_da = 0.02,
                                 clean_spectra = TRUE, min_mz = 0, max_mz = 1000,
                                 noise_threshold = 0.01, max_peak_num = 100,
                                 weighted = TRUE) {
-  list("ms2_tolerance_in_da" = ms2_tolerance_in_da,
-       "ms2_tolerance_in_ppm" = ms2_tolerance_in_ppm,
-       "clean_spectra" = clean_spectra,
-       "min_mz" = min_mz,
-       "max_mz" = max_mz,
-       "noise_threshold" = noise_threshold,
-       "max_peak_num" = max_peak_num,
-       "weighted" = weighted,
-       "method" = "entropy")
+     parameters <- list("ms2_tolerance_in_da" = ms2_tolerance_in_da,
+                     "ms2_tolerance_in_ppm" = ms2_tolerance_in_ppm,
+                     "clean_spectra" = clean_spectra,
+                     "min_mz" = min_mz,
+                     "max_mz" = max_mz,
+                     "noise_threshold" = noise_threshold,
+                     "max_peak_num" = max_peak_num,
+                     "weighted" = weighted,
+                     "method" = "entropy")
+     class(parameters) <- "parameters"
+     parameters
 }

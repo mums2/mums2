@@ -10,7 +10,6 @@
 #include <Rcpp.h>
 #include "../Score.h"
 #include "../ScoreValues.h"
-#include "../../NormalizeMs2/SquareRootNormalize.h"
 
 class ModifiedCosineScore final : public Score {
 private:
