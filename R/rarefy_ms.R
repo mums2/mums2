@@ -52,10 +52,27 @@
 #' @return returns a `matrix` object that contains your rarefied data.
 rarefy_ms <- function(community_object, size, threshold,
                       number_of_threads = detectCores(), seed = 123) {
-  if (!("community_object" %in% class(community_object))) {
+  if(!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the 
          `create_community_object` function.")
   }
+
+  if(!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+
+  if(!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+  
+  if(!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+
+  if(!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+
   return(RarefactionCalculation(community_object, size,
                                 threshold, number_of_threads, seed))
 }

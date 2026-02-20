@@ -53,6 +53,12 @@ test_that("ms2_ms2_compare fails if given incorrect parameters", {
     filter_peak_table(filter_insource_ions_params())
 
   mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
-  expect_error(ms2_ms1_compare(mzxml_files, data, 100000, 150))
-
+  expect_error(ms2_ms1_compare(mzxml_files, "data", 100000, 150),
+               "The mpactr object must be created using the")
+  expect_error(ms2_ms1_compare(1234, data, 100000, 150),
+               "ms2_files must be a character")
+  expect_error(ms2_ms1_compare(mzxml_files, data, "100000", 150),
+              "mz_tolerance must be numeric")
+  expect_error(ms2_ms1_compare(mzxml_files, data, 100000, "150"),
+              "rt_tolerance must be numeric")
 })

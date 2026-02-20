@@ -34,6 +34,10 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
     stop(paste0("The mpactr object must be created using the",
                 "`import_all_data()` function"))
   }
+  
+  if(!is.character(ms2_files)) {
+    stop("ms2_files must be a character")
+  }
 
   if(!is.numeric(mz_tolerance)) {
     stop("mz_tolerance must be numeric")
