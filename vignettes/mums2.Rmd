@@ -38,9 +38,9 @@ Meta data is a csv that provides information about the samples. In order for you
 
 ```{r import_data}
 data <- import_all_data(
-  peak_table = mums2::mums2_example("full_mix_peak_table.csv"), 
-  meta_data = mums2::mums2_example("full_mix_meta_data.csv"), 
-  format = "None")
+  peak_table = mums2::mums2_example("230112_botryllus_peaktable.csv"), 
+  meta_data = mums2::mums2_example("meta_data_boryillus.csv"), 
+  format = "Progenesis")
 ```
 
 
@@ -49,14 +49,14 @@ data <- import_all_data(
 Below is the expected format for a progenesis peak table. It contains feature data such as m/z (or pepmass) and retention time. The sample intenesities are also inside of this table.
 
 ```{r peak_table, R.options=list(max.print=40)}
-read.csv(mums2::mums2_example("full_mix_peak_table.csv"), check.names = FALSE)
+read.csv(mums2::mums2_example("230112_botryllus_peaktable.csv"), check.names = FALSE)
 ```
 
 #### Metadata
 
 The expected format for metadata is below. The metadata file needs to contain at minimum columns for "Injection", "Sample_Code", and " Biological_Group." 
 ```{r metadata, R.options=list(max.print=40)}
-read.csv(mums2::mums2_example("full_mix_meta_data.csv"), check.names = FALSE)
+read.csv(mums2::mums2_example("meta_data_boryillus.csv"), check.names = FALSE)
 ```
 
 ### Filter
@@ -109,7 +109,7 @@ Using the generated mpactr_object from calling the `import_all_data()` function 
 
 ```{r preprocess_ms2_data}
 matched_data <- ms2_ms1_compare(
-  ms2_files = mums2_example("full_mix_ms2.mgf"),mpactr_object = filtered_data, mz_tolerance = 2, rt_tolerance = 6)
+  ms2_files = mums2_example("botryllus_v2.gnps.mgf"),mpactr_object = filtered_data, mz_tolerance = 5, rt_tolerance = 6)
 
 head(matched_data$ms2_matches)
 
@@ -178,7 +178,7 @@ We have implemented two different distance calculations to generate distances be
 
 ```{r  scoring_distance, R.options=list(max.print=15)}
 dist <- dist_ms2(
-  data = matched_data, cutoff = 0.3, precursor_threshold = 2,
+  data = matched_data, cutoff = 0.3, precursor_threshold = -1,
   score_params = modified_cosine_params(0.5), min_peaks = 0)
 dist
 ```
@@ -203,7 +203,7 @@ After your data has been clustered, if you wish to see which OMUs the annotated 
 
 ```{r omu_annotations}
 annotations <- annotate_ms2(mass_data = matched_data, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.6, chemical_min_score = 0, cluster_data = cluster_results)
+                            ppm = 1000, min_score = 0.7, chemical_min_score = 0, cluster_data = cluster_results)
 
 annotations[1:5,]
 ```
