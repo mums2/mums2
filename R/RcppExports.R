@@ -33,8 +33,8 @@ RarefactionCalculation <- function(communityMatrix, size, threshold, numberOfThr
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numberOfThreads, seed)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
+MeasureDiversity <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
+    .Call(`_mums2_MeasureDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
 CreateHumanMetabolomicsDB <- function() {

@@ -16,7 +16,7 @@ compute_molecular_formulas(
 \item{parent_ppm}{the ppm you wish to generate the candidate
 molecular formulas.}
 
-\item{num_threads}{the amount of threads we the algorithm will use.}
+\item{number_of_threads}{the amount of threads we the algorithm will use.}
 }
 \value{
 your mass_data object with an additional \code{character}

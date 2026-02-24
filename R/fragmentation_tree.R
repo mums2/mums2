@@ -11,7 +11,7 @@
 #' @param mass_data your mass_data object generated from `ms2_ms1_compare()`
 #' @param parent_ppm the ppm you wish to generate the candidate
 #'  molecular formulas.
-#' @param num_threads the amount of threads we the algorithm will use.
+#' @param number_of_threads the amount of threads we the algorithm will use.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =

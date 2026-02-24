@@ -21,7 +21,11 @@ generate_a_combined_table(
 a \code{data.frame} object.
 }
 \description{
-combined
+This function will use the generated matched data, annotations and
+cluster data, to create a combined dataframe of all the generated data. It
+has the ability to create the dataframe without annotations or clustering data. However,
+if annotations are supplied and a feature has more than one annotation,
+the data will be returned in long format.
 }
 \examples{
 data <-

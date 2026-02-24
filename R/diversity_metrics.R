@@ -1,6 +1,10 @@
 #' @title Distance Shared
 #' @export
-#' @description dissimilarity via beta diversity
+#' @description Beta diversity is calculation that allows us to calculate the differences
+#' between two samples. We can conduct this analysis using the created community objects.
+#' The available options for beta diversity are: Bray Curtis, Jaccard Dissimilarity,
+#' Sorenson index, Hamming Distance, Morista-Horn index, and Yue & Clayton measure
+#' of dissimilarity (or thetayc). 
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -81,7 +85,7 @@ dist_shared <- function(community_object, size, threshold,
     stop("subsample must be a boolean")
   }
 
-  result <- FasterAvgDist(community_object, diversity_index,
+  result <- MeasureDiversity(community_object, diversity_index,
                           size, threshold, subsample,
                           number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
@@ -91,7 +95,9 @@ dist_shared <- function(community_object, size, threshold,
 
 #' @title Alpha Diversity Summary
 #' @export
-#' @description alpha diversity
+#' @description Alpha Diversity calculates the amount of diversity in a single sample.
+#' We can conduct this analysis using your created community object.
+#' We support the use of Shannon and Simpson diversity index.
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -173,7 +179,7 @@ alpha_summary <- function(community_object, size, threshold,
   }
 
 
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold,
+  result <- MeasureDiversity(community_object, diversity_index, size, threshold,
                           subsample, number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(result)

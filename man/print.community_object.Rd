@@ -12,7 +12,7 @@
 \item{...}{other parameters that are included in the print function.}
 }
 \description{
-3 function for print the community object
+S3 function for print the community object
 }
 \examples{
 data <-
