@@ -274,7 +274,7 @@ There are a few different ways to visualize the data generated from this package
 Principal Coordinate Analysis (PCOA) is a statistical technique used to show similarities between data. PCOA allows us, in particular, to use the distances generated from our ecological analysis. And, unlike Principle Component Analysis (PCA), it is not limited to only euclidean distances. So, we can use the distances generated from `dist_shared()` as input for this calculation. To start, we need to convert the `dist_shared()` result into cartisan coordinates. To do this, we can use the `stats::cmdscale()` function. Following, we can extract the points from the `stats::cmdscale()` function and rename them to be more readable. Finally, we plot the values. PCOA is a great way to look at your beta diversity results visually and shows us how similar samples are to each other.
 
 ```{r pcoa, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_obj <- bray_no_omus
+dist_obj <- bray_w_omus
 
 pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
 pcoa_points <- as.data.frame(pcoa$points)
@@ -285,8 +285,7 @@ pcoa_points$Samples <- rownames(pcoa_points)
 meta_data <- get_meta_data(filtered_data)
 for(i in 1:nrow(pcoa_points)) {
   idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
-  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[i]]
-  
+  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[idx]]
 }
 
 pcoa_points |>
@@ -324,7 +323,7 @@ Another feature included inside of mums2, is the ability to run your analysis us
 Below, you can see a copy of the functions we ran above. But this time, we are using group averages.  
 ```{r group_average}
   matched_avg <- convert_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
-  dist_avg <- dist <- dist_ms2(
+  dist_avg <- dist_ms2(
     data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
     score_params = modified_cosine_params(0.5), min_peaks = 0)
 
