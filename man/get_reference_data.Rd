@@ -18,7 +18,7 @@ prints customized message to the console
 Will return the data inside the reference object based on the index given.
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
 get_reference_data(reference, 1)
 
 }

@@ -83,7 +83,7 @@ read_mgf <- function(file) {
 #' @description Reader function msp files
 #' @param msp_file the file path of your msp file
 #' @examples
-#' read_msp(mums2_example("PSU-MSMLS.msp"))
+#' read_msp(mums2_example("massbank_example_data.msp"))
 #'
 #' @return a `reference_database` object.
 read_msp <- function(msp_file) {
@@ -105,7 +105,7 @@ read_msp <- function(msp_file) {
 #' @param hmdb_file the xml hmdb file
 #' @param ms2_folder the folder path of your ms2 files
 #' @examples
-#' read_msp(mums2_example("PSU-MSMLS.msp"))
+#' read_msp(mums2_example("massbank_example_data.msp"))
 #'
 #' @return a `reference_database` object.
 read_hmdb <- function(hmdb_file, ms2_folder) {

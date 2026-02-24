@@ -18,8 +18,8 @@ prints customized message to the console
 Add another database to your reference database.
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
-reference2 <- read_msp(mums2_example("PSU-MSMLS.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
+reference2 <- read_msp(mums2_example("massbank_example_data.msp"))
 combined_reference_database(reference, reference2)
 
 }

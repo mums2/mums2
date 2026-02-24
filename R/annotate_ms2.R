@@ -46,9 +46,9 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data.csv"),
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -59,11 +59,11 @@
 #'    filter_peak_table(filter_insource_ions_params())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
-#'  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
+#'  massbank <- read_msp(mums2_example("massbank_example_data.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
-#'    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
+#'    reference = massbank, scoring_params = modified_cosine_params(0.5),
 #'    ppm = 1000,
 #'    min_score =  0.1, chemical_min_score = 0)
 #'

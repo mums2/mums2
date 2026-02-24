@@ -5,7 +5,7 @@
 #' @param reference reference database object.
 #' @param index the index of the data.
 #' @examples
-#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' reference <- read_msp(mums2_example("massbank_example_data.msp"))
 #' get_reference_data(reference, 1)
 #'
 #' @return prints customized message to the console
@@ -26,8 +26,8 @@ get_reference_data <- function(reference, index) {
 #' @param reference reference database object.
 #' @param other_reference your other reference database object
 #' @examples
-#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
-#' reference2 <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' reference <- read_msp(mums2_example("massbank_example_data.msp"))
+#' reference2 <- read_msp(mums2_example("massbank_example_data.msp"))
 #' combined_reference_database(reference, reference2)
 #'
 #' @return prints customized message to the console
@@ -48,7 +48,7 @@ combined_reference_database <- function(reference, other_reference) {
 #' @param x reference database object.
 #' @param ... any extra print arguments you want to include.
 #' @examples
-#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' reference <- read_msp(mums2_example("massbank_example_data.msp"))
 #' print(reference)
 #'
 #' @return prints customized message to the console
@@ -64,7 +64,7 @@ print.reference_database <- function(x, ...) {
 #' @description returns the length of the database
 #' @param x reference database object.
 #' @examples
-#' reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#' reference <- read_msp(mums2_example("massbank_example_data.msp"))
 #' length(reference)
 #'
 #' @return returns the length of the regerence database

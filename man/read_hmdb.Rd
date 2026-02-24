@@ -18,6 +18,6 @@ a \code{reference_database} object.
 Read msp files
 }
 \examples{
-read_msp(mums2_example("PSU-MSMLS.msp"))
+read_msp(mums2_example("massbank_example_data.msp"))
 
 }

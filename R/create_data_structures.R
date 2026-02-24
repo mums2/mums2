@@ -2,15 +2,15 @@
 #' @title create community matrix
 #' @description
 #' Using your community_object, we are able to
-#'  convert it into a community matrix for easier
+#' convert it into a community matrix for easier
 #' usability of the object.
 #' @param cluster_object the result of the `cluster_data()` function.
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -20,8 +20,8 @@
 #'    filter_peak_table(filter_insource_ions_params())
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'   score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -67,10 +67,10 @@ create_community_matrix <- function(cluster_object) {
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -81,8 +81,8 @@ create_community_matrix <- function(cluster_object) {
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' matched_data_avg <- convert_to_group_averages(matched_data,
 #'                                                       filtered_data)
@@ -143,17 +143,21 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 
 #' @export
 #' @title Create a combined table
-#' @description combined
+#' @description This function will use the generated matched data, annotations and
+#' cluster data, to create a combined dataframe of all the generated data. It
+#' has the ability to create the dataframe without annotations or clustering data. However,
+#' if annotations are supplied and a feature has more than one annotation, 
+#' the data will be returned in long format. 
 #' @param matched_data description
 #' @param annotations annotations
 #' @param cluster_data cluster
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -164,8 +168,8 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -173,9 +177,9 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 #'
-#'  psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
+#'  massbank <- read_msp(mums2_example("massbank_example_data.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
-#'    reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
+#'    reference = massbank, scoring_params = modified_cosine_params(0.5),
 #'    ppm = 1000,
 #'    min_score =  0.1, chemical_min_score = 0)
 #'

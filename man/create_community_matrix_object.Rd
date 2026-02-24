@@ -4,7 +4,7 @@
 \alias{create_community_matrix_object}
 \alias{create_community_matrix_object.mass_data}
 \alias{create_community_matrix_object.mothur_cluster}
-\title{Create Community Matrix}
+\title{Create Community Matrix Object.}
 \usage{
 create_community_matrix_object(data)
 
@@ -20,16 +20,18 @@ or just a mass_data object created from \code{ms2_ms1_compare()}.}
 a external pointer to an Rcpp object.
 }
 \description{
-Takes you mass_data object and creates a community matrix object.
-This object is used to compute diversity calculations.
+Using the data generated from clustering or adding ms2 data to your object,
+we are able to create a community matrix object. The community matrix object
+stores the same data a community matrix but within a cpp object. We use this object
+to conduct analysis more efficiently.
 }
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -40,8 +42,8 @@ filtered_data <- data |>
 
 change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 10, 6)
 
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = modified_cosine_params(0.5), min_peaks = 0)

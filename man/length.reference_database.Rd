@@ -16,7 +16,7 @@ returns the length of the regerence database
 returns the length of the database
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
 length(reference)
 
 }
