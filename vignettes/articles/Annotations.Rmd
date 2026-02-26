@@ -1,0 +1,39 @@
+---
+title: "Annotations"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mums2)
+```
+
+To allow users to access data inside of reference databases without causing lag, we opted to created reference databases as a Rcpp object. This means that users are not able to access them unless you use specific getter functions (`get_reference_data()`, and `combined_reference_database()`). 
+
+To create a reference database object, you can either use the `read_msp()` function or the `read_hmdb()` function. Using the `length()` function will allow you to see the amount of references. 
+```{r}
+reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
+length(reference_db)
+```
+
+The `get_reference_data()` function will return the reference at the specified index you input. This allows you to see the data that is inside of your database. 
+```{r}
+get_reference_data(reference_db, 1)
+get_reference_data(reference_db, 2)
+```
+
+The `combined_reference_database()` function allows you to combined to different databases ontop of eachother to make one big reference database. This is useful for individuals that want to use one big reference database to annotate there data. 
+
+```{r}
+reference_db_2 <- read_msp(msp_file = mums2_example("massbank_example_data_negative.msp"))
+length(reference_db_2)
+
+combined_db <- combined_reference_database(reference_db, reference_db_2)
+length(combined_db)
+```
+
