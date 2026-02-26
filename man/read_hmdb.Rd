@@ -2,20 +2,23 @@
 % Please edit documentation in R/read_ms_data.R
 \name{read_hmdb}
 \alias{read_hmdb}
-\title{Read msp files}
+\title{Read HMDB database}
 \usage{
 read_hmdb(hmdb_file, ms2_folder)
 }
 \arguments{
-\item{hmdb_file}{the xml hmdb file}
+\item{hmdb_file}{the xml hmdb file.}
 
-\item{ms2_folder}{the folder path of your ms2 files}
+\item{ms2_folder}{the folder path of your ms2 spectra files.}
 }
 \value{
 a \code{reference_database} object.
 }
 \description{
-Read msp files
+This function allows you to create an hmdb database. However
+you are required to supply an xml hmdb file and a folder path
+that contains all of the ms2 spectras from the hmdb download
+page https://www.hmdb.ca/downloads.
 }
 \examples{
 read_msp(mums2_example("massbank_example_data.msp" ))

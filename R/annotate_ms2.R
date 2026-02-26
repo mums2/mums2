@@ -10,7 +10,9 @@
 #' `score_params` argument. `score_params` is a list of parameters for the
 #' chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
 #' created with functions [modified_cosine_params()] and
-#' [spec_entropy_params()], respectively.
+#' [spec_entropy_params()], respectively. If you are using an hmdb
+#' reference database, or a database that does not contain a precursormz
+#' please ensure that you expand your ppm to account for the difference.
 #'
 #'
 #' @param mass_data The object generated from `ms2_ms1_compare()`.

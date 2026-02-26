@@ -13,7 +13,10 @@ read_msp(msp_file)
 a \code{reference_database} object.
 }
 \description{
-Reader function msp files
+Creates a reference database by reading
+a download msp file. These files can be downloaded from
+sites like https://systemsomicslab.github.io/compms/msdial/main.html#MSP
+or https://mona.fiehnlab.ucdavis.edu/downloads
 }
 \examples{
 read_msp(mums2_example("massbank_example_data.msp"))

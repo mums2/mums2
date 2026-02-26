@@ -80,7 +80,10 @@ read_mgf <- function(file) {
 
 #' @title Create Reference Database
 #' @export
-#' @description Reader function msp files
+#' @description Creates a reference database by reading
+#' a download msp file. These files can be downloaded from
+#' sites like https://systemsomicslab.github.io/compms/msdial/main.html#MSP 
+#' or https://mona.fiehnlab.ucdavis.edu/downloads 
 #' @param msp_file the file path of your msp file
 #' @examples
 #' read_msp(mums2_example("massbank_example_data.msp"))
@@ -100,10 +103,15 @@ read_msp <- function(msp_file) {
 
 
 
-#' @title Read msp files
+#' @title Read HMDB database
 #' @export
-#' @param hmdb_file the xml hmdb file
-#' @param ms2_folder the folder path of your ms2 files
+#' @description
+#' This function allows you to create an hmdb database. However
+#' you are required to supply an xml hmdb file and a folder path 
+#' that contains all of the ms2 spectras from the hmdb download
+#' page https://www.hmdb.ca/downloads. 
+#' @param hmdb_file the xml hmdb file.
+#' @param ms2_folder the folder path of your ms2 spectra files.
 #' @examples
 #' read_msp(mums2_example("massbank_example_data.msp" ))
 #'

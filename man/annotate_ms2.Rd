@@ -65,7 +65,9 @@ spectral scoring methods. Currently scoring methods \code{"gnps"} and
 \code{score_params} argument. \code{score_params} is a list of parameters for the
 chosen scoring method. Parameters for "gnps" and "spectral_entropy" can be
 created with functions \code{\link[=modified_cosine_params]{modified_cosine_params()}} and
-\code{\link[=spec_entropy_params]{spec_entropy_params()}}, respectively.
+\code{\link[=spec_entropy_params]{spec_entropy_params()}}, respectively. If you are using an hmdb
+reference database, or a database that does not contain a precursormz
+please ensure that you expand your ppm to account for the difference.
 }
 \examples{
 data <-

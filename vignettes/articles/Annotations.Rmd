@@ -18,6 +18,7 @@ To allow users to access data inside of reference databases without causing lag,
 To create a reference database object, you can either use the `read_msp()` function or the `read_hmdb()` function. Using the `length()` function will allow you to see the amount of references. 
 ```{r}
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
+print(reference_db)
 length(reference_db)
 ```
 
