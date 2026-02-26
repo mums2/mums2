@@ -21,9 +21,6 @@ CppMatrix CalculateDiversity(const CppMatrix& abundances, const std::string& div
     std::string index = diversityIndex;
     std::transform(index.begin(), index.end(), index.begin(), tolower);
     Diversity* diversity = DiversityMetricFactory::ChooseDiversityBasedOnIndex(index);
-    if(diversity == nullptr) {
-        Rcpp::stop("Diversity Metric not found");
-    }
     CppMatrix results = diversity->CalculateDiversity(abundances, index);
     delete diversity;
     return results;

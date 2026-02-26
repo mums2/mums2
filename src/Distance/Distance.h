@@ -1,7 +1,7 @@
 #ifndef DISTANCE
 #define DISTANCE
 
-#include "DataStructures/Spectra.h"
+#include "../Spectra/Spectra.h"
 #include "DataStructures/SparseValue.h"
 #include <vector>
 #include <iostream>

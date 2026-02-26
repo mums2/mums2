@@ -9,12 +9,6 @@
 #include "CustomProgressBar/CliProgressBar.h"
 #include "Spectra/ReadSpectra.h"
 
-HumanMetabolomicsDB::HumanMetabolomicsDB(const std::vector<HumanMetabolomicsDBNode> &nodes) {
-    for (const auto &node : nodes) {
-        nodeMap[node.databaseName] = node;
-    }
-}
-
 void HumanMetabolomicsDB::AddHumanMetabolomicNode(const HumanMetabolomicsDBNode &node) {
     nodeMap[node.databaseName] = node;
 }
@@ -35,13 +29,6 @@ void HumanMetabolomicsDB::ProcessSpectraFiles() {
         }
         counter++;
         progressBar.update(counter/nodeMapCount);
-    }
-}
-
-void HumanMetabolomicsDB::PrintHumanMetabolomicsDB() {
-    for (const auto &node : nodeMap) {
-        Rcpp::Rcout << "Database " << node.first << std::endl;
-        Rcpp::Rcout << "Spectras " << node.second.spectraList.size() << std::endl;
     }
 }
 

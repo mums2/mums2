@@ -24,13 +24,6 @@ AnnotationNode AnnotationController::GetNode(const int index) {
     return annotations[index];
 }
 
-std::vector<AnnotationNode> AnnotationController::GetNodes(const std::vector<int>& index) const {
-    std::vector<AnnotationNode> nodes(index.size());
-    for (size_t i = 0; i < index.size(); ++i) {
-        nodes[i] = annotations[index[i]];
-    }
-    return nodes;
-}
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 std::queue<AnnotatedNode> AnnotationController::AnnotateFeature(const std::vector<Feature> &features,

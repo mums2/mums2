@@ -7,14 +7,14 @@
 #include <string>
 #include <vector>
 #include <Rcpp.h>
-#include "../Distance/DataStructures/Spectra.h"
+#include "../Spectra/Spectra.h"
 
 struct HumanMetabolomicsDBNode {
      HumanMetabolomicsDBNode() = default;
      HumanMetabolomicsDBNode(const std::vector<std::string>& names,
           const std::vector<std::string>& dataValues) {
           int count = 0;
-          int precursorMassIndex = 0;
+          int precursorMassIndex = -1;
           for (size_t i = 0; i < names.size(); i++) {
                if (count >= 4)
                     break;
@@ -53,6 +53,6 @@ struct HumanMetabolomicsDBNode {
      std::list<Spectra> spectraList;
      std::string annoName;
      std::string chemicalFormula;
-     double precursorMz;
+     double precursorMz = -1;
 };
 #endif //MUMS2_HUMANMETABOLOMICSDBNODE_H

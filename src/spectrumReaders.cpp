@@ -20,8 +20,3 @@ SEXP ReadMsp(const std::string& path) {
     auto* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }
-
-// [[Rcpp::export]]
-void ReadSpectraFile(const std::string& filePath) {
-    ReadSpectra::ReadSpectraFile(filePath);
-}

@@ -159,16 +159,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// PrintHMDBNames
-void PrintHMDBNames(const SEXP& hmdbPtr);
-RcppExport SEXP _mums2_PrintHMDBNames(SEXP hmdbPtrSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type hmdbPtr(hmdbPtrSEXP);
-    PrintHMDBNames(hmdbPtr);
-    return R_NilValue;
-END_RCPP
-}
 // AddSpectra
 void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames);
 RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP) {
@@ -284,16 +274,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadSpectraFile
-void ReadSpectraFile(const std::string& filePath);
-RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
-    ReadSpectraFile(filePath);
-    return R_NilValue;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -309,7 +289,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_MeasureDiversity", (DL_FUNC) &_mums2_MeasureDiversity, 8},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
-    {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
@@ -320,7 +299,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
-    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

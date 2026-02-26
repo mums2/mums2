@@ -45,10 +45,6 @@ AddHumanMetabolomicNode <- function(hmdbPtr, names, values) {
     invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values))
 }
 
-PrintHMDBNames <- function(hmdbPtr) {
-    invisible(.Call(`_mums2_PrintHMDBNames`, hmdbPtr))
-}
-
 AddSpectra <- function(hmdbPtr, fileNames, databaseNames) {
     invisible(.Call(`_mums2_AddSpectra`, hmdbPtr, fileNames, databaseNames))
 }
@@ -87,9 +83,5 @@ ReadMgf <- function(path) {
 
 ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
-}
-
-ReadSpectraFile <- function(filePath) {
-    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }
 

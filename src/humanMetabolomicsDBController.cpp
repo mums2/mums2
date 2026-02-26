@@ -19,11 +19,6 @@ void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& name
 }
 
 // [[Rcpp::export]]
-void PrintHMDBNames(const SEXP& hmdbPtr) {
-    Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
-    hmdbPointer.get()->PrintHumanMetabolomicsDB();
-}
-// [[Rcpp::export]]
 void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames,
     const std::vector<std::string>& databaseNames) {
     Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);

@@ -105,10 +105,18 @@ read_msp <- function(msp_file) {
 #' @param hmdb_file the xml hmdb file
 #' @param ms2_folder the folder path of your ms2 files
 #' @examples
-#' read_msp(mums2_example("massbank_example_data.msp"))
+#' read_msp(mums2_example("massbank_example_data.msp" ))
 #'
 #' @return a `reference_database` object.
 read_hmdb <- function(hmdb_file, ms2_folder) {
+  if (!file.exists(hmdb_file)) {
+    stop(paste0("hmdb file",
+                " does not exist. Please ensure all files exist."))
+  }
+  if (!file.exists(ms2_folder)) {
+    stop(paste0("ms2_folder",
+                " does not exist. Please ensure all files exist."))
+  }
   database <- process_xml(hmdb_file)
   read_and_match_spectra_files(ms2_folder, database)
   annotations <- CreateAnnotationController(database)
