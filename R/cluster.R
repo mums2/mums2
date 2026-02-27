@@ -1,7 +1,12 @@
 #' @export
-#' @title Cluster
+#' @title Cluster Features
 #' @description
-#' Clusters the data together
+#' `cluster_data()` allows users to cluster features inside
+#' your mass data object. This is done by creating a sparse matrix
+#' using the `distMs2()` function and inputting that inside the
+#' clutur package. This allows us to easily cluster all kinds of
+#' features as long as they contain a ms2 spectra.
+#' 
 #' @param distance_df a distance df that was generated
 #' from the `distMs2()` function.
 #' @param ms2_match_data your mass data set object generated

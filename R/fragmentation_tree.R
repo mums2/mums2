@@ -29,7 +29,7 @@
 #'
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 0.5, 6)
+#'  filtered_data, 0.1, 6)
 #' compute_molecular_formulas(matched_data)
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.

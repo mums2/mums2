@@ -28,7 +28,7 @@ get_reference_data(reference_db, 1)
 get_reference_data(reference_db, 2)
 ```
 
-The `combined_reference_database()` function allows you to combined to different databases ontop of eachother to make one big reference database. This is useful for individuals that want to use one big reference database to annotate there data. 
+The `combined_reference_database()` function allows you to combined two different databases ontop of eachother to make one reference database. 
 
 ```{r}
 reference_db_2 <- read_msp(msp_file = mums2_example("massbank_example_data_negative.msp"))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluster.R
 \name{cluster_data}
 \alias{cluster_data}
-\title{Cluster}
+\title{Cluster Features}
 \usage{
 cluster_data(
   distance_df,
@@ -28,7 +28,11 @@ a shared \code{data.frame} displaying all
 the clustered and abundance data.
 }
 \description{
-Clusters the data together
+\code{cluster_data()} allows users to cluster features inside
+your mass data object. This is done by creating a sparse matrix
+using the \code{distMs2()} function and inputting that inside the
+clutur package. This allows us to easily cluster all kinds of
+features as long as they contain a ms2 spectra.
 }
 \examples{
 data <-
