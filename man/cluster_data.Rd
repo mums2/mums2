@@ -20,19 +20,19 @@ from \code{ms2_ms1_compare()}.}
 
 \item{cutoff}{the cutoff value you wish to cluster to.}
 
-\item{cluster_method}{a cluster method, there are five methods to choose
-from: furthest, nearest, weighted, average, and opticlust.}
+\item{cluster_method}{the clustering algorithm you wish to use.
+The options are: furthest, nearest, weighted, average, and opticlust.}
 }
 \value{
-a shared \code{data.frame} displaying all
+a shared \code{data.frame} (or a \code{mothur_cluster} object) displaying all
 the clustered and abundance data.
 }
 \description{
 \code{cluster_data()} allows users to cluster features inside
-your mass data object. This is done by creating a sparse matrix
+the mass data object. This is done by creating a sparse matrix
 using the \code{distMs2()} function and inputting that inside the
-clutur package. This allows us to easily cluster all kinds of
-features as long as they contain a ms2 spectra.
+clutur package. This allows us to easily cluster features
+that contain an ms2 spectra.
 }
 \examples{
 data <-

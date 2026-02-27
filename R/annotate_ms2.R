@@ -78,43 +78,44 @@
 #' @export
 #' @return a `data.frame` object containing annotations
 annotate_ms2 <- function(mass_data, reference, scoring_params,
-                                   ppm, min_score,
-                                   chemical_min_score,
-                                   cluster_data = NULL, min_peaks = 0,
-                                   number_of_threads = detectCores()) {
-  
-  if(!inherits(mass_data, "mass_data")) {
+                         ppm, min_score,
+                         chemical_min_score,
+                         cluster_data = NULL, min_peaks = 0,
+                         number_of_threads = detectCores()) {
+
+  if (!inherits(mass_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))
   }
 
-  if(!inherits(scoring_params, "parameters")) {
-    stop(paste0("score_params must be created using the `modified_cosine_params()`",
-                " or `spec_entropy_params()` function"))
+  if (!inherits(scoring_params, "parameters")) {
+    stop(paste0("score_params must be created using the ",
+                "`modified_cosine_params()` or `spec_entropy_params()`",
+                "function"))
   }
 
-  if(!inherits(cluster_data, "mothur_cluster") && !is.null(cluster_data)) {
+  if (!inherits(cluster_data, "mothur_cluster") && !is.null(cluster_data)) {
     stop(paste0("cluster_data must be created using the `cluster_data()`",
                 "function"))
   }
-  
-  if(!is.numeric(ppm)) {
+
+  if (!is.numeric(ppm)) {
     stop("ppm must be numeric")
   }
 
-  if(!is.numeric(min_score)) {
+  if (!is.numeric(min_score)) {
     stop("min_score must be numeric")
   }
-  
-  if(!is.numeric(chemical_min_score)) {
+
+  if (!is.numeric(chemical_min_score)) {
     stop("chemical_min_score must be numeric")
   }
 
-  if(!is.numeric(min_peaks)) {
+  if (!is.numeric(min_peaks)) {
     stop("min_peaks must be numeric")
   }
 
-  if(!is.numeric(number_of_threads)) {
+  if (!is.numeric(number_of_threads)) {
     stop("number_of_threads must be numeric")
   }
 
@@ -125,17 +126,22 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
 
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
-                                     min_score, chemical_min_score, min_peaks, number_of_threads)
-  if(nrow(annotations) <= 0) {
+                                     min_score, chemical_min_score,
+                                     min_peaks, number_of_threads)
+  if (nrow(annotations) <= 0) {
     warning("No annotations have been found. Try adjusting your variables.")
     return(annotations)
   }
-  cols <- which(!(colnames(annotations) %in% c("query_ms1_id", "query_ms2_id", "query_mz", "query_rt",
-                                       "ref_idx", "query_formula", "chemical_similarity", "score")))
-  annotations <- cbind(annotations[, c("query_ms1_id", "query_ms2_id", "query_mz",
-                              "query_rt", "ref_idx", "query_formula", "chemical_similarity", "score")]
-                    , annotations[, cols])
-  
+  cols <- which(!(colnames(annotations) %in% c("query_ms1_id", "query_ms2_id",
+                                               "query_mz", "query_rt",
+                                               "ref_idx", "query_formula",
+                                               "chemical_similarity", "score")))
+  annotations <- cbind(annotations[, c("query_ms1_id", "query_ms2_id",
+                                       "query_mz", "query_rt", "ref_idx",
+                                       "query_formula", "chemical_similarity",
+                                       "score")]
+                       , annotations[, cols])
+
 
   for (i in seq_len(ncol(annotations))){
     annotations[, i] <- trimws(annotations[, i], "right")

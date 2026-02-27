@@ -41,9 +41,9 @@ you want the calculation to use.}
 a \code{data.frame} object that shows the dissimilarity in samples.
 }
 \description{
-Alpha Diversity calculates the amount of diversity in a single sample.
-We can conduct this analysis using your created community object.
-We support the use of Shannon and Simpson diversity index.
+Alpha Diversity calculates the amount of diversity in
+a single sample. We can conduct this analysis using your created
+community object. We support the use of Shannon and Simpson diversity index.
 }
 \examples{
 data <-

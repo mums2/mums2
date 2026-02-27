@@ -43,10 +43,11 @@ a \code{data.frame} object that shows the
 dissimilarity between all samples.
 }
 \description{
-Beta diversity is calculation that allows us to calculate the differences
-between two samples. We can conduct this analysis using the created community objects.
-The available options for beta diversity are: Bray Curtis, Jaccard Dissimilarity,
-Sorenson index, Hamming Distance, Morista-Horn index, and Yue & Clayton measure
+Beta diversity is calculation that allows us to calculate
+the differences between two samples. We can conduct this analysis
+using the created community objects. The available options for
+beta diversity are: Bray Curtis, Jaccard Dissimilarity, Sorenson index,
+Hamming Distance, Morista-Horn index, and Yue & Clayton measure
 of dissimilarity (or thetayc).
 }
 \examples{

@@ -11,7 +11,7 @@ test_that("cluster_data error catching works as expected", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5), min_peaks = 0)
   expect_error(cluster_data("distances", dat,  0.3, "opticlust"),
-               "distance_df should be an object created")
+               "distance_df must be an object created")
   expect_error(cluster_data(distances, "dat",  0.3, "opticlust"),
               "The mass_data object must be created")
   expect_error(cluster_data(distances, dat,  "0.3", "opticlust"),

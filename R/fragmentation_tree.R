@@ -31,27 +31,33 @@
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
 #'  filtered_data, 0.1, 6)
 #' compute_molecular_formulas(matched_data)
+#' @references
+#' Sebastian Böcker, Florian Rasche, Towards de novo identification of
+#' metabolites by analyzing tandem mass spectra, Bioinformatics, Volume 24,
+#' Issue 16, August 2008, Pages i49–i55,
+#' https://doi.org/10.1093/bioinformatics/btn270
+#'
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
                                        number_of_threads = detectCores()) {
-  if(!inherits(mass_data, "mass_data")) {
+  if (!inherits(mass_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))
   }
-  if(!is.numeric(parent_ppm)) {
+  if (!is.numeric(parent_ppm)) {
     stop("parent_ppm must be numeric")
   }
 
-  if(!is.numeric(number_of_threads)) {
+  if (!is.numeric(number_of_threads)) {
     stop("number_of_threads must be numeric")
   }
-  
-  if(nrow(mass_data$ms2_matches) <= 0) {
+
+  if (nrow(mass_data$ms2_matches) <= 0) {
     stop("Your mass_data object has no ms2 matches, cannot continue.")
   }
 
-  if(length(mass_data$peak_data) <= 0) {
+  if (length(mass_data$peak_data) <= 0) {
     stop("Your mass_data object has no peak data, cannot continue.")
   }
 

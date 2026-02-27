@@ -29,21 +29,21 @@
 #' @return returns a `mass_data` object of all of the ms2 and ms1 matches.
 ms2_ms1_compare <- function(ms2_files, mpactr_object,
                             mz_tolerance, rt_tolerance) {
-  
-  if(!inherits(mpactr_object, "filter_pactr")) {
+
+  if (!inherits(mpactr_object, "filter_pactr")) {
     stop(paste0("The mpactr object must be created using the",
                 "`import_all_data()` function"))
   }
-  
-  if(!is.character(ms2_files)) {
+
+  if (!is.character(ms2_files)) {
     stop("ms2_files must be a character")
   }
 
-  if(!is.numeric(mz_tolerance)) {
+  if (!is.numeric(mz_tolerance)) {
     stop("mz_tolerance must be numeric")
   }
 
-  if(!is.numeric(rt_tolerance)) {
+  if (!is.numeric(rt_tolerance)) {
     stop("rt_tolerance must be numeric")
   }
 

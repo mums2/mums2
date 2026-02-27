@@ -1,22 +1,25 @@
 
 #' @title Get Reference Data
 #' @export
-#' @description Will return the data inside the reference object based on the index given.
+#' @description Will return the data inside the reference object
+#' based on the index given.
 #' @param reference reference database object.
 #' @param index the index of the data.
 #' @examples
 #' reference <- read_msp(mums2_example("massbank_example_data.msp"))
 #' get_reference_data(reference, 1)
 #'
-#' @return prints customized message to the console
+#' @return returns a `list` object with all of the reference data at
+#' the specified index.
 get_reference_data <- function(reference, index) {
-  if(!inherits(reference, "reference_database")) {
-    stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
+  if (!inherits(reference, "reference_database")) {
+    stop(paste0("Ensure reference is the object generated from",
+                " `read_msp()` or `read_hmdb()`"))
   }
-  if(!inherits(index,"numeric")) {
+  if (!inherits(index, "numeric")) {
     stop("index has to be a numeric")
   }
-  return(GetNode(reference, index))
+  GetNode(reference, index)
 }
 
 
@@ -30,15 +33,17 @@ get_reference_data <- function(reference, index) {
 #' reference2 <- read_msp(mums2_example("massbank_example_data.msp"))
 #' combined_reference_database(reference, reference2)
 #'
-#' @return prints customized message to the console
+#' @return a `reference_database` that includes references from both
+#' reference databases.
 combined_reference_database <- function(reference, other_reference) {
-  if(!inherits(reference, "reference_database") || 
-     !inherits(other_reference, "reference_database")) {
-      stop("Ensure reference is the object generated from `read_msp()` or `read_hmdb()`")
+  if (!inherits(reference, "reference_database") ||
+        !inherits(other_reference, "reference_database")) {
+    stop(paste0("Ensure reference is the object generated from",
+                "`read_msp()` or `read_hmdb()`"))
   }
   new_reference_db <- CombineReferenceDatabases(reference, other_reference)
   class(new_reference_db) <- "reference_database"
-  return(new_reference_db)
+  new_reference_db
 }
 
 
@@ -69,6 +74,5 @@ print.reference_database <- function(x, ...) {
 #'
 #' @return returns the length of the regerence database
 length.reference_database <- function(x) {
-  return(GetNodeCount(x))
+  GetNodeCount(x)
 }
-

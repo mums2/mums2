@@ -11,20 +11,21 @@ generate_a_combined_table(
 )
 }
 \arguments{
-\item{matched_data}{description}
+\item{matched_data}{massdata object created from \code{ms2_ms1_compare()}}
 
-\item{annotations}{annotations}
+\item{annotations}{annotations table created from \code{annotate_ms2()}}
 
-\item{cluster_data}{cluster}
+\item{cluster_data}{cluster data created from \code{cluster_data()}}
 }
 \value{
 a \code{data.frame} object.
 }
 \description{
-This function will use the generated matched data, annotations and
-cluster data, to create a combined dataframe of all the generated data. It
-has the ability to create the dataframe without annotations or clustering data. However,
-if annotations are supplied and a feature has more than one annotation,
+This function will use the generated matched data,
+annotations and cluster data, to create a combined dataframe of
+all the generated data. It has the ability to create the
+dataframe without annotations or clustering data. However, if
+annotations are supplied and a feature has more than one annotation,
 the data will be returned in long format.
 }
 \examples{

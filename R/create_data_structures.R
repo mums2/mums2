@@ -33,9 +33,9 @@
 #' @return a `data.frame` object of your community_object.
 create_community_matrix <- function(cluster_object) {
 
-  if(!inherits(cluster_object, "mothur_cluster")) {
+  if (!inherits(cluster_object, "mothur_cluster")) {
     stop(paste0("cluster_object must be created using the `cluster_data()`",
-            " function"))
+                "function"))
   }
   df <- get_abundance(cluster_object)
   samples <- unique(df$samples)
@@ -88,12 +88,12 @@ create_community_matrix <- function(cluster_object) {
 #'                                                       filtered_data)
 #' @return a `mass_data` object using group averages
 convert_to_group_averages <- function(matched_data, mpactr_object) {
-  if(!inherits(matched_data, "mass_data")) {
+  if (!inherits(matched_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))
   }
 
-  if(!inherits(mpactr_object, "filter_pactr")) {
+  if (!inherits(mpactr_object, "filter_pactr")) {
     stop(paste0("The mpactr object must be created using the",
                 "`import_all_data()` function"))
   }
@@ -143,14 +143,15 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 
 #' @export
 #' @title Create a combined table
-#' @description This function will use the generated matched data, annotations and
-#' cluster data, to create a combined dataframe of all the generated data. It
-#' has the ability to create the dataframe without annotations or clustering data. However,
-#' if annotations are supplied and a feature has more than one annotation, 
-#' the data will be returned in long format. 
-#' @param matched_data description
-#' @param annotations annotations
-#' @param cluster_data cluster
+#' @description This function will use the generated matched data,
+#' annotations and cluster data, to create a combined dataframe of
+#' all the generated data. It has the ability to create the
+#' dataframe without annotations or clustering data. However, if
+#' annotations are supplied and a feature has more than one annotation,
+#' the data will be returned in long format.
+#' @param matched_data massdata object created from `ms2_ms1_compare()`
+#' @param annotations annotations table created from `annotate_ms2()`
+#' @param cluster_data cluster data created from `cluster_data()`
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
@@ -189,7 +190,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 generate_a_combined_table <- function(matched_data,
                                       annotations = NULL, cluster_data = NULL) {
 
-  if(!inherits(matched_data, "mass_data")){
+  if (!inherits(matched_data, "mass_data")) {
     stop("matched_data must be an object created from `ms2_ms1_compare()`.")
   }
 

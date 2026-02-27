@@ -2,18 +2,17 @@
 #' @title Cluster Features
 #' @description
 #' `cluster_data()` allows users to cluster features inside
-#' your mass data object. This is done by creating a sparse matrix
+#' the mass data object. This is done by creating a sparse matrix
 #' using the `distMs2()` function and inputting that inside the
-#' clutur package. This allows us to easily cluster all kinds of
-#' features as long as they contain a ms2 spectra.
-#' 
+#' clutur package. This allows us to easily cluster features
+#' that contain an ms2 spectra.
 #' @param distance_df a distance df that was generated
 #' from the `distMs2()` function.
 #' @param ms2_match_data your mass data set object generated
 #'  from `ms2_ms1_compare()`.
 #' @param cutoff the cutoff value you wish to cluster to.
-#' @param cluster_method a cluster method, there are five methods to choose
-#'  from: furthest, nearest, weighted, average, and opticlust.
+#' @param cluster_method the clustering algorithm you wish to use.
+#'  The options are: furthest, nearest, weighted, average, and opticlust.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
@@ -40,25 +39,25 @@
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 #'
-#' @return a shared `data.frame` displaying all
+#' @return a shared `data.frame` (or a `mothur_cluster` object) displaying all
 #' the clustered and abundance data.
 cluster_data <- function(distance_df, ms2_match_data,
                          cutoff = 0.3, cluster_method = "opticlust") {
-  
-  if(!inherits(distance_df, "mass_data_dist")) {
-    stop("distance_df should be an object created from the `dist_ms2()` function")
+
+  if (!inherits(distance_df, "mass_data_dist")) {
+    stop("distance_df must be an object created from the `dist_ms2()` function")
   }
 
-  if(nrow(distance_df) <= 0) {
+  if (nrow(distance_df) <= 0) {
     stop("distance_df must have more than 0 rows")
   }
 
-  if(!inherits(ms2_match_data, "mass_data")) {
+  if (!inherits(ms2_match_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))
   }
 
-  if(!is.numeric(cutoff)) {
+  if (!is.numeric(cutoff)) {
     stop("cutoff should be a numeric value")
   }
   sparse_matrix <- create_sparse_matrix(distance_df$i,

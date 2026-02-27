@@ -49,3 +49,9 @@ matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
  filtered_data, 0.1, 6)
 compute_molecular_formulas(matched_data)
 }
+\references{
+Sebastian Böcker, Florian Rasche, Towards de novo identification of
+metabolites by analyzing tandem mass spectra, Bioinformatics, Volume 24,
+Issue 16, August 2008, Pages i49–i55,
+https://doi.org/10.1093/bioinformatics/btn270
+}

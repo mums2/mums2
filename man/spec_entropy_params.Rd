@@ -43,7 +43,7 @@ calculation. Set to -1 to disable. Defaults to \code{100}.}
 will be calculated. Defaults to \code{TRUE}.}
 }
 \value{
-A parameters list for similarity scoring method "spectral_entropy"
+A parameters \code{list} for similarity scoring method "spectral_entropy"
 }
 \description{
 Calculate spectral entropy similarity between two MS2 spectra

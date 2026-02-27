@@ -1,10 +1,11 @@
 #' @title Distance Shared
 #' @export
-#' @description Beta diversity is calculation that allows us to calculate the differences
-#' between two samples. We can conduct this analysis using the created community objects.
-#' The available options for beta diversity are: Bray Curtis, Jaccard Dissimilarity,
-#' Sorenson index, Hamming Distance, Morista-Horn index, and Yue & Clayton measure
-#' of dissimilarity (or thetayc). 
+#' @description Beta diversity is calculation that allows us to calculate
+#' the differences between two samples. We can conduct this analysis
+#' using the created community objects. The available options for
+#' beta diversity are: Bray Curtis, Jaccard Dissimilarity, Sorenson index,
+#' Hamming Distance, Morista-Horn index, and Yue & Clayton measure
+#' of dissimilarity (or thetayc).
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -56,7 +57,7 @@ dist_shared <- function(community_object, size, threshold,
                         iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren",
                             "hamming", "morisita", "thetayc")
-  if(!inherits(community_object, "community_object")) {
+  if (!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the
          `create_community_object` function.")
   }
@@ -66,28 +67,28 @@ dist_shared <- function(community_object, size, threshold,
                 paste(diversity_index_list, collapse = ", "))
     )
   }
-  if(!is.numeric(size)) {
+  if (!is.numeric(size)) {
     stop("size must be numeric")
   }
-  if(!is.numeric(threshold)) {
+  if (!is.numeric(threshold)) {
     stop("threshold must be numeric")
   }
-  if(!is.numeric(number_of_threads)) {
+  if (!is.numeric(number_of_threads)) {
     stop("number_of_threads must be numeric")
   }
-  if(!is.numeric(iterations)) {
+  if (!is.numeric(iterations)) {
     stop("iterations must be numeric")
   }
-  if(!is.numeric(seed)) {
+  if (!is.numeric(seed)) {
     stop("seed must be numeric")
   }
-  if(!is.logical(subsample)) {
+  if (!is.logical(subsample)) {
     stop("subsample must be a boolean")
   }
 
   result <- MeasureDiversity(community_object, diversity_index,
-                          size, threshold, subsample,
-                          number_of_threads, iterations, seed)
+                             size, threshold, subsample,
+                             number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(as.dist(result))
 }
@@ -95,9 +96,9 @@ dist_shared <- function(community_object, size, threshold,
 
 #' @title Alpha Diversity Summary
 #' @export
-#' @description Alpha Diversity calculates the amount of diversity in a single sample.
-#' We can conduct this analysis using your created community object.
-#' We support the use of Shannon and Simpson diversity index.
+#' @description Alpha Diversity calculates the amount of diversity in
+#' a single sample. We can conduct this analysis using your created
+#' community object. We support the use of Shannon and Simpson diversity index.
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -159,28 +160,28 @@ alpha_summary <- function(community_object, size, threshold,
     )
   }
 
-  if(!is.numeric(size)) {
+  if (!is.numeric(size)) {
     stop("size must be numeric")
   }
-  if(!is.numeric(threshold)) {
+  if (!is.numeric(threshold)) {
     stop("threshold must be numeric")
   }
-  if(!is.numeric(number_of_threads)) {
+  if (!is.numeric(number_of_threads)) {
     stop("number_of_threads must be numeric")
   }
-  if(!is.numeric(iterations)) {
+  if (!is.numeric(iterations)) {
     stop("iterations must be numeric")
   }
-  if(!is.numeric(seed)) {
+  if (!is.numeric(seed)) {
     stop("seed must be numeric")
   }
-  if(!is.logical(subsample)) {
+  if (!is.logical(subsample)) {
     stop("subsample must be a boolean")
   }
 
 
   result <- MeasureDiversity(community_object, diversity_index, size, threshold,
-                          subsample, number_of_threads, iterations, seed)
+                             subsample, number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(result)
 }

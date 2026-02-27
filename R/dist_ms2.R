@@ -55,33 +55,33 @@
 #' @return A sparse matrix of class `"data.frame"`
 #' @export
 dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
-                               min_peaks = 6,
-                               number_of_threads = detectCores()) {
-  if(!inherits(data, "mass_data")) {
+                     min_peaks = 6,
+                     number_of_threads = detectCores()) {
+  if (!inherits(data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare() function`"))
   }
   if (nrow(data$ms2_matches) <= 0) {
     stop("Cannot calculate distances, there are no matched ms2.")
   }
-  if(!inherits(score_params, "parameters")) {
-    stop(paste0("score_params must be created using the modified_cosine_params()",
-                " or spec_entropy_params() function"))
+  if (!inherits(score_params, "parameters")) {
+    stop(paste0("score_params must be created using the",
+                " modified_cosine_params() or spec_entropy_params() function"))
   }
 
- if(!is.numeric(cutoff)) {
+  if (!is.numeric(cutoff)) {
     stop("cutoff must be numeric")
   }
 
-  if(!is.numeric(precursor_threshold)) {
+  if (!is.numeric(precursor_threshold)) {
     stop(paste0("precursor_threshold must be a numeric"))
   }
 
-  if(!is.numeric(min_peaks)) {
+  if (!is.numeric(min_peaks)) {
     stop("min_peaks must be a numeric")
   }
 
-  if(!is.numeric(number_of_threads)) {
+  if (!is.numeric(number_of_threads)) {
     stop("number_of_threads must be a numeric")
   }
 
@@ -92,7 +92,7 @@ dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
 
   dist <- distMS2(data_list, score_params, precursor_threshold,
                   cutoff, min_peaks, number_of_threads)
-  
+
   class(dist) <- c(class(dist), "mass_data_dist")
   return(dist)
 }

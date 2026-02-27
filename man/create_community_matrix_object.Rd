@@ -22,8 +22,8 @@ a external pointer to an Rcpp object.
 \description{
 Using the data generated from clustering or adding ms2 data to your object,
 we are able to create a community matrix object. The community matrix object
-stores the same data a community matrix but within a cpp object. We use this object
-to conduct analysis more efficiently.
+stores the same data a community matrix but within a cpp object.
+We use this object to conduct analysis more efficiently.
 }
 \examples{
 data <-

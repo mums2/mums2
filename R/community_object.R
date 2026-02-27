@@ -3,8 +3,8 @@
 #' @description
 #' Using the data generated from clustering or adding ms2 data to your object,
 #' we are able to create a community matrix object. The community matrix object
-#' stores the same data a community matrix but within a cpp object. We use this object
-#' to conduct analysis more efficiently. 
+#' stores the same data a community matrix but within a cpp object.
+#' We use this object to conduct analysis more efficiently.
 #' @param data the result of the `cluster_data()` function,
 #'  or just a mass_data object created from `ms2_ms1_compare()`.
 #' @examples
@@ -39,8 +39,8 @@
 #'
 #' @return a external pointer to an Rcpp object.
 create_community_matrix_object <- function(data) {
-  if(!inherits(data, "mass_data") &&
-     !inherits(data, "mothur_cluster")) {
+  if (!inherits(data, "mass_data") &&
+        !inherits(data, "mothur_cluster")) {
     stop(paste0("data has to be created using the",
                 " `ms2_ms1_compare()` or `cluster_data()` functions"))
   }

@@ -46,7 +46,7 @@ change_rt_to_seconds_or_minute <- function(mpactr_object,
     stop("Make sure you are using the object created from `import_all_data()`")
   }
 
-  if(rt_type != "seconds" && rt_type != "minutes") {
+  if (rt_type != "seconds" && rt_type != "minutes") {
     stop("rt_type can only be equal to 'seconds', or 'minutes'")
   }
   print(paste0("Changing rt values to ", rt_type))
