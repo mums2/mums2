@@ -1,6 +1,11 @@
 #' @title Distance Shared
 #' @export
-#' @description dissimilarity via beta diversity
+#' @description Beta diversity is calculation that allows us to calculate
+#' the differences between two samples. We can conduct this analysis
+#' using the created community objects. The available options for
+#' beta diversity are: Bray Curtis, Jaccard Dissimilarity, Sorenson index,
+#' Hamming Distance, Morista-Horn index, and Yue & Clayton measure
+#' of dissimilarity (or thetayc).
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -18,10 +23,10 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -32,8 +37,8 @@
 #'
 #'  change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
 #'
@@ -52,7 +57,7 @@ dist_shared <- function(community_object, size, threshold,
                         iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren",
                             "hamming", "morisita", "thetayc")
-  if (!("community_object" %in% class(community_object))) {
+  if (!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the
          `create_community_object` function.")
   }
@@ -62,9 +67,28 @@ dist_shared <- function(community_object, size, threshold,
                 paste(diversity_index_list, collapse = ", "))
     )
   }
-  result <- FasterAvgDist(community_object, diversity_index,
-                          size, threshold, subsample,
-                          number_of_threads, iterations, seed)
+  if (!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+  if (!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+  if (!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+  if (!is.numeric(iterations)) {
+    stop("iterations must be numeric")
+  }
+  if (!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+  if (!is.logical(subsample)) {
+    stop("subsample must be a boolean")
+  }
+
+  result <- MeasureDiversity(community_object, diversity_index,
+                             size, threshold, subsample,
+                             number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(as.dist(result))
 }
@@ -72,7 +96,9 @@ dist_shared <- function(community_object, size, threshold,
 
 #' @title Alpha Diversity Summary
 #' @export
-#' @description alpha diversity
+#' @description Alpha Diversity calculates the amount of diversity in
+#' a single sample. We can conduct this analysis using your created
+#' community object. We support the use of Shannon and Simpson diversity index.
 #' @param community_object the object created from
 #' the `create_community_object()` function.
 #' @param size the size you wish to rarefy your diversity matrix to.
@@ -89,10 +115,10 @@ dist_shared <- function(community_object, size, threshold,
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -103,8 +129,8 @@ dist_shared <- function(community_object, size, threshold,
 #'
 #'  change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
 #'
@@ -134,8 +160,28 @@ alpha_summary <- function(community_object, size, threshold,
     )
   }
 
-  result <- FasterAvgDist(community_object, diversity_index, size, threshold,
-                          subsample, number_of_threads, iterations, seed)
+  if (!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+  if (!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+  if (!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+  if (!is.numeric(iterations)) {
+    stop("iterations must be numeric")
+  }
+  if (!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+  if (!is.logical(subsample)) {
+    stop("subsample must be a boolean")
+  }
+
+
+  result <- MeasureDiversity(community_object, diversity_index, size, threshold,
+                             subsample, number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   return(result)
 }

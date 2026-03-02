@@ -1,17 +1,19 @@
 #' @export
-#' @title Create Community Matrix
+#' @title Create Community Matrix Object.
 #' @description
-#' Takes you mass_data object and creates a community matrix object.
-#'  This object is used to compute diversity calculations.
+#' Using the data generated from clustering or adding ms2 data to your object,
+#' we are able to create a community matrix object. The community matrix object
+#' stores the same data a community matrix but within a cpp object.
+#' We use this object to conduct analysis more efficiently.
 #' @param data the result of the `cluster_data()` function,
 #'  or just a mass_data object created from `ms2_ms1_compare()`.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -22,8 +24,8 @@
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -37,6 +39,11 @@
 #'
 #' @return a external pointer to an Rcpp object.
 create_community_matrix_object <- function(data) {
+  if (!inherits(data, "mass_data") &&
+        !inherits(data, "mothur_cluster")) {
+    stop(paste0("data has to be created using the",
+                " `ms2_ms1_compare()` or `cluster_data()` functions"))
+  }
   UseMethod("create_community_matrix_object", data)
 }
 
@@ -87,10 +94,10 @@ create_community_matrix_object.mothur_cluster <- function(data) {
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -101,8 +108,8 @@ create_community_matrix_object.mothur_cluster <- function(data) {
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -125,16 +132,16 @@ get_community_matrix <- function(community_object) {
 #' @export
 #' @title Print Community Object
 #' @description
-#' 3 function for print the community object
+#' S3 function for print the community object
 #' @param x the object created from the `create_community_object()` function.
 #' @param ... other parameters that are included in the print function.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -145,8 +152,8 @@ get_community_matrix <- function(community_object) {
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)

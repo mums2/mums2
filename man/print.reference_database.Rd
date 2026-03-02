@@ -18,7 +18,7 @@ prints customized message to the console
 print reference objects.
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
 print(reference)
 
 }

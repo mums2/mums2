@@ -7,7 +7,7 @@
 compute_molecular_formulas(
   mass_data,
   parent_ppm = 3,
-  num_threads = detectCores()
+  number_of_threads = detectCores()
 )
 }
 \arguments{
@@ -16,7 +16,7 @@ compute_molecular_formulas(
 \item{parent_ppm}{the ppm you wish to generate the candidate
 molecular formulas.}
 
-\item{num_threads}{the amount of threads we the algorithm will use.}
+\item{number_of_threads}{the amount of threads we the algorithm will use.}
 }
 \value{
 your mass_data object with an additional \code{character}
@@ -32,10 +32,10 @@ efficiently calculate a multitudeof chemical formulas.
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -45,7 +45,13 @@ filtered_data <- data |>
    filter_peak_table(filter_insource_ions_params())
 
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 0.1, 6)
 compute_molecular_formulas(matched_data)
+}
+\references{
+Sebastian Böcker, Florian Rasche, Towards de novo identification of
+metabolites by analyzing tandem mass spectra, Bioinformatics, Volume 24,
+Issue 16, August 2008, Pages i49–i55,
+https://doi.org/10.1093/bioinformatics/btn270
 }

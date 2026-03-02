@@ -5,6 +5,8 @@
 #include <Rcpp.h>
 #include <RcppThread.h>
 #include <string>
+
+#include "DataStructures/CppMatrix.h"
 #include "FragmentationTree/FragmentationTree.h"
 #include "FragmentationTree/GreedyHeuristic.h"
 #include "Math/VectorMath.h"

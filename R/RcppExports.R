@@ -33,8 +33,8 @@ RarefactionCalculation <- function(communityMatrix, size, threshold, numberOfThr
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numberOfThreads, seed)
 }
 
-FasterAvgDist <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
-    .Call(`_mums2_FasterAvgDist`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
+MeasureDiversity <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
+    .Call(`_mums2_MeasureDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
 CreateHumanMetabolomicsDB <- function() {
@@ -43,10 +43,6 @@ CreateHumanMetabolomicsDB <- function() {
 
 AddHumanMetabolomicNode <- function(hmdbPtr, names, values) {
     invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values))
-}
-
-PrintHMDBNames <- function(hmdbPtr) {
-    invisible(.Call(`_mums2_PrintHMDBNames`, hmdbPtr))
 }
 
 AddSpectra <- function(hmdbPtr, fileNames, databaseNames) {
@@ -87,9 +83,5 @@ ReadMgf <- function(path) {
 
 ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
-}
-
-ReadSpectraFile <- function(filePath) {
-    invisible(.Call(`_mums2_ReadSpectraFile`, filePath))
 }
 

@@ -41,15 +41,17 @@ you want the calculation to use.}
 a \code{data.frame} object that shows the dissimilarity in samples.
 }
 \description{
-alpha diversity
+Alpha Diversity calculates the amount of diversity in
+a single sample. We can conduct this analysis using your created
+community object. We support the use of Shannon and Simpson diversity index.
 }
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -60,8 +62,8 @@ filtered_data <- data |>
 
  change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 10, 6)
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = modified_cosine_params(0.5), min_peaks = 0)
 

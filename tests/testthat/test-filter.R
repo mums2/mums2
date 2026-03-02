@@ -17,6 +17,18 @@ test_that("all the filters work as expected", {
   expect_true(nrow(filtered_peak_table) == 590)
 })
 
+test_that("filter_peak_table will fail if given incorrect parameters", {
+  data <- import_all_data(peak_table = test_path("exttestdata",
+                                                 "peak_table.csv"),
+                          meta_data = test_path("exttestdata",
+                                                "meta_data.csv"),
+                          format = "Progenesis")
+  expect_error(filter_peak_table("a", filter_mispicked_ions_params()),
+               "The mpactr object")
+  expect_error(filter_peak_table(data, c()),
+               "The params object")
+})
+
 test_that("filter_mispicked_ions parameters return correct data", {
   params <- filter_mispicked_ions_params()
   ls <- list(ringwin = 0, isowin = 0,
@@ -53,3 +65,4 @@ test_that("filter_insource_ions_params return correct data", {
   expect_true(all(names(ls) == names(params)))
   expect_true(length(params) == 2)
 })
+

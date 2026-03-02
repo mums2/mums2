@@ -19,7 +19,6 @@ public:
     bool AddNodes(const AnnotationController& node);
     AnnotationNode GetNode(int index);
     size_t NodeCount() const {return annotations.size();}
-    std::vector<AnnotationNode> GetNodes(const std::vector<int>& index) const;
     std::vector<AnnotationNode>& GetAnnotationNodes() {return annotations;}
     std::queue<AnnotatedNode> AnnotateFeature(const std::vector<Feature>& features, const ScoringFactory& factory,
         double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks,

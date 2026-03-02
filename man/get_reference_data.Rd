@@ -12,13 +12,15 @@ get_reference_data(reference, index)
 \item{index}{the index of the data.}
 }
 \value{
-prints customized message to the console
+returns a \code{list} object with all of the reference data at
+the specified index.
 }
 \description{
-Will return the data inside the reference object based on the index given.
+Will return the data inside the reference object
+based on the index given.
 }
 \examples{
-reference <- read_msp(mums2_example("PSU-MSMLS.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
 get_reference_data(reference, 1)
 
 }

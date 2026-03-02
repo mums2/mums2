@@ -3,6 +3,7 @@
 //
 
 #include "ScoringMethods/GNPS/ModifiedCosineScore.h"
+#include "NormalizeMs2/SquareRootNormalize.h"
 #include <algorithm>
 ModifiedCosineScore::ModifiedCosineScore(const Rcpp::List& parameter):tolerance(parameter["tolerance"]) {
 

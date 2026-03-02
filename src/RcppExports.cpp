@@ -119,9 +119,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// FasterAvgDist
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
-RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
+// MeasureDiversity
+Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
+RcppExport SEXP _mums2_MeasureDiversity(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -133,7 +133,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
+    rcpp_result_gen = Rcpp::wrap(MeasureDiversity(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -156,16 +156,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
     AddHumanMetabolomicNode(hmdbPtr, names, values);
-    return R_NilValue;
-END_RCPP
-}
-// PrintHMDBNames
-void PrintHMDBNames(const SEXP& hmdbPtr);
-RcppExport SEXP _mums2_PrintHMDBNames(SEXP hmdbPtrSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type hmdbPtr(hmdbPtrSEXP);
-    PrintHMDBNames(hmdbPtr);
     return R_NilValue;
 END_RCPP
 }
@@ -284,16 +274,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadSpectraFile
-void ReadSpectraFile(const std::string& filePath);
-RcppExport SEXP _mums2_ReadSpectraFile(SEXP filePathSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type filePath(filePathSEXP);
-    ReadSpectraFile(filePath);
-    return R_NilValue;
-END_RCPP
-}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -306,10 +286,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
-    {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
+    {"_mums2_MeasureDiversity", (DL_FUNC) &_mums2_MeasureDiversity, 8},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
-    {"_mums2_PrintHMDBNames", (DL_FUNC) &_mums2_PrintHMDBNames, 1},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
@@ -320,7 +299,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
-    {"_mums2_ReadSpectraFile", (DL_FUNC) &_mums2_ReadSpectraFile, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

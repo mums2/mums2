@@ -24,13 +24,6 @@ AnnotationNode AnnotationController::GetNode(const int index) {
     return annotations[index];
 }
 
-std::vector<AnnotationNode> AnnotationController::GetNodes(const std::vector<int>& index) const {
-    std::vector<AnnotationNode> nodes(index.size());
-    for (size_t i = 0; i < index.size(); ++i) {
-        nodes[i] = annotations[index[i]];
-    }
-    return nodes;
-}
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 std::queue<AnnotatedNode> AnnotationController::AnnotateFeature(const std::vector<Feature> &features,
@@ -49,7 +42,8 @@ const double precursorThreshold, const size_t minPeaks, const int threadCount) c
         RcppThread::parallelFor(0, size, [this, &feature, &factory, &result,
             &minScoreThreshold, &chemicalMinScore, &precursorThreshold, &minPeaks, &mutex, &i](int j) {
             const AnnotationNode& node = annotations[j];
-            if ((std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz <= precursorThreshold) {
+            if (precursorThreshold == -1 ||
+                (std::abs(feature.mz - node.precursorMz)) * 1e6 / feature.mz <= precursorThreshold) {
                 const double chemicalSimilarity = MolecularFormulaSimilarity::ComputeSimilarity(feature.formula,
                node.chemicalFormula);
                 if (chemicalSimilarity >= chemicalMinScore) {

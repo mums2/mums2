@@ -13,7 +13,7 @@ file.}
 \item{meta_data}{The file path to your meta_data file or \code{data.frame}.}
 
 \item{format}{The expected exported type of your peak table, can be
-one of "Progenesis", "Metaboscape", "None".}
+one of "Progenesis", "None", "None".}
 }
 \value{
 a \code{mpactr} object.
@@ -25,8 +25,8 @@ It will import your peak table and meta data and create a mpactr_object.
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 }

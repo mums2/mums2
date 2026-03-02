@@ -16,7 +16,6 @@ public:
     ~CommunityMatrix() = default;
     void InitializeMatrix();
     const Rcpp::NumericMatrix& GetCommunityMatrix() const {return communityMatrix;}
-    std::vector<uint64_t> GetCommunityMatrixByRow(int row) const;
     const CppMatrix& GetCppMatrixOfAbundances() const {return cppMatrixOfAbundances;}
 
     const std::vector<std::vector<uint64_t>>& GetColumnEligibleIndexes() const {return eligibleRowIndexes;}

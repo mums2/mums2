@@ -6,7 +6,7 @@
 #define MUMS2_ANNOTATIONNODE_H
 #include <string>
 #include <list>
-#include "../Distance/DataStructures/Spectra.h"
+#include "../Spectra/Spectra.h"
 
 struct KeyValues {
     std::string key;

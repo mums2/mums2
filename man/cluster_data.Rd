@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluster.R
 \name{cluster_data}
 \alias{cluster_data}
-\title{Cluster}
+\title{Cluster Features}
 \usage{
 cluster_data(
   distance_df,
@@ -20,23 +20,27 @@ from \code{ms2_ms1_compare()}.}
 
 \item{cutoff}{the cutoff value you wish to cluster to.}
 
-\item{cluster_method}{a cluster method, there are five methods to choose
-from: furthest, nearest, weighted, average, and opticlust.}
+\item{cluster_method}{the clustering algorithm you wish to use.
+The options are: furthest, nearest, weighted, average, and opticlust.}
 }
 \value{
-a shared \code{data.frame} displaying all
+a shared \code{data.frame} (or a \code{mothur_cluster} object) displaying all
 the clustered and abundance data.
 }
 \description{
-Clusters the data together
+\code{cluster_data()} allows users to cluster features inside
+the mass data object. This is done by creating a sparse matrix
+using the \code{distMs2()} function and inputting that inside the
+clutur package. This allows us to easily cluster features
+that contain an ms2 spectra.
 }
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -47,8 +51,8 @@ filtered_data <- data |>
 
 change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 10, 6)
 
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = modified_cosine_params(0.5), min_peaks = 0)

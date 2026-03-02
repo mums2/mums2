@@ -183,7 +183,6 @@ Spectra ReadSpectra::ReadSpectraFile(const std::string &filePath) {
     if (!spectraFile.is_open()) {
         Rcpp::stop("Could not open spectra file.");
     }
-
     double mz, intensity;
     std::vector<double> mzValues;
     std::vector<double> intensityValues;

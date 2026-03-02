@@ -11,25 +11,30 @@ generate_a_combined_table(
 )
 }
 \arguments{
-\item{matched_data}{description}
+\item{matched_data}{massdata object created from \code{ms2_ms1_compare()}}
 
-\item{annotations}{annotations}
+\item{annotations}{annotations table created from \code{annotate_ms2()}}
 
-\item{cluster_data}{cluster}
+\item{cluster_data}{cluster data created from \code{cluster_data()}}
 }
 \value{
 a \code{data.frame} object.
 }
 \description{
-combined
+This function will use the generated matched data,
+annotations and cluster data, to create a combined dataframe of
+all the generated data. It has the ability to create the
+dataframe without annotations or clustering data. However, if
+annotations are supplied and a feature has more than one annotation,
+the data will be returned in long format.
 }
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -40,8 +45,8 @@ filtered_data <- data |>
 
 change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 10, 6)
 
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
  score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -49,9 +54,9 @@ dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 
- psu_msmls <- read_msp(mums2_example("PSU-MSMLS.msp"))
+ massbank <- read_msp(mums2_example("massbank_example_data.msp"))
  annotations <- annotate_ms2(mass_data = matched_data,
-   reference = psu_msmls, scoring_params = modified_cosine_params(0.5),
+   reference = massbank, scoring_params = modified_cosine_params(0.5),
    ppm = 1000,
    min_score =  0.1, chemical_min_score = 0)
 

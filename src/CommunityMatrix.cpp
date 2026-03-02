@@ -45,12 +45,6 @@ void CommunityMatrix::InitializeMatrix() {
     cppMatrixOfAbundances = CppMatrix(cppMatrix, row, col);
 }
 
-std::vector<uint64_t> CommunityMatrix::GetCommunityMatrixByRow(const int row) const {
-    Rcpp::NumericVector community = communityMatrix(row, Rcpp::_);
-    const std::vector<uint64_t> communityVector = Rcpp::as<std::vector<uint64_t>>(community);
-    return communityVector;
-}
-
 Rcpp::CharacterVector CommunityMatrix::GetSampleNames() {
     return Rcpp::rownames(communityMatrix);
 }
