@@ -21,6 +21,10 @@ usability of the object."></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/mums2.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Annotations.html">Annotations</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -57,10 +61,10 @@ usability of the object.</p>
 <dd><p>the result of the <code><a href="cluster_data.html">cluster_data()</a></code> function.
 data &lt;-
 import_all_data(peak_table =
-mums2::mums2_example("full_mix_peak_table_small.csv"),
+mums2::mums2_example("botryllus_pt_small.csv"),
 meta_data =
-mums2::mums2_example("full_mix_meta_data_small.csv"),
-format = "Metaboscape")</p>
+mums2::mums2_example("meta_data_boryillus.csv"),
+format = "None")</p>
 <p>filtered_data &lt;- data |&gt;
 filter_peak_table(filter_mispicked_ions_params()) |&gt;
 filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |&gt;
@@ -68,8 +72,8 @@ filter_peak_table(filter_group_params(group_threshold = 0.1,
 "Blanks")) |&gt;
 filter_peak_table(filter_insource_ions_params())
 change_rt_to_seconds_or_minute(filtered_data, "minutes")</p>
-<p>matched_data &lt;- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-filtered_data, 2, 6)</p>
+<p>matched_data &lt;- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+filtered_data, 10, 6)</p>
 <p>dist &lt;- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 score_params = modified_cosine_params(0.5), min_peaks = 0)</p>
 <p>cluster_results &lt;- cluster_data(distance_df = dist,

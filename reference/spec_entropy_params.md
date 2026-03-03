@@ -61,7 +61,7 @@ spec_entropy_params(
 
 ## Value
 
-A parameters list for similarity scoring method "spectral_entropy"
+A parameters `list` for similarity scoring method "spectral_entropy"
 
 ## Details
 
@@ -107,4 +107,6 @@ spec_entropy_params()
 #> $method
 #> [1] "entropy"
 #> 
+#> attr(,"class")
+#> [1] "parameters"
 ```

@@ -10,10 +10,20 @@
 - [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
   : Match your ms1 spectra to a ms2
 
-## Mass Spectrometry Data Readers
+## Reference Database Readers
 
 - [`read_msp()`](https://www.mums2.org/mums2/reference/read_msp.md) :
-  Read msp files
+  Create Reference Database
+- [`read_hmdb()`](https://www.mums2.org/mums2/reference/read_hmdb.md) :
+  Read HMDB database
+- [`combined_reference_database()`](https://www.mums2.org/mums2/reference/combined_reference_database.md)
+  : Combine Databases
+- [`get_reference_data()`](https://www.mums2.org/mums2/reference/get_reference_data.md)
+  : Get Reference Data
+- [`length(`*`<reference_database>`*`)`](https://www.mums2.org/mums2/reference/length.reference_database.md)
+  : Reference database length
+- [`print(`*`<reference_database>`*`)`](https://www.mums2.org/mums2/reference/print.reference_database.md)
+  : Print reference
 
 ## Filters
 
@@ -45,7 +55,7 @@
 ## Cluster
 
 - [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
-  : Cluster
+  : Cluster Features
 
 ## Diversity Metrics
 
@@ -61,7 +71,7 @@
 - [`create_community_matrix()`](https://www.mums2.org/mums2/reference/create_community_matrix.md)
   : create community matrix
 - [`create_community_matrix_object()`](https://www.mums2.org/mums2/reference/create_community_matrix_object.md)
-  : Create Community Matrix
+  : Create Community Matrix Object.
 - [`print(`*`<community_object>`*`)`](https://www.mums2.org/mums2/reference/print.community_object.md)
   : Print Community Object
 - [`get_community_matrix()`](https://www.mums2.org/mums2/reference/get_community_matrix.md)

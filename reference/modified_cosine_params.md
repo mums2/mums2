@@ -47,4 +47,6 @@ modified_cosine_params(0.5)
 #> $method
 #> [1] "gnps"
 #> 
+#> attr(,"class")
+#> [1] "parameters"
 ```

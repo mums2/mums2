@@ -55,10 +55,10 @@ a `mpactr` object that has been filter based on the supplied parameters.
 ``` r
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 #> If peak table has corrupted compound names they will be converted to
 #>       utf-8 and if there are any commas, they will be converted to periods(.).
 filtered_data <- data |>
@@ -67,14 +67,14 @@ filtered_data <- data |>
    filter_peak_table(filter_group_params(group_threshold = 0.1,
                                              "Blanks")) |>
    filter_peak_table(filter_insource_ions_params())
-#> ℹ Checking 1294 peaks for mispicked peaks.
+#> ℹ Checking 1500 peaks for mispicked peaks.
 #> ℹ Argument merge_peaks is: TRUE. Merging mispicked peaks with method sum.
-#> ✔ 8 ions failed the mispicked filter, 1286 ions remain.
-#> ℹ Parsing 1286 peaks for replicability across technical replicates.
-#> ✔ 399 ions failed the cv_filter filter, 887 ions remain.
-#> ℹ Parsing 887 peaks based on the sample group: Blanks.
+#> ✔ 50 ions failed the mispicked filter, 1450 ions remain.
+#> ℹ Parsing 1450 peaks for replicability across technical replicates.
+#> ✔ 329 ions failed the cv_filter filter, 1121 ions remain.
+#> ℹ Parsing 1121 peaks based on the sample group: Blanks.
 #> ℹ Argument remove_ions is: TRUE.Removing peaks from Blanks.
-#> ✔ 494 ions failed the Blanks filter, 393 ions remain.
-#> ℹ Parsing 393 peaks for insource ions.
-#> ✔ 43 ions failed the insource filter, 350 ions remain.
+#> ✔ 342 ions failed the Blanks filter, 779 ions remain.
+#> ℹ Parsing 779 peaks for insource ions.
+#> ✔ 55 ions failed the insource filter, 724 ions remain.
 ```

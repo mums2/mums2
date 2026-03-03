@@ -16,9 +16,8 @@ create_community_matrix(cluster_object)
   the result of the
   [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
   function. data \<- import_all_data(peak_table =
-  mums2::mums2_example("full_mix_peak_table_small.csv"), meta_data =
-  mums2::mums2_example("full_mix_meta_data_small.csv"), format =
-  "Metaboscape")
+  mums2::mums2_example("botryllus_pt_small.csv"), meta_data =
+  mums2::mums2_example("meta_data_boryillus.csv"), format = "None")
 
   filtered_data \<- data \|\>
   filter_peak_table(filter_mispicked_ions_params()) \|\>
@@ -28,8 +27,8 @@ create_community_matrix(cluster_object)
   change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
   matched_data \<-
-  ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-  filtered_data, 2, 6)
+  ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"), filtered_data,
+  10, 6)
 
   dist \<- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh
   = 2, score_params = modified_cosine_params(0.5), min_peaks = 0)

@@ -22,7 +22,7 @@ import_all_data(peak_table, meta_data, format)
 - format:
 
   The expected exported type of your peak table, can be one of
-  "Progenesis", "Metaboscape", "None".
+  "Progenesis", "None", "None".
 
 ## Value
 
@@ -33,10 +33,10 @@ a `mpactr` object.
 ``` r
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 #> If peak table has corrupted compound names they will be converted to
 #>       utf-8 and if there are any commas, they will be converted to periods(.).
 ```

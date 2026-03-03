@@ -1,6 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://www.mums2.org/mums2/404.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/LICENSE.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/articles/Annotations.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/articles/index.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/articles/mums2.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/authors.html</loc></url>
@@ -10,6 +11,7 @@
 <url><loc>https://www.mums2.org/mums2/reference/annotate_ms2.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/cluster_data.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/reference/combined_reference_database.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/compute_molecular_formulas.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/convert_to_group_averages.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/create_community_matrix.html</loc></url>
@@ -23,14 +25,18 @@
 <url><loc>https://www.mums2.org/mums2/reference/filter_peak_table.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/generate_a_combined_table.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/get_community_matrix.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/reference/get_reference_data.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/import_all_data.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/index.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/reference/length.reference_database.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/modified_cosine_params.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/ms2_ms1_compare.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/mums2-package.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/mums2_example.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/print.community_object.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/reference/print.reference_database.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/rarefy_ms.html</loc></url>
+<url><loc>https://www.mums2.org/mums2/reference/read_hmdb.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/read_msp.html</loc></url>
 <url><loc>https://www.mums2.org/mums2/reference/spec_entropy_params.html</loc></url>
 </urlset>

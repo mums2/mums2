@@ -21,6 +21,10 @@ paths are used in function examples."></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/mums2.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Annotations.html">Annotations</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -67,14 +71,13 @@ of the package.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mums2_example</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "PSU-MSMLS.msp"                 "PSUMSMLS_Adenine.csv"         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "demo_massdataset"              "full_mix_meta_data.csv"       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "full_mix_meta_data_small.csv"  "full_mix_ms2.mgf"             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "full_mix_ms2_small.mgf"        "full_mix_peak_table.csv"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "full_mix_peak_table_small.csv" "ion_masses"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "230112_botryllus_peaktable.csv"     "botryllus_pt_small.csv"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "botryllus_v2.gnps.mgf"              "ion_masses"                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "massbank_example_data.msp"          "massbank_example_data_negative.msp"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "meta_data_boryillus.csv"           </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">mums2_example</span><span class="op">(</span><span class="st">"PSUMSMLS_Adenine.csv"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/_temp/Library/mums2/extdata/PSUMSMLS_Adenine.csv"</span>
+<span class="r-in"><span><span class="fu">mums2_example</span><span class="op">(</span><span class="st">"massbank_example_data.msp"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/home/runner/work/_temp/Library/mums2/extdata/massbank_example_data.msp"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
