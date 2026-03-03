@@ -1,13 +1,22 @@
 test_that("We can get one of the reference by index from the database", {
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
-  data <- get_reference_data(psu_msmls_data, 1)
+  data <- get_reference_data(psu_msmls_data, 2)
   expect_equal(names(data), c("info", "spec"))
   expect_true(length(data$info$keys) == 15)
   expect_true(length(data$spec$mz) == 43)
-  expect_error(get_reference_data(psu_msmls_data, ""), "index has to be a numeric")
+  expect_error(get_reference_data(psu_msmls_data, ""), "Index has to be a numeric")
   expect_error(get_reference_data("", 1), "Ensure reference is the object")
 })
+
+test_that("get_reference_data index will fail if the size is greater than the length
+          of the database", {
+          psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
+                                              "PSU-MSMLS.msp"))
+          expect_error(get_reference_data(psu_msmls_data, 577), 
+                       "Index must be less than the size of the database")
+        })
+
 
 test_that("You can add another database file to the reference data", {
   path <- test_path("exttestdata/database_data", "PSU-MSMLS.msp")
