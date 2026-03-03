@@ -78,10 +78,11 @@ context("Test CppMatrix Operations") {
         std::vector<std::vector<double>> mat2(2);
         mat2[0] = {1,2,3};
         mat2[1] = {4,5,6};
-        const CppMatrix matrix(mat);
+        CppMatrix matrix(mat);
         const CppMatrix matrix2(mat2);
         expect_error(matrix - matrix2);
         expect_error(matrix + matrix2);
+        expect_error(matrix += matrix2);
         expect_error(matrix == matrix2);
     }
     test_that("You are able to divide CppMatrix by a scaler") {

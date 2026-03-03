@@ -4,7 +4,6 @@
 
 #ifndef DIVERSITY_H
 #define DIVERSITY_H
-#include <Rcpp.h>
 #include "../DataStructures/CppMatrix.h"
 class Diversity {
 public:

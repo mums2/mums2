@@ -12,21 +12,57 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // AnnotateMs2Features
-Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const Rcpp::List referenceList, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks);
-RcppExport SEXP _mums2_AnnotateMs2Features(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP referenceListSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP) {
+Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks, const int threadCount);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP, SEXP threadCountSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type queryList(queryListSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type querySpectra(querySpectraSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List >::type referenceList(referenceListSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type annotationController(annotationControllerSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type scoringParameters(scoringParametersSEXP);
     Rcpp::traits::input_parameter< const Rcpp::StringVector& >::type formulas(formulasSEXP);
     Rcpp::traits::input_parameter< const double >::type precursorThreshold(precursorThresholdSEXP);
     Rcpp::traits::input_parameter< const double >::type minScoreThreshold(minScoreThresholdSEXP);
     Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
     Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
-    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(queryList, querySpectra, referenceList, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks));
+    Rcpp::traits::input_parameter< const int >::type threadCount(threadCountSEXP);
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetNodeCount
+size_t GetNodeCount(const SEXP& annotationController);
+RcppExport SEXP _mums2_GetNodeCount(SEXP annotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNodeCount(annotationController));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GetNode
+SEXP GetNode(const SEXP& annotationController, const int index);
+RcppExport SEXP _mums2_GetNode(SEXP annotationControllerSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(GetNode(annotationController, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CombineReferenceDatabases
+SEXP CombineReferenceDatabases(const SEXP& annotationController, const SEXP& otherAnnotationController);
+RcppExport SEXP _mums2_CombineReferenceDatabases(SEXP annotationControllerSEXP, SEXP otherAnnotationControllerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type annotationController(annotationControllerSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type otherAnnotationController(otherAnnotationControllerSEXP);
+    rcpp_result_gen = Rcpp::wrap(CombineReferenceDatabases(annotationController, otherAnnotationController));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -83,9 +119,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// FasterAvgDist
-Rcpp::NumericMatrix FasterAvgDist(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
-RcppExport SEXP _mums2_FasterAvgDist(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
+// MeasureDiversity
+Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
+RcppExport SEXP _mums2_MeasureDiversity(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -97,29 +133,62 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(FasterAvgDist(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
+    rcpp_result_gen = Rcpp::wrap(MeasureDiversity(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadMgf
-Rcpp::List ReadMgf(const std::string& path);
-RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
+// CreateHumanMetabolomicsDB
+SEXP CreateHumanMetabolomicsDB();
+RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
+    rcpp_result_gen = Rcpp::wrap(CreateHumanMetabolomicsDB());
     return rcpp_result_gen;
 END_RCPP
 }
-// ReadMsp
-Rcpp::List ReadMsp(const std::string& path);
-RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
+// AddHumanMetabolomicNode
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names, const std::vector<std::string>& values);
+RcppExport SEXP _mums2_AddHumanMetabolomicNode(SEXP hmdbPtrSEXP, SEXP namesSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    AddHumanMetabolomicNode(hmdbPtr, names, values);
+    return R_NilValue;
+END_RCPP
+}
+// AddSpectra
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames);
+RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type databaseNames(databaseNamesSEXP);
+    AddSpectra(hmdbPtr, fileNames, databaseNames);
+    return R_NilValue;
+END_RCPP
+}
+// ProcessMs2Files
+void ProcessMs2Files(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_ProcessMs2Files(SEXP hmdbPtrSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    ProcessMs2Files(hmdbPtr);
+    return R_NilValue;
+END_RCPP
+}
+// CreateAnnotationController
+SEXP CreateAnnotationController(SEXP& hmdbPtr);
+RcppExport SEXP _mums2_CreateAnnotationController(SEXP hmdbPtrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
+    Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
+    rcpp_result_gen = Rcpp::wrap(CreateAnnotationController(hmdbPtr));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -183,40 +252,25 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// TestSimilarity
-std::vector<double> TestSimilarity(const std::vector<double>& mzOne, std::vector<double>& intOne, const std::vector<double>& mzTwo, std::vector<double>& intTwo, const double shift);
-RcppExport SEXP _mums2_TestSimilarity(SEXP mzOneSEXP, SEXP intOneSEXP, SEXP mzTwoSEXP, SEXP intTwoSEXP, SEXP shiftSEXP) {
+// ReadMgf
+Rcpp::List ReadMgf(const std::string& path);
+RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzOne(mzOneSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intOne(intOneSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mzTwo(mzTwoSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type intTwo(intTwoSEXP);
-    Rcpp::traits::input_parameter< const double >::type shift(shiftSEXP);
-    rcpp_result_gen = Rcpp::wrap(TestSimilarity(mzOne, intOne, mzTwo, intTwo, shift));
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
     return rcpp_result_gen;
 END_RCPP
 }
-// squareRootNormalize
-std::vector<double> squareRootNormalize(std::vector<double>& vec);
-RcppExport SEXP _mums2_squareRootNormalize(SEXP vecSEXP) {
+// ReadMsp
+SEXP ReadMsp(const std::string& path);
+RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double>& >::type vec(vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(squareRootNormalize(vec));
-    return rcpp_result_gen;
-END_RCPP
-}
-// scaleNormalize
-std::vector<double> scaleNormalize(std::vector<double>& vec);
-RcppExport SEXP _mums2_scaleNormalize(SEXP vecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double>& >::type vec(vecSEXP);
-    rcpp_result_gen = Rcpp::wrap(scaleNormalize(vec));
+    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -224,22 +278,27 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 9},
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
+    {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
+    {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
+    {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
-    {"_mums2_FasterAvgDist", (DL_FUNC) &_mums2_FasterAvgDist, 8},
-    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
-    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
+    {"_mums2_MeasureDiversity", (DL_FUNC) &_mums2_MeasureDiversity, 8},
+    {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
+    {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
+    {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
+    {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
+    {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_TestSimilarity", (DL_FUNC) &_mums2_TestSimilarity, 5},
-    {"_mums2_squareRootNormalize", (DL_FUNC) &_mums2_squareRootNormalize, 1},
-    {"_mums2_scaleNormalize", (DL_FUNC) &_mums2_scaleNormalize, 1},
+    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
+    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

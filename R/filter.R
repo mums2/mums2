@@ -19,10 +19,10 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
 #'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
@@ -32,6 +32,17 @@
 #' @returns a `mpactr` object that has been filter based on
 #' the supplied parameters.
 filter_peak_table <- function(mpactr_object, params) {
+  if (!inherits(mpactr_object, "filter_pactr")) {
+    stop(paste0("The mpactr object must be created using the",
+                "`import_all_data()` function"))
+  }
+  if (!inherits(params, c("filter_mispicked_ions", "filter_group",
+                          "filter_cv", "filter_insource_ions"))) {
+    stop(paste0("The params object must be created using one these",
+                " functions:",
+                "`filter_mispicked_ions_params()`, `filter_cv_params()`, ",
+                "`filter_group_params()`, `filter_insource_ions_params()`"))
+  }
   UseMethod("filter_peak_table", params)
 }
 

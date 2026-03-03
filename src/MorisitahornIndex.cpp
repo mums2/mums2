@@ -1,7 +1,8 @@
 //
 // Created by Gregory Johnson on 4/25/25.
 //
-
+#include <numeric>
+#include <cmath>
 #include "DiversityMetrics/BetaDiversityCalculators/MorisitahornIndex.h"
 
 double MorisitahornIndex::Calculate(const std::vector<std::vector<double>>& abundanceVectors) const {
@@ -12,7 +13,7 @@ double MorisitahornIndex::Calculate(const std::vector<std::vector<double>>& abun
     double summationOfSampleOneAndTwo = 0;
     double summationSampleOne = 0;
     double summationSampleTwo = 0;
-    for(size_t i = 0; i < sampleOne.size(); i++) {
+    for(std::size_t i = 0; i < sampleOne.size(); i++) {
         const double currentSampleOne = sampleOne[i];
         const double currentSampleTwo = sampleTwo[i];
         summationOfSampleOneAndTwo += (currentSampleOne / totalSampleOne)

@@ -11,14 +11,14 @@
 #' @param mass_data your mass_data object generated from `ms2_ms1_compare()`
 #' @param parent_ppm the ppm you wish to generate the candidate
 #'  molecular formulas.
-#' @param num_threads the amount of threads we the algorithm will use.
+#' @param number_of_threads the amount of threads we the algorithm will use.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -28,13 +28,39 @@
 #'    filter_peak_table(filter_insource_ions_params())
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 0.1, 6)
 #' compute_molecular_formulas(matched_data)
+#' @references
+#' Sebastian Böcker, Florian Rasche, Towards de novo identification of
+#' metabolites by analyzing tandem mass spectra, Bioinformatics, Volume 24,
+#' Issue 16, August 2008, Pages i49–i55,
+#' https://doi.org/10.1093/bioinformatics/btn270
+#'
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
-                                       num_threads = detectCores()) {
+                                       number_of_threads = detectCores()) {
+  if (!inherits(mass_data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare()`"))
+  }
+  if (!is.numeric(parent_ppm)) {
+    stop("parent_ppm must be numeric")
+  }
+
+  if (!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+
+  if (nrow(mass_data$ms2_matches) <= 0) {
+    stop("Your mass_data object has no ms2 matches, cannot continue.")
+  }
+
+  if (length(mass_data$peak_data) <= 0) {
+    stop("Your mass_data object has no peak data, cannot continue.")
+  }
+
   size <- length(mass_data$peak_data)
   molecular_formula_list <- vector("list", size)
   pb <- CreateProgressBarObject()
@@ -43,7 +69,7 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
     molecular_formula_list[[i]] <-
       compute_fragmentation_tree(mass_data$peak_data[[i]],
                                  mass_data$ms2_matches$mz[[i]],
-                                 parent_ppm, num_threads)
+                                 parent_ppm, number_of_threads)
     IncrementProgressBar(pb, i / size)
   }
   DestroyProgressBar(pb)

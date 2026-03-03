@@ -110,6 +110,32 @@ test_that("Test dist_shared errors with wrong index", {
                            iterations = 100))
 })
 
+test_that("Test dist_shared errors when given wrong parameters", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  result <- cluster_data(distances, dat,  0.3, "opticlust")
+  community_object <- create_community_matrix_object(result)
+  expect_error(dist_shared(community_object, "400", 10, "bray", TRUE,
+                           iterations = 100),
+               "size")
+  expect_error(dist_shared(community_object, 400, "10", "bray", TRUE,
+                           iterations = 100),
+              "threshold")
+  expect_error(dist_shared(community_object, 400, 10, "bray", "TRUE",
+                           iterations = 100),
+              "subsample")
+  expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
+                           iterations = "100"),
+              "iterations")
+  expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
+                           iterations = 100, number_of_threads = "1"),
+              "number_of_threads")
+  expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
+                           iterations = 100, seed = "1"),
+              "seed")
+
+})
+
 test_that("Alpha summary returns the proper results for simpsons", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
@@ -155,4 +181,30 @@ test_that("Alpha summary fails when given wrong input", {
   expect_error(alpha_summary(results, 400, 10, "shannon", TRUE, 2))
   expect_error(alpha_summary(community_object, 400, 10, "bray", TRUE,
                              iterations = 2))
+})
+
+test_that("Test Alpha summary errors when given wrong parameters", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  results <- cluster_data(distances, dat,  0.3, "opticlust")
+  community_object <- create_community_matrix_object(results)
+  expect_error(alpha_summary(community_object, "400", 10, "shannon", TRUE,
+                           iterations = 100),
+               "size")
+  expect_error(alpha_summary(community_object, 400, "10", "shannon", TRUE,
+                           iterations = 100),
+              "threshold")
+  expect_error(alpha_summary(community_object, 400, 10, "shannon", "TRUE",
+                           iterations = 100),
+              "subsample")
+  expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
+                           iterations = "100"),
+              "iterations")
+  expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
+                           iterations = 100, number_of_threads = "1"),
+              "number_of_threads")
+  expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
+                           iterations = 100, seed = "1"),
+              "seed")
+
 })

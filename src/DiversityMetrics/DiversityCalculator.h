@@ -5,7 +5,6 @@
 #ifndef DIVERSITYCALCULATOR_H
 #define DIVERSITYCALCULATOR_H
 #include <vector>
-#include <Rcpp.h>
 
 class DiversityCalculator {
 public:

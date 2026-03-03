@@ -27,10 +27,10 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -41,8 +41,8 @@
 #'
 #'
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist_gnps <- dist_ms2(data = matched_data,
 #'  cutoff = 0.3, precursor_threshold = 2,
@@ -55,18 +55,37 @@
 #' @return A sparse matrix of class `"data.frame"`
 #' @export
 dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
-                     min_peaks = 6, number_of_threads = detectCores()) {
-  UseMethod("dist_ms2", data)
-}
-
-#' @method dist_ms2 mass_data
-#' @export
-dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
-                               min_peaks = 6,
-                               number_of_threads = detectCores()) {
+                     min_peaks = 6,
+                     number_of_threads = detectCores()) {
+  if (!inherits(data, "mass_data")) {
+    stop(paste0("The mass_data object must be created using the",
+                " `ms2_ms1_compare() function`"))
+  }
   if (nrow(data$ms2_matches) <= 0) {
     stop("Cannot calculate distances, there are no matched ms2.")
   }
+  if (!inherits(score_params, "parameters")) {
+    stop(paste0("score_params must be created using the",
+                " modified_cosine_params() or spec_entropy_params() function"))
+  }
+
+  if (!is.numeric(cutoff)) {
+    stop("cutoff must be numeric")
+  }
+
+  if (!is.numeric(precursor_threshold)) {
+    stop(paste0("precursor_threshold must be a numeric"))
+  }
+
+  if (!is.numeric(min_peaks)) {
+    stop("min_peaks must be a numeric")
+  }
+
+  if (!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be a numeric")
+  }
+
+
   data_list <- list("pmz" = data$ms2_matches$mz,
                     "id" = data$ms2_matches$ms1_compound_id,
                     "spectra" = data$peak_data)
@@ -74,5 +93,6 @@ dist_ms2.mass_data <- function(data, cutoff, precursor_threshold, score_params,
   dist <- distMS2(data_list, score_params, precursor_threshold,
                   cutoff, min_peaks, number_of_threads)
 
+  class(dist) <- c(class(dist), "mass_data_dist")
   return(dist)
 }

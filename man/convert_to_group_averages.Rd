@@ -24,10 +24,10 @@ each sample individually.
 \examples{
 data <-
    import_all_data(peak_table =
-                   mums2::mums2_example("full_mix_peak_table_small.csv"),
+                   mums2::mums2_example("botryllus_pt_small.csv"),
                    meta_data =
-                   mums2::mums2_example("full_mix_meta_data_small.csv"),
-                   format = "Metaboscape")
+                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   format = "None")
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -38,8 +38,8 @@ filtered_data <- data |>
 
 change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
-matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
- filtered_data, 2, 6)
+matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+ filtered_data, 10, 6)
 
 matched_data_avg <- convert_to_group_averages(matched_data,
                                                       filtered_data)

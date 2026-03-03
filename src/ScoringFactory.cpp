@@ -7,12 +7,12 @@
 #include <utility>
 
 #include "ScoringMethods/SpectralEntropy/entropy.h"
-#include "ScoringMethods/GNPS/GNPSScoringDynamicPriorityQueue.h"
+#include "ScoringMethods/GNPS/ModifiedCosineScore.h"
 
 ScoringFactory::ScoringFactory(const Rcpp::List &parameters) {
     scoringMethod = Rcpp::as<std::string>(parameters["method"]);
     if(scoringMethod == "gnps") {
-        currentScoringAlgorithm = new GNPSScoringDynamicPriorityQueue(parameters);
+        currentScoringAlgorithm = new ModifiedCosineScore(parameters);
     }
     else if(scoringMethod == "entropy") {
         currentScoringAlgorithm = new Entropy(parameters);

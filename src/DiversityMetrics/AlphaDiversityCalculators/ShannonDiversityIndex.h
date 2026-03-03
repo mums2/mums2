@@ -6,7 +6,6 @@
 #define SHANNONDIVERSITYINDEX_H
 #include "../DiversityCalculator.h"
 #include <numeric>
-#include <cmath>
 
 class ShannonDiversityIndex final : public DiversityCalculator{
 public:

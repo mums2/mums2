@@ -78,15 +78,17 @@ read_mgf <- function(file) {
   all_data
 }
 
-#' @title Read msp files
+#' @title Create Reference Database
 #' @export
-#' @description Reader function msp files
+#' @description Creates a reference database by reading
+#' a download msp file. These files can be downloaded from
+#' sites like https://systemsomicslab.github.io/compms/msdial/main.html#MSP
+#' or https://mona.fiehnlab.ucdavis.edu/downloads
 #' @param msp_file the file path of your msp file
 #' @examples
-#' read_msp(mums2_example("PSU-MSMLS.msp"))[[1]]
+#' read_msp(mums2_example("massbank_example_data.msp"))
 #'
-#' @return a `list` object that contains all
-#'  of the data present in your msp file.
+#' @return a `reference_database` object.
 read_msp <- function(msp_file) {
   extension <- tail(strsplit(msp_file, split = "\\.")[[1]], 1)
   if (tolower(extension) != "msp") {
@@ -94,5 +96,78 @@ read_msp <- function(msp_file) {
                 it is currently a .", extension))
   }
   print(paste0("Reading: ", msp_file, " ..."))
-  ReadMsp(msp_file)
+  reference <- ReadMsp(msp_file)
+  class(reference) <- "reference_database"
+  reference
+}
+
+
+
+#' @title Read HMDB database
+#' @export
+#' @description
+#' This function allows you to create an hmdb database. However
+#' you are required to supply an xml hmdb file and a folder path
+#' that contains all of the ms2 spectras from the hmdb download
+#' page https://www.hmdb.ca/downloads.
+#' @param hmdb_file the xml hmdb file.
+#' @param ms2_folder the folder path of your ms2 spectra files.
+#' @examples
+#' read_msp(mums2_example("massbank_example_data.msp" ))
+#'
+#' @references
+#' Wishart DS, Guo A, Oler E, Wang F, Anjum A, Peters H, Dizon R,
+#' Sayeeda Z, Tian S, Lee BL, Berjanskii M, Mah R, Yamamoto M,
+#' Jovel J, Torres-Calzada C, Hiebert-Giesbrecht M, Lui VW,
+#' Varshavi D, Varshavi D, Allen D, Arndt D, Khetarpal N,
+#' Sivakumaran A, Harford K, Sanford S, Yee K, Cao X, Budinski Z,
+#'  Liigand J, Zhang L, Zheng J, Mandal R, Karu N,
+#' Dambrova M, Schiöth HB, Greiner R, Gautam V. HMDB 5.0:
+#' the Human Metabolome Database for 2022.
+#' Nucleic Acids Res. 2022 Jan 7;50(D1):D622-D631.
+#' doi: 10.1093/nar/gkab1062. PMID: 34986597; PMCID: PMC8728138.
+#' @return a `reference_database` object.
+read_hmdb <- function(hmdb_file, ms2_folder) {
+  if (!file.exists(hmdb_file)) {
+    stop(paste0("hmdb file",
+                " does not exist. Please ensure all files exist."))
+  }
+  if (!file.exists(ms2_folder)) {
+    stop(paste0("ms2_folder",
+                " does not exist. Please ensure all files exist."))
+  }
+  database <- process_xml(hmdb_file)
+  read_and_match_spectra_files(ms2_folder, database)
+  annotations <- CreateAnnotationController(database)
+  class(annotations) <- "reference_database"
+  annotations
+}
+
+
+process_xml <- function(xml_file) {
+  print("Reading Metabolites from XML Files...")
+  records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
+  print("Processing XML Files...")
+  pb <- CreateProgressBarObject()
+  database <- CreateHumanMetabolomicsDB()
+  progress <- 0
+  size <- length(records)
+  for (xml in records) {
+    tags <- xml_name(xml_children(xml))
+    data <- xml_text(xml_children(xml))
+    AddHumanMetabolomicNode(database, tags, data)
+    IncrementProgressBar(pb, progress / size)
+    progress <- progress + 1
+  }
+  DestroyProgressBar(pb)
+  rm(pb)
+  database
+}
+
+
+read_and_match_spectra_files <- function(ms2_files, database) {
+  ls <- list.files(ms2_files, full.names = TRUE)
+  database_names <- sub("_.*", "", list.files(ms2_files, full.names = FALSE))
+  AddSpectra(database, ls, database_names)
+  ProcessMs2Files(database)
 }

@@ -1,4 +1,4 @@
-test_that("annotate_ms_featrues returns the correct annotations in the
+test_that("annotate_ms_features returns the correct annotations in the
            first n ms features", {
             dir <- "exttestdata"
             q_file <- "matched_data.RDS"
@@ -25,7 +25,7 @@ test_that("annotate_ms_featrues returns the correct annotations in the
             expect_s3_class(annotations, "data.frame")
           })
 
-test_that("annotate_ms_featrues returns the omu where the query is present", {
+test_that("annotate_ms_features returns the omu where the query is present", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
@@ -39,7 +39,7 @@ test_that("annotate_ms_featrues returns the omu where the query is present", {
   expect_true("omu" %in% colnames(annotations))
 })
 
-test_that("annotate_ms_featrues returns the correct 
+test_that("annotate_ms_features returns the correct 
           of rows and columns", {
             dir <- "exttestdata"
             r_file <- "database_data/PSU-MSMLS.msp"
@@ -52,9 +52,16 @@ test_that("annotate_ms_featrues returns the correct
 
             expect_true(nrow(annotations) == 3)
             expect_true(ncol(annotations) == 23)
+
+            annotations <- annotate_ms2(dat, psu_msmls,
+                                        modified_cosine_params(0.5), -1,
+                                        .7, 0, min_peaks = 0)
+
+            expect_true(nrow(annotations) == 209)
+            expect_true(ncol(annotations) == 23)
           })
 
-test_that("annotate_ms_featrues works with predicted molecular formulas", {
+test_that("annotate_ms_features works with predicted molecular formulas", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
@@ -62,6 +69,87 @@ test_that("annotate_ms_featrues works with predicted molecular formulas", {
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
                               modified_cosine_params(0.5),
-                              20, .2, 0, min_peaks = 0)
+                              1000, .1, 0, min_peaks = 0)
   expect_true("query_formula" %in% colnames(annotations))
 })
+
+test_that("annotate_ms2 will return a warning if the annotations are empty", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+  dat <- compute_molecular_formulas(dat)
+  psu_msmls <- read_msp(test_path(dir, r_file))
+  expect_warning(annotate_ms2(dat, psu_msmls,
+                              modified_cosine_params(0.5),
+                              100, .1, 0, min_peaks = 0))
+})
+
+test_that("annotate_ms2 will fail if not supplied a mass_data object", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  psu_msmls <- read_msp(test_path(dir, r_file))
+
+  expect_error(annotate_ms2(c(), psu_msmls,
+                              modified_cosine_params(0.5),
+                              100, .1, 0, min_peaks = 0),
+              "The mass_data object must be created using")
+})
+
+test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
+  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  psu_msmls <- read_msp(test_path(dir, r_file))
+  err <-  "The mass_data object must be created using the `ms2_ms1_compare()`"
+
+  expect_error(annotate_ms2(dat, psu_msmls,
+                              c(),
+                              100, .1, 0, min_peaks = 0),
+              "score_params must be created using the")
+})
+
+test_that("annotate_ms2 will fail if not supplied correct clustering data", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  psu_msmls <- read_msp(test_path(dir, r_file))
+
+  expect_error(annotate_ms2(dat, psu_msmls,
+              modified_cosine_params(0.5), 20,
+              .2, 0, min_peaks = 0, cluster_data = data.frame()),
+              "cluster_data must be created using")
+})
+
+test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
+  dir <- "exttestdata"
+  r_file <- "database_data/PSU-MSMLS.msp"
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  psu_msmls <- read_msp(test_path(dir, r_file))
+
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), "20",
+                            .2, 0, min_peaks = 0),
+              "ppm")
+  
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            ".2", 0, min_peaks = 0),
+              "min_score")
+  
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            .2, "0", min_peaks = 0),
+              "chemical_min_score")
+  
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            .2, 0, min_peaks = "0"),
+              "min_peaks")
+  
+  expect_error(annotate_ms2(dat, psu_msmls,
+                            modified_cosine_params(0.5), 20,
+                            .2, 0, min_peaks = 0,
+                            number_of_threads = "1"),
+              "number_of_threads")
+})
+

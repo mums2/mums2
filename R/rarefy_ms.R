@@ -23,10 +23,10 @@
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
-#'                    mums2::mums2_example("full_mix_peak_table_small.csv"),
+#'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("full_mix_meta_data_small.csv"),
-#'                    format = "Metaboscape")
+#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    format = "None")
 #'
 #' filtered_data <- data |>
 #'    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -37,8 +37,8 @@
 #'
 #' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
-#' matched_data <- ms2_ms1_compare(mums2_example("full_mix_ms2_small.mgf"),
-#'  filtered_data, 2, 6)
+#' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
+#'  filtered_data, 10, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'  score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -52,10 +52,27 @@
 #' @return returns a `matrix` object that contains your rarefied data.
 rarefy_ms <- function(community_object, size, threshold,
                       number_of_threads = detectCores(), seed = 123) {
-  if (!("community_object" %in% class(community_object))) {
+  if (!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the 
          `create_community_object` function.")
   }
+
+  if (!is.numeric(size)) {
+    stop("size must be numeric")
+  }
+
+  if (!is.numeric(threshold)) {
+    stop("threshold must be numeric")
+  }
+
+  if (!is.numeric(number_of_threads)) {
+    stop("number_of_threads must be numeric")
+  }
+
+  if (!is.numeric(seed)) {
+    stop("seed must be numeric")
+  }
+
   return(RarefactionCalculation(community_object, size,
                                 threshold, number_of_threads, seed))
 }
