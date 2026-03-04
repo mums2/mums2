@@ -9,7 +9,7 @@
 
 mums2 is a package that was created to supply researchers with a
 collection of tools that they can use to analyze untargeted metabolomics
-data. This package will supply tools to analysis of tandem Mass
+data. This package will supply tools to analysis tandem Mass
 spectrometry (MS) data in a easy and efficient manner. The package
 supports importation and filtration of MS1 feature tables, annotations,
 de novo molecular formula predictions, scoring of MS2 spectra,
@@ -34,7 +34,7 @@ devtools::install_github("mums2/mums2")
 ## Get started
 
 See the [Getting
-Started](https://www.mums2.org/mpactr/articles/mpactr.html) page to get
+Started](https://www.mums2.org/mums2/articles/mums2.html) page to get
 started.
 
 ## Getting help

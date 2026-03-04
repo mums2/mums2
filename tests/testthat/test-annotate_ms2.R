@@ -55,9 +55,9 @@ test_that("annotate_ms_features returns the correct
 
             annotations <- annotate_ms2(dat, psu_msmls,
                                         modified_cosine_params(0.5), -1,
-                                        .2, 0, min_peaks = 0)
+                                        .7, 0, min_peaks = 0)
 
-            expect_true(nrow(annotations) == 11946)
+            expect_true(nrow(annotations) == 209)
             expect_true(ncol(annotations) == 23)
           })
 

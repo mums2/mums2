@@ -4,7 +4,7 @@
 #' @description Will return the data inside the reference object
 #' based on the index given.
 #' @param reference reference database object.
-#' @param index the index of the data.
+#' @param index the index of the data. The index starts at 1.
 #' @examples
 #' reference <- read_msp(mums2_example("massbank_example_data.msp"))
 #' get_reference_data(reference, 1)
@@ -17,8 +17,12 @@ get_reference_data <- function(reference, index) {
                 " `read_msp()` or `read_hmdb()`"))
   }
   if (!inherits(index, "numeric")) {
-    stop("index has to be a numeric")
+    stop("Index has to be a numeric")
   }
+  if(index <= 0 || index > length(reference)) {
+    stop("Index must be less than the size of the database")
+  }
+  index <- index - 1
   GetNode(reference, index)
 }
 
