@@ -33,7 +33,9 @@ devtools::install_github("mums2/mums2")
 
 ## Get started
 
-See the [Getting Started](www.mums2.org/mums2/) page to get started.
+See the [Getting
+Started](https://www.mums2.org/mums2/articles/mums2.html) page to get
+started.
 
 ## Getting help
 
