@@ -9,23 +9,29 @@
 #include "CustomProgressBar/CliProgressBar.h"
 #include "Spectra/ReadSpectra.h"
 
-void HumanMetabolomicsDB::AddHumanMetabolomicNode(const HumanMetabolomicsDBNode &node) {
-    nodeMap[node.databaseName] = node;
+HumanMetabolomicsDB::HumanMetabolomicsDB(const size_t nodeSize) {
+    nodes = std::vector<HumanMetabolomicsDBNode>(nodeSize);
+    spectraFiles = std::vector<std::vector<std::string>>(nodeSize);
 }
 
-void HumanMetabolomicsDB::AddSpectraFiles(const std::string &spectraFiles, const std::string& databaseName) {
-    spectraMap[databaseName].emplace_back(spectraFiles);
+void HumanMetabolomicsDB::AddHumanMetabolomicNode(const HumanMetabolomicsDBNode &node, const size_t index) {
+    nameToIndexMap[node.databaseName] = index;
+    nodes[index] = node;
+}
+
+void HumanMetabolomicsDB::AddSpectraFiles(const std::string &spectraFile, const std::string& databaseName) {
+    if (nameToIndexMap.find(databaseName) == nameToIndexMap.end()) return;
+    spectraFiles[nameToIndexMap[databaseName]].emplace_back(spectraFile);
 }
 
 void HumanMetabolomicsDB::ProcessSpectraFiles() {
     CliProgressBar progressBar;
-    Rcpp::Rcout << "Processing spectra files..." << std::endl;
-    const auto nodeMapCount = static_cast<float>(nodeMap.size());
+    const auto nodeMapCount = static_cast<float>(spectraFiles.size());
     float counter = 0;
-    for (auto &nodes : nodeMap) {
-        for (const auto &spectraFile : spectraMap[nodes.first]) {
+    for (size_t i = 0; i < spectraFiles.size(); i++) {
+        for (const auto &spectraFile : spectraFiles[i]) {
             Spectra spectra = ReadSpectra::ReadSpectraFile(spectraFile);
-            nodes.second.spectraList.emplace_back(spectra);
+            nodes[i].spectraList.emplace_back(spectra);
         }
         counter++;
         progressBar.update(counter/nodeMapCount);
@@ -34,26 +40,26 @@ void HumanMetabolomicsDB::ProcessSpectraFiles() {
 
 AnnotationController* HumanMetabolomicsDB::ConstructDataBase() const {
     size_t referenceSize = 0;
-    for (const auto& node : nodeMap) {
-        if (node.second.spectraList.empty())
+    for (const auto& node : nodes) {
+        if (node.spectraList.empty())
             continue;
-        referenceSize += node.second.spectraList.size();
+        referenceSize += node.spectraList.size();
     }
     size_t count = 0;
     std::vector<AnnotationNode> databaseReferences(referenceSize);
-    for (const auto& node : nodeMap) {
-        if (node.second.spectraList.empty())
+    for (const auto& node : nodes) {
+        if (node.spectraList.empty())
             continue;
         AnnotationNode annotation;
-        annotation.name = node.second.annoName;
-        annotation.precursorMz = node.second.precursorMz;
-        annotation.chemicalFormula = node.second.chemicalFormula;
-        for (size_t i = 0; i < node.second.keys.size(); i++) {
-            annotation.keyValues.emplace_back(KeyValues{node.second.keys[i], node.second.values[i]});
-            annotation.keys.emplace_back(node.second.keys[i]);
-            annotation.values.emplace_back(node.second.values[i]);
+        annotation.name = node.annoName;
+        annotation.precursorMz = node.precursorMz;
+        annotation.chemicalFormula = node.chemicalFormula;
+        for (size_t i = 0; i < node.keys.size(); i++) {
+            annotation.keyValues.emplace_back(KeyValues{node.keys[i], node.values[i]});
+            annotation.keys.emplace_back(node.keys[i]);
+            annotation.values.emplace_back(node.values[i]);
         }
-        for (const auto& spectra : node.second.spectraList) {
+        for (const auto& spectra : node.spectraList) {
             annotation.spectra = spectra;
             databaseReferences[count++] = annotation;
         }

@@ -37,12 +37,12 @@ MeasureDiversity <- function(communityMatrix, index, size, threshold, subsample,
     .Call(`_mums2_MeasureDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
-CreateHumanMetabolomicsDB <- function() {
-    .Call(`_mums2_CreateHumanMetabolomicsDB`)
+CreateHumanMetabolomicsDB <- function(nodeSize) {
+    .Call(`_mums2_CreateHumanMetabolomicsDB`, nodeSize)
 }
 
-AddHumanMetabolomicNode <- function(hmdbPtr, names, values) {
-    invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values))
+AddHumanMetabolomicNode <- function(hmdbPtr, names, values, index) {
+    invisible(.Call(`_mums2_AddHumanMetabolomicNode`, hmdbPtr, names, values, index))
 }
 
 AddSpectra <- function(hmdbPtr, fileNames, databaseNames) {

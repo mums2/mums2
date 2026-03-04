@@ -138,24 +138,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // CreateHumanMetabolomicsDB
-SEXP CreateHumanMetabolomicsDB();
-RcppExport SEXP _mums2_CreateHumanMetabolomicsDB() {
+SEXP CreateHumanMetabolomicsDB(const size_t nodeSize);
+RcppExport SEXP _mums2_CreateHumanMetabolomicsDB(SEXP nodeSizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CreateHumanMetabolomicsDB());
+    Rcpp::traits::input_parameter< const size_t >::type nodeSize(nodeSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(CreateHumanMetabolomicsDB(nodeSize));
     return rcpp_result_gen;
 END_RCPP
 }
 // AddHumanMetabolomicNode
-void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names, const std::vector<std::string>& values);
-RcppExport SEXP _mums2_AddHumanMetabolomicNode(SEXP hmdbPtrSEXP, SEXP namesSEXP, SEXP valuesSEXP) {
+void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& names, const std::vector<std::string>& values, const size_t index);
+RcppExport SEXP _mums2_AddHumanMetabolomicNode(SEXP hmdbPtrSEXP, SEXP namesSEXP, SEXP valuesSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type names(namesSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
-    AddHumanMetabolomicNode(hmdbPtr, names, values);
+    Rcpp::traits::input_parameter< const size_t >::type index(indexSEXP);
+    AddHumanMetabolomicNode(hmdbPtr, names, values, index);
     return R_NilValue;
 END_RCPP
 }
@@ -287,8 +289,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
     {"_mums2_MeasureDiversity", (DL_FUNC) &_mums2_MeasureDiversity, 8},
-    {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 0},
-    {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 3},
+    {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 1},
+    {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 4},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},

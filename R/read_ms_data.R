@@ -138,29 +138,30 @@ read_hmdb <- function(hmdb_file, ms2_folder) {
   }
   database <- process_xml(hmdb_file)
   read_and_match_spectra_files(ms2_folder, database)
+  print("Creating Annotation Database...")
   annotations <- CreateAnnotationController(database)
   class(annotations) <- "reference_database"
   annotations
 }
-
 
 process_xml <- function(xml_file) {
   print("Reading Metabolites from XML Files...")
   records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
   print("Processing XML Files...")
   pb <- CreateProgressBarObject()
-  database <- CreateHumanMetabolomicsDB()
-  progress <- 0
   size <- length(records)
+  database <- CreateHumanMetabolomicsDB(size)
+  progress <- 0
   for (xml in records) {
     tags <- xml_name(xml_children(xml))
     data <- xml_text(xml_children(xml))
-    AddHumanMetabolomicNode(database, tags, data)
+    AddHumanMetabolomicNode(database, tags, data, progress)
     IncrementProgressBar(pb, progress / size)
     progress <- progress + 1
   }
   DestroyProgressBar(pb)
   rm(pb)
+  rm(records)
   database
 }
 
@@ -168,6 +169,8 @@ process_xml <- function(xml_file) {
 read_and_match_spectra_files <- function(ms2_files, database) {
   ls <- list.files(ms2_files, full.names = TRUE)
   database_names <- sub("_.*", "", list.files(ms2_files, full.names = FALSE))
+  print("Adding Spectra Files..." )
   AddSpectra(database, ls, database_names)
+  print("Processing Spectra Files..." )
   ProcessMs2Files(database)
 }
