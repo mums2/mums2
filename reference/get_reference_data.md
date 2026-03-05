@@ -17,7 +17,7 @@ get_reference_data(reference, index)
 
 - index:
 
-  the index of the data.
+  the index of the data. The index starts at 1.
 
 ## Value
 
