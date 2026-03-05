@@ -3,12 +3,7 @@
 //
 
 #include "Spectra/ReadSpectra.h"
-
 #include "Spectra/MetaDataValuePair.h"
-// [[Rcpp::depends(RcppProgress)]]
-#include <progress.hpp>
-#include <progress_bar.hpp>
-
 #include "CustomProgressBar/CliProgressBar.h"
 #include "CustomProgressBar/ETAProgressBar.h"
 

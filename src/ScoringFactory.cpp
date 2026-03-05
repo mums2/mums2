@@ -3,9 +3,6 @@
 //
 
 #include "ScoringMethods/ScoringFactory.h"
-
-#include <utility>
-
 #include "ScoringMethods/SpectralEntropy/entropy.h"
 #include "ScoringMethods/GNPS/ModifiedCosineScore.h"
 

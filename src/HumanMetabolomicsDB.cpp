@@ -3,9 +3,6 @@
 //
 
 #include "HMDB/HumanMetabolomicsDB.h"
-#include <ostream>
-#include <Rcpp.h>
-
 #include "CustomProgressBar/CliProgressBar.h"
 #include "Spectra/ReadSpectra.h"
 

@@ -4,11 +4,8 @@
 
 
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
-
-#include <algorithm>
-#include <map>
 #include <unordered_map>
-#include <unordered_set>
+
 
 
 std::vector<double> MolecularFormula::chemicalAtomMassVector = {12.011,
