@@ -48,7 +48,7 @@
 #'
 #' community_object <- create_community_matrix_object(cluster_results)
 #'
-#' dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
+#' dist_shared(community_object, 400, 100, "bray", TRUE, 1)
 #' @return a `data.frame` object that shows the
 #' dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold,
@@ -140,7 +140,7 @@ dist_shared <- function(community_object, size, threshold,
 #'
 #' community_object <- create_community_matrix_object(cluster_results)
 #'
-#' alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
+#' alpha_summary(community_object, 400, 100, "shannon", TRUE, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity in samples.
 alpha_summary <- function(community_object, size, threshold,
                           diversity_index = "shannon",

@@ -78,5 +78,5 @@ cluster_results <- cluster_data(distance_df = dist,
 
 community_object <- create_community_matrix_object(cluster_results)
 
-dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
+dist_shared(community_object, 400, 100, "bray", TRUE, 1)
 }

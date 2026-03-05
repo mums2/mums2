@@ -87,10 +87,10 @@ filtered_data <- data |>
 
 matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
  filtered_data, 10, 6)
- massbank <- read_msp(mums2_example("massbank_example_data.msp"))
+ massbank <- read_msp(mums2_example("massbank_example_data_negative.msp"))
  annotations <- annotate_ms2(mass_data = matched_data,
    reference = massbank, scoring_params = modified_cosine_params(0.5),
-   ppm = 1000,
+   ppm = 200,
    min_score =  0.1, chemical_min_score = 0)
 
 }
