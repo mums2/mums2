@@ -57,7 +57,7 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         }
         const double lossMass = formula.GetLossMass(currentFormula);
         const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-            fragmentationNodes[j].score + fragmentationNodes[j].subTreeScore;
+            fragmentationNodes[j].score;
         finalSubtreeScore += score;
     }
     CollectResultFromNode(parentIndexes, finalSubtreeScore, currentIndex);

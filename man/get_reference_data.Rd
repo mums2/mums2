@@ -9,7 +9,7 @@ get_reference_data(reference, index)
 \arguments{
 \item{reference}{reference database object.}
 
-\item{index}{the index of the data.}
+\item{index}{the index of the data. The index starts at 1.}
 }
 \value{
 returns a \code{list} object with all of the reference data at

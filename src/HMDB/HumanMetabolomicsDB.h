@@ -16,14 +16,15 @@
 
 class HumanMetabolomicsDB {
 public:
-    HumanMetabolomicsDB() = default;
-    void AddHumanMetabolomicNode(const HumanMetabolomicsDBNode& node);
-    void AddSpectraFiles(const std::string& spectraFiles, const std::string& databaseName);
+    explicit HumanMetabolomicsDB(size_t nodeSize);
+    void AddHumanMetabolomicNode(const HumanMetabolomicsDBNode& node, size_t index);
+    void AddSpectraFiles(const std::string &spectraFile, const std::string& databaseName);
     void ProcessSpectraFiles();
     AnnotationController* ConstructDataBase() const;
 private: // We could probably remove the unordered map and use a list. Add the spectra to the node
-    std::unordered_map<std::string, HumanMetabolomicsDBNode> nodeMap;
-    std::unordered_map<std::string, std::list<std::string>> spectraMap;
+    std::vector<HumanMetabolomicsDBNode> nodes;
+    std::vector<std::vector<std::string>> spectraFiles;
+    std::unordered_map<std::string, size_t> nameToIndexMap;
 };
 
 
