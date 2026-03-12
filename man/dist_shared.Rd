@@ -70,7 +70,7 @@ filtered_data <- data |>
 matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
  filtered_data, 10, 6)
 dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
- score_params = modified_cosine_params(0.5), min_peaks = 0)
+ score_params = modified_cosine_params(0.5), min_peaks = 6)
 
 cluster_results <- cluster_data(distance_df = dist,
  ms2_match_data = matched_data,
@@ -78,5 +78,5 @@ cluster_results <- cluster_data(distance_df = dist,
 
 community_object <- create_community_matrix_object(cluster_results)
 
-dist_shared(community_object, 4000, 100, "bray", TRUE, 1)
+dist_shared(community_object, 400, 100, "bray", TRUE, 1)
 }

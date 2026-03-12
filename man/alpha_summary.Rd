@@ -73,5 +73,5 @@ cluster_results <- cluster_data(distance_df = dist,
 
 community_object <- create_community_matrix_object(cluster_results)
 
-alpha_summary(community_object, 4000, 100, "shannon", TRUE, iterations = 1)
+alpha_summary(community_object, 400, 100, "shannon", TRUE, iterations = 1)
 }
