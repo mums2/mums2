@@ -1992,13 +1992,13 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 62                                 beta-Cryptoxathin-5,6,5',8'-diepoxide; FAB-EBEB; MS2; m/z
 #> 63                                                    Lutein 5,8-epoxide; FAB-EBEB; MS2; m/z
 #> 64                                                                 Myxol; FAB-EBEB; MS2; m/z
-#> 65                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
-#> 66                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
+#> 65                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
+#> 66                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
 #> 67                                 beta-Cryptoxathin-5,6,5',6'-diepoxide; FAB-EBEB; MS2; m/z
-#> 68                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
-#> 69                                                           Loroxanthin; FAB-EBEB; MS2; m/z
-#> 70                                                            Capsanthin; FAB-EBEB; MS2; m/z
-#> 71                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
+#> 68                                                           Loroxanthin; FAB-EBEB; MS2; m/z
+#> 69                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
+#> 70                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
+#> 71                                                            Capsanthin; FAB-EBEB; MS2; m/z
 #> 72                                                     Deepoxyneoxanthin; FAB-EBEB; MS2; m/z
 #> 73                                                   Dihydroergotamine; LC-ESI-QTOF; MS2; CE
 #> 74                                                        Antheraxanthin; FAB-EBEB; MS2; m/z
@@ -2103,18 +2103,18 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 173                                                                                     <NA>
 #> 174                                                                                     <NA>
 #> 175                                                                                     <NA>
-#> 176                    Isopentenyl-Adenine-7-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
-#> 177                    Isopentenyl-Adenine-9-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
-#> 178                                                    12'-Apozeaxanthin; FAB-EBEB; MS2; m/z
-#> 179                                    N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
-#> 180                                    N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
+#> 176                                    N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
+#> 177                                    N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
+#> 178                    Isopentenyl-Adenine-7-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
+#> 179                    Isopentenyl-Adenine-9-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
+#> 180                                                    12'-Apozeaxanthin; FAB-EBEB; MS2; m/z
 #> 181                                                                                     <NA>
 #> 182                                                                                     <NA>
 #> 183                                                      Epicholestanol; LC-APPI-QQ; MS2; CE
-#> 184                                                         Coprostanol; LC-APPI-QQ; MS2; CE
+#> 184                                                         Cholestanol; LC-APPI-QQ; MS2; CE
 #> 185                                                      Epicoprostanol; LC-APPI-QQ; MS2; CE
-#> 186                                                       Thioridazine; LC-ESI-QTOF; MS2; CE
-#> 187                                                         Cholestanol; LC-APPI-QQ; MS2; CE
+#> 186                                                         Coprostanol; LC-APPI-QQ; MS2; CE
+#> 187                                                       Thioridazine; LC-ESI-QTOF; MS2; CE
 #> 188                                                                                     <NA>
 #> 189                                                                                     <NA>
 #> 190                                                                                     <NA>
@@ -2315,8 +2315,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 385                                                                                     <NA>
 #> 386                                                                                     <NA>
 #> 387                                                    Papilioerythrione; FAB-EBEB; MS2; m/z
-#> 388                                                           Adonirubin; FAB-EBEB; MS2; m/z
-#> 389                                                          Pectenolone; FAB-EBEB; MS2; m/z
+#> 388                                                          Pectenolone; FAB-EBEB; MS2; m/z
+#> 389                                                           Adonirubin; FAB-EBEB; MS2; m/z
 #> 390                                                                                     <NA>
 #> 391                                                                                     <NA>
 #> 392                                                                                     <NA>
