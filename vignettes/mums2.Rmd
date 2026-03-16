@@ -28,7 +28,7 @@ library(reshape2)
 
 ## Process data
 
-Before we begin to analyze your data, we have to process it into a readable `data.frame` or object that we can view and transform. To process your data we need to run a two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting ms1 data, and `ms2_ms1_compare()` assigns ms2 spectra to your ms1 data. At this point, you may need to filter out noise, or transform it before you can properly analyze it. To accommodate for those issues, we have two other functions: `filter_peak_table()`, `change_rt_to_seconds_or_minute()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minute()` allows you to transform your retention time to minutes or seconds. This allows you to ensure your ms1 data retention time matches your ms2 data retention time. Below will explain in more detail what each function does and how to go through the pipeline.
+Before we begin to analyze your data, we have to process it into a readable `data.frame` or object that we can view and transform. To process your data we need to run a two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting MS1 data, and `ms2_ms1_compare()` assigns MS2 spectra to your MS1 data. At this point, you may need to filter out noise, or transform it before you can properly analyze it. To accommodate for those issues, we have two other functions: `filter_peak_table()`, `change_rt_to_seconds_or_minute()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minute()` allows you to transform your retention time to minutes or seconds. This allows you to ensure your MS1 data retention time matches your MS2 data retention time. Below will explain in more detail what each function does and how to go through the pipeline.
 
 ### Import
 
@@ -93,15 +93,15 @@ head(get_peak_table(filtered_data), 1)
 
 ### Preprocess MS2 data
 
-Using the generated mpactr_object from calling the `import_all_data()` function we can use a .mgf/.mzxml/.mzml file to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple matches, it will select the ms2 spectra with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
+Using the generated mpactr_object from calling the `import_all_data()` function we can use a .mgf/.mzxml/.mzml file to match MS1 and MS2 peaks. The `ms2_ms1_compare()` function reads a list of mgf files and matches them with a MS1 spectra based on the mass-charge ratio and retention time tolerance. If there are multiple matches, it will select the MS2 spectra with the highest intensity. Keep in mind that MS2 spectra files are very memory intensive, they can be anywhere from 1 MB to 100 GB. Therefore, depending on how big the file is, it might take a few moments for the function to complete.
 
 `ms2_ms1_compare()` generates a list of data with two data.frames ("ms1_data", "peak_data"), a list ("peak_data"), and a character vector ("samples").
 
-**ms2_matches** - One of the two data.frames, "ms2_matches", is a data.frame that contains five columns: "mz", "rt", "ms1_compound_id", "spectra_index", and "ms2_spectrum_id." "mz" and "rt", represent the ms2 mass to charge ratio and retention time. "ms1_compound_id" represents your ms1 compound id that was imported from the feature table. "spectra_index" matches the ms2 data with its ms2 spectrum. Finally, "ms2_spectrum_id" similar to the "ms1_compound_id", is the generated name to represent your ms2 spectra (the name is a combination of your mz and rt). This is necessary to properly compare compounds. Since compounds with similiar structures are expected to have similar MS2 patterns, we can use algorithmic techniques to compute the similarity between two spectra. This allows us to generate annotations and cluster similar spectra (MS2 matched information) together.
+**ms2_matches** - One of the two data.frames, "ms2_matches", is a data.frame that contains five columns: "mz", "rt", "ms1_compound_id", "spectra_index", and "ms2_spectrum_id." "mz" and "rt", represent the MS2 mass to charge ratio and retention time. "ms1_compound_id" represents your MS1 compound id that was imported from the feature table. "spectra_index" matches the MS2 data with its MS2 spectrum. Finally, "ms2_spectrum_id" similar to the "ms1_compound_id", is the generated name to represent your MS2 spectra (the name is a combination of your mz and rt). This is necessary to properly compare compounds. Since compounds with similiar structures are expected to have similar MS2 patterns, we can use algorithmic techniques to compute the similarity between two spectra. This allows us to generate annotations and cluster similar spectra (MS2 matched information) together.
 
 **ms1_data** - The other "data.frame", "ms1_data", is a data.frame of the created mpactr object.
 
-**peak_data** - The list that is generate from `ms2_ms1_compare()` is named "peak_data." "peak_data" is a collection of ms2 peak list. A peak list a collection of fragment ions, they all have a value to represent their intensity and mass-charge ratio.
+**peak_data** - The list that is generate from `ms2_ms1_compare()` is named "peak_data." "peak_data" is a collection of MS2 peak list. A peak list a collection of fragment ions, they all have a value to represent their intensity and mass-charge ratio.
 
 **samples** - The last slot inside of the list is a character vector named "samples." This is a list of the groups/samples contained inside of your peak_table file.
 
@@ -152,7 +152,7 @@ matched_data_small$predicted_molecular_formulas
 
 ### Annotations
 
-Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In mum2 package, ms2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses an modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the reference databases.
+Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In mum2 package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses an modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the reference databases.
 
 ```{r annotations}
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
@@ -170,7 +170,7 @@ Let's look into generating OMUs. OMUs are cluster of metabolites with similar MS
 
 ### Scoring/Distance
 
-We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`modified_cosine_params()`) or spectral entropy algorithm (`spec_entropy_params()`). Just like above, being able to compute the similarity between ms2 spectra is what allows us to cluster data. We can also use the similarity distances to generate a simple distance data.frame for later use.
+We have implemented two different distance calculations to generate distances between compounds. To generate the distances you can use the gnps algorithm (`modified_cosine_params()`) or spectral entropy algorithm (`spec_entropy_params()`). Just like above, being able to compute the similarity between MS2 spectra is what allows us to cluster data. We can also use the similarity distances to generate a simple distance data.frame for later use.
 
 ```{r  scoring_distance, R.options=list(max.print=15)}
 dist <- dist_ms2(
