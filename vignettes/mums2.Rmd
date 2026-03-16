@@ -152,7 +152,7 @@ matched_data_small$predicted_molecular_formulas
 
 ### Annotations
 
-Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In mum2 package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses an modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the reference databases.
+Beyond predicting the molecular formula, it is possible to use the `annotate_ms2()` function to annotate the data in the matched_ms2_ms1 object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In mum2 package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps algorithm (for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses an modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. We determine which method we use by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods we are able to effectively generate a collection of annotations based on the reference databases. We have a small massbank database provided from [MSDial](https://systemsomicslab.github.io/compms/msdial/main.html#MSP) that is included in the package and can be used to annotate data.
 
 ```{r annotations}
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
@@ -379,12 +379,21 @@ alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
   t() |> 
   as.data.frame()
 alpha$name <- rownames(alpha)
-alpha$group <- as.factor(1)
-colnames(alpha) <- c("distances", "name", "group")
+alpha$group <- ""
+
+# Convert Sample_Codes into Biological Groups
+meta_data <- get_meta_data(filtered_data)
+alpha$group <- sapply(alpha$name, function(x) {
+   meta_data$Biological_Group[[which(x == meta_data$Sample_Code)[[1]]]]
+}, USE.NAMES = FALSE)
+
+# Plot 
+colnames(alpha) <- c("distances", "sample_code", "group")
 alpha |>
-  ggplot(aes(x = name, y = distances, group = group)) +
+  ggplot(aes(x = sample_code, y = distances, group = group)) +
   geom_point()  + 
-  geom_boxplot(alpha = 0.3)
+  geom_boxplot(alpha = 0.3) +
+  facet_wrap(~group, scales = "free_x")
 
 
 
