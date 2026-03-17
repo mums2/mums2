@@ -13,13 +13,12 @@ test_that("cluster_data error catching works as expected", {
   expect_error(cluster_data("distances", dat,  0.3, "opticlust"),
                "distance_df must be an object created")
   expect_error(cluster_data(distances, "dat",  0.3, "opticlust"),
-              "The mass_data object must be created")
+               "The mass_data object must be created")
   expect_error(cluster_data(distances, dat,  "0.3", "opticlust"),
-              "cutoff should be a numeric value")
-  
+               "cutoff should be a numeric value")
+
   zero_dist <- dist_ms2(dat, -1, 2, modified_cosine_params(0.5), min_peaks = 0)
   expect_error(cluster_data(zero_dist, dat,  0.3, "opticlust"),
-              "distance_df must have more than 0 rows")
- 
-})
+               "distance_df must have more than 0 rows")
 
+})

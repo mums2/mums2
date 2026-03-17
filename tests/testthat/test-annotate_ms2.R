@@ -90,9 +90,9 @@ test_that("annotate_ms2 will fail if not supplied a mass_data object", {
   psu_msmls <- read_msp(test_path(dir, r_file))
 
   expect_error(annotate_ms2(c(), psu_msmls,
-                              modified_cosine_params(0.5),
-                              100, .1, 0, min_peaks = 0),
-              "The mass_data object must be created using")
+                            modified_cosine_params(0.5),
+                            100, .1, 0, min_peaks = 0),
+               "The mass_data object must be created using")
 })
 
 test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
@@ -103,9 +103,9 @@ test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
   err <-  "The mass_data object must be created using the `ms2_ms1_compare()`"
 
   expect_error(annotate_ms2(dat, psu_msmls,
-                              c(),
-                              100, .1, 0, min_peaks = 0),
-              "score_params must be created using the")
+                            c(),
+                            100, .1, 0, min_peaks = 0),
+               "score_params must be created using the")
 })
 
 test_that("annotate_ms2 will fail if not supplied correct clustering data", {
@@ -115,9 +115,9 @@ test_that("annotate_ms2 will fail if not supplied correct clustering data", {
   psu_msmls <- read_msp(test_path(dir, r_file))
 
   expect_error(annotate_ms2(dat, psu_msmls,
-              modified_cosine_params(0.5), 20,
-              .2, 0, min_peaks = 0, cluster_data = data.frame()),
-              "cluster_data must be created using")
+                            modified_cosine_params(0.5), 20,
+                            .2, 0, min_peaks = 0, cluster_data = data.frame()),
+               "cluster_data must be created using")
 })
 
 test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
@@ -129,27 +129,26 @@ test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), "20",
                             .2, 0, min_peaks = 0),
-              "ppm")
-  
+               "ppm")
+
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
                             ".2", 0, min_peaks = 0),
-              "min_score")
-  
+               "min_score")
+
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
                             .2, "0", min_peaks = 0),
-              "chemical_min_score")
-  
+               "chemical_min_score")
+
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
                             .2, 0, min_peaks = "0"),
-              "min_peaks")
-  
+               "min_peaks")
+
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
                             .2, 0, min_peaks = 0,
                             number_of_threads = "1"),
-              "number_of_threads")
+               "number_of_threads")
 })
-

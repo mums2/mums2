@@ -58,7 +58,7 @@ test_that("ms2_ms2_compare fails if given incorrect parameters", {
   expect_error(ms2_ms1_compare(1234, data, 100000, 150),
                "ms2_files must be a character")
   expect_error(ms2_ms1_compare(mzxml_files, data, "100000", 150),
-              "mz_tolerance must be numeric")
+               "mz_tolerance must be numeric")
   expect_error(ms2_ms1_compare(mzxml_files, data, 100000, "150"),
-              "rt_tolerance must be numeric")
+               "rt_tolerance must be numeric")
 })

@@ -19,7 +19,7 @@ get_reference_data <- function(reference, index) {
   if (!inherits(index, "numeric")) {
     stop("Index has to be a numeric")
   }
-  if(index <= 0 || index > length(reference)) {
+  if (index <= 0 || index > length(reference)) {
     stop("Index must be less than the size of the database")
   }
   index <- index - 1

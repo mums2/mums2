@@ -31,7 +31,8 @@ get_reference_data(reference_db, 2)
 The `combined_reference_database()` function allows you to combined two different databases ontop of eachother to make one reference database. 
 
 ```{r}
-reference_db_2 <- read_msp(msp_file = mums2_example("massbank_example_data_negative.msp"))
+reference_db_2 <-
+  read_msp(msp_file = mums2_example("massbank_example_data_negative.msp"))
 length(reference_db_2)
 
 combined_db <- combined_reference_database(reference_db, reference_db_2)

@@ -90,7 +90,7 @@ dist_shared <- function(community_object, size, threshold,
                              size, threshold, subsample,
                              number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
-  return(as.dist(result))
+  as.dist(result)
 }
 
 
@@ -183,5 +183,5 @@ alpha_summary <- function(community_object, size, threshold,
   result <- MeasureDiversity(community_object, diversity_index, size, threshold,
                              subsample, number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
-  return(result)
+  result
 }

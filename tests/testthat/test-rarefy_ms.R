@@ -19,9 +19,9 @@ test_that("rarefy_ms errors when given incorrect parameters", {
   expect_error(rarefy_ms(community_object, "size", 10),
                "size must be numeric")
   expect_error(rarefy_ms(community_object, 1, "10"),
-              "threshold must be numeric")
+               "threshold must be numeric")
   expect_error(rarefy_ms(community_object, 1, 10, "a"),
-              "number_of_threads must be numeric")
+               "number_of_threads must be numeric")
   expect_error(rarefy_ms(community_object, 1, 10, 1, "a"),
-              "seed must be numeric")
+               "seed must be numeric")
 })
