@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The mums2 package is designed to provide researchers with tools to analyze untargeted metabolomics data generated using tandem mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data.
+The mums2 package is designed to provide researchers with tools to analyze untargeted metabolomics data generated using tandem mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data. To showcase how this, we will be using a previously published database that analyzed the metabolome of [Botryllus Schlosseri](https://doi.org/10.1128/msystems.00793-25).
 
 ```{r setup}
 library(mums2)
