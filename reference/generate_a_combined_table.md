@@ -1989,17 +1989,17 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 59                                                                                      <NA>
 #> 60                                                                                      <NA>
 #> 61                                                                                      <NA>
-#> 62                                 beta-Cryptoxathin-5,6,5',8'-diepoxide; FAB-EBEB; MS2; m/z
-#> 63                                                    Lutein 5,8-epoxide; FAB-EBEB; MS2; m/z
-#> 64                                                                 Myxol; FAB-EBEB; MS2; m/z
-#> 65                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
-#> 66                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
-#> 67                                 beta-Cryptoxathin-5,6,5',6'-diepoxide; FAB-EBEB; MS2; m/z
-#> 68                                                           Loroxanthin; FAB-EBEB; MS2; m/z
-#> 69                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
-#> 70                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
-#> 71                                                            Capsanthin; FAB-EBEB; MS2; m/z
-#> 72                                                     Deepoxyneoxanthin; FAB-EBEB; MS2; m/z
+#> 62                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
+#> 63                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
+#> 64                                 beta-Cryptoxathin-5,6,5',8'-diepoxide; FAB-EBEB; MS2; m/z
+#> 65                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
+#> 66                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
+#> 67                                                           Loroxanthin; FAB-EBEB; MS2; m/z
+#> 68                                 beta-Cryptoxathin-5,6,5',6'-diepoxide; FAB-EBEB; MS2; m/z
+#> 69                                                    Lutein 5,8-epoxide; FAB-EBEB; MS2; m/z
+#> 70                                                                 Myxol; FAB-EBEB; MS2; m/z
+#> 71                                                     Deepoxyneoxanthin; FAB-EBEB; MS2; m/z
+#> 72                                                            Capsanthin; FAB-EBEB; MS2; m/z
 #> 73                                                   Dihydroergotamine; LC-ESI-QTOF; MS2; CE
 #> 74                                                        Antheraxanthin; FAB-EBEB; MS2; m/z
 #> 75                                                                                      <NA>
@@ -2103,18 +2103,18 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 173                                                                                     <NA>
 #> 174                                                                                     <NA>
 #> 175                                                                                     <NA>
-#> 176                                    N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
-#> 177                                    N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
-#> 178                    Isopentenyl-Adenine-7-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
-#> 179                    Isopentenyl-Adenine-9-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
-#> 180                                                    12'-Apozeaxanthin; FAB-EBEB; MS2; m/z
+#> 176                    Isopentenyl-Adenine-7-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
+#> 177                    Isopentenyl-Adenine-9-glucoside; LC-ESI-ITFT; MS2; CE 14.0 eV; [M+H]+
+#> 178                                                    12'-Apozeaxanthin; FAB-EBEB; MS2; m/z
+#> 179                                    N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
+#> 180                                    N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
 #> 181                                                                                     <NA>
 #> 182                                                                                     <NA>
-#> 183                                                      Epicholestanol; LC-APPI-QQ; MS2; CE
-#> 184                                                         Cholestanol; LC-APPI-QQ; MS2; CE
-#> 185                                                      Epicoprostanol; LC-APPI-QQ; MS2; CE
-#> 186                                                         Coprostanol; LC-APPI-QQ; MS2; CE
-#> 187                                                       Thioridazine; LC-ESI-QTOF; MS2; CE
+#> 183                                                      Epicoprostanol; LC-APPI-QQ; MS2; CE
+#> 184                                                         Coprostanol; LC-APPI-QQ; MS2; CE
+#> 185                                                       Thioridazine; LC-ESI-QTOF; MS2; CE
+#> 186                                                      Epicholestanol; LC-APPI-QQ; MS2; CE
+#> 187                                                         Cholestanol; LC-APPI-QQ; MS2; CE
 #> 188                                                                                     <NA>
 #> 189                                                                                     <NA>
 #> 190                                                                                     <NA>
@@ -2314,8 +2314,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 384                                                                                     <NA>
 #> 385                                                                                     <NA>
 #> 386                                                                                     <NA>
-#> 387                                                    Papilioerythrione; FAB-EBEB; MS2; m/z
-#> 388                                                          Pectenolone; FAB-EBEB; MS2; m/z
+#> 387                                                          Pectenolone; FAB-EBEB; MS2; m/z
+#> 388                                                    Papilioerythrione; FAB-EBEB; MS2; m/z
 #> 389                                                           Adonirubin; FAB-EBEB; MS2; m/z
 #> 390                                                                                     <NA>
 #> 391                                                                                     <NA>
@@ -2346,12 +2346,12 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 416                                                                                     <NA>
 #> 417                                                                                     <NA>
 #> 418                                                                                     <NA>
-#> 419                        Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 10.0 eV; [M]+
-#> 420                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 5.0 eV; [M]+
-#> 421                                                              Rutin; LC-ESI-QTOF; MS2; CE
-#> 422                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 0.0 eV; [M]+
-#> 423       Quercetin-3-O-beta-glucopyranosyl-7-O-alpha-rhamnopyranoside; LC-ESI-QTOF; MS2; CE
-#> 424                                                Rutin; LC-ESI-ITFT; MS2; CE 55 eV; [M+H]+
+#> 419                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 5.0 eV; [M]+
+#> 420                        Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 10.0 eV; [M]+
+#> 421                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 0.0 eV; [M]+
+#> 422                                                Rutin; LC-ESI-ITFT; MS2; CE 55 eV; [M+H]+
+#> 423                                                              Rutin; LC-ESI-QTOF; MS2; CE
+#> 424       Quercetin-3-O-beta-glucopyranosyl-7-O-alpha-rhamnopyranoside; LC-ESI-QTOF; MS2; CE
 #> 425 Delphinidin-3-O-(6''-O-alpha-rhamnopyranosyl-beta-glucopyranoside); LC-ESI-QTOF; MS2; CE
 #> 426      Cyanidin-3-O-(2''-O-beta-glucopyranosyl-beta-glucopyranoside); LC-ESI-QTOF; MS2; CE
 #> 427                                                      Rutin; LC-ESI-QTOF; MS2; [M+H]+; CE
