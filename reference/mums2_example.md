@@ -27,10 +27,10 @@ returns a `character` object
 
 ``` r
 mums2_example()
-#> [1] "230112_botryllus_peaktable.csv"     "botryllus_pt_small.csv"            
-#> [3] "botryllus_v2.gnps.mgf"              "ion_masses"                        
-#> [5] "massbank_example_data.msp"          "massbank_example_data_negative.msp"
-#> [7] "meta_data_boryillus.csv"           
+#> [1] "230112_botryllus_peaktable.csv"     "MSMS-Neg-Respect.msp"              
+#> [3] "botryllus_pt_small.csv"             "botryllus_v2.gnps.mgf"             
+#> [5] "ion_masses"                         "massbank_example_data.msp"         
+#> [7] "massbank_example_data_negative.msp" "meta_data_boryillus.csv"           
 
 mums2_example("massbank_example_data.msp")
 #> [1] "/home/runner/work/_temp/Library/mums2/extdata/massbank_example_data.msp"

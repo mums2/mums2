@@ -4,7 +4,10 @@ The mums2 package is designed to provide researchers with tools to
 analyze untargeted metabolomics data generated using tandem mass
 spectroscopy from microbial communities. The overall approach taken to
 analyze metabolomics data parallels that used to analyze microbial
-communities using 16S rRNA gene sequencing data.
+communities using 16S rRNA gene sequencing data. To showcase how this,
+we will be using a previously published database that analyzed the
+metabolome of [Botryllus
+Schlosseri](https://doi.org/10.1128/msystems.00793-25).
 
 ``` r
 library(mums2)
@@ -14,53 +17,46 @@ library(networkD3)
 library(reshape2)
 ```
 
-## Preprocess data
+## Process data
 
-Before we even begin the process of analyzing your data, we have to
-preprocess it. It is import that we process your data into a readable
-`data.frame` or object that we can view and transform. To process your
-data we need to run a two functions:
+Before we begin to analyze your data, we have to process it into a
+readable `data.frame` or object that we can view and transform. To
+process your data we need to run a two functions:
 [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md),
 and
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md).
 [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md)
-creates an object reflecting the imported data, and
+creates an object reflecting MS1 data, and
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
-assigns ms2 spectra to your ms1 data. However, some of your data could
-be noise, or may need to be transformed before you can properly analysis
-it. To accommodate for those issues, we have two other functions:
+assigns MS2 spectra to your MS1 data. At this point, you may need to
+filter out noise, or transform it before you can properly analyze it. To
+accommodate for those issues, we have two other functions:
 [`filter_peak_table()`](https://www.mums2.org/mums2/reference/filter_peak_table.md),
 [`change_rt_to_seconds_or_minute()`](https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.md).
 [`filter_peak_table()`](https://www.mums2.org/mums2/reference/filter_peak_table.md)
 allows your to remove low-quality features and
 [`change_rt_to_seconds_or_minute()`](https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.md)
-allows you to transform your retention to minutes or seconds. This
-allows you to ensure your retention time matches your ms2 data retention
-time. Below will explain in more detail what each function does and how
-to go through the pipeline.
+allows you to transform your retention time to minutes or seconds. This
+allows you to ensure your MS1 data retention time matches your MS2 data
+retention time. Below will explain in more detail what each function
+does and how to go through the pipeline.
 
 ### Import
 
 The
 [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md)
-function takes in a peak_table and meta_data table as input and converts
-it into a `mpactr` object (its a wrapper for
+function takes in a peak_table and meta_data tables as input and
+converts them into a `mpactr` object (its a wrapper for
 [`mpactr::import_data()`](https://www.mums2.org/mpactr/reference/import_data.html)).
 The format parameter accepts three different formats: Metaboscape,
-Progenesis, and None. If you are using a feature table that was exported
-from metaboscape, use the “None” format. If its from Progenesis, use the
-“Progenesis” format. In order for “None” and “Progenesis” to work,
-mpactr transforms the data behind the scenes into a universal peak
-table. The “None” format is only used when you are using the “universal
-peak table” as the “peak table” parameter. You can read up more about
-each of the formats
+Progenesis, and None. You can read up more about each of the formats
 here([`mpactr::import_data()`](https://www.mums2.org/mpactr/reference/import_data.html)).
-If you need a deeper understanding of what format the peak table and
-meta data file show be in, look at mpactr’s [getting started
-page](https://www.mums2.org/mpactr/articles/mpactr.html)
+If you need a deeper understanding of what format the peak_table and
+meta_data file should be in, take a look at mpactr’s [getting started
+page](https://www.mums2.org/mpactr/articles/mpactr.html).
 
-Meta data is a csv that provides information about the samples. In order
-for your meta data to be valid, it needs the following columns:
+Meta_data is a csv that provides information about the samples. In order
+for your meta_data to be valid, it needs the following columns:
 “Injection”, “Sample_Code”, ” Biological_Group.” The “Injection” column
 is the name of the samples, it should match the samples inside of the
 peak_table. “Sample_Code” is the id for you technical replicates.
@@ -80,8 +76,8 @@ data <- import_all_data(
 #### Peak Table
 
 Below is the expected format for a progenesis peak table. It contains
-feature data such as m/z (or pepmass) and retention time. The sample
-intenesities are also inside of this table.
+samples as columns and features as rows. The feature intensities are
+expected to be un-normalized.
 
 ``` r
 read.csv(mums2::mums2_example("230112_botryllus_peaktable.csv"), check.names = FALSE)
@@ -114,7 +110,7 @@ read.csv(mums2::mums2_example("meta_data_boryillus.csv"), check.names = FALSE)
 
 ### Filter
 
-After you import the data you can use functions from mpactR to filter
+After importing the data, you can use functions from mpactR to filter
 the data. There are four different filters included in mpactR:
 [`mpactr::filter_mispicked_ions()`](https://www.mums2.org/mpactr/reference/filter_mispicked_ions.html),
 [`mpactr::filter_group()`](https://www.mums2.org/mpactr/reference/filter_group.html),
@@ -122,9 +118,9 @@ the data. There are four different filters included in mpactR:
 and
 [`mpactr::filter_insource_ions()`](https://www.mums2.org/mpactr/reference/filter_insource_ions.html)
 (You can find more information on
-[mpactR’s](https://www.mums2.org/mpactr/) website). You are not required
-to filter your data but filtering your data will help reduce noise and
-correct peak selecting errors. Which will also speed up the analysis.
+[mpactR’s](https://www.mums2.org/mpactr/) website). Although data
+fitlering is not required, it will help reduce noise and correct peak
+selection errors, which will also speed up the analysis.
 
 ``` r
 filtered_data <- data |>
@@ -263,7 +259,7 @@ head(get_peak_table(filtered_data), 3)
 #> 3:                  158672.23                  165991.44   TRUE
 ```
 
-### Convert from rt to “RT in minutes” or “rt in seconds”
+### Convert from rt to “rt in minutes” or “rt in seconds”
 
 Sometimes a MS2 file will report the retention time in minutes but the
 MS1 file will use seconds. This mismatch will cause the MS1 data to
@@ -280,18 +276,6 @@ get_peak_table(filtered_data)$rt
 #> [13]  5.81  4.79  7.48
 #>  [ reached 'max' / getOption("max.print") -- omitted 4529 entries ]
 ```
-
-Retention time(rt) is the amount of time a compound spends in a column
-and it is an important variable for identifying MS1 compounds. It is
-used to match MS1 and MS2 spectra together. However, there are times
-when rt is displayed in a incorrect time format. Such as in minutes
-instead of seconds. And, if we were to match a MS1 spectra with your rt
-time in minutes to a MS2 spectra with rt time in seconds, the data would
-match incorrectly. Therefore, using a function to convert from one
-format to another is helpful. Keep in mind, that this function cannot
-directly detect whether your retention time is in seconds or minutes, so
-if you convert your retention to minutes when it is already in minutes
-you will generate rt in seconds instead.
 
 ``` r
 
@@ -453,10 +437,11 @@ The
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
 function reads a list of mgf files and matches them with a MS1 spectra
 based on the mass-charge ratio and retention time tolerance. If there
-are multiple peaks, it will select the peak with the highest intensity.
-Keep in mind that MS2 spectra files are very memory intensive, they can
-be anywhere from 1 MB to 100 GB. Therefore, depending on how big the
-file is, it might take a few moments for the function to complete.
+are multiple matches, it will select the MS2 spectra with the highest
+intensity. Keep in mind that MS2 spectra files are very memory
+intensive, they can be anywhere from 1 MB to 100 GB. Therefore,
+depending on how big the file is, it might take a few moments for the
+function to complete.
 
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
 generates a list of data with two data.frames (“ms1_data”, “peak_data”),
@@ -464,31 +449,30 @@ a list (“peak_data”), and a character vector (“samples”).
 
 **ms2_matches** - One of the two data.frames, “ms2_matches”, is a
 data.frame that contains five columns: “mz”, “rt”, “ms1_compound_id”,
-“spectra_index”, and “ms2_spectrum_id.” “mz” and “rt”, represent the ms2
+“spectra_index”, and “ms2_spectrum_id.” “mz” and “rt”, represent the MS2
 mass to charge ratio and retention time. “ms1_compound_id” represents
-your ms1 compound id that was imported from the feature table.
-“spectra_index” matches the ms2 data with its ms2 spectrum. Finally,
+your MS1 compound id that was imported from the feature table.
+“spectra_index” matches the MS2 data with its MS2 spectrum. Finally,
 “ms2_spectrum_id” similar to the “ms1_compound_id”, is the generated
-name to represent your ms2 spectra (the name is a combination of your mz
-and rt). This is necessary to properly compare compounds. Since the
-information supplied from a MS2 file will compute similar results to
-compounds that are alike, we can use algorithmic techniques to compute
-the similarity between two compounds. This allows us to generate
-annotations and cluster similar spectra (MS2 matched information)
-together.
+name to represent your MS2 spectra (the name is a combination of your mz
+and rt). This is necessary to properly compare compounds. Since
+compounds with similiar structures are expected to have similar MS2
+patterns, we can use algorithmic techniques to compute the similarity
+between two spectra. This allows us to generate annotations and cluster
+similar spectra (MS2 matched information) together.
 
 **ms1_data** - The other “data.frame”, “ms1_data”, is a data.frame of
 the created mpactr object.
 
 **peak_data** - The list that is generate from
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
-is named “peak_data.” “peak_data” is a collection of ms2 peak list. A
+is named “peak_data.” “peak_data” is a collection of MS2 peak list. A
 peak list a collection of fragment ions, they all have a value to
 represent their intensity and mass-charge ratio.
 
 **samples** - The last slot inside of the list is a character vector
-named “samples.” This is just a list of the groups/samples contained
-inside of your peak_table file.
+named “samples.” This is a list of the groups/samples contained inside
+of your peak_table file.
 
 ``` r
 matched_data <- ms2_ms1_compare(
@@ -620,22 +604,22 @@ metadata like molecular formulas and annotations. Using the
 [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
 function, we can generate molecular formulas and
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
-allows us to annotate our data based on a reference database. This
-allows us to annotate additional data to unknown features or confirm
-known features. Below will explain in further detail how these functions
-are used.
+allows us to annotate our data based on reference databases. This allows
+us to annotate additional data to unknown features or confirm known
+features. Below will explain in further detail how these functions can
+be used.
 
-### Chemical formula prediction
+### Molecular formula prediction
 
 To add annotation information to the data, mums2 will generate *de novo*
-chemical formula predictions using fragmentation trees. The
+molecular formula predictions using fragmentation trees. The
 [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
-function uses MS2 data to generate the most explained chemical formula
+function uses MS2 data to generate the most explained molecular formula
 and return it as a result (for more information: [Fragmentation
 Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most
-explained chemical formula simply means the chemical formula that is
+explained molecular formula simply means the molecular formula that is
 explained by the most peaks in the compound. In order to create a
-fragmentation tree we have to generate every possible chemical formula
+fragmentation tree we have to generate every possible molecular formula
 the parent mass can create (using only CHNOPS). We call these formulas
 the candidate formulas, formulas that have the potential to be the
 predicted formulas. We then look at every mass and intensity pair inside
@@ -647,7 +631,7 @@ formula). Finally, we can compute a score for each one of the nodes uses
 methods like Ring Double Bond equivalents, compute molecular formula
 score, etc. You can learn how other open-sourced software such as
 [MZMine](https://mzio.io/mzmine-news/) and
-[Sirirus](https://github.com/sirius-ms/sirius) generate chemical
+[Sirius](https://github.com/sirius-ms/sirius) generate molecular
 formula. Due to the time this function will take to run, we are going to
 use a small testset.
 
@@ -689,7 +673,7 @@ matched_data_small <- ms2_ms1_compare(
 
 
 matched_data_small <- compute_molecular_formulas(mass_data = matched_data_small, parent_ppm = 3)
-#> Computing                                                    | 11%  ETA: -...Computing ■■■■■                                              | 11%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■                                   | 33%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 55%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 11%  ETA: -...Computing ■■■■■                                              | 11%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■                                   | 33%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 55%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> 9/9 chemical formulas were predicted
 matched_data_small$predicted_molecular_formulas
 #> [1] "C12H203N11O20P6S2" "H203O9P3S3"        "C13H57N14OPS4"    
@@ -701,27 +685,27 @@ matched_data_small$predicted_molecular_formulas
 
 Beyond predicting the molecular formula, it is possible to use the
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
-function to annotate the data in the matched_ms2_ms1 object. By
-supplying a reference database and a scoring method, we can generate
-numerous annotations. A reference database is a collection of ms2
-spectra, generally curated in a specific format. This package is able to
-read msp files using the
+function to annotate the data in the matched_ms2_ms1 object using
+reference databases. A reference database can be input as msp files
+using the
 [`read_msp()`](https://www.mums2.org/mums2/reference/read_msp.md)
 function. It returns a reference database that can be used as an input
 for the
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
-function. To determine how similar ms2 spectra are from each other, we
-have to incorporate special algorithms. The algorithms we have decided
-to use are spectral entropy (for more information: [Spectral
-Entropy](https://doi.org/10.1038/s41592-021-01331-z))and the gnps
-algorithm (for more information:
-[GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses an modified
-cosine score to compute similarity between spectra, spectral entropy
-takes advantage of the total intensities of the spectra. We determine
-which method we use by supplying either, `gnps_param()` or
+function. In mum2 package, MS2 spectral similarity can be determined
+using either spectral entropy (for more information: [Spectral
+Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps algorithm
+(for more information: [GNPS](https://doi.org/10.1038/nbt.3597)). While
+gnps uses an modified cosine score to compute similarity between
+spectra, spectral entropy takes advantage of the total intensities of
+the spectra. We determine which method we use by supplying either,
+`gnps_param()` or
 [`spec_entropy_params()`](https://www.mums2.org/mums2/reference/spec_entropy_params.md).
 Using these two methods we are able to effectively generate a collection
-of annotations based on the supplied data.
+of annotations based on the reference databases. We have a small
+massbank database provided from
+[MSDial](https://systemsomicslab.github.io/compms/msdial/main.html#MSP)
+that is included in the package and can be used to annotate data.
 
 ``` r
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
@@ -735,16 +719,16 @@ annotations <- annotate_ms2(
 
 annotations[1:5,]
 #>             query_ms1_id       query_ms2_id    query_mz query_rt ref_idx
-#> 1 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3289
-#> 2 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3283
-#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
-#> 4 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3284
+#> 1 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3283
+#> 2 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3284
+#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3289
+#> 4 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
 #> 5 1050.56754 Da 368.94 s mz1051.57522rt6.15 1051.575220 6.150000    5777
 #>   query_formula chemical_similarity    score collisionenergy instrument
-#> 1                          0.000000 0.167768              15           
-#> 2                          0.000000 0.166047              15           
-#> 3                          0.000000 0.159757              30           
-#> 4                          0.000000 0.164341              30           
+#> 1                          0.000000 0.166047              15           
+#> 2                          0.000000 0.164341              30           
+#> 3                          0.000000 0.167768              15           
+#> 4                          0.000000 0.159757              30           
 #> 5                          0.000000 0.476564             0.0           
 #>   instrumenttype                comment  ionmode         ccs
 #> 1    LC-ESI-ITFT registered in MassBank Positive 229.5588665
@@ -760,9 +744,9 @@ annotations[1:5,]
 #> 5 OCC1O[C@@H](OC2=CC=C(\\C=C\\C(=O)OCC3O[C@@H](OC4=C([O+]=C5C=C(O)C=C(O[C@@H]6OC(CO)[C@@H](O)C(O)[C@@H]6O)C5=C4)C4=CC(O)=C(O)C=C4)[C@@H](O[C@@H]4OC[C@@H](O)[C@@H](O)C4O)C(O)[C@@H]3O)C=C2)[C@@H](O)C(O)[C@@H]1O
 #>                      inchikey retentiontime precursortype num.peaks
 #> 1 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
-#> 2 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
-#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
-#> 4 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         4
+#> 2 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         4
+#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
+#> 4 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
 #> 5 OPWPCWHMCUWCGG-XKYKWVHPSA-O                        [M]+         4
 #>                                                                                                                           name
 #> 1                                                                                            Telmisartan; LC-ESI-ITFT; MS2; CE
@@ -780,11 +764,11 @@ annotations[1:5,]
 
 ## Create OMUs
 
-Lets look into generating OMUs. OMUs are cluster of metabolites and can
-be used for numerous analysis. To properly cluster your data together,
-you need to generate some similarity or distance between your data. This
-is where our
-[`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
+Let’s look into generating OMUs. OMUs are cluster of metabolites with
+similar MS2 spectral pattern and can be used for numerous analysis. To
+properly cluster your data together, you need to generate some
+similarity or distance between the features of your data. This is where
+our [`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
 function comes in. After you generate a distance `data.frame` we can use
 the
 [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
@@ -797,25 +781,25 @@ We have implemented two different distance calculations to generate
 distances between compounds. To generate the distances you can use the
 gnps algorithm
 ([`modified_cosine_params()`](https://www.mums2.org/mums2/reference/modified_cosine_params.md))
-or an algorithm called spectral entropy
+or spectral entropy algorithm
 ([`spec_entropy_params()`](https://www.mums2.org/mums2/reference/spec_entropy_params.md)).
-Just like above, being able to compute the similarity between ms2
-spectra is what allows us to cluster and annotate the data but we can
-also use the similarity distances to generate a simple distance
-data.frame for later use.
+Just like above, being able to compute the similarity between MS2
+spectra is what allows us to cluster data. We can also use the
+similarity distances to generate a simple distance data.frame for later
+use.
 
 ``` r
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_threshold = -1,
   score_params = modified_cosine_params(0.5), min_peaks = 0)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: 47s ...Computing ■■                                                 | 4%  ETA: 23s ...Computing ■■■                                                | 6%  ETA: 15s ...Computing ■■■■                                               | 8%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 12%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 16%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 dist
-#>   i   j      dist
-#> 1 1 506 0.2414772
-#> 2 1 341 0.1911813
-#> 3 1 512 0.2443375
-#> 4 1 348 0.1495395
-#> 5 1 349 0.1255408
+#>   i   j       dist
+#> 1 1 506 0.24147716
+#> 2 1   2 0.05989299
+#> 3 1   3 0.06767390
+#> 4 1   5 0.06993205
+#> 5 1 341 0.19118126
 #>  [ reached 'max' / getOption("max.print") -- omitted 60029 rows ]
 ```
 
@@ -823,12 +807,11 @@ dist
 
 OMUs or Operational Metabolomic Units are clusters of metabolites. We
 cluster metabolites based on how similar their ms2s are to each other.
-In our case, we are have a function that is able to do just this, the
-[`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
-function. This function generates a distance `data.frame`, or a
-`data.frame` of closeness between metabolites. Using the generate object
-along with the matched_ms2_ms1 object, we are able to cluster are data
-together to generate OMUs using the
+The [`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
+function generates a distance `data.frame`, or a `data.frame` of
+closeness between metabolites. Using the generated object along with the
+matched_ms2_ms1 object, we are able to cluster the data together to
+generate OMUs using the
 [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
 function. This function returns a list with five slots; label,
 abundance, cluster, cluster_metrics, and iteration metrics.
@@ -1091,7 +1074,7 @@ more diversity there is.
 ``` r
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
               diversity_index = "simpson", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 7s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 7s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 6s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 5s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 6s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 5s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #>      221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_1_434
 #> [1,]                 0.6090176                 0.6202386
 #>      221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_1_431
@@ -1125,7 +1108,7 @@ Beta diversity represents the dissimilarity of two different samples.
 With this calculation the user can generate distances between the
 community that can be used for visualizations. And, with all of the
 annotations, and clusters that were computed earlier, you can see just
-how dissimilar/similar the resultant samples are.
+how dissimilar/similar the samples are.
 
 Below are examples of using rarefaction to calculate Bray-Curtis
 distances using OMU or individual metabolites.
@@ -1163,7 +1146,7 @@ bray_w_omus
 
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
                            threshold = 100, diversity_index = "bray", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: 24s ...Computing ■■■                                                | 5%  ETA: 15s ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 bray_no_omus
 #>                            221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
 #> 221012_DGM_Blank1_1_2_391                 0.06219456                          
@@ -1270,12 +1253,12 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
 
 Another feature included inside of mums2, is the ability to run your
 analysis using group averages. Some researchers conduct mass
-spectrometry experiments by running samples in triplicates. Meaning,
-they run the experiment using three of the same samples to account for
-noise. Since we know all three samples are the same, we can average out
-all of the samples into one group and work with one group. We are able
-to generate group averages by using the metadata file that was supplied
-when you imported your data. We can accomplish this by using the
+spectrometry experiments by running samples in triplicates to account
+for noise. Since we know all three samples are the same, we can average
+out all of the samples into one group and work with one group. We are
+able to generate group averages by using the metadata file that was
+supplied when you imported your data. We can accomplish this by using
+the
 [`convert_to_group_averages()`](https://www.mums2.org/mums2/reference/convert_to_group_averages.md)
 function.
 
@@ -1422,7 +1405,7 @@ adjusted based on the information supplied in the metadata file.
 
 ### Combined data frames
 
-mums2 also allows you to view your all of your generated data as a whole
+mums2 also allows you to view your all of your generated data together
 using the
 [`generate_a_combined_table()`](https://www.mums2.org/mums2/reference/generate_a_combined_table.md)
 function. This function will take your matched object (generated from
@@ -1430,9 +1413,8 @@ function. This function will take your matched object (generated from
 your annotations object (generated from
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md))
 and your cluster data (generated from
-[`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)).
-It will then generate a combined data.frame with all of the generate
-data.
+[`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md))
+to generate a combined data.frame with all of the generated data.
 
 ``` r
   # For normal data
@@ -1532,9 +1514,8 @@ data.
 
 ### Heat map
 
-Another way to visualize diversity data is to use a heat map. A heat map
-is a 2d representation of data that visualizes the magnitude of data. We
-can easily see how correlated data is between samples with a heatmap.
+Another way to visualize diversity data is to use a heat map. We can
+easily see how correlated data is between samples with a heatmap.
 
 ``` r
 dist_shared(community_object_avg, 4000, 100, "jaccard") |> 
@@ -1543,31 +1524,40 @@ dist_shared(community_object_avg, 4000, 100, "jaccard") |>
   ggplot(aes(x = A, y = B, fill = distances)) +
   geom_tile() +
   scale_fill_gradient(low="#FF0000", high = "#FFFFFF")
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 ```
 
 ![](mums2_files/figure-html/heat_map-1.png)
 
 ### Box Plot
 
-A box plot (or box and whisker plot) will use a box to depict the
-variation of the data. We can take advantage of this to look at the
-distributions inside of our generate beta and alpha diversity data.
-Below is a box plot using alpha diversity.
+A box and whisker plot can also be used to depict the variation of the
+data. We can take advantage of this to look at the distributions inside
+of our generate beta and alpha diversity data. Below is a box plot using
+alpha diversity.
 
 ``` r
 
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
   t() |> 
   as.data.frame()
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 alpha$name <- rownames(alpha)
-alpha$group <- as.factor(1)
-colnames(alpha) <- c("distances", "name", "group")
+alpha$group <- ""
+
+# Convert Sample_Codes into Biological Groups
+meta_data <- get_meta_data(filtered_data)
+alpha$group <- sapply(alpha$name, function(x) {
+   meta_data$Biological_Group[[which(x == meta_data$Sample_Code)[[1]]]]
+}, USE.NAMES = FALSE)
+
+# Plot 
+colnames(alpha) <- c("distances", "sample_code", "group")
 alpha |>
-  ggplot(aes(x = name, y = distances, group = group)) +
+  ggplot(aes(x = sample_code, y = distances, group = group)) +
   geom_point()  + 
-  geom_boxplot(alpha = 0.3)
+  geom_boxplot(alpha = 0.3) +
+  facet_wrap(~group, scales = "free_x")
 ```
 
 ![](mums2_files/figure-html/box_plot-1.png)
