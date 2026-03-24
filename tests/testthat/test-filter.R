@@ -65,4 +65,3 @@ test_that("filter_insource_ions_params return correct data", {
   expect_true(all(names(ls) == names(params)))
   expect_true(length(params) == 2)
 })
-

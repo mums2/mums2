@@ -73,7 +73,7 @@ change_rt_to_seconds_or_minute <- function(mpactr_object,
     colnames(peak_table)[column_index] <- "RTINMINUTES"
     mpactr_object$mpactr_data$set_peak_table(peak_table)
   }
-  return(mpactr_object)
+  mpactr_object
 }
 
 

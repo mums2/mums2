@@ -62,7 +62,7 @@ test_that("convert to group averages fail if given wrong parameters", {
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
   expect_error(convert_to_group_averages("ms2_data", data),
                "The mass_data object")
-  
+
   expect_error(convert_to_group_averages(ms2_data, "data"),
                "The mpactr object")
 })

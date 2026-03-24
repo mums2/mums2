@@ -120,19 +120,19 @@ test_that("Test dist_shared errors when given wrong parameters", {
                "size")
   expect_error(dist_shared(community_object, 400, "10", "bray", TRUE,
                            iterations = 100),
-              "threshold")
+               "threshold")
   expect_error(dist_shared(community_object, 400, 10, "bray", "TRUE",
                            iterations = 100),
-              "subsample")
+               "subsample")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
                            iterations = "100"),
-              "iterations")
+               "iterations")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
                            iterations = 100, number_of_threads = "1"),
-              "number_of_threads")
+               "number_of_threads")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
                            iterations = 100, seed = "1"),
-              "seed")
+               "seed")
 
 })
 
@@ -189,22 +189,22 @@ test_that("Test Alpha summary errors when given wrong parameters", {
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
   expect_error(alpha_summary(community_object, "400", 10, "shannon", TRUE,
-                           iterations = 100),
+                             iterations = 100),
                "size")
   expect_error(alpha_summary(community_object, 400, "10", "shannon", TRUE,
-                           iterations = 100),
-              "threshold")
+                             iterations = 100),
+               "threshold")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", "TRUE",
-                           iterations = 100),
-              "subsample")
+                             iterations = 100),
+               "subsample")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                           iterations = "100"),
-              "iterations")
+                             iterations = "100"),
+               "iterations")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                           iterations = 100, number_of_threads = "1"),
-              "number_of_threads")
+                             iterations = 100, number_of_threads = "1"),
+               "number_of_threads")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                           iterations = 100, seed = "1"),
-              "seed")
+                             iterations = 100, seed = "1"),
+               "seed")
 
 })

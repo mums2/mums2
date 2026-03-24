@@ -45,22 +45,23 @@ test_that("read_msp will fail if file has the wrong extension", {
 
 test_that("read_hmdb will properly read hmdb data", {
   hmdb_db <- read_hmdb(test_path("exttestdata", "sweat_metabo_small.xml"),
-                 test_path("exttestdata", "Spectra"))
+                       test_path("exttestdata", "Spectra"))
   expect_true(length(hmdb_db) == 2)
 })
 
 test_that("read_hmdb will fail if given incorrect parameters", {
   expect_error(read_hmdb("", test_path("exttestdata", "Spectra")),
-  "hmdb file does not exist")
+               "hmdb file does not exist")
 
   expect_error(read_hmdb(test_path("exttestdata", "sweat_metabo_small.xml"),
-               "ms2_folder does not exist"))
+                         "ms2_folder does not exist"))
 })
 
 test_that("read_hmdb will default prescursor mz to NA if not given", {
-  hmdb_db <- read_hmdb(test_path("exttestdata", "sweat_metabo_small_no_mass.xml"),
-                test_path("exttestdata", "Spectra"))
+  hmdb_db <- read_hmdb(test_path("exttestdata",
+                                 "sweat_metabo_small_no_mass.xml"),
+                       test_path("exttestdata", "Spectra"))
 
   node <- get_reference_data(hmdb_db, 1)
-  expect_true(node$info$values[which(node$info$keys == "precursormz")] == "NA") 
+  expect_true(node$info$values[which(node$info$keys == "precursormz")] == "NA")
 })

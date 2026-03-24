@@ -169,8 +169,8 @@ process_xml <- function(xml_file) {
 read_and_match_spectra_files <- function(ms2_files, database) {
   ls <- list.files(ms2_files, full.names = TRUE)
   database_names <- sub("_.*", "", list.files(ms2_files, full.names = FALSE))
-  print("Adding Spectra Files..." )
+  print("Adding Spectra Files...")
   AddSpectra(database, ls, database_names)
-  print("Processing Spectra Files..." )
+  print("Processing Spectra Files...")
   ProcessMs2Files(database)
 }

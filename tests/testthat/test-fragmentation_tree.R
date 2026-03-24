@@ -4,28 +4,28 @@ test_that("test that fragmentation tree makes predictions", {
   expect_true(length(which(dat$predicted_molecular_formulas == "")) <= 0)
 })
 
-test_that("compute_molecular_formulas will fail if given incorrect parameters", {
-  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-  expect_error(compute_molecular_formulas("dat"), 
-               "The mass_data object must be created")
-  
-  expect_error(compute_molecular_formulas(dat, parent_ppm = "a"), 
-               "parent_ppm must be numeric")
-  
-  expect_error(compute_molecular_formulas(dat, number_of_threads = "a"), 
-               "number_of_threads must be numeric")
-  
-  dat$ms2_matches <- data.frame()
-  expect_error(compute_molecular_formulas(dat), 
-               "Your mass_data object has no ms2 matches")
-  
-  dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-  dat$peak_data <- list()
-  expect_error(compute_molecular_formulas(dat), 
-               "Your mass_data object has no peak data")
-  
+test_that("compute_molecular_formulas will fail if given incorrect
+          parameters", {
+            dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+            expect_error(compute_molecular_formulas("dat"),
+                         "The mass_data object must be created")
 
-})
+            expect_error(compute_molecular_formulas(dat, parent_ppm = "a"),
+                         "parent_ppm must be numeric")
+
+            expect_error(compute_molecular_formulas(dat,
+                                                    number_of_threads = "a"),
+                         "number_of_threads must be numeric")
+
+            dat$ms2_matches <- data.frame()
+            expect_error(compute_molecular_formulas(dat),
+                         "Your mass_data object has no ms2 matches")
+
+            dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
+            dat$peak_data <- list()
+            expect_error(compute_molecular_formulas(dat),
+                         "Your mass_data object has no peak data")
+          })
 
 
 test_that("Return NA when there are no parent decompositions", {
