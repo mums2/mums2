@@ -398,15 +398,3 @@ alpha |>
 
 
 ```
-
-
-You can also look at the dissimilarities in the communities by using a box plot with beta diversity.
-```{r box_plot_beta, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_shared(community_object_avg, 4000, 100, "bray") |>
-  as.matrix() |>
-  reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
-  ggplot(aes(x = A, y = distances, colour = A)) +
-  geom_point(aes(color = B))  + 
-  geom_boxplot(alpha = 0.1)
-
-```
