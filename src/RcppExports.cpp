@@ -223,6 +223,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// start_profiler
+SEXP start_profiler(const SEXP& str);
+RcppExport SEXP _mums2_start_profiler(SEXP strSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type str(strSEXP);
+    rcpp_result_gen = Rcpp::wrap(start_profiler(str));
+    return rcpp_result_gen;
+END_RCPP
+}
+// stop_profiler
+SEXP stop_profiler();
+RcppExport SEXP _mums2_stop_profiler() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(stop_profiler());
+    return rcpp_result_gen;
+END_RCPP
+}
 // CreateProgressBarObject
 SEXP CreateProgressBarObject();
 RcppExport SEXP _mums2_CreateProgressBarObject() {
@@ -296,6 +317,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
     {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
+    {"_mums2_start_profiler", (DL_FUNC) &_mums2_start_profiler, 1},
+    {"_mums2_stop_profiler", (DL_FUNC) &_mums2_stop_profiler, 0},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},

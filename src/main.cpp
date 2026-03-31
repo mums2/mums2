@@ -43,10 +43,25 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
 // [[Rcpp::export]]
 std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     const double parentMass, const int numberOfThreads) {
-    const int size = molecularFormulas.size();
     FragmentationTree tree(molecularFormulas, parentMass);
-    RcppThread::parallelFor(0, size, [&tree](int i) {
-        tree.AddMolecularFormulaToGraph(i);
+    const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
+    const int size = static_cast<int>(availableIndexes.size());
+    RcppThread::parallelFor(0, size, [&tree, &availableIndexes](int i) {
+        tree.AddMolecularFormulaToGraph(availableIndexes[i]);
     }, numberOfThreads);
     return GreedyHeuristic::CalculateHeuristic(tree);
+}
+
+#include "../../../../Downloads/gperftools-2.15/src/gperftools/profiler.h"
+
+// [[Rcpp::export]]
+SEXP start_profiler(const SEXP& str) {
+    ProfilerStart(Rcpp::as<const char*>(str));
+    return R_NilValue;
+}
+
+// [[Rcpp::export]]
+SEXP stop_profiler() {
+    ProfilerStop();
+    return R_NilValue;
 }

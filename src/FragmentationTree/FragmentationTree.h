@@ -19,12 +19,14 @@ public:
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     void SortFragmentationNodes();
     void AddMolecularFormulaToGraph(int currentIndex);
+    const std::vector<int>& GetColorZeroFormulas() {return colorZeroFormulas;}
 
 private:
     void Initialize(const Rcpp::List& fragmentationData);
     void CollectResultFromNode(const std::list<int>& parentIndexes, double subtreeScore, int index);
     // Keys of the same color represent the same mz, int (isotope).
     std::vector<FragmentationNode> molecularNodeList;
+    std::vector<int> colorZeroFormulas;
     std::mutex mutexLock;
     double parentMass;
     int size;

@@ -17,10 +17,14 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     const Rcpp::NumericVector& decompositionScores = fragmentationData["score"];
     const Rcpp::NumericVector& masses = fragmentationData["mass"];
     size = molecularFormulas.size();
+    colorZeroFormulas.reserve(size);
     molecularNodeList = std::vector<FragmentationNode>(size);
     for (int i = 0; i < size; i++) {
         molecularNodeList[i] = FragmentationNode(color[i], i,
             decompositionScores[i], 0, MolecularFormula(molecularFormulas[i], masses[i]));
+        if (color[i] == 0) {
+            colorZeroFormulas.emplace_back(i);
+        }
     }
 }
 
@@ -31,9 +35,9 @@ void FragmentationTree::SortFragmentationNodes() {
 void FragmentationTree::CollectResultFromNode(const std::list<int>& parentIndexes, const double subtreeScore,
     const int index) {
     mutexLock.lock();
-    for (const auto& parentIndex : parentIndexes) {
-        molecularNodeList[parentIndex].subTreeScore +=  subtreeScore;
-    }
+    // for (const auto& parentIndex : parentIndexes) {
+    //     molecularNodeList[parentIndex].subTreeScore +=  subtreeScore;
+    // }
     molecularNodeList[index].subTreeScore += subtreeScore;
     mutexLock.unlock();
 }
@@ -42,7 +46,7 @@ void FragmentationTree::CollectResultFromNode(const std::list<int>& parentIndexe
 void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
     const std::vector<FragmentationNode>& fragmentationNodes = molecularNodeList;
     const MolecularFormula& formula = fragmentationNodes[currentIndex].formula;
-    const FragmentationNode& fragmentationNode =  fragmentationNodes[currentIndex];
+    const FragmentationNode& fragmentationNode = fragmentationNodes[currentIndex];
     std::list<int> parentIndexes;
     double finalSubtreeScore = 0;
     for (int j = currentIndex + 1; j < size; j++) {
@@ -52,7 +56,7 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         const int res = formula.CheckIfOtherIsSubFormula(currentFormula);
         if (res == 0) continue;
         if (res == 2) { // meaning parentFormula is a subformula of the child
-            parentIndexes.emplace_back(j);
+            //parentIndexes.emplace_back(j);
             continue;
         }
         const double lossMass = formula.GetLossMass(currentFormula);
