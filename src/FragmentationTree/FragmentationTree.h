@@ -23,7 +23,7 @@ public:
 
 private:
     void Initialize(const Rcpp::List& fragmentationData);
-    void CollectResultFromNode(const std::list<int>& parentIndexes, double subtreeScore, int index);
+    void CollectResultFromNode(double subtreeScore, int index);
     // Keys of the same color represent the same mz, int (isotope).
     std::vector<FragmentationNode> molecularNodeList;
     std::vector<int> colorZeroFormulas;

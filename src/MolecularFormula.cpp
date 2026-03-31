@@ -72,8 +72,9 @@ std::string MolecularFormula::GetMolecularFormula() const {
 std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     std::string formula;
     for (const auto& element : chemicalAtomNamesOrder) {
-        const int atoms = std::abs(chemicalAtomAmounts[ConvertASCIIElementToIndex(element)] -
-            other.chemicalAtomAmounts[ConvertASCIIElementToIndex(element)]);
+        const size_t index = ConvertASCIIElementToIndex(element);
+        const int atoms = std::abs(chemicalAtomAmounts[index] -
+            other.chemicalAtomAmounts[index]);
         if (atoms <= 0) continue;
         formula += element;
         if (atoms == 1) continue;
@@ -82,23 +83,24 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     return formula;
 }
 
-int MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
-    bool thisFormula = true;
-    bool otherFormula = true;
-    for (const auto& element : chemicalAtomNamesOrder) {
-        if (!thisFormula && !otherFormula) return 0; // Neither is a subformula
-        const int currentAtoms = GetAtomsForElement(element);
-        const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
-        if (currentAtoms == otherAtoms) continue;
-        if (currentAtoms > otherAtoms) otherFormula = false;
-        else thisFormula = false;
-    }
-    // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
-    // are subformulas of each other
-    // But we only represent the first formula with the link so its not cyclic
-    if (thisFormula) return 1;
-    // if it reached this far, the only option is that the other formula is true so we return a 2
-    return 2;
+bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
+    // for (const auto& element : chemicalAtomNamesOrder) {
+    //     const int currentAtoms = GetAtomsForElement(element);
+    //     const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
+    //     if (currentAtoms < otherAtoms) return false;
+    // }
+    return std::all_of(chemicalAtomNamesOrder.cbegin(), chemicalAtomNamesOrder.cend(),
+        [&subFormulaCandidate, this](const char& element) {
+            const int currentAtoms = GetAtomsForElement(element);
+            const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
+            return currentAtoms > otherAtoms;
+    });
+    // // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
+    // // are subformulas of each other
+    // // But we only represent the first formula with the link so its not cyclic
+    // if (thisFormula) return 1;
+    // // if it reached this far, the only option is that the other formula is true so we return a 2
+    // return 2;
 
 }
 

@@ -17,7 +17,7 @@ public:
     int GetAtomsForElement(const char&) const;
     std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
-    int CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
+    bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
     double GetMass() const;
 protected:
     double molecularMass;

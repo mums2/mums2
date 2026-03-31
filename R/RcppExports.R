@@ -65,14 +65,6 @@ ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThre
     .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
 }
 
-start_profiler <- function(str) {
-    .Call(`_mums2_start_profiler`, str)
-}
-
-stop_profiler <- function() {
-    .Call(`_mums2_stop_profiler`)
-}
-
 CreateProgressBarObject <- function() {
     .Call(`_mums2_CreateProgressBarObject`)
 }
