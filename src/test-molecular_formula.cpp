@@ -42,15 +42,15 @@ context("Molecular Formula") {
     test_that("We can check if formulas are subformulas of another") {
         const MolecularFormula molecularFormula("C6H12O6");
         const MolecularFormula otherFormula("C20H15O7N3");
-        expect_true(molecularFormula.CheckIfOtherIsSubFormula(otherFormula) == 2);
+        expect_true(molecularFormula.CheckIfOtherIsSubFormula(otherFormula) == false);
 
         const MolecularFormula molecularFormula2("C6H12O6");
         const MolecularFormula otherFormula2("CH2");
-        expect_true(molecularFormula2.CheckIfOtherIsSubFormula(otherFormula2) == 1);
+        expect_true(molecularFormula2.CheckIfOtherIsSubFormula(otherFormula2) == true);
 
         const MolecularFormula molecularFormula3("C6H12O6");
         const MolecularFormula otherFormula3("H10O5");
-        expect_true(molecularFormula3.CheckIfOtherIsSubFormula(otherFormula3) == 1);
+        expect_true(molecularFormula3.CheckIfOtherIsSubFormula(otherFormula3) == true);
     }
 
 

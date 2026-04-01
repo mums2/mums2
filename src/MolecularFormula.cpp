@@ -7,13 +7,19 @@
 #include <unordered_map>
 
 
-
 std::vector<double> MolecularFormula::chemicalAtomMassVector = {12.011,
     1.0078, 14.007, 15.999, 30.974, 32.065}; // C H N O P S
 std::vector<char> MolecularFormula::chemicalAtomNamesOrder = {'C', 'H', 'N', 'O', 'P', 'S'};
 
 MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula, const double molecularMass):
 molecularMass(molecularMass) {
+    chemicalAtomsIndexTest = std::vector<size_t>(100, -1);
+    chemicalAtomsIndexTest[67] = 0;
+    chemicalAtomsIndexTest[72] = 1;
+    chemicalAtomsIndexTest[78] = 2;
+    chemicalAtomsIndexTest[79] = 3;
+    chemicalAtomsIndexTest[80] = 4;
+    chemicalAtomsIndexTest[83] = 5;
     chemicalAtomAmounts = std::vector<int>(6, 0);
     const char* formula = molecularFormula.get_cstring();
     const size_t size = std::strlen(formula);
@@ -29,7 +35,8 @@ molecularMass(molecularMass) {
             if(chemicalSymbol != ' ') {
                 if (hasCheckedAtomAmount || !std::islower(formula[i])) {
                     if (amountOfAtoms.empty()) amountOfAtoms = "1";
-                    chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalSymbol)] = std::stoi(amountOfAtoms);
+                    // chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]
+                    chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
                     hasCheckedAtomAmount = false;
                     chemicalSymbol = ' ';
                     amountOfAtoms = "";
@@ -44,7 +51,7 @@ molecularMass(molecularMass) {
         hasCheckedAtomAmount = true;
     }
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
-    chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalSymbol)] = std::stoi(amountOfAtoms);
+    chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
 }
 
 double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
@@ -53,7 +60,10 @@ double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
 
 int MolecularFormula::GetAtomsForElement(const char &chemicalElement) const {
     //return chemicalAtomMap.at(chemicalElement);
-    return chemicalAtomAmounts[ConvertASCIIElementToIndex(chemicalElement)];
+    const size_t index = chemicalAtomsIndexTest[static_cast<int>(chemicalElement)];
+    if (index < 0)
+        Rcpp::stop("Chemical Element is Not CHNOPS");
+    return chemicalAtomAmounts[index];
 }
 
 std::string MolecularFormula::GetMolecularFormula() const {
@@ -72,7 +82,7 @@ std::string MolecularFormula::GetMolecularFormula() const {
 std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     std::string formula;
     for (const auto& element : chemicalAtomNamesOrder) {
-        const size_t index = ConvertASCIIElementToIndex(element);
+        const size_t index = chemicalAtomsIndexTest[static_cast<int>(element)];
         const int atoms = std::abs(chemicalAtomAmounts[index] -
             other.chemicalAtomAmounts[index]);
         if (atoms <= 0) continue;
@@ -93,7 +103,7 @@ bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormu
         [&subFormulaCandidate, this](const char& element) {
             const int currentAtoms = GetAtomsForElement(element);
             const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
-            return currentAtoms > otherAtoms;
+            return currentAtoms >= otherAtoms;
     });
     // // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
     // // are subformulas of each other
