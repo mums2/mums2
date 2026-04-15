@@ -11,7 +11,7 @@ struct ScoreValues {
 };
 struct CompareScores {
     bool operator()(ScoreValues const& s1, ScoreValues const & s2) const {
-        return s1.score < s2.score;
+        return s1.score > s2.score;
     }
 };
 

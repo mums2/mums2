@@ -22,7 +22,8 @@ std::vector<double> ModifiedCosineScore::ScoreRData(const std::vector<double>& l
         shiftMap = ConstructPeaks(listOneMZ, listTwoMz, listOneInt, listTwoInt, tolerance,shift);
     }
     scoreMap.insert(scoreMap.end(), shiftMap.begin(), shiftMap.end());
-    std::make_heap(scoreMap.begin(), scoreMap.end(), CompareScores());
+    std::sort(scoreMap.begin(), scoreMap.end(), CompareScores());
+    // std::make_heap(scoreMap.begin(), scoreMap.end(), CompareScores());
     size_t peakCount = 0;
     return {ScoreMatches(scoreMap, listOneInt.size(), peakCount),
     static_cast<double>(peakCount)};
@@ -86,26 +87,48 @@ std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unorde
     return score_values_vector;
 }
 
+// double ModifiedCosineScore::ScoreMatches(
+//     std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
+//     std::unordered_set<size_t> usedPeakOne;
+//     std::unordered_set<size_t> usedPeakTwo;
+//     double totalScore = 0;
+//     while(!queue.empty()) {
+//         ScoreValues value = queue.front();
+//         if(usedPeakOne.find(value.indexOne) != usedPeakOne.end()||
+//             usedPeakTwo.find(value.indexTwo) != usedPeakTwo.end()) {
+//             std::pop_heap(queue.begin(), queue.end(), CompareScores());
+//             queue.pop_back();
+//             continue;
+//         }
+//         usedPeakOne.insert(value.indexOne);
+//         usedPeakTwo.insert(value.indexTwo);
+//         totalScore += value.score;
+//         numberOfPeakMatches ++;
+//         if(numberOfPeakMatches >= countOfSpectraOne)
+//             break;
+//         std::pop_heap(queue.begin(), queue.end(), CompareScores());
+//     }
+//     return totalScore;
+// }
+
 double ModifiedCosineScore::ScoreMatches(
     std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
-    std::unordered_set<size_t> usedPeakOne;
-    std::unordered_set<size_t> usedPeakTwo;
+    std::vector<bool> usedPeakOne(countOfSpectraOne, false);
+    std::vector<bool> usedPeakTwo(countOfSpectraOne,  false);
     double totalScore = 0;
-    while(!queue.empty()) {
-        ScoreValues value = queue.front();
-        if(usedPeakOne.find(value.indexOne) != usedPeakOne.end()||
-            usedPeakTwo.find(value.indexTwo) != usedPeakTwo.end()) {
-            std::pop_heap(queue.begin(), queue.end(), CompareScores());
-            queue.pop_back();
+
+    for (const auto& value : queue) {
+        if(usedPeakOne[value.indexOne]||
+           usedPeakTwo[value.indexTwo]) {
             continue;
-        }
-        usedPeakOne.insert(value.indexOne);
-        usedPeakTwo.insert(value.indexTwo);
+           }
+        usedPeakOne[value.indexOne] = true;
+        usedPeakTwo[value.indexTwo] = true;
         totalScore += value.score;
         numberOfPeakMatches ++;
         if(numberOfPeakMatches >= countOfSpectraOne)
             break;
-        std::pop_heap(queue.begin(), queue.end(), CompareScores());
     }
+
     return totalScore;
 }
