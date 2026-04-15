@@ -14,20 +14,17 @@ std::vector<double> ModifiedCosineScore::ScoreRData(const std::vector<double>& l
 {
     SquareRootNormalize::Normalize(listOneInt);
     SquareRootNormalize::Normalize(listTwoInt);
-    int sizeOfMap = 0;
-    int shiftMapSize = 0;
-    auto map = ConstructPeaks(listOneMZ, listTwoMz, tolerance,0, sizeOfMap);
-    std::unordered_map<int, std::unordered_set<int>> shift_map;
+    std::vector<ScoreValues> scoreMap = ConstructPeaks(listOneMZ, listTwoMz,  listOneInt,
+        listTwoInt, tolerance,0);
+    std::vector<ScoreValues> shiftMap;
     if(std::abs(shift) > tolerance)
     {
-        shift_map = ConstructPeaks(listOneMZ, listTwoMz, tolerance,shift, shiftMapSize);
+        shiftMap = ConstructPeaks(listOneMZ, listTwoMz, listOneInt, listTwoInt, tolerance,shift);
     }
-    auto shiftQueue = ConstructPriorityQueue(shift_map, listOneInt, listTwoInt, shiftMapSize);
-    auto queue = ConstructPriorityQueue(map, listOneInt, listTwoInt, sizeOfMap);
-    queue.insert(queue.end(), shiftQueue.begin(), shiftQueue.end());
-    std::make_heap(queue.begin(), queue.end(), CompareScores());
-    int peakCount = 0;
-    return {ScoreMatches(queue, listOneInt.size(), peakCount),
+    scoreMap.insert(scoreMap.end(), shiftMap.begin(), shiftMap.end());
+    std::make_heap(scoreMap.begin(), scoreMap.end(), CompareScores());
+    size_t peakCount = 0;
+    return {ScoreMatches(scoreMap, listOneInt.size(), peakCount),
     static_cast<double>(peakCount)};
 }
 
@@ -40,13 +37,18 @@ double ModifiedCosineScore::CalculateScore(const Spectra &firstSpectra, const Sp
         (firstSpectra.precursorMz - secondSpectra.precursorMz))[0];
 }
 
-std::unordered_map<int, std::unordered_set<int>> ModifiedCosineScore::ConstructPeaks(const std::vector<double>& mzVector,
-    const std::vector<double>& otherMzVector, const double tol, const double shift, int& totalSizeOfIndexMap)
+std::vector<ScoreValues> ModifiedCosineScore::ConstructPeaks(const std::vector<double>& mzVector,
+    const std::vector<double>& otherMzVector, const std::vector<double>& intensitiesOne,
+    const std::vector<double>& intensitiesTwo,
+    const double tol, const double shift)
 {
     //Declare a vector and look at its size
     const double adjTolerance = tol + 0.000001;
-    std::unordered_map<int, std::unordered_set<int>> indexMap;
-    totalSizeOfIndexMap = 0;
+    // TODO: Remove the unordered maps and sets from the code and generate the priorty queue sooner.
+    // TODO: This will allow us to reduce the amount of hashmap collisions and set overhead.
+    std::vector<ScoreValues> scoreValuesVector;
+    scoreValuesVector.reserve(mzVector.size());
+
     // Iterate over
     for(size_t i = 0; i < mzVector.size(); i++)
     {
@@ -55,18 +57,20 @@ std::unordered_map<int, std::unordered_set<int>> ModifiedCosineScore::ConstructP
         auto lowerIters = std::lower_bound(otherMzVector.begin(), otherMzVector.end(), lowBounds);
         while(lowerIters != otherMzVector.end() && *lowerIters < highBounds)
         {
-            indexMap[i].insert(lowerIters - otherMzVector.begin());
+            const size_t index = lowerIters - otherMzVector.begin();
+            scoreValuesVector.emplace_back(ScoreValues{i, index,
+                intensitiesOne[i] * intensitiesTwo[index]});
             ++lowerIters;
-            totalSizeOfIndexMap++;
         }
+
         //Should probably construct the Priorty queue here?
         //Although im sending over a good amount of memory
     }
-    return indexMap;
+    return scoreValuesVector;
 }
 
-std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unordered_map<int, std::unordered_set<int>>& map,
-    const std::vector<double>& intensitiesOne, const std::vector<double>& intensitiesTwo, int sizeOfHeapArray)
+std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unordered_map<size_t, std::unordered_set<size_t>>& map,
+    const std::vector<double>& intensitiesOne, const std::vector<double>& intensitiesTwo, const size_t sizeOfHeapArray)
 {
     //std::priority_queue<ScoreValues, std::vector<ScoreValues>, CompareScores> queue;
     std::vector<ScoreValues> score_values_vector(sizeOfHeapArray);
@@ -83,9 +87,9 @@ std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unorde
 }
 
 double ModifiedCosineScore::ScoreMatches(
-    std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, int& numberOfPeakMatches) {
-    std::unordered_set<int> usedPeakOne;
-    std::unordered_set<int> usedPeakTwo;
+    std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
+    std::unordered_set<size_t> usedPeakOne;
+    std::unordered_set<size_t> usedPeakTwo;
     double totalScore = 0;
     while(!queue.empty()) {
         ScoreValues value = queue.front();
@@ -99,7 +103,7 @@ double ModifiedCosineScore::ScoreMatches(
         usedPeakTwo.insert(value.indexTwo);
         totalScore += value.score;
         numberOfPeakMatches ++;
-        if(numberOfPeakMatches >= static_cast<int>(countOfSpectraOne))
+        if(numberOfPeakMatches >= countOfSpectraOne)
             break;
         std::pop_heap(queue.begin(), queue.end(), CompareScores());
     }

@@ -5,8 +5,8 @@
 #ifndef SCOREVALUES_H
 #define SCOREVALUES_H
 struct ScoreValues {
-    int indexOne;
-    int indexTwo;
+    size_t indexOne;
+    size_t indexTwo;
     double score;
 };
 struct CompareScores {
