@@ -13,11 +13,9 @@
 
 class ModifiedCosineScore final : public Score {
 private:
-    std::unordered_map<int, std::unordered_set<int>> ConstructPeaks(const std::vector<double>&, const std::vector<double>&,
-        double, double, int&);
-    std::vector<ScoreValues> ConstructPriorityQueue(std::unordered_map<int, std::unordered_set<int>>&, const std::vector<double>&,
-        const std::vector<double>&, int);
-    double ScoreMatches(std::vector<ScoreValues>&, size_t, int&);
+    std::vector<ScoreValues> ConstructPeaks(const std::vector<double>&, const std::vector<double>&,
+        const std::vector<double>&, const std::vector<double>&, double, double, size_t);
+    double ScoreMatches(const std::vector<ScoreValues>&, size_t, size_t&);
     double tolerance = 0;
 public:
     ModifiedCosineScore() = default;
