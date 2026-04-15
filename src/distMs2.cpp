@@ -13,13 +13,3 @@ Rcpp::DataFrame  distMS2(const Rcpp::List spectraDataList, const Rcpp::List para
 
     return dist;
 }
-
-//[[Rcpp::export]]
-double CompareMs2(const std::vector<double>& mz1, const std::vector<double>& mz2,
-    const std::vector<double>& int1, const std::vector<double>& int2, const double precMz1,
-    const double precMz2, const Rcpp::List parameters) {
-    Spectra spectra("", mz1, int1, precMz1);
-    Spectra spectra2("", mz2, int2, precMz2);
-    const ScoringFactory factory(parameters);
-    return factory.CalculateScore(spectra, spectra2, 0);
-}

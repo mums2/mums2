@@ -21,10 +21,6 @@ distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPe
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
 
-CompareMs2 <- function(mz1, mz2, int1, int2, precMz1, precMz2, parameters) {
-    .Call(`_mums2_CompareMs2`, mz1, mz2, int1, int2, precMz1, precMz2, parameters)
-}
-
 CreateCommunityMatrix <- function(communityMatrix) {
     .Call(`_mums2_CreateCommunityMatrix`, communityMatrix)
 }

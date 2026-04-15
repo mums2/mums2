@@ -82,23 +82,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CompareMs2
-double CompareMs2(const std::vector<double>& mz1, const std::vector<double>& mz2, const std::vector<double>& int1, const std::vector<double>& int2, const double precMz1, const double precMz2, const Rcpp::List parameters);
-RcppExport SEXP _mums2_CompareMs2(SEXP mz1SEXP, SEXP mz2SEXP, SEXP int1SEXP, SEXP int2SEXP, SEXP precMz1SEXP, SEXP precMz2SEXP, SEXP parametersSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mz1(mz1SEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type mz2(mz2SEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type int1(int1SEXP);
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type int2(int2SEXP);
-    Rcpp::traits::input_parameter< const double >::type precMz1(precMz1SEXP);
-    Rcpp::traits::input_parameter< const double >::type precMz2(precMz2SEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List >::type parameters(parametersSEXP);
-    rcpp_result_gen = Rcpp::wrap(CompareMs2(mz1, mz2, int1, int2, precMz1, precMz2, parameters));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CreateCommunityMatrix
 SEXP CreateCommunityMatrix(Rcpp::NumericMatrix communityMatrix);
 RcppExport SEXP _mums2_CreateCommunityMatrix(SEXP communityMatrixSEXP) {
@@ -302,7 +285,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
     {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
-    {"_mums2_CompareMs2", (DL_FUNC) &_mums2_CompareMs2, 7},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
