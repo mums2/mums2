@@ -25,7 +25,9 @@ std::vector<double> ModifiedCosineScore::ScoreRData(const std::vector<double>& l
     std::sort(scoreMap.begin(), scoreMap.end(), CompareScores());
     // std::make_heap(scoreMap.begin(), scoreMap.end(), CompareScores());
     size_t peakCount = 0;
-    return {ScoreMatches(scoreMap, listOneInt.size(), peakCount),
+    size_t numPeaks = listOneMZ.size();
+    if (listOneMZ.size() < listTwoInt.size()) numPeaks = listTwoInt.size();
+    return {ScoreMatches(scoreMap, numPeaks, peakCount),
     static_cast<double>(peakCount)};
 }
 
@@ -114,7 +116,7 @@ std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unorde
 double ModifiedCosineScore::ScoreMatches(
     std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
     std::vector<bool> usedPeakOne(countOfSpectraOne, false);
-    std::vector<bool> usedPeakTwo(countOfSpectraOne,  false);
+    std::vector<bool> usedPeakTwo(countOfSpectraOne, false);
     double totalScore = 0;
 
     for (const auto& value : queue) {
