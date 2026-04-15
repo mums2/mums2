@@ -61,7 +61,7 @@ read.csv(mums2::mums2_example("meta_data_boryillus.csv"), check.names = FALSE)
 
 ### Filter
 
-After importing the data, you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). Although data fitlering is not required, it will help reduce noise and correct peak selection errors, which will also speed up the analysis.
+After importing the data, you can use functions from mpactR to filter the data. There are four different filters included in mpactR: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). Although data filtering is not required, it will help reduce noise and correct peak selection errors, which will also speed up the analysis.
 
 ```{r filter_data}
 filtered_data <- data |>
