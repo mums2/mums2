@@ -14,19 +14,20 @@ std::vector<double> ModifiedCosineScore::ScoreRData(const std::vector<double>& l
 {
     SquareRootNormalize::Normalize(listOneInt);
     SquareRootNormalize::Normalize(listTwoInt);
+    const size_t numPeaks = std::max(listOneMZ.size(), listTwoMz.size());
     std::vector<ScoreValues> scoreMap = ConstructPeaks(listOneMZ, listTwoMz,  listOneInt,
-        listTwoInt, tolerance,0);
+        listTwoInt, tolerance,0, numPeaks);
     std::vector<ScoreValues> shiftMap;
     if(std::abs(shift) > tolerance)
     {
-        shiftMap = ConstructPeaks(listOneMZ, listTwoMz, listOneInt, listTwoInt, tolerance,shift);
+        shiftMap = ConstructPeaks(listOneMZ, listTwoMz, listOneInt,
+            listTwoInt, tolerance,shift, numPeaks);
     }
     scoreMap.insert(scoreMap.end(), shiftMap.begin(), shiftMap.end());
     std::sort(scoreMap.begin(), scoreMap.end(), CompareScores());
     // std::make_heap(scoreMap.begin(), scoreMap.end(), CompareScores());
     size_t peakCount = 0;
-    size_t numPeaks = listOneMZ.size();
-    if (listOneMZ.size() < listTwoInt.size()) numPeaks = listTwoInt.size();
+
     return {ScoreMatches(scoreMap, numPeaks, peakCount),
     static_cast<double>(peakCount)};
 }
@@ -43,14 +44,14 @@ double ModifiedCosineScore::CalculateScore(const Spectra &firstSpectra, const Sp
 std::vector<ScoreValues> ModifiedCosineScore::ConstructPeaks(const std::vector<double>& mzVector,
     const std::vector<double>& otherMzVector, const std::vector<double>& intensitiesOne,
     const std::vector<double>& intensitiesTwo,
-    const double tol, const double shift)
+    const double tol, const double shift, const size_t numPeaks)
 {
     //Declare a vector and look at its size
     const double adjTolerance = tol + 0.000001;
     // TODO: Remove the unordered maps and sets from the code and generate the priorty queue sooner.
     // TODO: This will allow us to reduce the amount of hashmap collisions and set overhead.
     std::vector<ScoreValues> scoreValuesVector;
-    scoreValuesVector.reserve(mzVector.size());
+    scoreValuesVector.reserve(numPeaks);
 
     // Iterate over
     for(size_t i = 0; i < mzVector.size(); i++)
@@ -72,49 +73,8 @@ std::vector<ScoreValues> ModifiedCosineScore::ConstructPeaks(const std::vector<d
     return scoreValuesVector;
 }
 
-std::vector<ScoreValues> ModifiedCosineScore::ConstructPriorityQueue(std::unordered_map<size_t, std::unordered_set<size_t>>& map,
-    const std::vector<double>& intensitiesOne, const std::vector<double>& intensitiesTwo, const size_t sizeOfHeapArray)
-{
-    //std::priority_queue<ScoreValues, std::vector<ScoreValues>, CompareScores> queue;
-    std::vector<ScoreValues> score_values_vector(sizeOfHeapArray);
-    int count = 0;
-    for(auto& value : map) {
-        const double intensityOneValue = intensitiesOne[value.first];
-        for(const auto index : value.second) {
-            const double intensityTwoValue = intensitiesTwo[index];
-            const double score = intensityOneValue * intensityTwoValue;
-            score_values_vector[count++] = {value.first, index,score};
-        }
-    }
-    return score_values_vector;
-}
-
-// double ModifiedCosineScore::ScoreMatches(
-//     std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
-//     std::unordered_set<size_t> usedPeakOne;
-//     std::unordered_set<size_t> usedPeakTwo;
-//     double totalScore = 0;
-//     while(!queue.empty()) {
-//         ScoreValues value = queue.front();
-//         if(usedPeakOne.find(value.indexOne) != usedPeakOne.end()||
-//             usedPeakTwo.find(value.indexTwo) != usedPeakTwo.end()) {
-//             std::pop_heap(queue.begin(), queue.end(), CompareScores());
-//             queue.pop_back();
-//             continue;
-//         }
-//         usedPeakOne.insert(value.indexOne);
-//         usedPeakTwo.insert(value.indexTwo);
-//         totalScore += value.score;
-//         numberOfPeakMatches ++;
-//         if(numberOfPeakMatches >= countOfSpectraOne)
-//             break;
-//         std::pop_heap(queue.begin(), queue.end(), CompareScores());
-//     }
-//     return totalScore;
-// }
-
-double ModifiedCosineScore::ScoreMatches(
-    std::vector<ScoreValues>& queue,const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
+double ModifiedCosineScore::ScoreMatches(const std::vector<ScoreValues>& queue,
+    const size_t countOfSpectraOne, size_t& numberOfPeakMatches) {
     std::vector<bool> usedPeakOne(countOfSpectraOne, false);
     std::vector<bool> usedPeakTwo(countOfSpectraOne, false);
     double totalScore = 0;
