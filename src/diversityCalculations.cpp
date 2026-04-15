@@ -1,8 +1,8 @@
 //
 // Created by Gregory Johnson on 11/19/25.
 //
-#include <RcppThread.h>
 #include <Rcpp.h>
+#include <RcppThread.h>
 #include <string>
 #include <vector>
 #include <mutex>
