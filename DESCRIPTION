@@ -35,7 +35,8 @@ Imports:
     parallel,
     progress,
     Rdisop,
-    xml2
+    xml2,
+    pbapply
 Suggests: 
     knitr,
     rmarkdown,
