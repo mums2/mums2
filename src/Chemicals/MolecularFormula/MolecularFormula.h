@@ -20,13 +20,11 @@ public:
     bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
     double GetMass() const;
 protected:
-    double molecularMass;
+    double molecularMass{};
     std::vector<int> chemicalAtomAmounts;
     static std::vector<char> chemicalAtomNamesOrder;
     static std::vector<double> chemicalAtomMassVector;
-    std::vector<size_t> chemicalAtomsIndexTest;
-private:
-    static size_t ConvertASCIIElementToIndex(int num);
+    std::vector<int8_t> chemicalAtomsIndexTest;
 };
 
 

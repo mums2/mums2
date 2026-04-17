@@ -13,7 +13,7 @@ std::vector<char> MolecularFormula::chemicalAtomNamesOrder = {'C', 'H', 'N', 'O'
 
 MolecularFormula::MolecularFormula(const Rcpp::String &molecularFormula, const double molecularMass):
 molecularMass(molecularMass) {
-    chemicalAtomsIndexTest = std::vector<size_t>(100, -1);
+    chemicalAtomsIndexTest = std::vector<int8_t>(100, -1);
     chemicalAtomsIndexTest[67] = 0;
     chemicalAtomsIndexTest[72] = 1;
     chemicalAtomsIndexTest[78] = 2;
@@ -60,7 +60,7 @@ double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
 
 int MolecularFormula::GetAtomsForElement(const char &chemicalElement) const {
     //return chemicalAtomMap.at(chemicalElement);
-    const size_t index = chemicalAtomsIndexTest[static_cast<int>(chemicalElement)];
+    const int8_t index = chemicalAtomsIndexTest[static_cast<int>(chemicalElement)];
     if (index < 0)
         Rcpp::stop("Chemical Element is Not CHNOPS");
     return chemicalAtomAmounts[index];
@@ -82,7 +82,7 @@ std::string MolecularFormula::GetMolecularFormula() const {
 std::string MolecularFormula::operator-(const MolecularFormula &other) const {
     std::string formula;
     for (const auto& element : chemicalAtomNamesOrder) {
-        const size_t index = chemicalAtomsIndexTest[static_cast<int>(element)];
+        const int8_t index = chemicalAtomsIndexTest[static_cast<int>(element)];
         const int atoms = std::abs(chemicalAtomAmounts[index] -
             other.chemicalAtomAmounts[index]);
         if (atoms <= 0) continue;
@@ -116,16 +116,4 @@ bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormu
 
 double MolecularFormula::GetMass() const {
     return molecularMass;
-}
-
-size_t MolecularFormula::ConvertASCIIElementToIndex(const int num) {
-    if (num == 67) return 0; // C
-    if (num == 72) return 1; // H
-    if (num == 78) return 2; // N
-    if (num == 79) return 3; // O
-    if (num == 80) return 4; // P
-    if (num == 83) return 5; // S
-    //if 83 which it all it can be
-    // We screen before-hand and the alphabet only contains CHNOPS
-    Rcpp::stop("Chemical Element is Not CHNOPS");
 }
