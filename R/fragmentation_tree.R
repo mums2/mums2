@@ -163,11 +163,10 @@ compute_molecular_formulas2 <- function(matched_data, parent_ppm = 3,
   pboptions(use_lb = TRUE, nout = 10)
   cl <- parallel::makePSOCKcluster(getOption("cl.cores", number_of_threads))
 
-  clusterExport(cl, c("matched_data", "decomposeMass", "decomposeIsotopes",
-                      "create_all_possible_formulas"))
+  clusterExport(cl, c("matched_data"), envir = environment())
   print("Generating Potential formulas...")
   potential_formulas <- pblapply(seq(size), function(i) {
-    create_all_possible_formulas(matched_data$peak_data[[i]],
+    mums2:::create_all_possible_formulas(matched_data$peak_data[[i]],
                                   matched_data$ms2_matches$mz[[i]], parent_ppm, i)
   } , cl = cl)
   stopCluster(cl)
