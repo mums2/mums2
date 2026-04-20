@@ -191,7 +191,7 @@ compute_molecular_formulas2 <- function(matched_data, parent_ppm = 3,
   failed_amount <- length(which(is.na(results)))
   message(paste0(abs(length(results) - failed_amount), "/", length(results),
                  " chemical formulas were predicted"))
-
+  matched_data
 }
 
 
