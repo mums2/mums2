@@ -13,6 +13,7 @@ class MolecularFormula {
 public:
     MolecularFormula() = default;
     explicit MolecularFormula(const Rcpp::String& molecularFormula, double molecularMass = 0);
+    explicit MolecularFormula(const std::string& molecularFormula, double molecularMass = 0);
     double GetLossMass(const MolecularFormula& other) const;
     int GetAtomsForElement(const char&) const;
     std::string GetMolecularFormula() const;

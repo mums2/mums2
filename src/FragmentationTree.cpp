@@ -11,6 +11,12 @@ FragmentationTree::FragmentationTree(const Rcpp::List& fragmentationData, const 
         Initialize(fragmentationData);
     }
 
+FragmentationTree::FragmentationTree(const std::vector<FragmentationNode>& fragmentationData,
+    const double parentMass):
+     parentMass(parentMass) {
+    Initialize(fragmentationData);
+}
+
 void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     const Rcpp::StringVector& molecularFormulas = fragmentationData["formula"];
     const Rcpp::IntegerVector& color = fragmentationData["color"];
@@ -28,18 +34,29 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     }
 }
 
+void FragmentationTree::Initialize(const std::vector<FragmentationNode>& fragmentationData) {
+    size = static_cast<int>(fragmentationData.size());
+    colorZeroFormulas.reserve(size);
+    molecularNodeList = fragmentationData;
+    for (int i = 0; i < size; i++) {
+        if (fragmentationData[i].color == 0) {
+            colorZeroFormulas.emplace_back(i);
+        }
+    }
+}
+
 void FragmentationTree::SortFragmentationNodes() {
     std::stable_sort(molecularNodeList.begin(), molecularNodeList.end(), CompareFragmentationNodes());
 }
 
 void FragmentationTree::CollectResultFromNode(const double subtreeScore,
     const int index) {
-    mutexLock.lock();
+   // mutexLock.lock();
     // for (const auto& parentIndex : parentIndexes) {
     //     molecularNodeList[parentIndex].subTreeScore +=  subtreeScore;
     // }
     molecularNodeList[index].subTreeScore += subtreeScore;
-    mutexLock.unlock();
+ //   mutexLock.unlock();
 }
 
 

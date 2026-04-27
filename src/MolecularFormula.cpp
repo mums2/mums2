@@ -54,6 +54,50 @@ molecularMass(molecularMass) {
     chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
 }
 
+MolecularFormula::MolecularFormula(const std::string& molecularFormula, const double molecularMass):
+molecularMass(molecularMass) {
+    chemicalAtomsIndexTest = std::vector<int8_t>(100, -1);
+    chemicalAtomsIndexTest[67] = 0;
+    chemicalAtomsIndexTest[72] = 1;
+    chemicalAtomsIndexTest[78] = 2;
+    chemicalAtomsIndexTest[79] = 3;
+    chemicalAtomsIndexTest[80] = 4;
+    chemicalAtomsIndexTest[83] = 5;
+    chemicalAtomAmounts = std::vector<int>(6, 0);
+    // const char* formula = molecularFormula.c_str();
+    const size_t size = molecularFormula.size();
+    char chemicalSymbol = ' ';
+    std::string amountOfAtoms;
+    bool hasCheckedAtomAmount = false;
+    for (size_t i = 0; i < size; i++) {
+        if (!std::isdigit(molecularFormula[i])) {
+            //If you have checked to see how many atoms there are or
+            //The chemical does not have a lowercase letter, then the chemical before
+            // Is standalone and only has 1 atom.
+            // or it has checked the atoms and the chemical before has been created
+            if(chemicalSymbol != ' ') {
+                if (hasCheckedAtomAmount || !std::islower(molecularFormula[i])) {
+                    if (amountOfAtoms.empty()) amountOfAtoms = "1";
+                    // chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]
+                    chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
+                    hasCheckedAtomAmount = false;
+                    chemicalSymbol = ' ';
+                    amountOfAtoms = "";
+                }
+            }
+            // Only elements are CHNOPS
+            // if it is a chemical character
+            chemicalSymbol = molecularFormula[i];
+            continue;
+        }
+        amountOfAtoms += molecularFormula[i];
+        hasCheckedAtomAmount = true;
+    }
+    if (amountOfAtoms.empty()) amountOfAtoms = "1";
+    chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
+}
+
+
 double MolecularFormula::GetLossMass(const MolecularFormula &other) const {
     return std::abs(GetMass() - other.GetMass());
 }

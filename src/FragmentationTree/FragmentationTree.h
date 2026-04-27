@@ -16,6 +16,7 @@ class FragmentationTree {
 public:
     FragmentationTree() = default;
     FragmentationTree(const Rcpp::List& fragmentationData, double);
+    FragmentationTree(const std::vector<FragmentationNode>&, double);
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     void SortFragmentationNodes();
     void AddMolecularFormulaToGraph(int currentIndex);
@@ -23,6 +24,7 @@ public:
 
 private:
     void Initialize(const Rcpp::List& fragmentationData);
+    void Initialize(const std::vector<FragmentationNode>& fragmentationData);
     void CollectResultFromNode(double subtreeScore, int index);
     // Keys of the same color represent the same mz, int (isotope).
     std::vector<FragmentationNode> molecularNodeList;
