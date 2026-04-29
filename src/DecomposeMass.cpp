@@ -362,28 +362,22 @@ std::multimap<double, ims::ComposedElement,
 	return scores;
 }
 
-std::vector<FragmentationNode> DecomposeMass::GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
+std::vector<std::multimap<double, ims::ComposedElement,
+	std::greater<double> >> DecomposeMass::GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
 	const double intensity, const double ppm) const {
 	const int size = static_cast<int>(inputData.masses.size() + 1);
-	std::vector<FragmentationNode> results;
-	for (int i = 0; i < size; ++i) {
-		if (i == 0) {
-			std::vector<FragmentationNode> nodes = GenerateResults(
-				DecomposeMassFormulas(inputData.parentMass, intensity, ppm),
-				0, i);
-			if (nodes.empty()) break;
-			results.insert(results.end(), nodes.begin(), nodes.end());
-			continue;
-		}
-		const double currentMass = inputData.masses[i - 1];
-		if (currentMass > inputData.parentMass) {
-			continue;
-		}
-		std::vector<FragmentationNode> nodes = GenerateResults(
-				DecomposeMassFormulas(inputData.parentMass, intensity, ppm),
-				0, i);
-		if (nodes.empty()) continue;
-		results.insert(results.end(), nodes.begin(), nodes.end());
+
+	std::vector<std::multimap<double, ims::ComposedElement,
+	std::greater<double>>> results(size);
+				results[0] = DecomposeMassFormulas(inputData.parentMass, intensity, ppm);
+
+	if (results.empty()) return {};
+
+	for (int i = 1; i < size; ++i) {
+		const double currentMass = inputData.masses[i];
+		if (currentMass > inputData.parentMass) continue;
+
+		results[i] = DecomposeMassFormulas(currentMass, intensity, ppm);
 	}
 	return results;
 }

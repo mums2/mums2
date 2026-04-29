@@ -20,7 +20,8 @@ class DecomposeMass {
 public:
     std::multimap<double, ims::ComposedElement,
 	std::greater<double>> DecomposeMassFormulas(double mass, double intensity, double ppm = 2) const;
-    std::vector<FragmentationNode> GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
+    std::vector<std::multimap<double, ims::ComposedElement,
+    std::greater<double> >> GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
         double intensity = 1, double ppm = 2) const;
     SEXP DecompToRObject(const DecompResult& decompResult);
 private:
@@ -30,6 +31,7 @@ private:
     float GetDBE(const ims::ComposedElement& molecule, int z) const;
     bool IsWithinElementRange(const ims::ComposedElement& molecule, const ims::ComposedElement& minElements,
     const ims::ComposedElement& maxElements) const;
+public:
     std::vector<FragmentationNode> GenerateResults(const std::multimap<double, ims::ComposedElement,
                                                           std::greater<double>>& scores, int z, int color) const;
 

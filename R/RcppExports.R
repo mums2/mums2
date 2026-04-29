@@ -85,8 +85,8 @@ ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
 }
 
-DecomposeMasses <- function(mzData, masses, ppm, numberOfThreads = 1L) {
-    .Call(`_mums2_DecomposeMasses`, mzData, masses, ppm, numberOfThreads)
+DecomposeMassesOther <- function(mzData, masses, ppm, numberOfThreads = 1L) {
+    .Call(`_mums2_DecomposeMassesOther`, mzData, masses, ppm, numberOfThreads)
 }
 
 DecomposeMasses3 <- function(mzData, masses, ppm, numberOfThreads = 1L) {

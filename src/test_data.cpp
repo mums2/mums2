@@ -4,6 +4,8 @@
 #include <Rcpp.h>
 #include <RcppThread.h>
 #include <mutex>
+
+#include "CustomProgressBar/CliProgressBar.h"
 #include "Decomposition/DecomposeMass.h"
 #include "Decomposition/DecomposeMassInputData.h"
 #include "FragmentationTree/FragmentationTree.h"
@@ -27,58 +29,121 @@ std::vector<DecompositionMassInputData> CreateInputData(const Rcpp::NumericVecto
 
 
 
+
+// std::vector<std::string> DecomposeMasses(const Rcpp::NumericVector& mzData, const Rcpp::List& masses,
+// 	const double ppm, const int numberOfThreads = 1) {
+// 	const int size = static_cast<int>(masses.size());
+// 	const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
+// 	std::mutex mutex;
+// 	std::vector<std::string> resultantFormulas;
+// 	DecomposeMass decomposeMass;
+// 	CliProgressBar progressBar;
+// 	float counter = 0;
+// 	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass, &resultantFormulas,
+// 		&ppm, &mutex, &progressBar, &counter, &size](int i) {
+// 		const std::vector<FragmentationNode> result =
+// 			decomposeMass.GenerateMolecularFormulas(inputData[i], 1, ppm);
+// 		FragmentationTree tree(result, inputData[i].parentMass);
+// 		const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
+// 		for (const int& availableIndex : availableIndexes) {
+// 			tree.AddMolecularFormulaToGraph(availableIndex);
+// 		}
+// 		std::string resultantFormula = GreedyHeuristic::CalculateHeuristic(tree);
+// 		mutex.lock();
+// 		resultantFormulas.emplace_back(resultantFormula);
+// 		progressBar.update(++counter/static_cast<float>(size));
+// 		mutex.unlock();
+// 	}, numberOfThreads);
+// 	return resultantFormulas;
+// }
+//
+
 //[[Rcpp::export]]
-std::vector<std::string> DecomposeMasses(const Rcpp::NumericVector& mzData, const Rcpp::List& masses,
+std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData, const Rcpp::List& masses,
 	const double ppm, const int numberOfThreads = 1) {
 	const int size = static_cast<int>(masses.size());
 	const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
 	std::mutex mutex;
-	// std::vector<std::vector<FragmentationNode>> decompResults;
-	std::vector<std::string> resultantFormulas;
+
+	std::vector<std::vector<std::multimap<double, ims::ComposedElement,
+	std::greater<double>>>> allNodes(size);
 	DecomposeMass decomposeMass;
-	RcppThread::ProgressBar bar(size, 1);
-	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass, &resultantFormulas,
-		&ppm, &mutex, &bar](int i) {
-		const std::vector<FragmentationNode> result =
+	CliProgressBar progressBar;
+	int counter = 0;
+	Rcpp::Rcout << "Calculating decomposition masses..." << std::endl;
+	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass,
+		&allNodes, &ppm, &mutex, &progressBar, &counter, &size](int i) {
+			const std::vector<std::multimap<double, ims::ComposedElement,
+		std::greater<double>>> result =
 			decomposeMass.GenerateMolecularFormulas(inputData[i], 1, ppm);
-		FragmentationTree tree(result, inputData[i].parentMass);
-		const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
-		for (const int& availableIndex : availableIndexes) {
-			tree.AddMolecularFormulaToGraph(availableIndex);
-		}
-		std::string resultantFormula = GreedyHeuristic::CalculateHeuristic(tree);
 		mutex.lock();
-		resultantFormulas.emplace_back(resultantFormula);
+		allNodes[i] = result;
+		counter++;
+		progressBar.update(static_cast<float>(counter)/static_cast<float>(size));
+
 		mutex.unlock();
-		++bar;
 	}, numberOfThreads);
+	progressBar.end_display();
+
+	CliProgressBar progressBar2;
+	std::vector<std::string> resultantFormulas(size);
+	counter = 0;
+	Rcpp::Rcout << "Calculating fragmentation trees..." << std::endl;
+	std::vector<FragmentationNode> fragmentationNodes;
+	for (size_t i = 0; i < size; i++) {
+		int color = 0;
+		for (const auto& results : allNodes[i]) {
+			const std::vector<FragmentationNode> nodes = decomposeMass.GenerateResults(results, 0, color++);
+			fragmentationNodes.insert(fragmentationNodes.end(), nodes.begin(), nodes.end());
+		}
+		FragmentationTree tree(fragmentationNodes, inputData[i].parentMass);
+		const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
+
+		RcppThread::parallelFor(0, size, [&tree, &availableIndexes](int j) {
+			tree.AddMolecularFormulaToGraph(availableIndexes[j]);
+		}, numberOfThreads);
+		resultantFormulas[i] = GreedyHeuristic::CalculateHeuristic(tree);
+		counter++;
+		progressBar2.update(static_cast<float>(counter)/static_cast<float>(size));
+	}
+	progressBar2.end_display();
 	return resultantFormulas;
 }
 
+
+
+
+// void DecomposeMasses1(const double mass,
+// 	const double ppm, const int numberOfThreads = 1) {
+// 	constexpr DecomposeMass decomposeMass;
+// 		const auto result =
+// 			decomposeMass.DecomposeMassFormulas(mass, 1, ppm);
+// 	const auto score = decomposeMass.GenerateResults(result, 0, 0);
+//
+// }
+
 //[[Rcpp::export]]
-std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const Rcpp::List& masses,
+std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const std::vector<double>& masses,
 	const double ppm, const int numberOfThreads = 1) {
 	const int size = static_cast<int>(masses.size());
-	const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
+	// const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
 	std::mutex mutex;
 	std::vector<std::vector<FragmentationNode>> decompResults;
 	DecomposeMass decomposeMass;
-	// RcppThread::ProgressBar bar(size, 1);
-	// RcppThread::parallelFor(0, size, [&inputData, &decomposeMass, &decompResults,
-	// 	&ppm, &mutex, &bar](int i) {
-	// 	std::vector<FragmentationNode> result = decomposeMass.GenerateMolecularFormulas(inputData[i], 1, ppm);
-	// 	mutex.lock();
-	// 	decompResults.emplace_back(result);
-	// 	mutex.unlock();
-	// 	++bar;
-	// }, numberOfThreads);
-	const std::vector<FragmentationNode> result =
-		decomposeMass.GenerateMolecularFormulas(inputData[5], 1, ppm);
-	FragmentationTree tree(result, inputData[5].parentMass);
-	const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
-	for (const int& availableIndex : availableIndexes) {
-		tree.AddMolecularFormulaToGraph(availableIndex);
-	}
-	return GreedyHeuristic::CalculateHeuristic(tree);
-}
+	CliProgressBar p;
+	RcppThread::ProgressBar bar(size, 5);
+	int counter = 0;
+	RcppThread::parallelFor(0, size, [&masses, &decomposeMass, &decompResults,
+		&ppm, &p, &size, &counter, &mutex](int i) {
+		auto result = decomposeMass.DecomposeMassFormulas(masses[i], 1, ppm);
 
+		// decompResults.emplace_back(result);
+		// mutex.unlock();
+		mutex.lock();
+		counter++;
+		p.update(static_cast<float>(counter)/static_cast<float>(size));
+		mutex.unlock();
+	}, numberOfThreads);
+	p.end_display();
+	return "";
+}

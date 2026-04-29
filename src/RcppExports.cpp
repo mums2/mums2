@@ -276,9 +276,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// DecomposeMasses
-std::vector<std::string> DecomposeMasses(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads);
-RcppExport SEXP _mums2_DecomposeMasses(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
+// DecomposeMassesOther
+std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads);
+RcppExport SEXP _mums2_DecomposeMassesOther(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -286,18 +286,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type masses(massesSEXP);
     Rcpp::traits::input_parameter< const double >::type ppm(ppmSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(DecomposeMasses(mzData, masses, ppm, numberOfThreads));
+    rcpp_result_gen = Rcpp::wrap(DecomposeMassesOther(mzData, masses, ppm, numberOfThreads));
     return rcpp_result_gen;
 END_RCPP
 }
 // DecomposeMasses3
-std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads);
+std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const std::vector<double>& masses, const double ppm, const int numberOfThreads);
 RcppExport SEXP _mums2_DecomposeMasses3(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mzData(mzDataSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type masses(massesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type masses(massesSEXP);
     Rcpp::traits::input_parameter< const double >::type ppm(ppmSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     rcpp_result_gen = Rcpp::wrap(DecomposeMasses3(mzData, masses, ppm, numberOfThreads));
@@ -329,7 +329,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
-    {"_mums2_DecomposeMasses", (DL_FUNC) &_mums2_DecomposeMasses, 4},
+    {"_mums2_DecomposeMassesOther", (DL_FUNC) &_mums2_DecomposeMassesOther, 4},
     {"_mums2_DecomposeMasses3", (DL_FUNC) &_mums2_DecomposeMasses3, 4},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

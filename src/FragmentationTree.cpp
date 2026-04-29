@@ -51,12 +51,12 @@ void FragmentationTree::SortFragmentationNodes() {
 
 void FragmentationTree::CollectResultFromNode(const double subtreeScore,
     const int index) {
-   // mutexLock.lock();
+   mutexLock.lock();
     // for (const auto& parentIndex : parentIndexes) {
     //     molecularNodeList[parentIndex].subTreeScore +=  subtreeScore;
     // }
     molecularNodeList[index].subTreeScore += subtreeScore;
- //   mutexLock.unlock();
+    mutexLock.unlock();
 }
 
 
