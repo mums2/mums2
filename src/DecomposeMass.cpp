@@ -374,7 +374,7 @@ std::vector<std::multimap<double, ims::ComposedElement,
 	if (results.empty()) return {};
 
 	for (int i = 1; i < size; ++i) {
-		const double currentMass = inputData.masses[i];
+		const double currentMass = inputData.masses[i - 1];
 		if (currentMass > inputData.parentMass) continue;
 
 		results[i] = DecomposeMassFormulas(currentMass, intensity, ppm);
