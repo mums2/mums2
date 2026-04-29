@@ -65,16 +65,14 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 	const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
 	std::mutex mutex;
 
-	std::vector<std::vector<std::multimap<double, ims::ComposedElement,
-	std::greater<double>>>> allNodes(size);
+	std::vector<std::vector<DecompResult>> allNodes(size);
 	DecomposeMass decomposeMass;
 	CliProgressBar progressBar;
 	int counter = 0;
 	Rcpp::Rcout << "Calculating decomposition masses..." << std::endl;
 	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass,
 		&allNodes, &ppm, &mutex, &progressBar, &counter, &size](int i) {
-			const std::vector<std::multimap<double, ims::ComposedElement,
-		std::greater<double>>> result =
+			const std::vector<DecompResult> result =
 			decomposeMass.GenerateMolecularFormulas(inputData[i], 1, ppm);
 		mutex.lock();
 		allNodes[i] = result;
@@ -89,14 +87,8 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 	std::vector<std::string> resultantFormulas(size);
 	counter = 0;
 	Rcpp::Rcout << "Calculating fragmentation trees..." << std::endl;
-	std::vector<FragmentationNode> fragmentationNodes;
 	for (size_t i = 0; i < size; i++) {
-		int color = 0;
-		for (const auto& results : allNodes[i]) {
-			const std::vector<FragmentationNode> nodes = decomposeMass.GenerateResults(results, 0, color++);
-			fragmentationNodes.insert(fragmentationNodes.end(), nodes.begin(), nodes.end());
-		}
-		FragmentationTree tree(fragmentationNodes, inputData[i].parentMass);
+		FragmentationTree tree(allNodes[i], inputData[i].parentMass);
 		const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
 
 		RcppThread::parallelFor(0, size, [&tree, &availableIndexes](int j) {
@@ -119,6 +111,9 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 // 		const auto result =
 // 			decomposeMass.DecomposeMassFormulas(mass, 1, ppm);
 // 	const auto score = decomposeMass.GenerateResults(result, 0, 0);
+// 	FragmentationTree tree(allNodes[i], inputData[i].parentMass);
+// 	const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
+// 		tree.AddMolecularFormulaToGraph(availableIndexes[j]);
 //
 // }
 

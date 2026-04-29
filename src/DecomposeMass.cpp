@@ -168,20 +168,20 @@ void DecomposeMass::InitializeCHNOPS(ims::Alphabet& chnops, const int maxisotope
 
 
 
-std::vector<FragmentationNode> DecomposeMass::GenerateResults(const std::multimap<double, ims::ComposedElement,
+DecompResult DecomposeMass::GenerateResults(const std::multimap<double, ims::ComposedElement,
                                                           std::greater<double>>& scores, const int z,
                                                           const int color) const {
 
 	// Build result set to be returned as a list to R.
-	// std::vector<std::string> formula;
-	// std::vector<double> score;
-	// std::vector<double> exactmass;
-	//std::vector<int> charge;
-	std::vector<FragmentationNode> nodes;
-	// formula.reserve(scores.size());
-	// score.reserve(scores.size());
-	// exactmass.reserve(scores.size());
-	//charge.reserve(scores.size());
+	std::vector<std::string> formula;
+	std::vector<double> score;
+	std::vector<double> exactmass;
+	// std::vector<int> charge;
+	//std::vector<FragmentationNode> nodes;
+	 formula.reserve(scores.size());
+	 score.reserve(scores.size());
+	 exactmass.reserve(scores.size());
+	// charge.reserve(scores.size());
 
 
 	// Chemical rules
@@ -199,9 +199,9 @@ std::vector<FragmentationNode> DecomposeMass::GenerateResults(const std::multima
 		if (!IsValidMyNitrogenRule(scoreResult.second, z)) {
 			continue;
 		}
-		// score.emplace_back(scoreResult.first);
-		// formula.emplace_back(scoreResult.second.getSequence());
-		// exactmass.emplace_back(scoreResult.second.getMass());
+		score.emplace_back(scoreResult.first);
+		formula.emplace_back(scoreResult.second.getSequence());
+		exactmass.emplace_back(scoreResult.second.getMass());
 		// charge.emplace_back(z);
 
 		// Chemical rules
@@ -209,21 +209,21 @@ std::vector<FragmentationNode> DecomposeMass::GenerateResults(const std::multima
 		//
 		//
 		// DBE[i] = GetDBE(scoreResult.second, z);
-		nodes.emplace_back(color, -1,
-		scoreResult.first, 0, MolecularFormula(scoreResult.second.getSequence(),
-			scoreResult.second.getMass()));
+		// nodes.emplace_back(color, -1,
+		// scoreResult.first, 0, MolecularFormula(scoreResult.second.getSequence(),
+		// 	scoreResult.second.getMass()));
 	}
-	if (nodes.empty() && !scores.empty()) {
+	if (formula.empty() && !scores.empty()) {
 		// this means all the formulas were invalid
 		const auto it = scores.cbegin();
-		// score.emplace_back(it->first);
-		// formula.emplace_back(it->second.getSequence());
-		// exactmass.emplace_back(it->second.getMass());
-		nodes.emplace_back(color, -1,
-		it->first, 0, MolecularFormula(it->second.getSequence(),
-			it->second.getMass()));
+		score.emplace_back(it->first);
+		formula.emplace_back(it->second.getSequence());
+		exactmass.emplace_back(it->second.getMass());
+		// nodes.emplace_back(color, -1,
+		// it->first, 0, MolecularFormula(it->second.getSequence(),
+		// 	it->second.getMass()));
 	}
-	return nodes;
+	return DecompResult{formula, score, exactmass, std::vector<int>(formula.size(), color)};
 }
 
 
@@ -362,14 +362,13 @@ std::multimap<double, ims::ComposedElement,
 	return scores;
 }
 
-std::vector<std::multimap<double, ims::ComposedElement,
-	std::greater<double> >> DecomposeMass::GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
+std::vector<DecompResult> DecomposeMass::GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
 	const double intensity, const double ppm) const {
 	const int size = static_cast<int>(inputData.masses.size() + 1);
 
-	std::vector<std::multimap<double, ims::ComposedElement,
-	std::greater<double>>> results(size);
-				results[0] = DecomposeMassFormulas(inputData.parentMass, intensity, ppm);
+	std::vector<DecompResult> results(size);
+				results[0] = GenerateResults(DecomposeMassFormulas(inputData.parentMass, intensity, ppm),
+					0, 0);
 
 	if (results.empty()) return {};
 
@@ -377,7 +376,8 @@ std::vector<std::multimap<double, ims::ComposedElement,
 		const double currentMass = inputData.masses[i - 1];
 		if (currentMass > inputData.parentMass) continue;
 
-		results[i] = DecomposeMassFormulas(currentMass, intensity, ppm);
+		results[i] = GenerateResults(DecomposeMassFormulas(currentMass, intensity, ppm),
+					0, i);
 	}
 	return results;
 }

@@ -4,6 +4,7 @@
 
 #include "FragmentationTree/FragmentationTree.h"
 #include "Chemicals/MolecularFormula/MolecularFormula.h"
+#include "Decomposition/DecomposeMass.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
 FragmentationTree::FragmentationTree(const Rcpp::List& fragmentationData, const double parentMass):
@@ -11,10 +12,10 @@ FragmentationTree::FragmentationTree(const Rcpp::List& fragmentationData, const 
         Initialize(fragmentationData);
     }
 
-FragmentationTree::FragmentationTree(const std::vector<FragmentationNode>& fragmentationData,
+FragmentationTree::FragmentationTree(const std::vector<DecompResult>& decompResults,
     const double parentMass):
      parentMass(parentMass) {
-    Initialize(fragmentationData);
+    Initialize(decompResults);
 }
 
 void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
@@ -34,15 +35,29 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     }
 }
 
-void FragmentationTree::Initialize(const std::vector<FragmentationNode>& fragmentationData) {
-    size = static_cast<int>(fragmentationData.size());
-    colorZeroFormulas.reserve(size);
-    molecularNodeList = fragmentationData;
-    for (int i = 0; i < size; i++) {
-        if (fragmentationData[i].color == 0) {
-            colorZeroFormulas.emplace_back(i);
-        }
+void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResults) {
+
+
+    size = 0;
+    for (const auto& decompResult : decompResults) {
+        size += static_cast<int>(decompResult.formula.size());
     }
+    molecularNodeList = std::vector<FragmentationNode>(size);
+    int indexPosition = 0;
+    for (const auto & fragData : decompResults) {
+        const int currentSize = static_cast<int>(fragData.formula.size());
+        const int indexToGetTo = (currentSize + indexPosition) - indexPosition;
+        for (int i = 0; i < indexToGetTo; i++) {
+            molecularNodeList[i + indexPosition] = FragmentationNode(fragData.color[i], i + indexPosition,
+                       fragData.score[i], 0, MolecularFormula(fragData.formula[i],
+                           fragData.exactmass[i]));
+            if (fragData.color[i] == 0) {
+                colorZeroFormulas.emplace_back(i);
+            }
+        }
+        indexPosition += currentSize;
+    }
+
 }
 
 void FragmentationTree::SortFragmentationNodes() {

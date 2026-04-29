@@ -10,13 +10,14 @@
 #include <vector>
 #include <Rcpp.h>
 #include "FragmentationNode.h"
+#include "../Decomposition/DecompResult.h"
 
 
 class FragmentationTree {
 public:
     FragmentationTree() = default;
     FragmentationTree(const Rcpp::List& fragmentationData, double);
-    FragmentationTree(const std::vector<FragmentationNode>&, double);
+    FragmentationTree(const std::vector<DecompResult>&, double);
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     void SortFragmentationNodes();
     void AddMolecularFormulaToGraph(int currentIndex);
@@ -24,7 +25,7 @@ public:
 
 private:
     void Initialize(const Rcpp::List& fragmentationData);
-    void Initialize(const std::vector<FragmentationNode>& fragmentationData);
+    void Initialize(const std::vector<DecompResult>& decompResults);
     void CollectResultFromNode(double subtreeScore, int index);
     // Keys of the same color represent the same mz, int (isotope).
     std::vector<FragmentationNode> molecularNodeList;
