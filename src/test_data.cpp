@@ -90,8 +90,9 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 	for (size_t i = 0; i < size; i++) {
 		FragmentationTree tree(allNodes[i], inputData[i].parentMass);
 		const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
-
-		RcppThread::parallelFor(0, size, [&tree, &availableIndexes](int j) {
+		const int currentSize = static_cast<int>(availableIndexes.size());
+		if (currentSize <= 0) continue; // Mean there are no decompositions!
+		RcppThread::parallelFor(0, currentSize, [&tree, &availableIndexes](int j) {
 			tree.AddMolecularFormulaToGraph(availableIndexes[j]);
 		}, numberOfThreads);
 		resultantFormulas[i] = GreedyHeuristic::CalculateHeuristic(tree);
