@@ -87,6 +87,7 @@ bool DecomposeMass::IsWithinElementRange(const ims::ComposedElement& molecule, c
 	return true;
 }
 
+
 void DecomposeMass::InitializeCHNOPS(ims::Alphabet& chnops, const int maxisotopes) const {
 
     ims::IsotopeDistribution::SIZE = maxisotopes;
@@ -163,6 +164,7 @@ void DecomposeMass::InitializeCHNOPS(ims::Alphabet& chnops, const int maxisotope
 	chnops.push_back(P);
 	chnops.push_back(S);
 }
+
 
 
 
@@ -249,8 +251,7 @@ std::vector<DecompositionHolder> DecomposeMass::DecomposeMassFormulas(double mas
 	ims::ComposedElement maxElements("C999999", alphabet);
 
 
-
-		for (const auto & decomposition : decompositions) {
+	for (const auto & decomposition : decompositions) {
 
 		// creates a candidate molecule out of elemental composition and a set of elements
 		ims::ComposedElement candidate_molecule(decomposition, alphabet);
@@ -323,7 +324,6 @@ std::vector<DecompositionHolder> DecomposeMass::DecomposeMassFormulas(double mas
 			nonnormalized_score.score /= accumulated_score;
 		}
 	}
-	std::sort(nonnormalized_scores.begin(), nonnormalized_scores.end(), CompareDecompositions());
 	return nonnormalized_scores;
 }
 
