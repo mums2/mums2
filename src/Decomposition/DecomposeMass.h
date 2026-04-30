@@ -11,15 +11,14 @@
 #include "../RdisopHeaderFiles/composedelement.h"
 #include "DecompResult.h"
 #include "DecomposeMassInputData.h"
-#include "../FragmentationTree/FragmentationNode.h"
+#include "DecompositionHolder.h"
 #include <Rcpp.h>
 
 
 
 class DecomposeMass {
 public:
-    std::multimap<double, ims::ComposedElement,
-	std::greater<double>> DecomposeMassFormulas(double mass, double intensity, double ppm = 2) const;
+    std::vector<DecompositionHolder> DecomposeMassFormulas(double mass, double intensity, double ppm = 2) const;
     std::vector<DecompResult> GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
         double intensity = 1, double ppm = 2) const;
     SEXP DecompToRObject(const DecompResult& decompResult);
@@ -31,8 +30,7 @@ private:
     bool IsWithinElementRange(const ims::ComposedElement& molecule, const ims::ComposedElement& minElements,
     const ims::ComposedElement& maxElements) const;
 public:
-    DecompResult GenerateResults(const std::multimap<double, ims::ComposedElement,
-                                                          std::greater<double>>& scores, int z, int color) const;
+    DecompResult GenerateResults(const std::vector<DecompositionHolder>& scores, int z) const;
 
 
 };
