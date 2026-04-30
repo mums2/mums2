@@ -62,8 +62,9 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
 
 }
 
-void FragmentationTree::SortFragmentationNodes() {
-    std::stable_sort(molecularNodeList.begin(), molecularNodeList.end(), CompareFragmentationNodes());
+std::string FragmentationTree::GetBestFormula() const {
+    return std::max_element(molecularNodeList.cbegin(), molecularNodeList.cbegin() + colorZeroFormulas.size(),
+        CompareFragmentationNodes())->formula.GetMolecularFormula();
 }
 
 void FragmentationTree::CollectResultFromNode(const double subtreeScore,

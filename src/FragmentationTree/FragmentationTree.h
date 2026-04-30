@@ -19,7 +19,7 @@ public:
     FragmentationTree(const Rcpp::List& fragmentationData, double);
     FragmentationTree(const std::vector<DecompResult>&, double);
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
-    void SortFragmentationNodes();
+    std::string GetBestFormula() const;
     void AddMolecularFormulaToGraph(int currentIndex);
     const std::vector<int>& GetColorZeroFormulas() {return colorZeroFormulas;}
 

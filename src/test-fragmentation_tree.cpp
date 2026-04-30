@@ -65,8 +65,8 @@ context("Fragmentation Tree") {
         tree.AddMolecularFormulaToGraph(1);
         tree.AddMolecularFormulaToGraph(2);
         tree.AddMolecularFormulaToGraph(3);
-        tree.SortFragmentationNodes();
-        expect_true(tree.GetFragmentationNodes().front().subTreeScore > tree.GetFragmentationNodes()[1].subTreeScore);
+        const std::string result = tree.GetBestFormula();
+        expect_true(result == "C6H12O6");
     }
 
 
