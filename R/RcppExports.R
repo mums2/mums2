@@ -89,6 +89,10 @@ DecomposeMassesOther <- function(mzData, masses, ppm, numberOfThreads = 1L) {
     .Call(`_mums2_DecomposeMassesOther`, mzData, masses, ppm, numberOfThreads)
 }
 
+DecomposeMasses1 <- function(mass, ppm) {
+    .Call(`_mums2_DecomposeMasses1`, mass, ppm)
+}
+
 DecomposeMasses3 <- function(mzData, masses, ppm, numberOfThreads = 1L) {
     .Call(`_mums2_DecomposeMasses3`, mzData, masses, ppm, numberOfThreads)
 }

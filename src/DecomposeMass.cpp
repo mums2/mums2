@@ -11,7 +11,6 @@
 
 
 
-
 char DecomposeMass::GetParity(const ims::ComposedElement& molecule, const int charge) const {
 	const bool massEven =  static_cast<int>(molecule.getMass()) % 2 == 0 ? true : false;
 	const bool nitrogenEven = static_cast<int>(molecule.getElementAbundance("N")) % 2 == 0 ? true : false;
@@ -168,70 +167,40 @@ void DecomposeMass::InitializeCHNOPS(ims::Alphabet& chnops, const int maxisotope
 
 
 
-DecompResult DecomposeMass::GenerateResults(const std::multimap<double, ims::ComposedElement,
-                                                          std::greater<double>>& scores, const int z,
-                                                          const int color) const {
+DecompResult DecomposeMass::GenerateResults(const std::vector<DecompositionHolder>& scores, const int z) const {
 
-	// Build result set to be returned as a list to R.
+
 	std::vector<std::string> formula;
 	std::vector<double> score;
 	std::vector<double> exactmass;
-	// std::vector<int> charge;
-	//std::vector<FragmentationNode> nodes;
+
 	 formula.reserve(scores.size());
 	 score.reserve(scores.size());
 	 exactmass.reserve(scores.size());
-	// charge.reserve(scores.size());
-
-
-	// Chemical rules
-	// std::vector<std::string> parity(scores.size());
-	// std::vector<bool> valid(scores.size());
-	// std::vector<double> DBE(scores.size());
-
-	// std::vector<std::string> colNames(2);
-	// colNames[0] = "mass";
-	// colNames[1] = "intensity";
-
-	// outputs molecules & their scores.
 
 	for (const auto& scoreResult : scores) {
-		if (!IsValidMyNitrogenRule(scoreResult.second, z)) {
+		if (!IsValidMyNitrogenRule(scoreResult.element, z)) {
 			continue;
 		}
-		score.emplace_back(scoreResult.first);
-		formula.emplace_back(scoreResult.second.getSequence());
-		exactmass.emplace_back(scoreResult.second.getMass());
-		// charge.emplace_back(z);
-
-		// Chemical rules
-		// parity[i] = GetParity(scoreResult.second, z);
-		//
-		//
-		// DBE[i] = GetDBE(scoreResult.second, z);
-		// nodes.emplace_back(color, -1,
-		// scoreResult.first, 0, MolecularFormula(scoreResult.second.getSequence(),
-		// 	scoreResult.second.getMass()));
+		score.emplace_back(scoreResult.score);
+		formula.emplace_back(scoreResult.element.getSequence());
+		exactmass.emplace_back(scoreResult.element.getMass());
 	}
 	if (formula.empty() && !scores.empty()) {
 		// this means all the formulas were invalid
 		const auto it = scores.cbegin();
-		score.emplace_back(it->first);
-		formula.emplace_back(it->second.getSequence());
-		exactmass.emplace_back(it->second.getMass());
-		// nodes.emplace_back(color, -1,
-		// it->first, 0, MolecularFormula(it->second.getSequence(),
-		// 	it->second.getMass()));
+		score.emplace_back(it->score);
+		formula.emplace_back(it->element.getSequence());
+		exactmass.emplace_back(it->element.getMass());
 	}
-	return DecompResult{formula, score, exactmass, std::vector<int>(formula.size(), color)};
+	return DecompResult{formula, score, exactmass};
 }
 
 
 
 
 
-std::multimap<double, ims::ComposedElement,
-	std::greater<double> > DecomposeMass::DecomposeMassFormulas(double mass, double intensity, double ppm) const {
+std::vector<DecompositionHolder> DecomposeMass::DecomposeMassFormulas(double mass, double intensity, double ppm) const {
 	std::vector<double> abundances {intensity};
 	std::vector<double> masses {mass};
 	constexpr int maxIsotopes = 10;
@@ -270,10 +239,8 @@ std::multimap<double, ims::ComposedElement,
 
 	ims::DistributionProbabilityScorer scorer(peaklist_masses, peaklist_abundances);
 
-	std::vector<std::pair<ims::ComposedElement, double>> nonnormalized_scores;
+	std::vector<DecompositionHolder> nonnormalized_scores;
 
-	std::multimap<double, ims::ComposedElement,
-	std::greater<double> > scores;
 	std::vector<std::vector<unsigned>> decompositions =
 		decomposer.getDecompositions(masses[0], error);
 
@@ -344,22 +311,20 @@ std::multimap<double, ims::ComposedElement,
 
 		// stores the sequence with non-normalized score
 
-		nonnormalized_scores.emplace_back(candidate_molecule, score);
+		nonnormalized_scores.emplace_back(DecompositionHolder{candidate_molecule, score});
 
 		// accumulates scores
 		accumulated_score += score;
 
 	}
 
-	for (const auto& nonnormalized_score : nonnormalized_scores) {
-		double normalized_score = nonnormalized_score.second;
+	for (auto& nonnormalized_score : nonnormalized_scores) {
 		if (accumulated_score > 0.0) {
-			normalized_score /= accumulated_score;
+			nonnormalized_score.score /= accumulated_score;
 		}
-		// stores the sequence with the score
-		scores.emplace(normalized_score, nonnormalized_score.first);
 	}
-	return scores;
+	std::sort(nonnormalized_scores.begin(), nonnormalized_scores.end(), CompareDecompositions());
+	return nonnormalized_scores;
 }
 
 std::vector<DecompResult> DecomposeMass::GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
@@ -368,7 +333,7 @@ std::vector<DecompResult> DecomposeMass::GenerateMolecularFormulas(const Decompo
 
 	std::vector<DecompResult> results(size);
 				results[0] = GenerateResults(DecomposeMassFormulas(inputData.parentMass, intensity, ppm),
-					0, 0);
+					0);
 
 	if (results.empty()) return {};
 
@@ -377,7 +342,7 @@ std::vector<DecompResult> DecomposeMass::GenerateMolecularFormulas(const Decompo
 		if (currentMass > inputData.parentMass) continue;
 
 		results[i] = GenerateResults(DecomposeMassFormulas(currentMass, intensity, ppm),
-					0, i);
+					0);
 	}
 	return results;
 }
@@ -385,6 +350,5 @@ std::vector<DecompResult> DecomposeMass::GenerateMolecularFormulas(const Decompo
 SEXP DecomposeMass::DecompToRObject(const DecompResult& decompResult) {
 	return Rcpp::List::create(Rcpp::Named("formulas") = decompResult.formula,
 	                   Rcpp::Named("scores") = decompResult.score,
-	                   Rcpp::Named("exactmass") = decompResult.exactmass,
-	                   Rcpp::Named("color") = decompResult.color);
+	                   Rcpp::Named("exactmass") = decompResult.exactmass);
 }

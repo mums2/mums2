@@ -105,18 +105,15 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 
 
 
+//[[Rcpp::export]]
+SEXP DecomposeMasses1(const double mass,
+	const double ppm) {
+	DecomposeMass decomposeMass;
+	const auto result =
+			decomposeMass.GenerateResults(decomposeMass.DecomposeMassFormulas(mass, 1, ppm), 0);
+	return decomposeMass.DecompToRObject(result);
 
-// void DecomposeMasses1(const double mass,
-// 	const double ppm, const int numberOfThreads = 1) {
-// 	constexpr DecomposeMass decomposeMass;
-// 		const auto result =
-// 			decomposeMass.DecomposeMassFormulas(mass, 1, ppm);
-// 	const auto score = decomposeMass.GenerateResults(result, 0, 0);
-// 	FragmentationTree tree(allNodes[i], inputData[i].parentMass);
-// 	const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
-// 		tree.AddMolecularFormulaToGraph(availableIndexes[j]);
-//
-// }
+}
 
 //[[Rcpp::export]]
 std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const std::vector<double>& masses,
@@ -143,3 +140,5 @@ std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const std::vecto
 	p.end_display();
 	return "";
 }
+
+

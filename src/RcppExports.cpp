@@ -290,6 +290,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// DecomposeMasses1
+SEXP DecomposeMasses1(const double mass, const double ppm);
+RcppExport SEXP _mums2_DecomposeMasses1(SEXP massSEXP, SEXP ppmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type mass(massSEXP);
+    Rcpp::traits::input_parameter< const double >::type ppm(ppmSEXP);
+    rcpp_result_gen = Rcpp::wrap(DecomposeMasses1(mass, ppm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // DecomposeMasses3
 std::string DecomposeMasses3(const Rcpp::NumericVector& mzData, const std::vector<double>& masses, const double ppm, const int numberOfThreads);
 RcppExport SEXP _mums2_DecomposeMasses3(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
@@ -330,6 +342,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
     {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
     {"_mums2_DecomposeMassesOther", (DL_FUNC) &_mums2_DecomposeMassesOther, 4},
+    {"_mums2_DecomposeMasses1", (DL_FUNC) &_mums2_DecomposeMasses1, 2},
     {"_mums2_DecomposeMasses3", (DL_FUNC) &_mums2_DecomposeMasses3, 4},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

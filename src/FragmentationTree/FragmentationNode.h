@@ -10,21 +10,18 @@
 
 struct FragmentationNode {
     FragmentationNode() = default;
-    FragmentationNode(const int color, const int index, const double score, const double sub_tree_score,
+    FragmentationNode(const int color, const double score, const double sub_tree_score,
         MolecularFormula formula)
         : color(color),
-          index(index),
           score(score),
           subTreeScore(sub_tree_score),
           formula(std::move(formula)) {
     }
 
     int color{};
-    int index{};
     double score{};
     double subTreeScore{};
     MolecularFormula formula;
-    std::list<int> parentIndexes;
 };
 
 struct CompareFragmentationNodes {

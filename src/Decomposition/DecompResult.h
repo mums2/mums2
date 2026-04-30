@@ -10,6 +10,5 @@ struct DecompResult {
     std::vector<std::string> formula;
     std::vector<double> score;
     std::vector<double> exactmass;
-    std::vector<int> color;
 };
 #endif //DECOMPRESULT_H

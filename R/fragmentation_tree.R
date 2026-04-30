@@ -461,3 +461,11 @@ compute_molecular_formulas_other <- function(mass_data, parent_ppm = 3,
 
 }
 
+
+#' @export
+#' @title decomp
+#' @description
+#' de novo algorithm for computing molecular formulas. Using fragmentation trees
+decomp <- function(mass, ppm) {
+   DecomposeMasses1(mass, ppm)
+}
