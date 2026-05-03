@@ -86,8 +86,8 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
 compute_fragmentation_tree <- function(list_of_mz_int, parent_mass,
                                        parent_ppm, num_threads) {
   parent_decomp <- decomposeMass(parent_mass, ppm = parent_ppm)
-  valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
-  invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
+  valid_parent_indexes <- which(parent_decomp$valid == "Valid")
+  invalid_indexes <- which(parent_decomp$valid == "Invalid")
   if (length(parent_decomp$formula) <= 0) {
     return(NA_character_)
   }
@@ -115,7 +115,7 @@ compute_fragmentation_tree <- function(list_of_mz_int, parent_mass,
     if (is.null(decomp_list[[i]])) {
       next
     }
-    valid_indexes <- head(which(decomp_list[[i]]$valid == "Valid"), 1000)
+    valid_indexes <- which(decomp_list[[i]]$valid == "Valid")
     scores <- decomp_list[[i]]$score[valid_indexes]
     full_data$score <- append(full_data$score, scores)
     full_data$formula <- append(full_data$formula,
@@ -198,8 +198,8 @@ compute_molecular_formulas2 <- function(matched_data, parent_ppm = 3,
 create_all_possible_formulas <- function(list_of_mz_int, parent_mass,
                                        parent_ppm, index) {
   parent_decomp <- decomposeMass(parent_mass, ppm = parent_ppm)
-  valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
-  invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
+  valid_parent_indexes <- which(parent_decomp$valid == "Valid")
+  invalid_indexes <- which(parent_decomp$valid == "Invalid")
   if (length(parent_decomp$formula) <= 0) {
     return(list(full_data = NA_character_, index = index))
   }
@@ -228,7 +228,7 @@ create_all_possible_formulas <- function(list_of_mz_int, parent_mass,
     if (is.null(decomp_list[[i]])) {
       next
     }
-    valid_indexes <- head(which(decomp_list[[i]]$valid == "Valid"), 1000)
+    valid_indexes <- which(decomp_list[[i]]$valid == "Valid")
     scores <- decomp_list[[i]]$score[valid_indexes]
     full_data$score <- append(full_data$score, scores)
     full_data$formula <- append(full_data$formula,

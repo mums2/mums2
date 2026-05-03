@@ -18,7 +18,7 @@
 
 class DecomposeMass {
 public:
-    std::vector<DecompositionHolder> DecomposeMassFormulas(double mass, double intensity, double ppm = 2) const;
+    std::vector<DecompositionHolder>  DecomposeMassFormulas(double mass, double intensity, double ppm = 2) const;
     std::vector<DecompResult> GenerateMolecularFormulas(const DecompositionMassInputData& inputData,
         double intensity = 1, double ppm = 2) const;
     SEXP DecompToRObject(const DecompResult& decompResult);

@@ -138,23 +138,14 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
 }
 
 bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
-    // for (const auto& element : chemicalAtomNamesOrder) {
-    //     const int currentAtoms = GetAtomsForElement(element);
-    //     const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
-    //     if (currentAtoms < otherAtoms) return false;
-    // }
+    // O(M) function
+    // With M being equal to the number of elements (in this case CHNOPS) M = 6
     return std::all_of(chemicalAtomNamesOrder.cbegin(), chemicalAtomNamesOrder.cend(),
         [&subFormulaCandidate, this](const char& element) {
             const int currentAtoms = GetAtomsForElement(element);
             const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
             return currentAtoms >= otherAtoms;
     });
-    // // so if thisformula and otherformula are both true, it just returns one, since other formula and this formula
-    // // are subformulas of each other
-    // // But we only represent the first formula with the link so its not cyclic
-    // if (thisFormula) return 1;
-    // // if it reached this far, the only option is that the other formula is true so we return a 2
-    // return 2;
 
 }
 

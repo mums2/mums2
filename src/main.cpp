@@ -44,10 +44,9 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
 std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
     const double parentMass, const int numberOfThreads) {
     FragmentationTree tree(molecularFormulas, parentMass);
-    const std::vector<int>& availableIndexes = tree.GetColorZeroFormulas();
-    const int size = static_cast<int>(availableIndexes.size());
-    RcppThread::parallelFor(0, size, [&tree, &availableIndexes](int i) {
-        tree.AddMolecularFormulaToGraph(availableIndexes[i]);
+    const int colorZeroSize = tree.GetColorZeroCount();
+    RcppThread::parallelFor(0, colorZeroSize, [&tree](int i) {
+        tree.AddMolecularFormulaToGraph(i);
     }, numberOfThreads);
     return GreedyHeuristic::CalculateHeuristic(tree);
 }

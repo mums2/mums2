@@ -250,7 +250,6 @@ std::vector<DecompositionHolder> DecomposeMass::DecomposeMassFormulas(double mas
 	ims::ComposedElement minElements("C0", alphabet);
 	ims::ComposedElement maxElements("C999999", alphabet);
 
-
 	for (const auto & decomposition : decompositions) {
 
 		// creates a candidate molecule out of elemental composition and a set of elements
@@ -311,7 +310,6 @@ std::vector<DecompositionHolder> DecomposeMass::DecomposeMassFormulas(double mas
 		double score = scorer.score(candidate_masses, candidate_abundances);
 
 		// stores the sequence with non-normalized score
-
 		nonnormalized_scores.emplace_back(DecompositionHolder{candidate_molecule, score});
 
 		// accumulates scores

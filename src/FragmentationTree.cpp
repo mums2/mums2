@@ -24,13 +24,13 @@ void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
     const Rcpp::NumericVector& decompositionScores = fragmentationData["score"];
     const Rcpp::NumericVector& masses = fragmentationData["mass"];
     size = molecularFormulas.size();
-    colorZeroFormulas.reserve(size);
+    colorZeroSize = 0;
     molecularNodeList = std::vector<FragmentationNode>(size);
     for (int i = 0; i < size; i++) {
         molecularNodeList[i] = FragmentationNode(color[i],
             decompositionScores[i], 0, MolecularFormula(molecularFormulas[i], masses[i]));
         if (color[i] == 0) {
-            colorZeroFormulas.emplace_back(i);
+            colorZeroSize++;
         }
     }
 }
@@ -39,6 +39,7 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
 
 
     size = 0;
+    colorZeroSize = 0;
     for (const auto& decompResult : decompResults) {
         size += static_cast<int>(decompResult.formula.size());
     }
@@ -53,7 +54,7 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
                        fragData.score[i], fragData.score[i],
                        MolecularFormula(fragData.formula[i], fragData.exactmass[i]));
             if (color == 0) {
-                colorZeroFormulas.emplace_back(i);
+                colorZeroSize++;
             }
         }
         indexPosition += currentSize;
@@ -63,7 +64,7 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
 }
 
 std::string FragmentationTree::GetBestFormula() const {
-    return std::max_element(molecularNodeList.cbegin(), molecularNodeList.cbegin() + colorZeroFormulas.size(),
+    return std::max_element(molecularNodeList.cbegin(), molecularNodeList.cbegin() + colorZeroSize,
         CompareFragmentationNodes())->formula.GetMolecularFormula();
 }
 
@@ -83,11 +84,13 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
     const MolecularFormula& formula = fragmentationNodes[currentIndex].formula;
     const FragmentationNode& fragmentationNode = fragmentationNodes[currentIndex];
     double finalSubtreeScore = 0;
-    for (int j = 0; j < size; j++) {
+    for (int j = colorZeroSize; j < size; j++) {
         if (j == currentIndex) continue;
         const MolecularFormula& currentFormula = fragmentationNodes[j].formula;
         // Nodes with similar fragmentation colors should never be a subformula
-        if (fragmentationNodes[j].color == fragmentationNode.color) continue;
+        // if (fragmentationNodes[j].color == fragmentationNode.color) continue;
+        // Should never happen as we are going to start at the end of the color zero
+        // formulas
         const bool res = formula.CheckIfOtherIsSubFormula(currentFormula);
         if (!res) continue;
         const double lossMass = formula.GetLossMass(currentFormula);
