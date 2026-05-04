@@ -66,6 +66,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// DeNovoMolecularFormulaPrediction
+std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads);
+RcppExport SEXP _mums2_DeNovoMolecularFormulaPrediction(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type mzData(mzDataSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type masses(massesSEXP);
+    Rcpp::traits::input_parameter< const double >::type ppm(ppmSEXP);
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(DeNovoMolecularFormulaPrediction(mzData, masses, ppm, numberOfThreads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // distMS2
 Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
 RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
@@ -210,19 +224,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// ComputeFragmentationTree
-std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas, const double parentMass, const int numberOfThreads);
-RcppExport SEXP _mums2_ComputeFragmentationTree(SEXP molecularFormulasSEXP, SEXP parentMassSEXP, SEXP numberOfThreadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type molecularFormulas(molecularFormulasSEXP);
-    Rcpp::traits::input_parameter< const double >::type parentMass(parentMassSEXP);
-    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ComputeFragmentationTree(molecularFormulas, parentMass, numberOfThreads));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CreateProgressBarObject
 SEXP CreateProgressBarObject();
 RcppExport SEXP _mums2_CreateProgressBarObject() {
@@ -284,6 +285,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
     {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
+    {"_mums2_DeNovoMolecularFormulaPrediction", (DL_FUNC) &_mums2_DeNovoMolecularFormulaPrediction, 4},
     {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
@@ -295,7 +297,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
-    {"_mums2_ComputeFragmentationTree", (DL_FUNC) &_mums2_ComputeFragmentationTree, 3},
     {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},

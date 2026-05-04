@@ -5,6 +5,5 @@
 #include "FragmentationTree/GreedyHeuristic.h"
 
 std::string GreedyHeuristic::CalculateHeuristic(FragmentationTree& tree) {
-    tree.SortFragmentationNodes();
-    return tree.GetFragmentationNodes()[0].formula.GetMolecularFormula();
+    return tree.GetBestFormula();
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/fragmentation_tree.R
 \name{compute_molecular_formulas}
 \alias{compute_molecular_formulas}
-\title{Compute Molecular formula}
+\title{Compute Molecular formula Other}
 \usage{
 compute_molecular_formulas(
   mass_data,
   parent_ppm = 3,
-  number_of_threads = detectCores()
+  number_of_threads = detectCores() - 1
 )
 }
 \arguments{
