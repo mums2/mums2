@@ -102,8 +102,6 @@ std::vector<std::string> DecomposeMassesOther(const Rcpp::NumericVector& mzData,
 	return resultantFormulas;
 }
 
-
-
 //[[Rcpp::export]]
 SEXP DecomposeMasses1(const double mass,
 	const double ppm) {

@@ -52,6 +52,12 @@ molecularMass(molecularMass) {
     }
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
     chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
+    carbon = chemicalAtomAmounts[0];
+    hydrogen = chemicalAtomAmounts[1];
+    nitrogen = chemicalAtomAmounts[2];
+    oxygen = chemicalAtomAmounts[3];
+    phosphorus = chemicalAtomAmounts[4];
+    sulfur = chemicalAtomAmounts[5];
 }
 
 MolecularFormula::MolecularFormula(const std::string& molecularFormula, const double molecularMass):
@@ -95,6 +101,12 @@ molecularMass(molecularMass) {
     }
     if (amountOfAtoms.empty()) amountOfAtoms = "1";
     chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalSymbol)]] = std::stoi(amountOfAtoms);
+    carbon = chemicalAtomAmounts[0];
+    hydrogen = chemicalAtomAmounts[1];
+    nitrogen = chemicalAtomAmounts[2];
+    oxygen = chemicalAtomAmounts[3];
+    phosphorus = chemicalAtomAmounts[4];
+    sulfur = chemicalAtomAmounts[5];
 }
 
 
@@ -107,7 +119,7 @@ int MolecularFormula::GetAtomsForElement(const char &chemicalElement) const {
     const int8_t index = chemicalAtomsIndexTest[static_cast<int>(chemicalElement)];
     if (index < 0)
         Rcpp::stop("Chemical Element is Not CHNOPS");
-    return chemicalAtomAmounts[index];
+    return chemicalAtomAmounts[chemicalAtomsIndexTest[static_cast<int>(chemicalElement)]];
 }
 
 std::string MolecularFormula::GetMolecularFormula() const {
@@ -140,12 +152,41 @@ std::string MolecularFormula::operator-(const MolecularFormula &other) const {
 bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
     // O(M) function
     // With M being equal to the number of elements (in this case CHNOPS) M = 6
-    return std::all_of(chemicalAtomNamesOrder.cbegin(), chemicalAtomNamesOrder.cend(),
-        [&subFormulaCandidate, this](const char& element) {
-            const int currentAtoms = GetAtomsForElement(element);
-            const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
-            return currentAtoms >= otherAtoms;
-    });
+    // return std::all_of(chemicalAtomNamesOrder.cbegin(), chemicalAtomNamesOrder.cend(),
+    //     [&subFormulaCandidate, this](const char& element) {
+    //         const int currentAtoms = GetAtomsForElement(element);
+    //         const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
+    //         return currentAtoms >= otherAtoms;
+    // });
+    if (carbon < subFormulaCandidate.carbon) return false;
+    if (hydrogen < subFormulaCandidate.hydrogen) return false;
+    if (nitrogen < subFormulaCandidate.nitrogen) return false;
+    if (oxygen < subFormulaCandidate.oxygen) return false;
+    if (phosphorus < subFormulaCandidate.phosphorus) return false;
+    if (sulfur < subFormulaCandidate.sulfur) return false;
+    return true;
+
+
+}
+
+
+bool MolecularFormula::CheckIfOtherIsSubFormula2(const MolecularFormula &subFormulaCandidate) const {
+    // O(M) function
+    // With M being equal to the number of elements (in this case CHNOPS) M = 6
+    // return std::all_of(chemicalAtomNamesOrder.cbegin(), chemicalAtomNamesOrder.cend(),
+    //     [&subFormulaCandidate, this](const char& element) {
+    //         const int currentAtoms = GetAtomsForElement(element);
+    //         const int otherAtoms = subFormulaCandidate.GetAtomsForElement(element);
+    //         return currentAtoms >= otherAtoms;
+    // });
+    if (carbon < subFormulaCandidate.carbon) return false;
+    if (hydrogen < subFormulaCandidate.hydrogen) return false;
+    if (nitrogen < subFormulaCandidate.nitrogen) return false;
+    if (oxygen < subFormulaCandidate.oxygen) return false;
+    if (phosphorus < subFormulaCandidate.phosphorus) return false;
+    if (sulfur < subFormulaCandidate.sulfur) return false;
+    return true;
+
 
 }
 

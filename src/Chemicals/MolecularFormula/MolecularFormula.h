@@ -19,6 +19,7 @@ public:
     std::string GetMolecularFormula() const;
     std::string operator-(const MolecularFormula& other) const;
     bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
+    bool CheckIfOtherIsSubFormula2(const MolecularFormula &subFormulaCandidate) const;
     double GetMass() const;
 protected:
     double molecularMass{};
@@ -26,6 +27,12 @@ protected:
     static std::vector<char> chemicalAtomNamesOrder;
     static std::vector<double> chemicalAtomMassVector;
     std::vector<int8_t> chemicalAtomsIndexTest;
+    int carbon;
+    int hydrogen;
+    int nitrogen;
+    int oxygen;
+    int phosphorus;
+    int sulfur;
 };
 
 
