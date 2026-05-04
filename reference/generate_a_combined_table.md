@@ -1989,19 +1989,19 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 59                                                                                      <NA>
 #> 60                                                                                      <NA>
 #> 61                                                                                      <NA>
-#> 62                                                   Dihydroergotamine; LC-ESI-QTOF; MS2; CE
-#> 63                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
-#> 64                                                     Deepoxyneoxanthin; FAB-EBEB; MS2; m/z
-#> 65                                                                 Myxol; FAB-EBEB; MS2; m/z
-#> 66                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
-#> 67                                                    Lutein 5,8-epoxide; FAB-EBEB; MS2; m/z
-#> 68                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
-#> 69                                                           Loroxanthin; FAB-EBEB; MS2; m/z
-#> 70                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
-#> 71                                 beta-Cryptoxathin-5,6,5',8'-diepoxide; FAB-EBEB; MS2; m/z
+#> 62                                                    Lutein 5,8-epoxide; FAB-EBEB; MS2; m/z
+#> 63                                                         Mutatoxanthin; FAB-EBEB; MS2; m/z
+#> 64                                                    Lutein 5,6-epoxide; FAB-EBEB; MS2; m/z
+#> 65                                                    Cucurbitaxanthin A; FAB-EBEB; MS2; m/z
+#> 66                                                     Deepoxyneoxanthin; FAB-EBEB; MS2; m/z
+#> 67                                                           Loroxanthin; FAB-EBEB; MS2; m/z
+#> 68                                                                 Myxol; FAB-EBEB; MS2; m/z
+#> 69                                 beta-Cryptoxathin-5,6,5',8'-diepoxide; FAB-EBEB; MS2; m/z
+#> 70                                                       4-Hydroxylutein; FAB-EBEB; MS2; m/z
+#> 71                                                            Capsanthin; FAB-EBEB; MS2; m/z
 #> 72                                 beta-Cryptoxathin-5,6,5',6'-diepoxide; FAB-EBEB; MS2; m/z
-#> 73                                                            Capsanthin; FAB-EBEB; MS2; m/z
-#> 74                                                        Antheraxanthin; FAB-EBEB; MS2; m/z
+#> 73                                                        Antheraxanthin; FAB-EBEB; MS2; m/z
+#> 74                                                   Dihydroergotamine; LC-ESI-QTOF; MS2; CE
 #> 75                                                                                      <NA>
 #> 76                                                                                      <NA>
 #> 77                                                                                      <NA>
@@ -2111,8 +2111,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 181                                                                                     <NA>
 #> 182                                                                                     <NA>
 #> 183                                                      Epicholestanol; LC-APPI-QQ; MS2; CE
-#> 184                                                      Epicoprostanol; LC-APPI-QQ; MS2; CE
-#> 185                                                         Coprostanol; LC-APPI-QQ; MS2; CE
+#> 184                                                         Coprostanol; LC-APPI-QQ; MS2; CE
+#> 185                                                      Epicoprostanol; LC-APPI-QQ; MS2; CE
 #> 186                                                       Thioridazine; LC-ESI-QTOF; MS2; CE
 #> 187                                                         Cholestanol; LC-APPI-QQ; MS2; CE
 #> 188                                                                                     <NA>
@@ -2346,13 +2346,13 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 416                                                                                     <NA>
 #> 417                                                                                     <NA>
 #> 418                                                                                     <NA>
-#> 419                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 5.0 eV; [M]+
-#> 420                        Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 10.0 eV; [M]+
+#> 419                        Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 10.0 eV; [M]+
+#> 420                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 5.0 eV; [M]+
 #> 421                                                              Rutin; LC-ESI-QTOF; MS2; CE
 #> 422                         Delphinidin-3-rutinoside; LC-ESI-ITFT; MS2; HCD; CE 0.0 eV; [M]+
-#> 423                                                Rutin; LC-ESI-ITFT; MS2; CE 55 eV; [M+H]+
-#> 424       Quercetin-3-O-beta-glucopyranosyl-7-O-alpha-rhamnopyranoside; LC-ESI-QTOF; MS2; CE
-#> 425 Delphinidin-3-O-(6''-O-alpha-rhamnopyranosyl-beta-glucopyranoside); LC-ESI-QTOF; MS2; CE
+#> 423       Quercetin-3-O-beta-glucopyranosyl-7-O-alpha-rhamnopyranoside; LC-ESI-QTOF; MS2; CE
+#> 424 Delphinidin-3-O-(6''-O-alpha-rhamnopyranosyl-beta-glucopyranoside); LC-ESI-QTOF; MS2; CE
+#> 425                                                Rutin; LC-ESI-ITFT; MS2; CE 55 eV; [M+H]+
 #> 426      Cyanidin-3-O-(2''-O-beta-glucopyranosyl-beta-glucopyranoside); LC-ESI-QTOF; MS2; CE
 #> 427                                       Luteolin-3',7-di-O-glucoside; LC-ESI-QTOF; MS2; CE
 #> 428                                                      Rutin; LC-ESI-QTOF; MS2; [M+H]+; CE
@@ -2460,8 +2460,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 530                                                                                     <NA>
 #> 531                                                                                     <NA>
 #> 532                                                                                     <NA>
-#> 533                                                       Sarcinaxanthin; FAB-EBEB; MS2; m/z
-#> 534                                                         Flavuxanthin; FAB-EBEB; MS2; m/z
+#> 533                                                         Flavuxanthin; FAB-EBEB; MS2; m/z
+#> 534                                                       Sarcinaxanthin; FAB-EBEB; MS2; m/z
 #> 535                                                                                     <NA>
 #> 536                                                                                     <NA>
 #> 537                                                                                     <NA>
@@ -2504,8 +2504,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 574                                                                                     <NA>
 #> 575                                                                                     <NA>
 #> 576                                                                                     <NA>
-#> 577                                                            Robinin; LC-ESI-QTOF; MS2; CE
-#> 578            Kaempferol-3-Galactoside-6''-Rhamnoside-3'''-Rhamnoside; LC-ESI-QTOF; MS2; CE
+#> 577            Kaempferol-3-Galactoside-6''-Rhamnoside-3'''-Rhamnoside; LC-ESI-QTOF; MS2; CE
+#> 578                                                            Robinin; LC-ESI-QTOF; MS2; CE
 #> 579                                                                                     <NA>
 #> 580                                                                                     <NA>
 #> 581                                                                                     <NA>

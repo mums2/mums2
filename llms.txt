@@ -14,6 +14,7 @@ distance calculations.
 You can install the CRAN version with:
 
 ``` r
+
 install.packages("mums2")
 ```
 
@@ -21,6 +22,7 @@ You can install the development version of mpactr from
 [GitHub](https://github.com/mums2/mums2) with:
 
 ``` r
+
 devtools::install_github("mums2/mums2")
 ```
 

@@ -1,10 +1,10 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   articles/Annotations: Annotations.html
   mums2: mums2.html
-last_built: 2026-04-27T06:49Z
+last_built: 2026-05-04T07:01Z
 urls:
   reference: https://www.mums2.org/mums2/reference
   article: https://www.mums2.org/mums2/articles
