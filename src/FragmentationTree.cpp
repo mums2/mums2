@@ -60,15 +60,11 @@ void FragmentationTree::CollectResultFromNode(const double subtreeScore,
 void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
     const std::vector<FragmentationNode>& fragmentationNodes = molecularNodeList;
     const MolecularFormula& formula = fragmentationNodes[currentIndex].formula;
-    const FragmentationNode& fragmentationNode = fragmentationNodes[currentIndex];
     double finalSubtreeScore = 0;
     for (int j = colorZeroSize; j < size; j++) {
         if (j == currentIndex) continue;
         const MolecularFormula& currentFormula = fragmentationNodes[j].formula;
         // Nodes with similar fragmentation colors should never be a subformula
-        // if (fragmentationNodes[j].color == fragmentationNode.color) continue;
-        // Should never happen as we are going to start at the end of the color zero
-        // formulas
         const bool res = formula.CheckIfOtherIsSubFormula(currentFormula);
         if (!res) continue;
         const double lossMass = formula.GetLossMass(currentFormula);
