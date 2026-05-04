@@ -7,32 +7,10 @@
 #include "Decomposition/DecomposeMass.h"
 #include "DiversityMetrics/DiversityMetricFactory.h"
 
-FragmentationTree::FragmentationTree(const Rcpp::List& fragmentationData, const double parentMass):
-     parentMass(parentMass) {
-        Initialize(fragmentationData);
-    }
-
 FragmentationTree::FragmentationTree(const std::vector<DecompResult>& decompResults,
     const double parentMass):
      parentMass(parentMass) {
     Initialize(decompResults);
-}
-
-void FragmentationTree::Initialize(const Rcpp::List& fragmentationData) {
-    const Rcpp::StringVector& molecularFormulas = fragmentationData["formula"];
-    const Rcpp::IntegerVector& color = fragmentationData["color"];
-    const Rcpp::NumericVector& decompositionScores = fragmentationData["score"];
-    const Rcpp::NumericVector& masses = fragmentationData["mass"];
-    size = molecularFormulas.size();
-    colorZeroSize = 0;
-    molecularNodeList = std::vector<FragmentationNode>(size);
-    for (int i = 0; i < size; i++) {
-        molecularNodeList[i] = FragmentationNode(color[i],
-            decompositionScores[i], 0, MolecularFormula(molecularFormulas[i], masses[i]));
-        if (color[i] == 0) {
-            colorZeroSize++;
-        }
-    }
 }
 
 void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResults) {

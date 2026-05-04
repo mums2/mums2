@@ -17,6 +17,10 @@ CombineReferenceDatabases <- function(annotationController, otherAnnotationContr
     .Call(`_mums2_CombineReferenceDatabases`, annotationController, otherAnnotationController)
 }
 
+DeNovoMolecularFormulaPrediction <- function(mzData, masses, ppm, numberOfThreads = 1L) {
+    .Call(`_mums2_DeNovoMolecularFormulaPrediction`, mzData, masses, ppm, numberOfThreads)
+}
+
 distMS2 <- function(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads) {
     .Call(`_mums2_distMS2`, spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads)
 }
@@ -61,10 +65,6 @@ CompareMS2Ms1 <- function(mz2, mz1, rt2, rt1, mzThreshold, rtThreshold) {
     .Call(`_mums2_CompareMS2Ms1`, mz2, mz1, rt2, rt1, mzThreshold, rtThreshold)
 }
 
-ComputeFragmentationTree <- function(molecularFormulas, parentMass, numberOfThreads) {
-    .Call(`_mums2_ComputeFragmentationTree`, molecularFormulas, parentMass, numberOfThreads)
-}
-
 CreateProgressBarObject <- function() {
     .Call(`_mums2_CreateProgressBarObject`)
 }
@@ -83,17 +83,5 @@ ReadMgf <- function(path) {
 
 ReadMsp <- function(path) {
     .Call(`_mums2_ReadMsp`, path)
-}
-
-DecomposeMassesOther <- function(mzData, masses, ppm, numberOfThreads = 1L) {
-    .Call(`_mums2_DecomposeMassesOther`, mzData, masses, ppm, numberOfThreads)
-}
-
-DecomposeMasses1 <- function(mass, ppm) {
-    .Call(`_mums2_DecomposeMasses1`, mass, ppm)
-}
-
-DecomposeMasses3 <- function(mzData, masses, ppm, numberOfThreads = 1L) {
-    .Call(`_mums2_DecomposeMasses3`, mzData, masses, ppm, numberOfThreads)
 }
 

@@ -37,16 +37,3 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     }
     return resultsIndexes;
 }
-
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::depends(RcppThread)]]
-// [[Rcpp::export]]
-std::string ComputeFragmentationTree(const Rcpp::List& molecularFormulas,
-    const double parentMass, const int numberOfThreads) {
-    FragmentationTree tree(molecularFormulas, parentMass);
-    const int colorZeroSize = tree.GetColorZeroCount();
-    RcppThread::parallelFor(0, colorZeroSize, [&tree](int i) {
-        tree.AddMolecularFormulaToGraph(i);
-    }, numberOfThreads);
-    return GreedyHeuristic::CalculateHeuristic(tree);
-}

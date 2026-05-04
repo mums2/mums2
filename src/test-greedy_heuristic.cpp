@@ -18,11 +18,23 @@ context("Greedy Heuristic") {
         std::vector<double> mass{155.23, 155.22, 100.8, 120.12};
         std::vector<int> color{0,0,1,2};
         std::vector<std::string> formula{"C6H12O6", "C5H24O6", "C2H10", "C4H5O5"};
-        Rcpp::List data = Rcpp::List::create(Rcpp::Named("formula") = formula,
-            Rcpp::Named("mass") = mass,
-            Rcpp::Named("color") = color,
-            Rcpp::Named("score") = score);
-        FragmentationTree tree(data, 155.24);
+        DecompResult decompResult;
+        decompResult.formula = {formula[0], formula[1]};
+        decompResult.exactmass = {mass[0], mass[1]};
+        decompResult.score = {score[0], score[1]};
+
+        DecompResult decompResult1;
+        decompResult1.formula = {formula[2]};
+        decompResult1.exactmass = {mass[2]};
+        decompResult1.score = {score[2]};
+
+        DecompResult decompResult2;
+        decompResult2.formula = {formula[3]};
+        decompResult2.exactmass = {mass[3]};
+        decompResult2.score = {score[3]};
+
+        FragmentationTree tree({decompResult, decompResult1, decompResult2},
+            155.24);
 
         tree.AddMolecularFormulaToGraph(0);
         tree.AddMolecularFormulaToGraph(1);
@@ -30,7 +42,7 @@ context("Greedy Heuristic") {
         tree.AddMolecularFormulaToGraph(3);
         Rcpp::Rcout << tree.GetFragmentationNodes()[0].subTreeScore << std::endl;
         Rcpp::Rcout << tree.GetFragmentationNodes()[1].subTreeScore << std::endl;
-        expect_true(GreedyHeuristic::CalculateHeuristic(tree) == "C6H12O6");
+        expect_true(GreedyHeuristic::CalculateHeuristic(tree) == "C5H24O6");
     }
 
 }
