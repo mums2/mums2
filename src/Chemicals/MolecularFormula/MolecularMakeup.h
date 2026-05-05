@@ -9,7 +9,7 @@
 
 class MolecularMakeup {
 public:
-    explicit MolecularMakeup(const Rcpp::String& molecularFormula);
+    explicit MolecularMakeup(const std::string& molecularFormula);
     int GetAtomsForElement(const std::string &element) const;
     const std::list<std::string>& GetAlphabet() const {return alphabet;}
 private:

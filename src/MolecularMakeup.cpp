@@ -4,9 +4,12 @@
 
 #include "Chemicals/MolecularFormula/MolecularMakeup.h"
 
-MolecularMakeup::MolecularMakeup(const Rcpp::String& molecularFormula) {
-    const char* formula = molecularFormula.get_cstring();
-    const size_t size = std::strlen(formula);
+MolecularMakeup::MolecularMakeup(const std::string& molecularFormula) {
+
+    std::string formula = molecularFormula;
+    formula.erase(std::remove_if(formula.begin(), formula.end(),
+        ::isspace), formula.end());
+    const size_t size = formula.size();
     std::string chemicalSymbol;
     std::string amountOfAtoms;
     bool hasCheckedAtomAmount = false;

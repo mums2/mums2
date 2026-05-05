@@ -3,10 +3,6 @@
 //
 
 #include <Rcpp.h>
-#include <RcppThread.h>
-#include <string>
-#include "FragmentationTree/FragmentationTree.h"
-#include "FragmentationTree/GreedyHeuristic.h"
 #include "Math/VectorMath.h"
 
 // [[Rcpp::export]]
@@ -27,7 +23,10 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
             // Otherwise
             // Check if the similarity score (the dot product) is closer than the last one
             // If so replace
-            double dotProduct = VectorMath::CosineScore({mz1[i], rt1[i]}, {mz2[j], rt2[j]});
+            const double currentMz2 = mz2[j];
+            const double currentRt2 = rt2[j];
+            double dotProduct = VectorMath::CosineScore({currentMz1, currentRt1},
+                {currentMz2, currentRt2});
             if (dotProduct < bestDotProduct) continue;
             resultsIndexes[i] = j + 1; // To match with R indexes add 1
             bestDotProduct = dotProduct;
