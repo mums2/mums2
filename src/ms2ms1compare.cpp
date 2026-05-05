@@ -12,10 +12,10 @@ Rcpp::NumericVector CompareMS2Ms1(const Rcpp::NumericVector& mz2, const Rcpp::Nu
     const auto currentSize = static_cast<size_t>(mz1.size());
     Rcpp::NumericVector resultsIndexes(currentSize, -1); // -1 means no match
     for (size_t i = 0; i < currentSize; i++) {
-        double currentMz1 = mz1[i];
-        double currentRt1 = rt1[i];
-        Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2) * 1e6 / currentMz1;
-        Rcpp::NumericVector rtError = Rcpp::abs(currentRt1 - rt2);
+        const double currentMz1 = mz1[i];
+        const double currentRt1 = rt1[i];
+        const Rcpp::NumericVector mzError = Rcpp::abs(currentMz1 - mz2) * 1e6 / currentMz1;
+        const Rcpp::NumericVector rtError = Rcpp::abs(currentRt1 - rt2);
         double bestDotProduct = 0;
         for (int j = 0; j < mzError.size(); j++) { // Pick score with the closest dotProduct value
             if (mzError[j] > mzThreshold || rtError[j] > rtThreshold) continue; // Over the threshold
