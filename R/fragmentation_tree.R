@@ -1,7 +1,5 @@
-
-
 #' @export
-#' @title Compute Molecular formula
+#' @title Compute Molecular formula Other
 #' @description
 #' de novo algorithm for computing molecular formulas. Using fragmentation trees
 #' we are able to generate a resultant molecular formula. To ensure efficient
@@ -40,7 +38,7 @@
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
-                                       number_of_threads = detectCores()) {
+                                       number_of_threads = detectCores() - 1) {
   if (!inherits(mass_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))
@@ -60,81 +58,15 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
   if (length(mass_data$peak_data) <= 0) {
     stop("Your mass_data object has no peak data, cannot continue.")
   }
-
-  size <- length(mass_data$peak_data)
-  molecular_formula_list <- vector("list", size)
-  pb <- CreateProgressBarObject()
-
-  for (i in seq_along(mass_data$peak_data)) {
-    molecular_formula_list[[i]] <-
-      compute_fragmentation_tree(mass_data$peak_data[[i]],
-                                 mass_data$ms2_matches$mz[[i]],
-                                 parent_ppm, number_of_threads)
-    IncrementProgressBar(pb, i / size)
-  }
-  DestroyProgressBar(pb)
-  rm(pb)
-  results <- as.character(molecular_formula_list)
-  mass_data$predicted_molecular_formulas <- results
-  failed_amount <- length(which(is.na(results)))
-  message(paste0(abs(length(results) - failed_amount), "/", length(results),
+  mzs <- lapply(mass_data$peak_data, function(x) x$mz)
+  resultant_formulas <-
+    DeNovoMolecularFormulaPrediction(mass_data$ms2_matches$mz, mzs,
+                                     parent_ppm, number_of_threads)
+  resultant_formulas[which(resultant_formulas == "")] <- NA_character_
+  failed_amount <- length(which(is.na(resultant_formulas)))
+  message(paste0(abs(length(resultant_formulas) - failed_amount),
+                 "/", length(resultant_formulas),
                  " chemical formulas were predicted"))
-  return(mass_data)
-}
-
-
-compute_fragmentation_tree <- function(list_of_mz_int, parent_mass,
-                                       parent_ppm, num_threads) {
-  parent_decomp <- decomposeMass(parent_mass, ppm = parent_ppm)
-  valid_parent_indexes <- head(which(parent_decomp$valid == "Valid"), 1000)
-  invalid_indexes <- head(which(parent_decomp$valid == "Invalid"), 1000)
-  if (length(parent_decomp$formula) <= 0) {
-    return(NA_character_)
-  }
-  if (length(valid_parent_indexes) == 1) {
-    return(parent_decomp$formula[valid_parent_indexes])
-  }
-  if (length(parent_decomp$formula) == 1) {
-    return(parent_decomp$formula[1])
-  }
-  # worse case scenario, use the invalid indexes to generate a value
-  if (length(valid_parent_indexes) <= 0 && length(invalid_indexes) > 0) {
-    valid_parent_indexes <- invalid_indexes
-  }
-  decomp_list <- vector("list", length(list_of_mz_int$mz))
-  for (i in seq_along(list_of_mz_int$mz)) {
-    if (parent_mass < list_of_mz_int$mz[[i]]) {
-      next
-    }
-    decomp_list[[i]] <- decomposeIsotopes(list_of_mz_int$mz[[i]],
-                                          list_of_mz_int$intensity[[i]])
-  }
-  full_data <- c()
-  color_count <- 1
-  for (i in seq_along(decomp_list)){
-    if (is.null(decomp_list[[i]])) {
-      next
-    }
-    valid_indexes <- head(which(decomp_list[[i]]$valid == "Valid"), 1000)
-    scores <- decomp_list[[i]]$score[valid_indexes]
-    full_data$score <- append(full_data$score, scores)
-    full_data$formula <- append(full_data$formula,
-                                decomp_list[[i]]$formula[valid_indexes])
-    full_data$mass <- append(full_data$mass,
-                             decomp_list[[i]]$exactmass[valid_indexes])
-    full_data$color <- c(full_data$color, rep(color_count, length(scores)))
-    color_count <- color_count + 1
-  }
-  if (length(full_data$score) <= 0) {
-    return(parent_decomp$formula[[1]])
-  }
-  scores <- parent_decomp$score[valid_parent_indexes]
-  full_data$score <- append(scores, full_data$score)
-  full_data$formula <- append(parent_decomp$formula[valid_parent_indexes],
-                              full_data$formula)
-  full_data$mass <- append(parent_decomp$exactmass[valid_parent_indexes],
-                           full_data$mass)
-  full_data$color <- append(rep(0, length(scores)), full_data$color)
-  res <- ComputeFragmentationTree(full_data, parent_mass, num_threads)
-  res
+  mass_data$predicted_molecular_formulas <- resultant_formulas
+  mass_data
 }
