@@ -85,7 +85,7 @@
 ## De-novo Molecular Formula Predictions
 
 - [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
-  : Compute Molecular formula
+  : Compute Molecular formula Other
 
 ## Helper Functions
 

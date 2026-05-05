@@ -130,7 +130,7 @@ requests are welcome on [GitHub](https://github.com/mums2/mums2/pulls).
 ## De-novo Molecular Formula Predictions
 
 - [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
-  : Compute Molecular formula
+  : Compute Molecular formula Other
 
 ## Helper Functions
 
