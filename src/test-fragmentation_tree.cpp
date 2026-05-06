@@ -69,10 +69,10 @@ context("Fragmentation Tree") {
         tree.AddMolecularFormulaToGraph(2);
         tree.AddMolecularFormulaToGraph(3);
         const auto nodes = tree.GetFragmentationNodes();
-        expect_true(nodes[0].subTreeScore != 0);
-        expect_true(nodes[1].subTreeScore != 0);
-        expect_true(nodes[2].subTreeScore == score[2]);
-        expect_true(nodes[3].subTreeScore == score[3]);
+        expect_true(nodes[0].score != 0);
+        expect_true(nodes[1].score != 0);
+        expect_true(nodes[2].score == score[2]);
+        expect_true(nodes[3].score == score[3]);
     }
     test_that("Fragmentation tree is sorting the nodes correctly") {
         std::vector<double> score{0.3, 0.23, 0.1, 0.3};

@@ -9,7 +9,7 @@
 
 class GreedyHeuristic {
 public:
-    static std::string CalculateHeuristic(FragmentationTree& tree);
+    static std::string CalculateHeuristic(const FragmentationTree& tree);
 };
 
 
