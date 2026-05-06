@@ -102,7 +102,7 @@ context("Fragmentation Tree") {
         tree.AddMolecularFormulaToGraph(2);
         tree.AddMolecularFormulaToGraph(3);
         const std::string result = tree.GetBestFormula();
-        expect_true(result == "C5H24O6");
+        expect_true(result == "C6H12O6");
     }
 
 

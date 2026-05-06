@@ -68,7 +68,7 @@ test_that("Returns the first candidate if there are no children
             dat$peak_data[[1]]$mz <- 70
             dat$peak_data[[1]]$intensity <- 10
             result <- compute_molecular_formulas(dat)
-            expected_result <- decomposeMass(150)$formula[[2]]
+            expected_result <- decomposeMass(150)$formula[[1]]
             expect_equal(result$predicted_molecular_formulas[[1]],
                          expected_result)
           })
