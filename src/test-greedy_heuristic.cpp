@@ -40,9 +40,7 @@ context("Greedy Heuristic") {
         tree.AddMolecularFormulaToGraph(1);
         tree.AddMolecularFormulaToGraph(2);
         tree.AddMolecularFormulaToGraph(3);
-        Rcpp::Rcout << tree.GetFragmentationNodes()[0].subTreeScore << std::endl;
-        Rcpp::Rcout << tree.GetFragmentationNodes()[1].subTreeScore << std::endl;
-        expect_true(GreedyHeuristic::CalculateHeuristic(tree) == "C5H24O6");
+        expect_true(GreedyHeuristic::CalculateHeuristic(tree) == "C6H12O6");
     }
 
 }
