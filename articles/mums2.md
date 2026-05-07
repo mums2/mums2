@@ -484,7 +484,7 @@ of your peak_table file.
 matched_data <- ms2_ms1_compare(
   ms2_files = mums2_example("botryllus_v2.gnps.mgf"),mpactr_object = filtered_data, mz_tolerance = 5, rt_tolerance = 6)
 #> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/botryllus_v2.gnps.mgf ..."
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> [1] "674/4544 peaks have an MS2 spectra."
 
 head(matched_data$ms2_matches)
@@ -685,9 +685,9 @@ matched_data_small <- compute_molecular_formulas(mass_data = matched_data_small,
 #> Computing                                                    | 11%  ETA: -...Computing ■■■■■                                              | 11%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 33%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 55%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> 9/9 chemical formulas were predicted
 matched_data_small$predicted_molecular_formulas
-#> [1] "C16H198N17O10P5S4" "C10H65N7O8P2S2"    "C11H67N6O7P3S3"   
-#> [4] "C7H63N3O7P2S3"     "C12H66N5O5P3S2"    "C8H60N6O6P2S4"    
-#> [7] "C11H87N7O9P2S2"    "C9H72N7O8P3S3"     "C16H68N11O11P5S4"
+#> [1] "C20H107N4O3P19S" "C9H185N6O6PS"    "C10H187N5O5P2S2" "C6H42N19OPS"    
+#> [5] "C20H60N3O5PS2"   "C10H47N12O6PS2"  "C6H99N5O6P6S2"   "C10H179N12O6P"  
+#> [9] "C9H553N7OP2S"
 ```
 
 ### Annotations
@@ -803,15 +803,15 @@ use.
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_threshold = -1,
   score_params = modified_cosine_params(0.5), min_peaks = 0)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: 15s ...Computing ■■■■                                               | 8%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 12%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 16%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 dist
 #>   i   j       dist
 #> 1 1 506 0.24147716
-#> 2 1 341 0.19118126
-#> 3 1   2 0.05989299
-#> 4 1 174 0.06966648
-#> 5 1   3 0.06767390
-#>  [ reached 'max' / getOption("max.print") -- omitted 60029 rows ]
+#> 2 1   2 0.05989299
+#> 3 1   3 0.06767390
+#> 4 1 341 0.19118126
+#> 5 1   5 0.06993205
+#>  [ reached 'max' / getOption("max.print") -- omitted 59729 rows ]
 ```
 
 ### Operational Metabolomic Units (OMUs)
@@ -856,7 +856,7 @@ cluster_results
 #> 3 221012_DGM_MB1599_13_3_433 omu1  48932.22
 #> 4 221012_DGM_MB1599_13_1_431 omu1  48982.59
 #> 5 221012_DGM_MB1598_12_3_430 omu1      0.00
-#>  [ reached 'max' / getOption("max.print") -- omitted 5350 rows ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 5440 rows ]
 #> 
 #> $cluster
 #>                  feature  omu
@@ -867,13 +867,13 @@ cluster_results
 #> 5 1076.25679 Da 479.00 s omu5
 #> 6 1083.57570 Da 350.99 s omu6
 #> 7 1127.60610 Da 352.16 s omu7
-#>  [ reached 'max' / getOption("max.print") -- omitted 112 rows ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 114 rows ]
 #> 
 #> $cluster_metrics
 #>      label   cutoff specificity      ppv          ttp  f1score            tn
-#> 1 0.300000 0.300000    0.963422 0.888745 48729.000000 0.848472 160667.000000
+#> 1 0.300000 0.300000    0.963847 0.889087 48417.000000 0.848000 161027.000000
 #>        mcc           fn          fp sensitivity      npv      fdr accuracy
-#> 1 0.798701 11305.000000 6100.000000    0.811690 0.934263 0.888745 0.923259
+#> 1 0.798530 11317.000000 6040.000000    0.810543 0.934335 0.889087 0.923470
 #> 
 #> $iteration_metrics
 #>      iter time label num_otus cutoff tp tn fp fn sensitivity specificity ppv
@@ -903,45 +903,45 @@ annotations[1:5,]
 #>             query_ms1_id      query_ms2_id   query_mz query_rt ref_idx
 #> 1 1088.53252 Da 351.76 s mz545.27303rt7.97 545.273030 7.970000    3762
 #> 2 1088.53252 Da 351.76 s mz545.27303rt7.97 545.273030 7.970000    3768
-#> 3  295.28858 Da 388.36 s mz296.29457rt6.47 296.294570 6.470000    1625
-#> 4  295.28858 Da 388.36 s mz296.29457rt6.47 296.294570 6.470000    1631
-#> 5  365.28353 Da 397.38 s mz366.29238rt6.11 366.292380 6.110000    6302
+#> 3  365.28353 Da 397.38 s mz366.29238rt6.11 366.292380 6.110000    6302
+#> 4  365.28353 Da 397.38 s mz366.29238rt6.11 366.292380 6.110000    6304
+#> 5  368.29309 Da 463.53 s  mz369.2987rt7.73 369.298700 7.730000    6056
 #>   query_formula chemical_similarity    score collisionenergy instrument
 #> 1                          0.000000 0.810909              15           
 #> 2                          0.000000 0.805937              15           
-#> 3                          0.000000 0.870702              15           
-#> 4                          0.000000 0.869844              15           
-#> 5                          0.000000 0.711204            10.0           
+#> 3                          0.000000 0.711204            10.0           
+#> 4                          0.000000 0.719118            10.0           
+#> 5                          0.000000 0.816973                           
 #>   instrumenttype                comment  ionmode         ccs
 #> 1    LC-ESI-ITFT registered in MassBank Positive          -1
 #> 2    LC-ESI-ITFT registered in MassBank Positive          -1
-#> 3    LC-ESI-ITFT registered in MassBank Positive 166.7904304
-#> 4    LC-ESI-ITFT registered in MassBank Positive 166.7904304
-#> 5      LC-ESI-QQ registered in MassBank Positive 195.1324064
+#> 3      LC-ESI-QQ registered in MassBank Positive 195.1324064
+#> 4      LC-ESI-QQ registered in MassBank Positive 195.3074064
+#> 5     LC-APPI-QQ registered in MassBank Positive          -1
 #>                                                                  smiles
 #> 1 OP(O)(=O)OCCC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F
 #> 2 OP(O)(=O)OCCC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F
-#> 3                            CC(O)=NC1=CC=C(C=C1)S(=O)(=O)NC1=NOC(C)=C1
-#> 4                            CC(O)=NC1=CC=C(C=C1)S(=O)(=O)NC1=NOC(C)=C1
-#> 5 CC(C)=CCNC1=C2N(C=NC2=NC=N1)[C@@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O
+#> 3 CC(C)=CCNC1=C2N(C=NC2=NC=N1)[C@@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O
+#> 4 CC(C)=CCNC1=C2N=CN([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C2=NC=N1
+#> 5                    CC(C)CCCC(C)C1CCC2C3CC[C@@H]4CC(=O)CCC4(C)C3CCC12C
 #>                      inchikey retentiontime precursortype num.peaks
 #> 1 MIABSAQIFYEDJP-UHFFFAOYSA-N                      [M+H]+         2
 #> 2 MIABSAQIFYEDJP-UHFFFAOYSA-N                      [M+H]+         2
-#> 3 GXPIUNZCALHVBA-UHFFFAOYSA-N                      [M+H]+         3
-#> 4 GXPIUNZCALHVBA-UHFFFAOYSA-N                      [M+H]+         3
-#> 5 ORUWKZNXHJIZKV-HDNYONAXSA-N                      [M+H]+         3
-#>                                                    name             ontology
-#> 1        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE Monoalkyl phosphates
-#> 2        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE Monoalkyl phosphates
-#> 3       N4-Acetylsulfamethoxazole; LC-ESI-ITFT; MS2; CE  Benzenesulfonamides
-#> 4       N4-Acetylsulfamethoxazole; LC-ESI-ITFT; MS2; CE  Benzenesulfonamides
-#> 5 N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE       Glycosylamines
-#>   precursormz     formula   omu
-#> 1  544.980501 C10H6F17O4P omu53
-#> 2  544.980501 C10H6F17O4P omu53
-#> 3  296.069953 C12H13N3O4S omu53
-#> 4  296.069953 C12H13N3O4S omu53
-#> 5  366.177195  C16H23N5O5 omu53
+#> 3 ORUWKZNXHJIZKV-HDNYONAXSA-N                      [M+H]+         3
+#> 4 XEHLLUQVSRLWMH-HDNYONAXSA-N                      [M+H]+         3
+#> 5 PESKGJQREUXSRR-JAGYRSRJSA-N                  [M-H2O+H]+         3
+#>                                                    name
+#> 1        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE
+#> 2        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE
+#> 3 N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
+#> 4 N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
+#> 5                     Coprostanone; LC-APPI-QQ; MS2; CE
+#>                       ontology precursormz     formula   omu
+#> 1         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
+#> 2         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
+#> 3               Glycosylamines  366.177195  C16H23N5O5 omu56
+#> 4               Glycosylamines  366.177195  C16H23N5O5 omu56
+#> 5 Cholesterols and derivatives  369.351578     C27H46O omu56
 ```
 
 ## Ecological Analysis
@@ -994,9 +994,9 @@ community_w_omus
 #> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00      0.00     0.00
 #>                                omu6     omu7     omu8     omu9     omu10
 #> 221012_DGM_Blank4_1_2_435       0.0      0.0     0.00    0.000      0.00
-#>                               omu11     omu12    omu13    omu14    omu15
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00     0.00
-#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 104 columns ]
+#>                               omu11     omu12    omu13    omu14     omu15
+#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00      0.00
+#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 106 columns ]
 ```
 
 You have the option of not clustering your data to generate a community
@@ -1063,15 +1063,15 @@ community matrix for ease of use.
 #> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00      0.00     0.00
 #>                                omu6     omu7     omu8     omu9     omu10
 #> 221012_DGM_Blank4_1_2_435       0.0      0.0     0.00    0.000      0.00
-#>                               omu11     omu12    omu13    omu14    omu15
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00     0.00
-#>                                omu16     omu17    omu18    omu19     omu20
-#> 221012_DGM_Blank4_1_2_435      0.000      0.00    0.000     0.00     0.000
-#>                                omu21    omu22    omu23     omu24    omu25
-#> 221012_DGM_Blank4_1_2_435      0.000     0.00     0.00     0.000     0.00
-#>                               omu26      omu27    omu28     omu29    omu30
-#> 221012_DGM_Blank4_1_2_435      0.00      0.000     0.00     0.000     0.00
-#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 89 columns ]
+#>                               omu11     omu12    omu13    omu14     omu15
+#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00      0.00
+#>                               omu16     omu17     omu18    omu19    omu20
+#> 221012_DGM_Blank4_1_2_435      0.00     0.000      0.00    0.000     0.00
+#>                                omu21     omu22    omu23    omu24     omu25
+#> 221012_DGM_Blank4_1_2_435      0.000     0.000     0.00     0.00     0.000
+#>                               omu26    omu27      omu28    omu29     omu30
+#> 221012_DGM_Blank4_1_2_435      0.00     0.00      0.000     0.00     0.000
+#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 91 columns ]
 ```
 
 ### Alpha Diversity
@@ -1090,23 +1090,23 @@ single sample.
 
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
               diversity_index = "simpson", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 7s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 7s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 6s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 5s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #>      221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_1_434
-#> [1,]                 0.6090176                 0.6202386
+#> [1,]                 0.6090363                 0.6202715
 #>      221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_1_431
-#> [1,]                  0.2933659                  0.2855403
+#> [1,]                  0.2944624                  0.2856107
 #>      221012_DGM_MB1598_12_3_430 221012_DGM_MB1598_12_1_428
-#> [1,]                  0.2220219                  0.2263777
+#> [1,]                  0.2220425                  0.2263645
 #>      221012_DGM_MB1597_11_2_426 221012_DGM_MB1595_10_3_424
-#> [1,]                  0.3125501                  0.5084228
+#> [1,]                  0.3147852                  0.5083162
 #>      221012_DGM_MB1595_10_2_423 221012_DGM_MB1597_11_3_427
-#> [1,]                  0.4734338                   0.320469
+#> [1,]                  0.4732464                  0.3229717
 #>      221012_DGM_MB1595_10_1_422 221012_DGM_Blank2_1_1_404
-#> [1,]                  0.4935133                  0.614213
+#> [1,]                  0.4936011                 0.6141926
 #>      221012_DGM_Blank3_1_1_419 221012_DGM_MB1590_5_3_403
-#> [1,]                 0.5652187                 0.4737008
+#> [1,]                  0.565196                 0.4736702
 #>      221012_DGM_Blank1_1_2_391
-#> [1,]                 0.4530283
+#> [1,]                 0.4528712
 #>  [ reached 'max' / getOption("max.print") -- omitted 30 columns ]
 ```
 
@@ -1136,7 +1136,7 @@ bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 bray_w_omus
 #>                            221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_1_434
-#> 221012_DGM_Blank4_1_1_434                 0.02412250                          
+#> 221012_DGM_Blank4_1_1_434                 0.02407000                          
 #>                            221012_DGM_MB1599_13_3_433
 #> 221012_DGM_Blank4_1_1_434                            
 #>                            221012_DGM_MB1599_13_1_431
@@ -1163,7 +1163,7 @@ bray_w_omus
 
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
                            threshold = 100, diversity_index = "bray", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: 24s ...Computing ■■■                                                | 5%  ETA: 15s ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 bray_no_omus
 #>                            221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
 #> 221012_DGM_Blank1_1_2_391                 0.06219456                          
@@ -1306,54 +1306,58 @@ ran above. But this time, we are using group averages.
 #> blank3     0.00     0.0    0     0.0    0    0    0    0    0     0     0     0
 #> MB1589 23337.03 24115.4    0 14022.7    0    0    0    0    0     0     0     0
 #> MB1588     0.00     0.0    0     0.0    0    0    0    0    0     0     0     0
-#>        omu13 omu14    omu15   omu16    omu17 omu18 omu19    omu20    omu21
-#> blank3     0     0     0.00     0.0      0.0     0     0    0.000    0.000
-#> MB1589     0     0 42087.33 10749.4 127599.7     0     0 8942.717 7274.027
-#> MB1588     0     0     0.00     0.0      0.0     0     0    0.000    0.000
-#>        omu22 omu23    omu24    omu25 omu26    omu27    omu28 omu29    omu30
-#> blank3     0     0    0.000     0.00     0     0.00     0.00     0     0.00
-#> MB1589     0     0 5316.441 73722.57     0 67484.12 35960.23     0 61818.83
-#> MB1588     0     0    0.000     0.00     0     0.00     0.00     0     0.00
-#>           omu31    omu32 omu33    omu34 omu35 omu36    omu37 omu38 omu39 omu40
-#> blank3    0.000     0.00     0     0.00     0     0    0.000     0     0     0
-#> MB1589 8703.846 29907.96     0 28524.01     0     0 8212.385     0     0     0
-#> MB1588    0.000     0.00     0     0.00     0     0    0.000     0     0     0
-#>        omu41 omu42 omu43 omu44    omu45 omu46 omu47    omu48 omu49   omu50
-#> blank3     0     0     0     0    0.000     0     0     0.00     0     0.0
-#> MB1589     0     0     0     0 9891.063     0     0 31016.72     0 18200.5
-#> MB1588     0     0     0     0    0.000     0     0     0.00     0     0.0
-#>        omu51 omu52      omu53     omu54     omu55    omu56 omu57 omu58 omu59
-#> blank3     0     0   536344.8      0.00      0.00     0.00     0     0     0
-#> MB1589     0     0 11950209.3  98530.36  61664.97 49602.83     0     0     0
-#> MB1588     0     0  2761290.9 479136.87 138083.00 27996.26     0     0     0
-#>            omu60    omu61   omu62 omu63 omu64    omu65 omu66      omu67 omu68
-#> blank3  4267.063     0.00     0.0     0     0    0.000     0      0.000     0
-#> MB1589 28711.179 20210.32 11347.3     0     0 7873.674     0 210327.208     0
-#> MB1588     0.000     0.00     0.0     0     0    0.000     0   6803.707     0
-#>             omu69      omu70    omu71 omu72 omu73 omu74    omu75     omu76
-#> blank3   65837.39   4293.939     0.00     0     0     0     0.00  71059.94
-#> MB1589 5096777.02 217270.654 83334.29     0     0     0 67868.33 578187.41
-#> MB1588 1098725.26  15809.002     0.00     0     0     0     0.00      0.00
-#>        omu77 omu78 omu79 omu80     omu81     omu82    omu83 omu84      omu85
-#> blank3     0     0     0     0  101080.8  4669.115     0.00     0   7709.688
-#> MB1589     0     0     0     0 2751336.9 23251.863 96614.68     0 278049.688
-#> MB1588     0     0     0     0       0.0     0.000     0.00     0      0.000
-#>        omu86    omu87 omu88    omu89    omu90    omu91 omu92    omu93    omu94
-#> blank3     0     0.00     0     0.00     0.00     0.00     0     0.00      0.0
-#> MB1589     0 19642.83     0 57334.46 38534.01 38765.94     0 12633.89 804098.7
-#> MB1588     0     0.00     0     0.00     0.00 46022.30     0     0.00      0.0
-#>           omu95   omu96 omu97    omu98     omu99   omu100 omu101 omu102
-#> blank3     0.00     0.0     0     0.00  98687.36     0.00      0      0
-#> MB1589 62575.24 37879.9     0 10110.24 322682.14 11067.09      0      0
-#> MB1588     0.00     0.0     0     0.00 260084.95     0.00      0      0
-#>           omu103 omu104 omu105   omu106 omu107    omu108 omu109 omu110 omu111
-#> blank3  37381.96      0      0     0.00      0   4068.33      0      0      0
-#> MB1589 166117.64      0      0 73379.17      0 118577.04      0      0      0
-#> MB1588  26708.77      0      0 90119.16      0      0.00      0      0      0
-#>        omu112 omu113 omu114 omu115 omu116 omu117    omu118   omu119
-#> blank3      0      0      0      0      0      0      0.00     0.00
-#> MB1589      0      0      0      0      0      0  60820.68 15677.16
-#> MB1588      0      0      0      0      0      0 212704.06     0.00
+#>        omu13 omu14 omu15    omu16   omu17    omu18 omu19 omu20    omu21
+#> blank3     0     0     0     0.00     0.0      0.0     0     0    0.000
+#> MB1589     0     0     0 42087.33 10749.4 127599.7     0     0 8942.717
+#> MB1588     0     0     0     0.00     0.0      0.0     0     0    0.000
+#>           omu22 omu23 omu24    omu25    omu26 omu27    omu28    omu29 omu30
+#> blank3    0.000     0     0    0.000     0.00     0     0.00     0.00     0
+#> MB1589 7274.027     0     0 5316.441 73722.57     0 67484.12 35960.23     0
+#> MB1588    0.000     0     0    0.000     0.00     0     0.00     0.00     0
+#>           omu31    omu32    omu33 omu34    omu35 omu36 omu37    omu38 omu39
+#> blank3     0.00    0.000     0.00     0     0.00     0     0    0.000     0
+#> MB1589 61818.83 8703.846 29907.96     0 28524.01     0     0 8212.385     0
+#> MB1588     0.00    0.000     0.00     0     0.00     0     0    0.000     0
+#>        omu40 omu41 omu42 omu43 omu44 omu45    omu46 omu47 omu48    omu49 omu50
+#> blank3     0     0     0     0     0     0    0.000     0     0     0.00     0
+#> MB1589     0     0     0     0     0     0 9891.063     0     0 31016.72     0
+#> MB1588     0     0     0     0     0     0    0.000     0     0     0.00     0
+#>          omu51 omu52 omu53     omu54 omu55      omu56    omu57     omu58 omu59
+#> blank3     0.0     0     0      0.00     0   536344.8     0.00      0.00     0
+#> MB1589 18200.5     0     0  60820.68     0 11950209.3 10110.24  98530.36     0
+#> MB1588     0.0     0     0 212704.06     0  2761290.9     0.00 479136.87     0
+#>        omu60 omu61     omu62    omu63    omu64   omu65 omu66 omu67 omu68 omu69
+#> blank3     0     0  71059.94     0.00     0.00     0.0     0     0     0     0
+#> MB1589     0     0 578187.41 11067.09 20210.32 11347.3     0     0     0     0
+#> MB1588     0     0      0.00     0.00     0.00     0.0     0     0     0     0
+#>             omu70 omu71    omu72      omu73      omu74    omu75 omu76    omu77
+#> blank3      0.000     0    0.000   65837.39   4293.939     0.00     0     0.00
+#> MB1589 210327.208     0 7873.674 5096777.02 217270.654 49602.83     0 67868.33
+#> MB1588   6803.707     0    0.000 1098725.26  15809.002 27996.26     0     0.00
+#>           omu78 omu79 omu80 omu81     omu82     omu83    omu84     omu85
+#> blank3     0.00     0     0     0  101080.8  4267.063     0.00      0.00
+#> MB1589 83334.29     0     0     0 2751336.9 28711.179 96614.68  61664.97
+#> MB1588     0.00     0     0     0       0.0     0.000     0.00 138083.00
+#>            omu86 omu87     omu88    omu89 omu90    omu91    omu92 omu93 omu94
+#> blank3  98687.36     0  4669.115     0.00     0     0.00     0.00     0     0
+#> MB1589 322682.14     0 23251.863 19642.83     0 57334.46 38534.01     0     0
+#> MB1588 260084.95     0     0.000     0.00     0     0.00     0.00     0     0
+#>           omu95      omu96    omu97   omu98     omu99 omu100 omu101 omu102
+#> blank3     0.00   7709.688      0.0     0.0  37381.96      0      0      0
+#> MB1589 62575.24 278049.688 804098.7 37879.9 166117.64      0      0      0
+#> MB1588     0.00      0.000      0.0     0.0  26708.77      0      0      0
+#>        omu103 omu104 omu105   omu106 omu107    omu108 omu109   omu110 omu111
+#> blank3      0      0      0     0.00      0   4068.33      0     0.00      0
+#> MB1589      0      0      0 12633.89      0 118577.04      0 38765.94      0
+#> MB1588      0      0      0     0.00      0      0.00      0 46022.30      0
+#>        omu112 omu113   omu114   omu115 omu116 omu117 omu118 omu119 omu120
+#> blank3      0      0     0.00     0.00      0      0      0      0      0
+#> MB1589      0      0 73379.17 15677.16      0      0      0      0      0
+#> MB1588      0      0 90119.16     0.00      0      0      0      0      0
+#>        omu121
+#> blank3      0
+#> MB1589      0
+#> MB1588      0
 ```
 
 You can also see how the samples in the matched object have been
@@ -1444,7 +1448,7 @@ to generate a combined data.frame with all of the generated data.
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
-#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu53
+#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu56
 #>   annotations 221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
 #> 1        <NA>                         0                         0
 #> 2        <NA>                         0                         0
@@ -1523,7 +1527,7 @@ to generate a combined data.frame with all of the generated data.
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
-#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu53
+#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu56
 #>   annotations blank           MB1588 MB1589 MB1590 blank1 MB1591 MB1592 MB1593
 #> 1        <NA>     0                0      0      0      0      0      0      0
 #> 2        <NA>     0 15627.3391933333      0      0      0      0      0      0
@@ -1565,7 +1569,7 @@ alpha diversity.
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
   t() |> 
   as.data.frame()
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: 24s ...Computing ■■■                                                | 5%  ETA: 15s ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 alpha$name <- rownames(alpha)
 alpha$group <- ""
 

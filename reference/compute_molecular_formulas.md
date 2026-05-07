@@ -507,7 +507,7 @@ compute_molecular_formulas(matched_data)
 #> [45] "221012_DGM_Blank4_1_3_436" 
 #> 
 #> $predicted_molecular_formulas
-#> [1] "C11H74N8O5P2S3"  "C10H79N11O5P2S2" "C12H91N12O9P3S3"
+#> [1] "C7H62N18O4P2S"   "C8H203N6O7PS"    "C5H118N4O4P10S4"
 #> 
 #> attr(,"class")
 #> [1] "mass_data"
