@@ -16,7 +16,7 @@ public:
     double GetLossMass(const MolecularFormula& other) const;
     int GetAtomsForElement(const char&) const;
     std::string GetMolecularFormula() const;
-    std::string operator-(const MolecularFormula& other) const;
+    std::vector<int> operator-(const MolecularFormula& other) const;
     bool CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const;
     double GetMass() const;
 protected:

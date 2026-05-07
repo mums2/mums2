@@ -29,7 +29,8 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
         const int indexToGetTo = (currentSize + indexPosition) - indexPosition;
         for (int i = 0; i < indexToGetTo; i++) {
             molecularNodeList[i + indexPosition] = FragmentationNode(color,
-                       fragData.score[i], MolecularFormula(fragData.formula[i], fragData.exactmass[i]));
+                       fragData.score[i], MolecularFormula(fragData.formula[i],
+                           fragData.exactmass[i]));
             if (color == 0) {
                 colorZeroSize++;
             }
@@ -91,11 +92,14 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         // Nodes with similar fragmentation colors should never be a subformula
         const bool res = formula.CheckIfOtherIsSubFormula(currentFormula);
         if (!res) continue;
-        // colors.emplace_back(currentFragmentation.color);
+        const double neutralLoseScore = neutralLosesScorer.DetermineNeutralLoses(
+            formula - currentFormula);
+
         distinctColors.insert(currentFragmentation.color);
+
         const double lossMass = formula.GetLossMass(currentFormula);
         const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-            currentFragmentation.score;
+            currentFragmentation.score + neutralLoseScore;
         finalSubtreeScore += score;
     }
     mutexLock.lock();
@@ -103,4 +107,3 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
     CollectResultFromNode(finalSubtreeScore, currentIndex);
     mutexLock.unlock();
 }
-
