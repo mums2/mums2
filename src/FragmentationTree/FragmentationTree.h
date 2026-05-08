@@ -18,10 +18,10 @@
 class FragmentationTree {
 public:
     FragmentationTree(const std::vector<DecompResult>&, double);
-    int GetColorZeroCount() const {return colorZeroSize;}
+    const std::vector<int>& GetColorRanges() {return ranges;}
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     std::string GetBestFormula() const;
-    void AddMolecularFormulaToGraph(int currentIndex);
+    void AddMolecularFormulaToGraph(int currentIndex, size_t startingIndex, size_t endingIndex, const DetectNeutralLoses &neutralLosesScorer);
 
 private:
     void Initialize(const std::vector<DecompResult>& decompResults);
@@ -31,9 +31,9 @@ private:
     std::mutex mutexLock;
     double parentMass;
     int size;
-    int colorZeroSize;
+    size_t colorZeroSize;
+    std::vector<int> ranges;
     std::vector<FragmentationNode> molecularNodeList;
-    DetectNeutralLoses neutralLosesScorer;
 };
 
 

@@ -16,8 +16,6 @@ public:
     DetectNeutralLoses();
     double DetermineNeutralLoses(const std::vector<int>& elements) const;
 private:
-    const double score = std::log(2);
-    const double scoreRadical = std::log(0.25);
     double GetDBE(const std::vector<int> &elements);
     std::vector<std::vector<int>> neutralLosesList;
     std::vector<bool> isRadical;

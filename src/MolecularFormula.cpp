@@ -56,6 +56,10 @@ molecularMass(molecularMass) {
     oxygen = chemicalAtomAmounts[3];
     phosphorus = chemicalAtomAmounts[4];
     sulfur = chemicalAtomAmounts[5];
+    heteroToCarbonRatio = 0;
+    if (carbon != 0)
+        heteroToCarbonRatio =
+            (static_cast<double>(nitrogen + oxygen + phosphorus + sulfur)) / static_cast<double>(carbon);
 }
 
 
@@ -113,4 +117,8 @@ bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormu
 
 double MolecularFormula::GetMass() const {
     return molecularMass;
+}
+
+double MolecularFormula::GetHeteroToCarbonRatio() const {
+    return heteroToCarbonRatio;
 }
