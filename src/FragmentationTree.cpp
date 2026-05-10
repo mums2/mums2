@@ -87,7 +87,7 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         if (!res) continue;
         const double currentHeteroCarbonRatio = currentFormula.GetHeteroToCarbonRatio();
         double heteroCarbonRatioScore = 0;
-        if (fragmentHeteroCarbonRatio < currentHeteroCarbonRatio) {
+        if (fragmentHeteroCarbonRatio > currentHeteroCarbonRatio) {
             heteroCarbonRatioScore = currentHeteroCarbonRatio - fragmentHeteroCarbonRatio;
         }
         const double neutralLoseScore = neutralLosesScorer.DetermineNeutralLoses(
