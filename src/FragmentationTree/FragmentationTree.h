@@ -25,13 +25,13 @@ public:
 
 private:
     void Initialize(const std::vector<DecompResult>& decompResults);
-    void CollectResultFromNode(double subtreeScore, int index);
     // Keys of the same color represent the same mz, int (isotope).
 
     std::mutex mutexLock;
     double parentMass;
     int size;
     int colorZeroSize;
+    size_t uniqueColors;
     std::vector<FragmentationNode> molecularNodeList;
     DetectNeutralLoses neutralLosesScorer;
 };

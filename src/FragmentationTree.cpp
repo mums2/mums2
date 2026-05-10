@@ -18,6 +18,8 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
 
     size = 0;
     colorZeroSize = 0;
+
+    uniqueColors = decompResults.size();
     for (const auto& decompResult : decompResults) {
         size += static_cast<int>(decompResult.formula.size());
     }
@@ -66,25 +68,16 @@ std::string FragmentationTree::GetBestFormula() const {
     // return it->formula.GetMolecularFormula();
 }
 
-void FragmentationTree::CollectResultFromNode(const double subtreeScore,
-    const int index) {
-   // mutexLock.lock();
-    // for (const auto& parentIndex : parentIndexes) {
-    //     molecularNodeList[parentIndex].subTreeScore +=  subtreeScore;
-    // }
-    molecularNodeList[index].score += subtreeScore;
-    // mutexLock.unlock();
-}
-
 // May have to store the number of colors that explain the formulas
 // And choose the formula that is most explained by the colors.
 void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
     const std::vector<FragmentationNode>& fragmentationNodes = molecularNodeList;
     const MolecularFormula& formula = fragmentationNodes[currentIndex].formula;
-    // std::vector<int> colors;
-    // colors.reserve(size);
-    double finalSubtreeScore = 0;
-    std::unordered_set<int> distinctColors;
+    const double fragmentHeteroCarbonRatio = formula.GetHeteroToCarbonRatio();
+
+    std::vector<bool> hasScoredColors(uniqueColors, false);
+    std::vector<double> highestColorScores(uniqueColors, 0);
+    int distinctColors = 0;
     for (int j = colorZeroSize; j < size; j++) {
         if (j == currentIndex) continue;
         const FragmentationNode& currentFragmentation = fragmentationNodes[j];
@@ -92,18 +85,30 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         // Nodes with similar fragmentation colors should never be a subformula
         const bool res = formula.CheckIfOtherIsSubFormula(currentFormula);
         if (!res) continue;
+        const double currentHeteroCarbonRatio = currentFormula.GetHeteroToCarbonRatio();
+        double heteroCarbonRatioScore = 0;
+        if (fragmentHeteroCarbonRatio < currentHeteroCarbonRatio) {
+            heteroCarbonRatioScore = currentHeteroCarbonRatio - fragmentHeteroCarbonRatio;
+        }
         const double neutralLoseScore = neutralLosesScorer.DetermineNeutralLoses(
             formula - currentFormula);
 
-        distinctColors.insert(currentFragmentation.color);
-
         const double lossMass = formula.GetLossMass(currentFormula);
         const double score = std::log(std::abs(1 - lossMass/parentMass)) +
-            currentFragmentation.score + neutralLoseScore;
-        finalSubtreeScore += score;
+            currentFragmentation.score + neutralLoseScore + heteroCarbonRatioScore;
+        if (!hasScoredColors[currentFragmentation.color] || score > highestColorScores[currentFragmentation.color]) {
+            highestColorScores[currentFragmentation.color] = score;
+            hasScoredColors[currentFragmentation.color] = true;
+        }
     }
+    for (const auto& color : hasScoredColors) {
+        if (color)
+            distinctColors++;
+    }
+    // Score
     mutexLock.lock();
-    molecularNodeList[currentIndex].amountOfDistinctColors = distinctColors.size();
-    CollectResultFromNode(finalSubtreeScore, currentIndex);
+    molecularNodeList[currentIndex].amountOfDistinctColors = distinctColors;
+    molecularNodeList[currentIndex].score += std::accumulate(highestColorScores.begin(),
+        highestColorScores.end(), 0.0);
     mutexLock.unlock();
 }
