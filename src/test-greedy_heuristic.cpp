@@ -41,11 +41,10 @@ context("Greedy Heuristic") {
             155.24);
 
 
-        DetectNeutralLoses neutralLoses;
-//        tree.AddMolecularFormulaToGraph(0, neutralLoses);
-//        tree.AddMolecularFormulaToGraph(1, neutralLoses);
-//        tree.AddMolecularFormulaToGraph(2, neutralLoses);
-//        tree.AddMolecularFormulaToGraph(3, neutralLoses);
+        tree.AddMolecularFormulaToGraph(0);
+        tree.AddMolecularFormulaToGraph(1);
+        tree.AddMolecularFormulaToGraph(2);
+        tree.AddMolecularFormulaToGraph(3);
         expect_true(GreedyHeuristic::CalculateHeuristic(tree) == "C6H12O6");
     }
 

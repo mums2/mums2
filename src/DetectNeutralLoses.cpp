@@ -4,8 +4,6 @@
 
 #include "FragmentationTree/DetectNeutralLoses.h"
 #include <algorithm>
-#include <cmath>
-
 DetectNeutralLoses::DetectNeutralLoses() {
     constexpr size_t size = 17;
     neutralLosesList = std::vector<std::vector<int>>(size);
@@ -56,8 +54,6 @@ DetectNeutralLoses::DetectNeutralLoses() {
 
 double DetectNeutralLoses::DetermineNeutralLoses(const std::vector<int> &elements) const {
     size_t detectedIndex = -1;
-    const double score = std::log(2);
-    const double scoreRadical = std::log(0.25);
     for (size_t i = 0; i < neutralLosesList.size(); ++i) {
         if (neutralLosesList[i] == elements) {
             detectedIndex = i;

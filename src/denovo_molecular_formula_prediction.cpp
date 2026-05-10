@@ -18,12 +18,10 @@ std::vector<DecompositionMassInputData> CreateInputData(const Rcpp::NumericVecto
 	for (int i = 0; i < size; i++) {
 		const Rcpp::NumericVector& mass = masses[i];
 		const int massSize = mass.size();
-		const double parentMass = mzData[i];
-		decompInput[i].masses.reserve(massSize);
-		decompInput[i].parentMass = parentMass;
-		for (int j = massSize - 1; j >= 0; j--) {
-			if (parentMass < mass[j]) continue;
-			decompInput[i].masses.emplace_back(mass[j]);
+		decompInput[i].masses = std::vector<double>(massSize, 0);
+		decompInput[i].parentMass = mzData[i];
+		for (int j = 0; j < massSize; j++) {
+			decompInput[i].masses[j] = mass[j];
 		}
 	}
 	return decompInput;
@@ -55,27 +53,18 @@ std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVec
 		mutex.unlock();
 	}, numberOfThreads);
 	progressBar.end_display();
-	DetectNeutralLoses neutralLoses;
+
 	CliProgressBar progressBar2;
 	std::vector<std::string> resultantFormulas(size);
 	counter = 0;
 	Rcpp::Rcout << "Calculating fragmentation trees..." << std::endl;
 	for (size_t i = 0; i < size; i++) {
 		FragmentationTree tree(allNodes[i], inputData[i].parentMass);
-		const std::vector<int>& colorRanges = tree.GetColorRanges();
-		if (colorRanges.at(1) <= 0) continue; // Mean there are no decompositions!
-		const int colorRangesSize = static_cast<int>(colorRanges.size());
-		for (int j = colorRangesSize - 1 ; j >= 2; j--) {
-			const int endingIndex = colorRanges.at(j);
-			const int startingIndex =  colorRanges.at(j - 1);
-			// Start One color Up
-			const int fragmentEndPosition = colorRanges.at(j - 1);
-			const int fragmentStartPosition = colorRanges.at(j - 2);
-			RcppThread::parallelFor(fragmentStartPosition, fragmentEndPosition, [&tree, &neutralLoses, &startingIndex,
-				&endingIndex](int j) {
-				tree.AddMolecularFormulaToGraph(j, startingIndex, endingIndex, neutralLoses);
-			}, numberOfThreads);
-		}
+		const int colorZeroFormulaCount = tree.GetColorZeroCount();
+		if (colorZeroFormulaCount <= 0) continue; // Mean there are no decompositions!
+		RcppThread::parallelFor(0, colorZeroFormulaCount, [&tree](int j) {
+			tree.AddMolecularFormulaToGraph(j);
+		}, numberOfThreads);
 		resultantFormulas[i] = GreedyHeuristic::CalculateHeuristic(tree);
 		counter++;
 		progressBar2.update(static_cast<float>(counter)/static_cast<float>(size));
