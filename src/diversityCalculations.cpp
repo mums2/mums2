@@ -16,6 +16,10 @@
 #include "Math/ParallelRandomNumberSitmo.h"
 #include "Rarefy/Rarefaction.h"
 
+bool IsAlphaIndex(const std::string& index) {
+    std::vector<std::string> indexes {"simpson", "shannon", "richness"};
+    return std::find(indexes.begin(), indexes.end(), index) != indexes.end();
+}
 
 CppMatrix CalculateDiversity(const CppMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
@@ -107,7 +111,7 @@ Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::str
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
     const size_t matrixRowSize = samples.size();
     int row = samples.size();
-    if (index == "simpson" || index == "shannon")
+    if (IsAlphaIndex(index))
         row = 1;
     CppMatrix diversityMatrix(std::vector<double>(row * samples.size(), 0), row, samples.size());
     const std::vector<std::vector<uint64_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
