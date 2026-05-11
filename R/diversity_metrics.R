@@ -105,7 +105,8 @@ dist_shared <- function(community_object, size, threshold,
 #' @param threshold the threshold you want your
 #' species to reach before it is included in the rarefaction sum.
 #' @param diversity_index the diversity index you wish to calculate diversity,
-#' the two options are shannon or simpson.
+#' the options are shannon, simpson, or richness. You may also compute many indexes
+#'  at the same time using a vector (ie. c("shannon", "simpson")).
 #' @param subsample if true, we will rarefy the data before we
 #' run the diversity calculations. Default is TRUE.
 #' @param number_of_threads the amount of threads
@@ -140,20 +141,22 @@ dist_shared <- function(community_object, size, threshold,
 #'
 #' community_object <- create_community_matrix_object(cluster_results)
 #'
-#' alpha_summary(community_object, 400, 100, "shannon", TRUE, iterations = 1)
+#' alpha_summary(community_object = community_object, size = 400,
+#'               threshold = 100, diversity_index = c("shannon", "simpson"),
+#'               subsample = TRUE, iterations = 1)
 #' @return a `data.frame` object that shows the dissimilarity in samples.
 alpha_summary <- function(community_object, size, threshold,
-                          diversity_index = "shannon",
+                          diversity_index = c("shannon", "simpson"),
                           subsample = TRUE,
                           number_of_threads = detectCores(),
-                          iterations = 1000, seed = 123) {
-  diversity_index_list <- c("shannon", "simpson")
+                          iterations = 100, seed = 123) {
+  diversity_index_list <- c("shannon", "simpson", "richness")
   if (!("community_object" %in% class(community_object))) {
     stop("Please ensure the community_object is created from the
          `create_community_object` function.")
   }
 
-  if (!(diversity_index %in% diversity_index_list)) {
+  if (!all(diversity_index %in% diversity_index_list)) {
     stop(paste0("Please ensure your diversity index
                 is one of the following values: ",
                 paste(diversity_index_list, collapse = ", "))
@@ -179,9 +182,19 @@ alpha_summary <- function(community_object, size, threshold,
     stop("subsample must be a boolean")
   }
 
-
-  result <- MeasureDiversity(community_object, diversity_index, size, threshold,
-                             subsample, number_of_threads, iterations, seed)
-  result[which(is.nan(result))] <- 0
+  diversity_result <- lapply(diversity_index, function(x) {
+    diversity <- t(MeasureDiversity(community_object, x, size, threshold,
+                                    subsample, number_of_threads, iterations, seed))
+    diversity[which(is.na(diversity)), 1] <- 0
+    diversity
+  })
+  result <- data.frame(samples = rownames(diversity_result[[1]]))
+  index <- 1
+  for(diversity in diversity_result) {
+    data <- data.frame(unname(diversity[, 1]))
+    colnames(data) <- diversity_index[[index]]
+    result <- cbind(result, data)
+    index <- index + 1
+  }
   result
 }

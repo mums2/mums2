@@ -44,11 +44,11 @@ void FragmentationTree::Initialize(const std::vector<DecompResult>& decompResult
 }
 
 std::string FragmentationTree::GetBestFormula() const {
-    size_t currentBestIndex = 0;
-    size_t topColorAmount = molecularNodeList[0].amountOfDistinctColors;
+    int currentBestIndex = 0;
+    int topColorAmount = molecularNodeList[0].amountOfDistinctColors;
     double score = molecularNodeList[0].score;
 
-    for (size_t i = 1; i < colorZeroSize; i++) {
+    for (int i = 1; i < colorZeroSize; i++) {
         const FragmentationNode& node = molecularNodeList[i];
         if (node.amountOfDistinctColors > topColorAmount) {
             topColorAmount = node.amountOfDistinctColors;
