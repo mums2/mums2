@@ -240,7 +240,7 @@ Using your created community object, you can compute alpha diversity. Alpha dive
 
 ```{r  alpha_summary, R.options=list(max.print=15)}
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
-              diversity_index = "simpson", subsample = TRUE)
+              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE)
 ```
 
 ### Beta Diversity
