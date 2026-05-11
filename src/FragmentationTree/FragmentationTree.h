@@ -21,7 +21,7 @@ public:
     int GetColorZeroCount() const {return colorZeroSize;}
     const std::vector<FragmentationNode> &GetFragmentationNodes() const {return molecularNodeList;}
     std::string GetBestFormula() const;
-    void AddMolecularFormulaToGraph(int currentIndex);
+    void AddMolecularFormulaToGraph(int currentIndex, const DetectNeutralLoses &detectNeutralLoses);
 
 private:
     void Initialize(const std::vector<DecompResult>& decompResults);
@@ -33,7 +33,6 @@ private:
     int colorZeroSize;
     size_t uniqueColors;
     std::vector<FragmentationNode> molecularNodeList;
-    DetectNeutralLoses neutralLosesScorer;
 };
 
 

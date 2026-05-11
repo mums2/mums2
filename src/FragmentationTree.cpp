@@ -70,7 +70,8 @@ std::string FragmentationTree::GetBestFormula() const {
 
 // May have to store the number of colors that explain the formulas
 // And choose the formula that is most explained by the colors.
-void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
+void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex,
+    const DetectNeutralLoses& detectNeutralLoses) {
     const std::vector<FragmentationNode>& fragmentationNodes = molecularNodeList;
     const MolecularFormula& formula = fragmentationNodes[currentIndex].formula;
     const double fragmentHeteroCarbonRatio = formula.GetHeteroToCarbonRatio();
@@ -90,7 +91,7 @@ void FragmentationTree::AddMolecularFormulaToGraph(const int currentIndex) {
         if (fragmentHeteroCarbonRatio > currentHeteroCarbonRatio) {
             heteroCarbonRatioScore = currentHeteroCarbonRatio - fragmentHeteroCarbonRatio;
         }
-        const double neutralLoseScore = neutralLosesScorer.DetermineNeutralLoses(
+        const double neutralLoseScore = detectNeutralLoses.DetermineNeutralLoses(
             formula - currentFormula);
 
         const double lossMass = formula.GetLossMass(currentFormula);
