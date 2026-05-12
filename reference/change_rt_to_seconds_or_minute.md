@@ -36,8 +36,6 @@ data <-
                    meta_data =
                    mums2::mums2_example("meta_data_boryillus.csv"),
                    format = "None")
-#> If peak table has corrupted compound names they will be converted to
-#>       utf-8 and if there are any commas, they will be converted to periods(.).
 change_rt_to_seconds_or_minute(data, "minutes")
 #> [1] "Changing rt values to minutes"
 #>                    Compound       mz RTINMINUTES 221012_DGM_Blank1_1_1_390

@@ -52,8 +52,6 @@ data <-
                    meta_data =
                    mums2::mums2_example("meta_data_boryillus.csv"),
                    format = "None")
-#> If peak table has corrupted compound names they will be converted to
-#>       utf-8 and if there are any commas, they will be converted to periods(.).
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
@@ -507,7 +505,7 @@ compute_molecular_formulas(matched_data)
 #> [45] "221012_DGM_Blank4_1_3_436" 
 #> 
 #> $predicted_molecular_formulas
-#> [1] "C7H62N18O4P2S"   "C8H203N6O7PS"    "C5H118N4O4P10S4"
+#> [1] "C14H72N8O3P4S"   "C8H203N6O7PS"    "C14H104N6O4P4S6"
 #> 
 #> attr(,"class")
 #> [1] "mass_data"

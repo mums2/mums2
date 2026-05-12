@@ -59,8 +59,6 @@ data <-
                    meta_data =
                    mums2::mums2_example("meta_data_boryillus.csv"),
                    format = "None")
-#> If peak table has corrupted compound names they will be converted to
-#>       utf-8 and if there are any commas, they will be converted to periods(.).
 
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>
