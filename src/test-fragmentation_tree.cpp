@@ -74,10 +74,11 @@ context("Fragmentation Tree") {
         FragmentationTree tree({decompResult, decompResult1, decompResult2},
             155.24);
 
-        tree.AddMolecularFormulaToGraph(0);
-        tree.AddMolecularFormulaToGraph(1);
-        tree.AddMolecularFormulaToGraph(2);
-        tree.AddMolecularFormulaToGraph(3);
+        const DetectNeutralLoses detectNeutralLoses;
+        tree.AddMolecularFormulaToGraph(0, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(1, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(2, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(3, detectNeutralLoses);
         const auto nodes = tree.GetFragmentationNodes();
         expect_true(nodes[0].score != 0);
         expect_true(nodes[1].score != 0);
@@ -111,10 +112,11 @@ context("Fragmentation Tree") {
         FragmentationTree tree({decompResult, decompResult1, decompResult2},
             155.24);
 
-        tree.AddMolecularFormulaToGraph(0);
-        tree.AddMolecularFormulaToGraph(1);
-        tree.AddMolecularFormulaToGraph(2);
-        tree.AddMolecularFormulaToGraph(3);
+        const DetectNeutralLoses detectNeutralLoses;
+        tree.AddMolecularFormulaToGraph(0, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(1, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(2, detectNeutralLoses);
+        tree.AddMolecularFormulaToGraph(3, detectNeutralLoses);
         const std::string result = tree.GetBestFormula();
         expect_true(result == "C6H12O6");
     }

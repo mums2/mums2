@@ -7,6 +7,7 @@
 #include "DiversityMetrics/AlphaDiversityCalculators/AlphaDiversity.h"
 #include "DiversityMetrics/AlphaDiversityCalculators/ShannonDiversityIndex.h"
 #include "DiversityMetrics/AlphaDiversityCalculators/SimpsonsDiversityIndex.h"
+#include "DiversityMetrics/AlphaDiversityCalculators/SpeciesRichnessDiversity.h"
 #include "DiversityMetrics/BetaDiversityCalculators/BetaDiversity.h"
 #include "DiversityMetrics/BetaDiversityCalculators/BrayCurtisDissimilarity.h"
 #include "DiversityMetrics/BetaDiversityCalculators/HammingDistance.h"
@@ -22,6 +23,9 @@ DiversityCalculator* DiversityMetricFactory::ChooseDiversityMetricBasedOnName(co
     }
     if(metricIndex == "simpson") {
         return new SimpsonsDiversityIndex();
+    }
+    if(metricIndex == "richness") {
+        return new SpeciesRichnessDiversity();
     }
     if(metricIndex == "bray") {
         return new BrayCurtisDissimilarity();
@@ -48,6 +52,7 @@ Diversity* DiversityMetricFactory::ChooseDiversityBasedOnIndex(const std::string
     std::unordered_map<std::string, std::string> indexMap;
     indexMap["shannon"] = "alpha";
     indexMap["simpson"] = "alpha";
+    indexMap["richness"] = "alpha";
     indexMap["bray"] = "beta";
     indexMap["jaccard"] = "beta";
     indexMap["hamming"] = "beta";

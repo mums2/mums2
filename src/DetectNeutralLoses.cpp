@@ -55,16 +55,18 @@ DetectNeutralLoses::DetectNeutralLoses() {
 }
 
 double DetectNeutralLoses::DetermineNeutralLoses(const std::vector<int> &elements) const {
-    size_t detectedIndex = -1;
+    size_t detectedIndex = 0;
+    bool found = false;
     const double score = std::log(2);
     const double scoreRadical = std::log(0.25);
     for (size_t i = 0; i < neutralLosesList.size(); ++i) {
         if (neutralLosesList[i] == elements) {
             detectedIndex = i;
+            found = true;
             break;
         }
     }
-    if (detectedIndex == -1) return 0;
+    if (!found) return 0;
     if (isRadical[detectedIndex]) return scoreRadical;
     return score;
 }

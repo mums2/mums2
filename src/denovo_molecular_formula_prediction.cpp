@@ -56,14 +56,15 @@ std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVec
 
 	CliProgressBar progressBar2;
 	std::vector<std::string> resultantFormulas(size);
+	const DetectNeutralLoses detectNeutralLoses;
 	counter = 0;
 	Rcpp::Rcout << "Calculating fragmentation trees..." << std::endl;
-	for (size_t i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) {
 		FragmentationTree tree(allNodes[i], inputData[i].parentMass);
 		const int colorZeroFormulaCount = tree.GetColorZeroCount();
 		if (colorZeroFormulaCount <= 0) continue; // Mean there are no decompositions!
-		RcppThread::parallelFor(0, colorZeroFormulaCount, [&tree](int j) {
-			tree.AddMolecularFormulaToGraph(j);
+		RcppThread::parallelFor(0, colorZeroFormulaCount, [&tree, &detectNeutralLoses](int j) {
+			tree.AddMolecularFormulaToGraph(j, detectNeutralLoses);
 		}, numberOfThreads);
 		resultantFormulas[i] = GreedyHeuristic::CalculateHeuristic(tree);
 		counter++;

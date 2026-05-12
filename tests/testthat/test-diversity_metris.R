@@ -133,6 +133,9 @@ test_that("Test dist_shared errors when given wrong parameters", {
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
                            iterations = 100, seed = "1"),
                "seed")
+  expect_error(dist_shared(community_object, 400, 10, "12", TRUE,
+                           iterations = 100),
+               "Please ensure")
 
 })
 
@@ -143,9 +146,10 @@ test_that("Alpha summary returns the proper results for simpsons", {
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "simpson", TRUE,
                              iterations = 2)
-  expect_true("matrix" %in% class(alpha_sum))
-  expect_true(ncol(alpha_sum) == length(dat$samples))
-  expect_true(nrow(alpha_sum) == 1)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == 2)
+  expect_true(nrow(alpha_sum) == length(dat$samples))
+  expect_true(colnames(alpha_sum)[[2]] == "simpson")
 })
 
 test_that("Alpha summary returns the proper results for shannon", {
@@ -155,9 +159,38 @@ test_that("Alpha summary returns the proper results for shannon", {
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "shannon", TRUE,
                              iterations = 2)
-  expect_true("matrix" %in% class(alpha_sum))
-  expect_true(ncol(alpha_sum) == length(dat$samples))
-  expect_true(nrow(alpha_sum) == 1)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == 2)
+  expect_true(nrow(alpha_sum) == length(dat$samples))
+  expect_true(colnames(alpha_sum)[[2]] == "shannon")
+})
+
+test_that("Alpha summary returns the proper results for species richness", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  result <- cluster_data(distances, dat,  0.3, "opticlust")
+  community_object <- create_community_matrix_object(result)
+  alpha_sum <- alpha_summary(community_object, 400, 10, "richness", TRUE,
+                             iterations = 2)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == 2)
+  expect_true(nrow(alpha_sum) == length(dat$samples))
+  expect_true(colnames(alpha_sum)[[2]] == "richness")
+})
+
+test_that("Alpha summary returns the proper results for both simpson, shannon and richness", {
+  dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  result <- cluster_data(distances, dat,  0.3, "opticlust")
+  community_object <- create_community_matrix_object(result)
+  alpha_sum <- alpha_summary(community_object, 400, 10, c("shannon", "simpson", "richness"), TRUE,
+                             iterations = 2)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == 4)
+  expect_true(nrow(alpha_sum) == length(dat$samples))
+  expect_true(colnames(alpha_sum)[[2]] == "shannon")
+  expect_true(colnames(alpha_sum)[[3]] == "simpson")
+  expect_true(colnames(alpha_sum)[[4]] == "richness")
 })
 
 test_that("Alpha summary works when subsample = FALSE", {
@@ -167,9 +200,10 @@ test_that("Alpha summary works when subsample = FALSE", {
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "simpson", FALSE,
                              iterations = 2)
-  expect_true("matrix" %in% class(alpha_sum))
-  expect_true(ncol(alpha_sum) == length(dat$samples))
-  expect_true(nrow(alpha_sum) == 1)
+  expect_true("data.frame" %in% class(alpha_sum))
+  expect_true(ncol(alpha_sum) == 2)
+  expect_true(nrow(alpha_sum) == length(dat$samples))
+  expect_true(colnames(alpha_sum)[[2]] == "simpson")
 })
 
 
@@ -206,5 +240,8 @@ test_that("Test Alpha summary errors when given wrong parameters", {
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
                              iterations = 100, seed = "1"),
                "seed")
+  expect_error(alpha_summary(community_object, 400, 10, "a", TRUE,
+                             iterations = 100),
+               "Please ensure")
 
 })
