@@ -35,14 +35,18 @@ context("Molecular Formula") {
         const std::string formula1 = "C20H15O7N3";
         const MolecularFormula molecularFormula(formula);
         const MolecularFormula otherFormula(formula1);
-        const std::string difference = molecularFormula - otherFormula;
-        expect_true(difference == "C14H3N3O");
+        const std::vector<int> difference = molecularFormula - otherFormula;
+        // C14H3N3O
+        const std::vector<int> expected{14, 3, 3, 1, 0, 0};
+        expect_true(difference == expected);
 
         const std::string formula2 = "C3H2";
         const MolecularFormula molecularFormula2(formula);
         const MolecularFormula otherFormula2(formula2);
-        const std::string difference2 = molecularFormula2 - otherFormula2;
-        expect_true(difference2 == "C3H10O6");
+        const std::vector<int> difference2 = molecularFormula2 - otherFormula2;
+        // "C3H10O6"
+        const std::vector<int> expected1{3, 10, 0, 6, 0, 0};
+        expect_true(difference2 == expected1);
     }
 
     test_that("We can check if formulas are subformulas of another") {

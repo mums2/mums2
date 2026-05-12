@@ -19,5 +19,5 @@ CppMatrix AlphaDiversity::CalculateDiversity(const CppMatrix &communityMatrix,
         results[i] = calculator->Calculate(temp);
     }
     delete calculator;
-    return CppMatrix(results, rowSize, rowSize);
+    return CppMatrix(results, 1, rowSize);
 }

@@ -20,7 +20,7 @@ struct FragmentationNode {
     int color{};
     double score{};
     MolecularFormula formula;
-    size_t amountOfDistinctColors = 0;
+    int amountOfDistinctColors = 0;
 };
 
 struct CompareFragmentationNodes {
