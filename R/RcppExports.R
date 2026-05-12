@@ -37,8 +37,8 @@ RarefactionCalculation <- function(communityMatrix, size, threshold, numberOfThr
     .Call(`_mums2_RarefactionCalculation`, communityMatrix, size, threshold, numberOfThreads, seed)
 }
 
-MeasureDiversity <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 1000L, seed = 123L) {
-    .Call(`_mums2_MeasureDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
+MeasureBetaDiversity <- function(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations = 100L, seed = 123L) {
+    .Call(`_mums2_MeasureBetaDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
 MeasureAlphaDiversity <- function(communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations = 100L, seed = 123L) {

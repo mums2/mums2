@@ -119,9 +119,9 @@ CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint6
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
-Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::string& index,
+Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std::string& index,
     const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
-    const int iterations = 1000, const int seed = 123) {
+    const int iterations = 100, const int seed = 123) {
     CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();

@@ -86,9 +86,9 @@ dist_shared <- function(community_object, size, threshold,
     stop("subsample must be a boolean")
   }
 
-  result <- MeasureDiversity(community_object, diversity_index,
-                             size, threshold, subsample,
-                             number_of_threads, iterations, seed)
+  result <- MeasureBetaDiversity(community_object, diversity_index,
+                                 size, threshold, subsample,
+                                 number_of_threads, iterations, seed)
   result[which(is.nan(result))] <- 0
   as.dist(result)
 }

@@ -75,6 +75,6 @@ cluster_results <- cluster_data(distance_df = dist,
 community_object <- create_community_matrix_object(cluster_results)
 
 alpha_summary(community_object = community_object, size = 400,
-              threshold = 100, diversity_index = c("shannon", "simpson"),
+              threshold = 100, diversity_index = c("shannon", "simpson", "richness"),
               subsample = TRUE, iterations = 1)
 }
