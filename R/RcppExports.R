@@ -41,6 +41,10 @@ MeasureDiversity <- function(communityMatrix, index, size, threshold, subsample,
     .Call(`_mums2_MeasureDiversity`, communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed)
 }
 
+MeasureAlphaDiversity <- function(communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations = 100L, seed = 123L) {
+    .Call(`_mums2_MeasureAlphaDiversity`, communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations, seed)
+}
+
 CreateHumanMetabolomicsDB <- function(nodeSize) {
     .Call(`_mums2_CreateHumanMetabolomicsDB`, nodeSize)
 }

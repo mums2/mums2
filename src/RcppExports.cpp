@@ -151,6 +151,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// MeasureAlphaDiversity
+Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std::vector<std::string>& indexes, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
+RcppExport SEXP _mums2_MeasureAlphaDiversity(SEXP communityMatrixSEXP, SEXP indexesSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type communityMatrix(communityMatrixSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type indexes(indexesSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type size(sizeSEXP);
+    Rcpp::traits::input_parameter< const uint64_t >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< const bool >::type subsample(subsampleSEXP);
+    Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
+    Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
+    Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(MeasureAlphaDiversity(communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CreateHumanMetabolomicsDB
 SEXP CreateHumanMetabolomicsDB(const size_t nodeSize);
 RcppExport SEXP _mums2_CreateHumanMetabolomicsDB(SEXP nodeSizeSEXP) {
@@ -291,6 +309,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
     {"_mums2_MeasureDiversity", (DL_FUNC) &_mums2_MeasureDiversity, 8},
+    {"_mums2_MeasureAlphaDiversity", (DL_FUNC) &_mums2_MeasureAlphaDiversity, 8},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 1},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 4},
     {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},

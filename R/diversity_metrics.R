@@ -182,19 +182,18 @@ alpha_summary <- function(community_object, size, threshold,
     stop("subsample must be a boolean")
   }
 
-  diversity_result <- lapply(diversity_index, function(x) {
-    diversity <- t(MeasureDiversity(community_object, x, size, threshold,
-                                    subsample, number_of_threads, iterations, seed))
-    diversity[which(is.na(diversity)), 1] <- 0
-    diversity
-  })
-  result <- data.frame(samples = rownames(diversity_result[[1]]))
-  index <- 1
-  for(diversity in diversity_result) {
-    data <- data.frame(unname(diversity[, 1]))
-    colnames(data) <- diversity_index[[index]]
-    result <- cbind(result, data)
-    index <- index + 1
-  }
-  result
+  diversity <- MeasureAlphaDiversity(community_object, diversity_index,
+                                     size, threshold, subsample,
+                                     number_of_threads, iterations, seed)
+  data.frame(samples = rownames(diversity), diversity)
+
+  # result <- data.frame(samples = rownames(diversity_result[[1]]))
+  # index <- 1
+  # for(diversity in diversity_result) {
+  #   data <- data.frame(unname(diversity[, 1]))
+  #   colnames(data) <- diversity_index[[index]]
+  #   result <- cbind(result, data)
+  #   index <- index + 1
+  # }
+  # result
 }
