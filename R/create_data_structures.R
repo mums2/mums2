@@ -98,13 +98,13 @@ convert_to_group_averages <- function(matched_data, mpactr_object) {
                 "`import_all_data()` function"))
   }
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
-  meta_data <- get_meta_data(mpactr_object)
-  injection_samples <- meta_data$Injection
+  meta_data <- get_metadata(mpactr_object)
+  injection_samples <- meta_data$injection
   modified_peak_table <-
     matched_data$ms1_data[, which(!(colnames(matched_data$ms1_data)
                                     %in% injection_samples)), with = FALSE]
   matched_data$ms1_data <- cbind(modified_peak_table, trips)
-  matched_data$samples <- unique(meta_data$Sample_Code)
+  matched_data$samples <- unique(meta_data$sample_code)
   matched_data
 }
 
@@ -126,14 +126,14 @@ create_count_table <- function(ms2_match_data) {
 # displays the average of the triplicates
 get_triplicate_averages <- function(mpactr_data, matched_data) {
   peak <- get_peak_table(mpactr_data)
-  meta_data <- get_meta_data(mpactr_data)
-  sample_codes <- unique(meta_data$Sample_Code)
+  meta_data <- get_metadata(mpactr_data)
+  sample_codes <- unique(meta_data$sample_code)
   triplicate_averages <- matrix(0, nrow(peak), 0)
   rownames(triplicate_averages) <- peak$Compound
   for (sample in sample_codes) {
     means <-
-      as.matrix(rowMeans(peak[, meta_data$Injection
-                              [which(meta_data$Sample_Code == sample)],
+      as.matrix(rowMeans(peak[, meta_data$injection
+                              [which(meta_data$sample_code == sample)],
                               with = FALSE]))
     triplicate_averages <- cbind(triplicate_averages, means)
   }
