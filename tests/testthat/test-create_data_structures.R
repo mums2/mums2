@@ -39,22 +39,22 @@ test_that("test that we create a proper count table", {
 test_that("We can convert a mass_data object to an averaged mass data object", {
   data <-
     import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"),
-                    meta_data = test_path("exttestdata", "meta_data.csv"),
+                    metadata = test_path("exttestdata", "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
   ms2_avg_data <- convert_to_group_averages(ms2_data, data)
-  meta_data <- get_meta_data(data)
-  expect_true(all(meta_data$Sample_Code %in% ms2_avg_data$samples))
-  expect_true(all(meta_data$Sample_Code %in% colnames(ms2_avg_data$ms1_data)))
+  metadata <- mpactr::get_meta_data(data)
+  expect_true(all(metadata$Sample_Code %in% ms2_avg_data$samples))
+  expect_true(all(metadata$Sample_Code %in% colnames(ms2_avg_data$ms1_data)))
 })
 
 test_that("convert to group averages fail if given wrong parameters", {
   data <-
     import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"),
-                    meta_data = test_path("exttestdata", "meta_data.csv"),
+                    metadata = test_path("exttestdata", "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",
@@ -74,8 +74,8 @@ test_that("get_triplicate_averages returns a dataframe with all
             data <-
               import_all_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
-                              meta_data = test_path("exttestdata",
-                                                    "meta_data.csv"),
+                              metadata = test_path("exttestdata",
+                                                    "metadata.csv"),
                               format = "Progenesis")
 
             mgf_files <- test_path("exttestdata",
@@ -83,9 +83,9 @@ test_that("get_triplicate_averages returns a dataframe with all
             ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
             triplicate_data <-
               as.data.frame(get_triplicate_averages(data, ms2_data))
-            meta_data <- get_meta_data(data)
+            metadata <- mpactr::get_meta_data(data)
             expect_true(all(rownames(triplicate_data)
-                            == unique(meta_data$Sample_Code)))
+                            == unique(metadata$Sample_Code)))
             expect_true(ncol(triplicate_data) == nrow(get_peak_table(data)))
           })
 
@@ -93,8 +93,8 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
   data <-
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),
-                    meta_data = test_path("exttestdata",
-                                          "meta_data.csv"),
+                    metadata = test_path("exttestdata",
+                                          "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",
@@ -154,8 +154,8 @@ test_that("generate_a_combined_table will fail if sent the wrong parameters", {
   data <-
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),
-                    meta_data = test_path("exttestdata",
-                                          "meta_data.csv"),
+                    metadata = test_path("exttestdata",
+                                          "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",

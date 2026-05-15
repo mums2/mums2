@@ -9,7 +9,7 @@
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -69,7 +69,7 @@ create_community_matrix <- function(cluster_object) {
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -98,7 +98,7 @@ convert_to_group_averages <- function(matched_data, mpactr_object) {
                 "`import_all_data()` function"))
   }
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
-  meta_data <- get_meta_data(mpactr_object)
+  meta_data <- mpactr::get_meta_data(mpactr_object)
   injection_samples <- meta_data$Injection
   modified_peak_table <-
     matched_data$ms1_data[, which(!(colnames(matched_data$ms1_data)
@@ -126,7 +126,7 @@ create_count_table <- function(ms2_match_data) {
 # displays the average of the triplicates
 get_triplicate_averages <- function(mpactr_data, matched_data) {
   peak <- get_peak_table(mpactr_data)
-  meta_data <- get_meta_data(mpactr_data)
+  meta_data <- mpactr::get_meta_data(mpactr_data)
   sample_codes <- unique(meta_data$Sample_Code)
   triplicate_averages <- matrix(0, nrow(peak), 0)
   rownames(triplicate_averages) <- peak$Compound
@@ -157,7 +157,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
 #'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>

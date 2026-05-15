@@ -1,8 +1,8 @@
 test_that("We can add ms2 data to our massdataset with mgf files", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
-                          meta_data = test_path("exttestdata",
-                                                "meta_data.csv"),
+                          metadata = test_path("exttestdata",
+                                                "metadata.csv"),
                           format = "Progenesis")
 
   data_filtered <- data |>
@@ -21,8 +21,8 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
 test_that("We can add ms2 data to our massdataset with mzml files", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
-                          meta_data = test_path("exttestdata",
-                                                "meta_data.csv"),
+                          metadata = test_path("exttestdata",
+                                                "metadata.csv"),
                           format = "Progenesis")
 
   data_filtered <- data |>
@@ -41,8 +41,8 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
 test_that("ms2_ms2_compare fails if given incorrect parameters", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
-                          meta_data = test_path("exttestdata",
-                                                "meta_data.csv"),
+                          metadata = test_path("exttestdata",
+                                                "metadata.csv"),
                           format = "Progenesis")
 
   data_filtered <- data |>
