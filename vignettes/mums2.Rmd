@@ -248,10 +248,9 @@ that would take a very long time to run. In our experience such a large value do
 
 Using your community data, you can calculate alpha diversity metrics. Alpha diversity represents richness or diversity in each sample separately. Within `{mums2}` you can quantify diversity using Simpson’s and Shannon’s diversity indices.
 
-```{r  alpha_summary, R.options=list(max.print=10)}
-alpha <- alpha_summary(
-  community_object = community_w_omus, size = 4000, threshold = 100,
-  diversity_index = "shannon")
+```{r  alpha_summary, R.options=list(max.print=15)}
+alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
+              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE)
 ```
 
 ### Beta Diversity
@@ -388,11 +387,7 @@ dist_shared(community_object_avg, 4000, 100, "jaccard") |>
 A box and whisker plot can also be used to depict the variation of the data. We can take advantage of this to look at the distributions inside of our generate beta and alpha diversity data. Below is a box plot using alpha diversity.
 ```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 
-alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson") |>
-  t() |> 
-  as.data.frame()
-alpha$name <- rownames(alpha)
-alpha$group <- ""
+alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson")
 
 # Convert Sample_Codes into Biological Groups
 metadata <- mpactr::get_meta_data(filtered_data)
@@ -401,9 +396,9 @@ alpha$group <- sapply(alpha$name, function(x) {
 }, USE.NAMES = FALSE)
 
 # Plot 
-colnames(alpha) <- c("distances", "sample_code", "group")
+colnames(alpha) <- c("sample_code", "diversity", "group")
 alpha |>
-  ggplot(aes(x = sample_code, y = distances, group = group)) +
+  ggplot(aes(x = sample_code, y = diversity, group = group)) +
   geom_point()  + 
   geom_boxplot(alpha = 0.3) +
   facet_wrap(~group, scales = "free_x")

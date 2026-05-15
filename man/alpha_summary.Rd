@@ -8,10 +8,10 @@ alpha_summary(
   community_object,
   size,
   threshold,
-  diversity_index = "shannon",
+  diversity_index = c("shannon", "simpson"),
   subsample = TRUE,
   number_of_threads = detectCores(),
-  iterations = 1000,
+  iterations = 100,
   seed = 123
 )
 }
@@ -25,7 +25,8 @@ the \code{create_community_object()} function.}
 species to reach before it is included in the rarefaction sum.}
 
 \item{diversity_index}{the diversity index you wish to calculate diversity,
-the two options are shannon or simpson.}
+the options are shannon, simpson, or richness. You may also compute many indexes
+at the same time using a vector (ie. c("shannon", "simpson")).}
 
 \item{subsample}{if true, we will rarefy the data before we
 run the diversity calculations. Default is TRUE.}
@@ -73,5 +74,7 @@ cluster_results <- cluster_data(distance_df = dist,
 
 community_object <- create_community_matrix_object(cluster_results)
 
-alpha_summary(community_object, 400, 100, "shannon", TRUE, iterations = 1)
+alpha_summary(community_object = community_object, size = 400,
+              threshold = 100, diversity_index = c("shannon", "simpson", "richness"),
+              subsample = TRUE, iterations = 1)
 }

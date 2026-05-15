@@ -56,6 +56,10 @@ molecularMass(molecularMass) {
     oxygen = chemicalAtomAmounts[3];
     phosphorus = chemicalAtomAmounts[4];
     sulfur = chemicalAtomAmounts[5];
+    heteroToCarbonRatio = 0;
+    if (carbon != 0)
+        heteroToCarbonRatio =
+            (static_cast<double>(nitrogen + oxygen + phosphorus + sulfur)) / static_cast<double>(carbon);
 }
 
 
@@ -84,18 +88,18 @@ std::string MolecularFormula::GetMolecularFormula() const {
     return formula;
 }
 
-std::string MolecularFormula::operator-(const MolecularFormula &other) const {
-    std::string formula;
-    for (const auto& element : chemicalAtomNamesOrder) {
-        const int8_t index = chemicalAtomsIndexTest[static_cast<int>(element)];
-        const int atoms = std::abs(chemicalAtomAmounts[index] -
-            other.chemicalAtomAmounts[index]);
-        if (atoms <= 0) continue;
-        formula += element;
-        if (atoms == 1) continue;
-        formula += std::to_string(atoms);
-    }
-    return formula;
+
+std::vector<int> MolecularFormula::operator-(const MolecularFormula &other) const {
+    std::vector<int> results(chemicalAtomNamesOrder.size());
+    // C H N O P S
+    //{'C', 'H', 'N', 'O', 'P', 'S'};
+    results[0] = std::abs(carbon - other.carbon);
+    results[1] = std::abs(hydrogen - other.hydrogen);
+    results[2] = std::abs(nitrogen - other.nitrogen);
+    results[3] = std::abs(oxygen - other.oxygen);
+    results[4] = std::abs(phosphorus - other.phosphorus);
+    results[5] = std::abs(sulfur - other.sulfur);
+    return results;
 }
 
 bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormulaCandidate) const {
@@ -113,4 +117,8 @@ bool MolecularFormula::CheckIfOtherIsSubFormula(const MolecularFormula &subFormu
 
 double MolecularFormula::GetMass() const {
     return molecularMass;
+}
+
+double MolecularFormula::GetHeteroToCarbonRatio() const {
+    return heteroToCarbonRatio;
 }

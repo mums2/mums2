@@ -16,7 +16,6 @@
 #include "Math/ParallelRandomNumberSitmo.h"
 #include "Rarefy/Rarefaction.h"
 
-
 CppMatrix CalculateDiversity(const CppMatrix& abundances, const std::string& diversityIndex) {
     std::string index = diversityIndex;
     std::transform(index.begin(), index.end(), index.begin(), tolower);
@@ -75,6 +74,27 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     return resultantMatrix;
 }
 
+
+CppMatrix RarefactionCalculationParallelized2(const CommunityMatrix& communityMatrix,
+    ParallelRandomNumberSitmo& rngEngine, const int rows, const int columns, const uint64_t size,
+    const uint64_t threshold) {
+    const std::vector<std::vector<uint64_t>>& abundanceRanges = communityMatrix.GetAbundanceRanges();
+    const std::vector<std::vector<uint64_t>>& communityAbundances = communityMatrix.GetCommunityAbundances();
+    const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityMatrix.GetColumnEligibleIndexes();
+    const std::vector<uint64_t>& sums = communityMatrix.GetSums();
+
+    std::vector<double> resultantMatrix(rows * columns);
+    for (int i = 0; i < rows; i++) {
+        const std::vector<uint64_t> data = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
+        abundanceRanges[i],rngEngine, size, sums[i], threshold);
+        size_t counter = 0;
+        for (int j = columns * i; j < columns * i + columns; j++) {
+            resultantMatrix[j] = static_cast<double>(data[counter++]);
+        }
+    }
+    return CppMatrix(resultantMatrix, rows, columns);
+}
+
 CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint64_t>>& communityAbundances,
     const std::vector<std::vector<uint64_t>>& eligibleIndexes,
     const std::vector<std::vector<uint64_t>>& abundanceRanges,
@@ -99,16 +119,14 @@ CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint6
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 // [[Rcpp::export]]
-Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::string& index,
+Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std::string& index,
     const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
-    const int iterations = 1000, const int seed = 123) {
+    const int iterations = 100, const int seed = 123) {
     CliProgressBar p;
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
     const size_t matrixRowSize = samples.size();
     int row = samples.size();
-    if (index == "simpson" || index == "shannon")
-        row = 1;
     CppMatrix diversityMatrix(std::vector<double>(row * samples.size(), 0), row, samples.size());
     const std::vector<std::vector<uint64_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
     const std::vector<std::vector<uint64_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
@@ -146,7 +164,72 @@ Rcpp::NumericMatrix MeasureDiversity(const SEXP& communityMatrix, const std::str
 
     Rcpp::NumericMatrix resultantMatrix = diversityMatrix.ToRcppMatrix();
     Rcpp::colnames(resultantMatrix) = samples;
-    if(diversityMatrix.GetRowSize() <= 1) return resultantMatrix; // alpha diversity
+    Rcpp::rownames(resultantMatrix) = samples;
+    return resultantMatrix;
+}
+
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppThread)]]
+// [[Rcpp::export]]
+Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std::vector<std::string>& indexes,
+    const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
+    const int iterations = 100, const int seed = 123) {
+
+    const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
+    const std::vector<std::vector<uint64_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
+    const std::vector<std::vector<uint64_t>>& communityAbundances = communityObject.get()->GetCommunityAbundances();
+    const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityObject.get()->GetColumnEligibleIndexes();
+    const std::vector<uint64_t>& sums = communityObject.get()->GetSums();
+    std::vector<ParallelRandomNumberSitmo> rngEngines(iterations);
+    for (int i = 0; i < iterations; ++i) {
+        rngEngines[i] = ParallelRandomNumberSitmo(seed + i);
+    }
+    const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
+    const size_t matrixRowSize = samples.size();
+    constexpr int row = 1;
+    const size_t indexesSize = indexes.size();
+    std::vector<CppMatrix> diversityMatrixes(indexesSize,
+        CppMatrix(std::vector<double>(matrixRowSize, 0), row, matrixRowSize));
+    std::mutex mutex;
+    int columnSize = communityObject.get()->GetColumn();
+    int currentProgress = 0;
+    const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
+    CliProgressBar p;
+    RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
+        &diversityMatrixes, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold,
+        &subsample, &indexes, &iterations, &indexesSize, &mutex, &p, &currentProgress](int i) {
+        CppMatrix rarefyMatrix;
+
+        if (subsample) {
+            rarefyMatrix = RarefactionCalculationParallelized(communityAbundances, eligibleIndexes,
+                 abundanceRanges, sums, rngEngines[i], matrixRowSize, columnSize, size, threshold);
+        }
+        std::vector<CppMatrix> diversityCppMatrixList(indexesSize);
+        for (size_t j = 0; j < indexesSize; j++) {
+            if (subsample)
+                diversityCppMatrixList[j] = CalculateDiversity(rarefyMatrix, indexes[j]);
+            else
+                diversityCppMatrixList[j] = CalculateDiversity(matrix, indexes[j]);
+        }
+        mutex.lock();
+        for (size_t j = 0; j < indexesSize; j++) {
+            diversityMatrixes[j] += diversityCppMatrixList[j];
+        }
+        p.update(static_cast<float>(currentProgress++)/static_cast<float>(iterations));
+        mutex.unlock();
+    }, numberOfThreads);
+    p.end_display();
+    CppMatrix initialMatrix = diversityMatrixes[0];
+    initialMatrix/=iterations;
+    Rcpp::NumericMatrix resultantMatrix = initialMatrix.ToRcppMatrix();
+    resultantMatrix = Rcpp::transpose(resultantMatrix);
+    for (size_t i = 1; i < indexesSize; i++) {
+        diversityMatrixes[i]/=iterations;
+        Rcpp::NumericMatrix currentMatrix = Rcpp::transpose(diversityMatrixes[i].ToRcppMatrix());
+        resultantMatrix = Rcpp::cbind(resultantMatrix, currentMatrix);
+    }
+    Rcpp::colnames(resultantMatrix) = Rcpp::wrap(indexes);
     Rcpp::rownames(resultantMatrix) = samples;
     return resultantMatrix;
 }
