@@ -111,12 +111,12 @@ convert_to_group_averages <- function(matched_data, mpactr_object) {
 # Helper function for creating count tables
 create_count_table <- function(ms2_match_data) {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
-  peak_table <- ms2_match_data$ms1_data[, c("Compound",
+  peak_table <- ms2_match_data$ms1_data[, c("compound",
                                             ms2_match_data$samples),
                                         with = FALSE]
 
-  samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
-  data.frame(Representative_Sequence = samples$Compound,
+  samples <- peak_table[which(peak_table$compound %in% ms2_matches_compounds), ]
+  data.frame(Representative_Sequence = samples$compound,
              total = rowSums(samples[, -1]),
              samples[, -1], check.names = FALSE)
 }
@@ -129,7 +129,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
   meta_data <- get_metadata(mpactr_data)
   sample_codes <- unique(meta_data$sample_code)
   triplicate_averages <- matrix(0, nrow(peak), 0)
-  rownames(triplicate_averages) <- peak$Compound
+  rownames(triplicate_averages) <- peak$compound
   for (sample in sample_codes) {
     means <-
       as.matrix(rowMeans(peak[, meta_data$injection
@@ -195,9 +195,9 @@ generate_a_combined_table <- function(matched_data,
   }
 
 
-  size <- length(matched_data$ms1_data$Compound)
+  size <- length(matched_data$ms1_data$compound)
   env <- new.env(hash = TRUE)
-  env$ms1_id <- matched_data$ms1_data$Compound
+  env$ms1_id <- matched_data$ms1_data$compound
   env$mz <- matched_data$ms1_data$mz
   retention_time_string <- "rt"
   if ("RTINMINUTES" %in% colnames(matched_data$ms1_data)) {
@@ -209,7 +209,7 @@ generate_a_combined_table <- function(matched_data,
   env$rt <- matched_data$ms1_data[[retention_time_string]]
   env$ms2_id <- rep("", size)
   collected_column_names <- c("ms1_id", "ms2_id", "mz", retention_time_string)
-  ms2_data_idx <- which(matched_data$ms1_data$Compound  %in%
+  ms2_data_idx <- which(matched_data$ms1_data$compound  %in%
                           matched_data$ms2_matches$ms1_compound_id)
   count <- 1
   for (i in ms2_data_idx) {

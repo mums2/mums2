@@ -27,7 +27,7 @@ test_that("test that we create a proper count table", {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
   peak_table <- ms2_match_data$ms1_data[, -c(2, 3, 4)]
   peak_table$cor <- NULL
-  samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
+  samples <- peak_table[which(peak_table$compound %in% ms2_matches_compounds), ]
   row_sums <- rowSums(samples[, -1])
   expect_true(all(names(count_table)[3:length(names(count_table))] %in%
                     names(peak_table[, -1])))

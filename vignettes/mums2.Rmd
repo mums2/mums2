@@ -39,7 +39,7 @@ meta_data is a csv that provides information about the samples. In order for you
 ```{r import_data}
 data <- import_all_data(
   peak_table = mums2::mums2_example("230112_botryllus_peaktable.csv"), 
-  meta_data = mums2::mums2_example("meta_data_boryillus.csv"), 
+  metadata = mums2::mums2_example("meta_data_boryillus.csv"), 
   format = "Progenesis")
 ```
 
@@ -134,7 +134,7 @@ Warning messages will be printed if no molecular formula is generated or there i
 
 data_small <- import_all_data(
   peak_table = mums2::mums2_example("botryllus_pt_small.csv"), 
-  meta_data = mums2::mums2_example("meta_data_boryillus.csv"), 
+  metadata = mums2::mums2_example("meta_data_boryillus.csv"), 
   format = "None") |> 
     filter_peak_table(filter_mispicked_ions_params()) |>
     filter_peak_table(filter_cv_params(cv_threshold = 0.05)) |>

@@ -66,7 +66,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
                 which(colnames(ms1_peak_table) == "RTINMINUTES"),
                 which(colnames(ms1_peak_table) == "RTINSECONDS"))
   rt1 <- ms1_peak_table[[rt_index]]
-  ms1_compounds <- ms1_peak_table$Compound
+  ms1_compounds <- ms1_peak_table$compound
   len <- length(ms1_compounds)
   result <- CompareMS2Ms1(mz2, mz1, rt2, rt1, mz_tolerance, rt_tolerance)
   matched_peaks <- length(which(result != -1))
