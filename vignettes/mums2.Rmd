@@ -32,6 +32,7 @@ Before we begin to analyze the data, we have to process it into a readable `data
 
 The `import_all_data()` function takes in two files one describing the peak data (i.e., peak_table) and the other describing the metadata (i.e., `metadata`) and converts them into an `mpactr` object. The `peak_table` argument takes a path to a file describing the peak table data. You can specify the format of the peak table data using the `format` argument: Metaboscape, Progenesis, and None. The value given to the `metadata` argument is the path to a CSV-formatted file that provides information about the samples. In order for your metadata to be valid, it needs the following columns: "injection", "sample_code", "biological_group". The values in the "injection" column should match the sample injection columns inside of the peak_table. "sample_code" is the ID of your technical replicates. Finally, "biological_group" is the ID of your biological replicate groups. If you need a deeper understanding of what format the objects given to the `peak_table` and `metadata` arguments should be in, take a look at mpactr's [getting started page](https://www.mums2.org/mpactr/articles/mpactr.html).
 
+
 ```{r import_data}
 data <- import_all_data(
   peak_table = mums2_example("boryillus_peaktable.csv"), 
@@ -245,9 +246,11 @@ that would take a very long time to run. In our experience such a large value do
 Using your community data, you can calculate alpha diversity metrics. Alpha diversity represents richness or diversity in each sample separately. Within `{mums2}` you can quantify diversity using Simpson’s and Shannon’s diversity indices.
 
 ```{r  alpha_summary, R.options=list(max.print=15)}
-alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
+alpha_summary(
+  community_object = community_w_omus, size = 40000, threshold = 200,
               diversity_index = c("simpson", "shannon", "richness"),
-              subsample = TRUE)
+              subsample = TRUE) |>
+  head()
 ```
 
 ### Beta Diversity
@@ -279,7 +282,6 @@ PCoA is a statistical technique used to show similarities between data. PCOA all
 pcoa <- cmdscale(bray_w_omus, k = 2, eig = T, add = T)
 
 variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
-
 colnames(pcoa$points) <- c("pcoa_1", "pcoa_2")
 
 as_tibble(pcoa$points, rownames = "sample") |>
@@ -322,7 +324,7 @@ simpleNetwork(
 
 ###  Using Group Averages
 
-Another feature included inside of `{mums2}` is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in technical/injection triplicate to account for instrument variability. Since we know all three injections are from the same vial, we can average all of these into one group. We can generate group averages by using the metadata file that was supplied when you imported your data based on "Sample_Code". We can accomplish this by using the `convert_to_group_averages()` function.
+Another feature included inside of `{mums2}` is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in technical/injection triplicate to account for instrument variability. Since we know all three injections are from the same vial, we can average all of these into one group. We can generate group averages by using the metadata file that was supplied when you imported your data based on "sample_code". We can accomplish this by using the `convert_to_group_averages()` function.
 
 Below, you can see a copy of the alpha and beta diversity functions we ran above. But this time, we are using group averages.
 
@@ -357,7 +359,7 @@ head(matched_data$samples)
 # Group Average
 head(matched_avg$samples)
 
-# The items in the Injection have been converted into the corresponding sample code.
+# The items in the injection have been converted into the corresponding sample code.
 get_metadata(filtered_data)[, c("injection", "sample_code")]
 ```
 
@@ -409,3 +411,4 @@ inner_join(alpha, metadata, by = c("samples" = "sample_code")) |>
   scale_y_continuous(limits = c(0, NA)) +
   theme_classic()
 ```
+

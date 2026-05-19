@@ -84,7 +84,7 @@ test_that("get_triplicate_averages returns a dataframe with all
             ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
             triplicate_data <-
               as.data.frame(get_triplicate_averages(data, ms2_data))
-            metadata <- mpactr::get_metadata(data)
+            metadata <- get_metadata(data)
             expect_true(all(rownames(triplicate_data)
                             == unique(metadata$Sample_Code)))
             expect_true(ncol(triplicate_data) == nrow(get_peak_table(data)))
