@@ -39,7 +39,7 @@ test_that("Ensure utf-8 data formatter messages properly", {
                               metadata = test_path("exttestdata",
                                                     "metadata.csv"),
                               format = "Progenesis")
-  
+
   expect_no_message(format_to_uft8_remove_commas(data))
 
   dat <- get_peak_table(data)

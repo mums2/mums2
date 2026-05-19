@@ -10,10 +10,10 @@ import_all_data(peak_table, metadata, format)
 \item{peak_table}{The file path to your feature table
 file.}
 
-\item{format}{The expected exported type of your peak table, can be
-one of "Progenesis", "None", "None".}
+\item{metadata}{The file path to your metadata file or \code{data.frame}.}
 
-\item{meta_data}{The file path to your meta_data file or \code{data.frame}.}
+\item{format}{The expected exported type of your peak table, can be
+one of "Progenesis", "Metaboscape", "None".}
 }
 \value{
 a \code{mpactr} object.
@@ -27,6 +27,6 @@ data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
                    metadata =
-                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   mums2::mums2_example("metadata_boryillus.csv"),
                    format = "None")
 }

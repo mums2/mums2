@@ -12,6 +12,7 @@ Tools that researchers can use to analyze untargeted metabolomics data generated
 Useful links:
 \itemize{
   \item \url{https://github.com/mums2/mums2}
+  \item \url{https://www.mums2.org/mums2}
   \item Report bugs at \url{https://github.com/mums2/mums2/issues}
 }
 

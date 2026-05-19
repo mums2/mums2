@@ -25,8 +25,8 @@ rt time in seconds or minutes. This modification happens in place
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
-                   meta_data =
-                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   metadata =
+                   mums2::mums2_example("metadata_boryillus.csv"),
                    format = "None")
 change_rt_to_seconds_or_minute(data, "minutes")
 }

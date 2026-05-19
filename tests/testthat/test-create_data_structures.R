@@ -46,9 +46,10 @@ test_that("We can convert a mass_data object to an averaged mass data object", {
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
   ms2_avg_data <- convert_to_group_averages(ms2_data, data)
-  metadata <- get_metadata(data)
-  expect_true(all(metadata$Sample_Code %in% ms2_avg_data$samples))
-  expect_true(all(metadata$Sample_Code %in% colnames(ms2_avg_data$ms1_data)))
+
+  metadata <- mpactr::get_metadata(data)
+  expect_true(all(metadata$sample_code %in% ms2_avg_data$samples))
+  expect_true(all(metadata$sample_code %in% colnames(ms2_avg_data$ms1_data)))
 })
 
 test_that("convert to group averages fail if given wrong parameters", {
