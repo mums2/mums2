@@ -42,3 +42,11 @@
 #' @useDynLib mums2, .registration = TRUE
 ## usethis namespace: end
 NULL
+
+#' @importFrom mpactr get_peak_table
+#' @export
+mpactr::get_peak_table
+
+#' @importFrom mpactr get_metadata
+#' @export
+mpactr::get_metadata

@@ -7,14 +7,6 @@ test_that("I can get all slots within the mass_data object", {
   expect_equal(dat$samples, get_samples(dat))
   expect_equal(dat$predicted_molecular_formulas,
                get_molecular_formula_predictions(dat))
-  
-  data <- import_all_data(peak_table = test_path("exttestdata",
-                                                 "peak_table.csv"),
-                          metadata = test_path("exttestdata",
-                                                "metadata.csv"),
-                          format = "Progenesis")
-  expect_equal(get_peak_table(data), get_peaks_table_mpactr(data))
-  expect_equal(get_metadata(data), get_metadata_mpactr(data))
 })
 
 test_that("Getter functions fail if not given the proper parameter", {
@@ -34,10 +26,5 @@ test_that("Getter functions fail if not given the proper parameter", {
                "mass_data must be generated from the")
   expect_error(get_molecular_formula_predictions(""),
                "mass_data must be generated from the")
-
-  expect_error(get_peaks_table_mpactr(""),
-               "mpactr object must be generated from the")
-  expect_error(get_metadata_mpactr(""),
-               "mpactr object must be generated from the")
 })
 
