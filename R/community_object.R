@@ -11,7 +11,7 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
@@ -95,7 +95,7 @@ create_community_matrix_object.mothur_cluster <- function(data) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
@@ -139,7 +139,7 @@ get_community_matrix <- function(community_object) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'

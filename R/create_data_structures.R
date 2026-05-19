@@ -8,7 +8,7 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
@@ -68,7 +68,7 @@ create_community_matrix <- function(cluster_object) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
@@ -98,13 +98,13 @@ convert_to_group_averages <- function(matched_data, mpactr_object) {
                 "`import_all_data()` function"))
   }
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
-  meta_data <- mpactr::get_meta_data(mpactr_object)
-  injection_samples <- meta_data$Injection
+  metadata <- mpactr::get_metadata(mpactr_object)
+  injection_samples <- metadata$Injection
   modified_peak_table <-
     matched_data$ms1_data[, which(!(colnames(matched_data$ms1_data)
                                     %in% injection_samples)), with = FALSE]
   matched_data$ms1_data <- cbind(modified_peak_table, trips)
-  matched_data$samples <- unique(meta_data$Sample_Code)
+  matched_data$samples <- unique(metadata$Sample_Code)
   matched_data
 }
 
@@ -126,14 +126,14 @@ create_count_table <- function(ms2_match_data) {
 # displays the average of the triplicates
 get_triplicate_averages <- function(mpactr_data, matched_data) {
   peak <- get_peak_table(mpactr_data)
-  meta_data <- mpactr::get_meta_data(mpactr_data)
-  sample_codes <- unique(meta_data$Sample_Code)
+  metadata <- mpactr::get_metadata(mpactr_data)
+  sample_codes <- unique(metadata$Sample_Code)
   triplicate_averages <- matrix(0, nrow(peak), 0)
   rownames(triplicate_averages) <- peak$Compound
   for (sample in sample_codes) {
     means <-
-      as.matrix(rowMeans(peak[, meta_data$Injection
-                              [which(meta_data$Sample_Code == sample)],
+      as.matrix(rowMeans(peak[, metadata$Injection
+                              [which(metadata$Sample_Code == sample)],
                               with = FALSE]))
     triplicate_averages <- cbind(triplicate_averages, means)
   }
@@ -156,7 +156,7 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'

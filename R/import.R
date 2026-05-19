@@ -17,7 +17,7 @@
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, metadata, format) {
   format_to_uft8_remove_commas(import_data(peak_table = peak_table,
-                                           meta_data = metadata,
+                                           # metadata = metadata,
                                            format = format))
 }
 

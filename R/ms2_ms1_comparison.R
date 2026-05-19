@@ -11,7 +11,7 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
+#'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
@@ -102,7 +102,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
   match_df$spectra_index <- as.numeric(match_df$spectra_index)
   result <- list(ms2_matches = match_df, peak_data = ms2_peaks,
                  ms1_data = ms1_peak_table,
-                 samples = mpactr::get_meta_data(mpactr_object)$Injection)
+                 samples = mpactr::get_metadata(mpactr_object)$Injection)
   class(result) <- "mass_data"
   result
 }

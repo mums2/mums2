@@ -286,7 +286,7 @@ variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
 colnames(pcoa$points) <- c("pcoa_1", "pcoa_2")
 
 as_tibble(pcoa$points, rownames = "sample") |>
-  inner_join(mpactr::get_meta_data(filtered_data), by = c("sample" = "Injection")) |>
+  inner_join(mpactr::get_metadata(filtered_data), by = c("sample" = "Injection")) |>
   ggplot(aes(x=pcoa_1, y = pcoa_2, color = Biological_Group)) +
     geom_point(size = 5.5) +
     labs(
@@ -355,7 +355,7 @@ You can also see how the samples in the matched object have been adjusted based 
   head(matched_avg$samples)
 
   # The items in the Injection have been converted into the corresponding sample code.
-  mpactr::get_meta_data(filtered_data)[, c("Injection", "Sample_Code")]
+  mpactr::get_metadata(filtered_data)[, c("Injection", "Sample_Code")]
 ```
 
 ### Combined data frames
@@ -390,7 +390,7 @@ A box and whisker plot can also be used to depict the variation of the data. We 
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson")
 
 # Convert Sample_Codes into Biological Groups
-metadata <- mpactr::get_meta_data(filtered_data)
+metadata <- mpactr::get_metadata(filtered_data)
 alpha$group <- sapply(alpha$name, function(x) {
    metadata$Biological_Group[[which(x == metadata$Sample_Code)[[1]]]]
 }, USE.NAMES = FALSE)
