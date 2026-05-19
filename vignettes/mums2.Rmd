@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 The `{mums2}` package is designed to provide researchers with tools to analyze untargeted metabolomics data generated using tandem mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data. To showcase how to do this, we will demonstrate the package using a previously published dataset that analyzed the metabolome of [*Botryllus schlosseri*](https://doi.org/10.1128/msystems.00793-25).
 
-```{r setup}
+```{r setup, message = FALSE, warning = FALSE}
 library(mums2)
 library(tidyverse)
 library(networkD3)
@@ -110,13 +110,13 @@ matched_data <- ms2_ms1_compare(
   ms2_files = mums2_example("botryllus_v2.gnps.mgf"),
   mpactr_object = filtered_data, mz_tolerance = 5, rt_tolerance = 6)
 
-head(matched_data$ms2_matches)
+head(get_ms2_matches(matched_data))
 
-head(matched_data$ms1_data, 1)
+head(get_ms1_data(matched_data))
 
-matched_data$peak_data[[1]]
+get_ms2_peaks_data(matched_data)[1]
 
-matched_data$samples
+get_samples(matched_data)
 ```
 
 ## Annotating data
@@ -146,7 +146,7 @@ matched_data_small <- ms2_ms1_compare(
 matched_data_small <- compute_molecular_formulas(
   mass_data = matched_data_small, parent_ppm = 3)
 
-matched_data_small$predicted_molecular_formulas
+get_molecular_formula_predictions(matched_data_small)
 ```
 
 ### Annotations
@@ -354,10 +354,10 @@ head(get_community_matrix(community_object = community_object_avg), 3)
 You can also see how the samples in the matched object have been adjusted based on the information supplied in the metadata file.
 ```{r samples}
 # Normal
-head(matched_data$samples)
+head(get_samples(matched_data))
 
 # Group Average
-head(matched_avg$samples)
+head(get_samples(matched_avg))
 
 # The items in the injection have been converted into the corresponding sample code.
 get_metadata(filtered_data)[, c("injection", "sample_code")]
