@@ -34,7 +34,7 @@ Before we begin to analyze your data, we have to process it into a readable `dat
 
 The `import_all_data()` function takes in a peak_table and meta_data tables as input and converts them into an `mpactr` object (this is a wrapper for `mpactr::import_data()`). The format parameter accepts three different formats: Metaboscape, Progenesis, and None. You can read up more about each of the formats here(`mpactr::import_data()`). If you need a deeper understanding of what format the peak_table and meta_data files should be in, take a look at mpactr's [getting started page](https://www.mums2.org/mpactr/articles/mpactr.html).
 
-meta_data is a csv that provides information about the samples. In order for your meta_data to be valid, it needs the following columns: “Injection”, “Sample_Code”, ”Biological_Group”. The values in the “Injection” column should match the sample injection columns inside of the peak_table. “Sample_Code” is the ID of your technical replicates. Finally, “Biological_Group” is the ID of your biological replicate groups (you can learn more about the meta_data file format here `mpactr::import_data()`).
+meta_data is a csv that provides information about the samples. In order for your meta_data to be valid, it needs the following columns: “injection”, “sample_code”, ”biological_group”. The values in the “injection” column should match the sample injection columns inside of the peak_table. “sample_code” is the ID of your technical replicates. Finally, “biological_group” is the ID of your biological replicate groups (you can learn more about the meta_data file format here `mpactr::import_data()`).
 
 ```{r import_data}
 data <- import_all_data(
@@ -54,7 +54,7 @@ read.csv(mums2::mums2_example("230112_botryllus_peaktable.csv"), check.names = F
 
 #### Metadata
 
-The expected format for metadata is below. The metadata file needs to contain at minimum columns for “Injection”, “Sample_Code”, and ”Biological_Group”.
+The expected format for metadata is below. The metadata file needs to contain at minimum columns for “injection”, “sample_code”, and ”biological_group”.
 ```{r metadata, R.options=list(max.print=40)}
 read.csv(mums2::mums2_example("meta_data_boryillus.csv"), check.names = FALSE)
 ```
@@ -239,8 +239,8 @@ The vegan package uses an object called a “community matrix.” A community ma
 Using your created community object, you can compute alpha diversity. Alpha diversity represents diversity (or richness) on a local scale. In our case, it represents the diversity inside of a single sample. You can determine alpha diversity in this package using two different methods: Simpson’s and Shannon’s diversity. Simpson’s diversity represents the diversity on a scale of zero to one, zero meaning no diversity and one meaning maximum diversity. Shannon’s diversity is not bound by zero or one; essentially, the higher the value, the more diversity there is in a single sample.
 
 ```{r  alpha_summary, R.options=list(max.print=15)}
-alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
-              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE)
+head(alpha_summary(community_object = community_w_omus, size = 4000, threshold = 10,
+              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE))
 ```
 
 ### Beta Diversity
@@ -277,10 +277,10 @@ variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
 names(pcoa_points) <- paste0("PCOA", seq(1:2))
 pcoa_points$Samples <- rownames(pcoa_points)
 
-meta_data <- get_meta_data(filtered_data)
+meta_data <- get_metadata(filtered_data)
 for(i in 1:nrow(pcoa_points)) {
-  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
-  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[idx]]
+  idx <- which(pcoa_points$Samples[[i]] == meta_data$injection)
+  pcoa_points$Samples[[i]] <- meta_data$biological_group[[idx]]
 }
 
 pcoa_points |>
@@ -313,7 +313,7 @@ simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRU
 
 
 ###  Using Group Averages
-Another feature included inside of mums2 is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in technical/injection triplicate to account for instrument variability. Since we know all three injections are from the same vial, we can average all of these into one group. We can generate group averages by using the metadata file that was supplied when you imported your data based on “Sample_Code”. We can accomplish this by using the `convert_to_group_averages()` function.
+Another feature included inside of mums2 is the ability to run your analysis using group averages. Some researchers conduct mass spectrometry experiments by running samples in technical/injection triplicate to account for instrument variability. Since we know all three injections are from the same vial, we can average all of these into one group. We can generate group averages by using the metadata file that was supplied when you imported your data based on “sample_code”. We can accomplish this by using the `convert_to_group_averages()` function.
 
 Below, you can see a copy of the alpha and beta diversity functions we ran above. But this time, we are using group averages.
 
@@ -342,8 +342,8 @@ You can also see how the samples in the matched object have been adjusted based 
   # Group Average
   head(matched_avg$samples)
 
-  # The items in the Injection have been converted into the corresponding sample code.
-  get_meta_data(filtered_data)[, c("Injection", "Sample_Code")]
+  # The items in the injection have been converted into the corresponding sample code.
+  get_metadata(filtered_data)[, c("injection", "sample_code")]
 ```
 
 ### Combined data frames
@@ -377,10 +377,10 @@ A box and whisker plot can also be used to depict the variation of the data. We 
 
 alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson")
 
-# Convert Sample_Codes into Biological Groups
-meta_data <- get_meta_data(filtered_data)
+# Convert sample_codes into Biological Groups
+meta_data <- get_metadata(filtered_data)
 alpha$group <- sapply(alpha$samples, function(x) {
-   meta_data$Biological_Group[[which(x == meta_data$Sample_Code)[[1]]]]
+   meta_data$biological_group[[which(x == meta_data$sample_code)[[1]]]]
 }, USE.NAMES = FALSE)
 
 # Plot 
