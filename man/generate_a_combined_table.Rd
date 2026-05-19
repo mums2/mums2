@@ -32,7 +32,7 @@ the data will be returned in long format.
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
-                   meta_data =
+                   metadata =
                    mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 

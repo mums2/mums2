@@ -20,44 +20,44 @@ test_that("Ensure we can import data properly", {
 test_that("Ensure data is properly converted to utf-8", {
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
-                              meta_data = test_path("exttestdata",
+                              metadata = test_path("exttestdata",
                                                     "metadata.csv"),
                               format = "Progenesis")
   dat <- get_peak_table(data)
   corrupted_feature_name <- "779_[Dâ€?Asp3,Dha7]MCâ€?FR_1000.50475 Da 187.19 s"
-  dat$Compound[[1]] <-  corrupted_feature_name
+  dat$compound[[1]] <-  corrupted_feature_name
   data$mpactr_data$set_peak_table(dat)
   data <- format_to_uft8_remove_commas(data)
   fixed_dat <- get_peak_table(data)
-  fixed_feature <- fixed_dat$Compound[[1]]
+  fixed_feature <- fixed_dat$compound[[1]]
   expect_true(fixed_feature != corrupted_feature_name)
 })
 
 test_that("Ensure utf-8 data formatter messages properly", {
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
-                              meta_data = test_path("exttestdata",
-                                                    "meta_data.csv"),
+                              metadata = test_path("exttestdata",
+                                                    "metadata.csv"),
                               format = "Progenesis")
 
   expect_no_message(format_to_uft8_remove_commas(data))
 
   dat <- get_peak_table(data)
   corrupted_feature_name <- "779_[Dâ€?Asp3.Dha7]MCâ€?FR_1000.50475 Da 187.19 s"
-  dat$Compound[[1]] <-  corrupted_feature_name
+  dat$compound[[1]] <-  corrupted_feature_name
   data$mpactr_data$set_peak_table(dat)
   expect_message(format_to_uft8_remove_commas(data),
   "Converted compound names to UTF-8.")
 
    data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
-                              meta_data = test_path("exttestdata",
-                                                    "meta_data.csv"),
+                              metadata = test_path("exttestdata",
+                                                    "metadata.csv"),
                               format = "Progenesis")
 
   dat <- get_peak_table(data)
   corrupted_feature_name <- "FR_1000,50475, Da, 187.19 s"
-  dat$Compound[[1]] <-  corrupted_feature_name
+  dat$compound[[1]] <-  corrupted_feature_name
   data$mpactr_data$set_peak_table(dat)
   expect_message(format_to_uft8_remove_commas(data),
   "Converted all commas to periods in compound names.")

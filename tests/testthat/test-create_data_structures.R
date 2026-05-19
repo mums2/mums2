@@ -27,7 +27,7 @@ test_that("test that we create a proper count table", {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
   peak_table <- ms2_match_data$ms1_data[, -c(2, 3, 4)]
   peak_table$cor <- NULL
-  samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
+  samples <- peak_table[which(peak_table$compound %in% ms2_matches_compounds), ]
   row_sums <- rowSums(samples[, -1])
   expect_true(all(names(count_table)[3:length(names(count_table))] %in%
                     names(peak_table[, -1])))
@@ -46,9 +46,10 @@ test_that("We can convert a mass_data object to an averaged mass data object", {
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
   ms2_data <- ms2_ms1_compare(mgf_files, data, 2, 6)
   ms2_avg_data <- convert_to_group_averages(ms2_data, data)
+
   metadata <- mpactr::get_metadata(data)
-  expect_true(all(metadata$Sample_Code %in% ms2_avg_data$samples))
-  expect_true(all(metadata$Sample_Code %in% colnames(ms2_avg_data$ms1_data)))
+  expect_true(all(metadata$sample_code %in% ms2_avg_data$samples))
+  expect_true(all(metadata$sample_code %in% colnames(ms2_avg_data$ms1_data)))
 })
 
 test_that("convert to group averages fail if given wrong parameters", {

@@ -17,7 +17,7 @@
 #' @returns a `mpactr` object.
 import_all_data <- function(peak_table, metadata, format) {
   format_to_uft8_remove_commas(import_data(peak_table = peak_table,
-                                           # metadata = metadata,
+                                           metadata = metadata,
                                            format = format))
 }
 
@@ -81,15 +81,15 @@ change_rt_to_seconds_or_minute <- function(mpactr_object,
 format_to_uft8_remove_commas <- function(mpactr_object) {
   peak_table <- get_peak_table(mpactr_object)
   # Converts non-utf8 data to utf8 data
-  current_compounds <- peak_table$Compound
-  peak_table$Compound <- iconv(peak_table$Compound, from = "latin1", "UTF-8")
-  if(!all(peak_table$Compound == current_compounds)) {
+  current_compounds <- peak_table$compound
+  peak_table$compound <- iconv(peak_table$compound, from = "latin1", "UTF-8")
+  if(!all(peak_table$compound == current_compounds)) {
     message("Converted compound names to UTF-8.")
-    current_compounds <- peak_table$Compound
+    current_compounds <- peak_table$compound
   }
 
-  peak_table$Compound <- gsub(",", ".", peak_table$Compound)
-  if(!all(peak_table$Compound == current_compounds)) {
+  peak_table$compound <- gsub(",", ".", peak_table$compound)
+  if(!all(peak_table$compound == current_compounds)) {
     message("Converted all commas to periods in compound names.")
   }
   mpactr_object$mpactr_data$set_peak_table(peak_table)

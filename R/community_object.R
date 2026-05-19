@@ -52,7 +52,7 @@ create_community_matrix_object <- function(data) {
 create_community_matrix_object.mass_data <- function(data) {
   samples <- data$samples
   ms2_matches <-  data$ms2_matches$ms1_compound_id
-  filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches),
+  filtered_data <- data$ms1_data[which(data$ms1_data$compound %in% ms2_matches),
   ][, samples, with = FALSE]
   matrix <- as.matrix(t(filtered_data))
   rownames(matrix) <- samples
