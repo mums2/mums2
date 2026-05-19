@@ -20,11 +20,8 @@ The `{mums2}` package is designed to provide researchers with tools to analyze u
 
 ```{r setup}
 library(mums2)
-#library(mpactr)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 library(networkD3)
-#library(reshape2)
 ```
 
 ## Process data
@@ -37,8 +34,8 @@ The `import_all_data()` function takes in two files one describing the peak data
 
 ```{r import_data}
 data <- import_all_data(
-  peak_table = mums2::mums2_example("boryillus_peaktable.csv"), 
-  metadata = mums2::mums2_example("boryillus_metadata.csv"), 
+  peak_table = mums2_example("boryillus_peaktable.csv"), 
+  metadata = mums2_example("boryillus_metadata.csv"), 
   format = "Progenesis")
 ```
 
@@ -48,19 +45,19 @@ data <- import_all_data(
 Below is the expected format for a Progenesis peak table. It contains samples as columns and features as rows. The feature intensities are expected to be un-normalized. 
 
 ```{r peak_table, R.options=list(max.print=10)}
-read.csv(mums2::mums2_example("boryillus_peaktable.csv"), check.names = FALSE)
+read_csv(mums2_example("boryillus_peaktable.csv"), skip = 2)
 ```
 
 #### Metadata
 
 The expected format for metadata is below. The metadata file needs to contain at minimum columns for "injection", "sample_code", and "biological_group".
 ```{r metadata, R.options=list(max.print=10)}
-read.csv(mums2::mums2_example("boryillus_metadata.csv"), check.names = FALSE)
+read_csv(mums2_example("boryillus_metadata.csv"))
 ```
 
 ### Filter
 
-After importing the data, you can use functions from mpactR to filter the data. There are four different filters in the mpactR package: `mpactr::filter_mispicked_ions()`, `mpactr::filter_group()`, `mpactr::filter_cv()`, and `mpactr::filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). Although data filtering is not required, it will help reduce noise and correct peak selection errors, which will also speed up the analysis.
+After importing the data, you can use functions from mpactR to filter the data. There are four different filters in the mpactR package: `filter_mispicked_ions()`, `filter_group()`, `filter_cv()`, and `filter_insource_ions()` (You can find more information on [mpactR's](https://www.mums2.org/mpactr/) website). Although data filtering is not required, it will help reduce noise and correct peak selection errors, which will also speed up the analysis.
 
 ```{r filter_data,  R.options=list(max.print=10)}
 filtered_data <- data |>
@@ -78,7 +75,7 @@ filtered_data
 Sometimes an MS2 file will report the retention time in minutes but the MS1 file will report in seconds. This mismatch will cause incorrect peak matching between MS1 and MS2 data. The `change_rt_to_seconds_or_minute()` function allows users to synthesize data with different units. Be aware that this function modifies the `{mpactr}` object in place. Therefore, you will need to call the function again to revert the units. Below will display a vector of retention time.
 
 ```{r show_rt_of_filtered_data, R.options=list(max.print=5)}
-mpactr::get_peak_table(filtered_data)$rt
+get_peak_table(filtered_data)$rt
 ```
 
 ```{r convert_rt_to_minutes_or_seconds, R.options=list(max.print=5)}
@@ -130,10 +127,9 @@ Once you have preprocessed your data, we can start to generate additional inform
 `{mums2}` can generate de novo molecular formula predictions using fragmentation trees. The `compute_molecular_formulas()` function uses MS2 data to generate the most explained molecular formula and return it as a result (for more information: [Fragmentation Trees](https://doi.org/10.1093/bioinformatics/btn270)). The most explained molecular formula simply means the molecular formula that is explained by the most peaks in the spectra. In order to create a fragmentation tree, we generate candidate formulas that comprise of every possible molecular formula the parent mass can create (using only CHNOPS). We then look at every mass and intensity pair inside of the spectra and compute every molecular formula. We then create a one directional graph based on all the molecular formulas using. A molecular formula will point to another if it is a sub-formula of another formula (meaning it contains at most as many atoms as the parent formula). Finally, we can compute a score for each one of the nodes using methods like Ring Double Bond equivalents, compute molecular formula score, etc. It is possible that the function is unable to compute a molecular formula. In these cases, a value of `NA` is returned. Warning messages will be printed if no molecular formula is generated or there is only one possible molecular formula. Due to the time this function will take to run, we are going to use a small dataset.
 
 ```{r  chemical_formula_prediction, R.options=list(max.print=10)}
-
 data_small <- import_all_data(
-  peak_table = mums2::mums2_example("botryllus_pt_small.csv"), 
-  metadata = mums2::mums2_example("boryillus_metadata.csv"), 
+  peak_table = mums2_example("botryllus_pt_small.csv"), 
+  metadata = mums2_example("boryillus_metadata.csv"), 
   format = "None") |> 
     filter_peak_table(filter_mispicked_ions_params()) |>
     filter_peak_table(filter_cv_params(cv_threshold = 0.05)) |>
@@ -154,7 +150,7 @@ matched_data_small$predicted_molecular_formulas
 
 ### Annotations
 
-Beyond predicting the molecular formula, we can also use the `annotate_ms2()` function to annotate the data in the `matched_ms2_ms1` object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In the `{mums2}` package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or the [GNPS algorithm](https://doi.org/10.1038/nbt.3597). While GNPS uses a modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. The chosen method can be used by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods, we can effectively generate a collection of annotations based on the reference databases. We have a small massbank database provided from [MSDial on XX/XX/XXXX](https://systemsomicslab.github.io/compms/msdial/main.html#MSP) that is preloaded in the package and can be used to annotate data.
+Beyond predicting the molecular formula, we can also use the `annotate_ms2()` function to annotate the data in the `matched_ms2_ms1` object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In the `{mums2}` package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or the [GNPS algorithm](https://doi.org/10.1038/nbt.3597). While GNPS uses a modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. The chosen method can be used by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods, we can effectively generate a collection of annotations based on the reference databases. We have a small massbank database provided from [MSDial on 05/12/2026](https://systemsomicslab.github.io/compms/msdial/main.html#MSP) that is preloaded in the package and can be used to annotate data.
 
 ```{r annotations}
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
@@ -204,7 +200,7 @@ cluster_results
 Now that the metabolomic features have been clustered into OMUs, it is possible to use the abundance of each OMU across samples to perform ecological analyses using the `create_community_matrix_object()` function followed by the `get_community_matrix()` function.
 
 ```{r  community_object, R.options=list(max.print=10)}
-community_w_omus <- create_community_matrix_object(data = cluster_results)
+community_w_omus <- create_community_matrix_object(cluster_results)
 get_community_matrix(community_w_omus)
 ```
 
@@ -250,7 +246,8 @@ Using your community data, you can calculate alpha diversity metrics. Alpha dive
 
 ```{r  alpha_summary, R.options=list(max.print=15)}
 alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
-              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE)
+              diversity_index = c("simpson", "shannon", "richness"),
+              subsample = TRUE)
 ```
 
 ### Beta Diversity
@@ -258,12 +255,12 @@ alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
 Beta diversity represents the dissimilarity between different samples. Beta diversity values can be calculated using community structure metrics (i.e., Bray-Curtis, Theta-YC, Moristia-Horn) or community membership metrics (i.e., Jaccard, Hamming, or Sorenson). With the resulting distance values further analyses are possible. Below are examples use Bray-Curtis distances using unclustered metabolites or OMUs. 
 
 ```{r  dist_shared, R.options=list(max.print=10)}
-bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
-                           threshold = 100, diversity_index = "bray")
+bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 40000,
+                           threshold = 200, diversity_index = "bray")
 bray_no_omus
 
-bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
-                          threshold = 100, diversity_index = "bray")
+bray_w_omus <- dist_shared(community_object = community_w_omus, size = 40000,
+                          threshold = 200, diversity_index = "bray")
 bray_w_omus
 ```
 
@@ -286,8 +283,8 @@ variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
 colnames(pcoa$points) <- c("pcoa_1", "pcoa_2")
 
 as_tibble(pcoa$points, rownames = "sample") |>
-  inner_join(mpactr::get_metadata(filtered_data), by = c("sample" = "Injection")) |>
-  ggplot(aes(x=pcoa_1, y = pcoa_2, color = Biological_Group)) +
+  inner_join(get_metadata(filtered_data), by = c("sample" = "injection")) |>
+  ggplot(aes(x=pcoa_1, y = pcoa_2, color = biological_group)) +
     geom_point(size = 5.5) +
     labs(
       x = paste0("PCoA 1 (", variance[1], "%)"),
@@ -330,77 +327,85 @@ Another feature included inside of `{mums2}` is the ability to run your analysis
 Below, you can see a copy of the alpha and beta diversity functions we ran above. But this time, we are using group averages.
 
 ```{r group_average}
-  matched_avg <- convert_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
-  dist_avg <- dist_ms2(
-    data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
-    score_params = modified_cosine_params(0.5), min_peaks = 0)
+  matched_avg <- convert_to_group_averages(
+  matched_data = matched_data, mpactr_object = filtered_data)
 
-  cluster_results_avg <- cluster_data(
-    distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
-    cluster_method = "opticlust")
+dist_avg <- dist_ms2(
+  data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
+  score_params = modified_cosine_params(0.5), min_peaks = 0)
 
-  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.6, chemical_min_score = 0, cluster_data = cluster_results_avg)
+cluster_results_avg <- cluster_data(
+  distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
+  cluster_method = "opticlust")
 
-  community_object_avg <- create_community_matrix_object(data = cluster_results_avg)
-  head(get_community_matrix(community_object = community_object_avg), 3)
+annotations_avg <- annotate_ms2(
+  mass_data = matched_avg,
+  reference = reference_db, scoring_params = modified_cosine_params(0.5), 
+  ppm = 1000, min_score = 0.6, chemical_min_score = 0,
+  cluster_data = cluster_results_avg)
+
+community_object_avg <- create_community_matrix_object(
+  data = cluster_results_avg)
+head(get_community_matrix(community_object = community_object_avg), 3)
 ```
 
 You can also see how the samples in the matched object have been adjusted based on the information supplied in the metadata file.
 ```{r samples}
-  # Normal
-  head(matched_data$samples)
+# Normal
+head(matched_data$samples)
 
-  # Group Average
-  head(matched_avg$samples)
+# Group Average
+head(matched_avg$samples)
 
-  # The items in the Injection have been converted into the corresponding sample code.
-  mpactr::get_metadata(filtered_data)[, c("Injection", "Sample_Code")]
+# The items in the Injection have been converted into the corresponding sample code.
+get_metadata(filtered_data)[, c("injection", "sample_code")]
 ```
 
 ### Combined data frames
 `{mums2}` also allows you to view your all of your generated data together using the `generate_a_combined_table()` function. This function will take your matched object (generated from `ms2_ms1_compare()`), your annotations object (generated from `annotate_ms2()`) and your cluster data (generated from `cluster_data()`) to generate a combined data.frame with all of the generated data. 
 ```{r combined_df}
-  # For normal data
-  head(generate_a_combined_table(matched_data = matched_data, annotations = annotations, cluster_data = cluster_results), 3)
+# For normal data
+generate_a_combined_table(
+  matched_data = matched_data, annotations = annotations, 
+  cluster_data = cluster_results) |> 
+  head(n = 3)
 
-  # For group averaged data
-  head(generate_a_combined_table(matched_data = matched_avg, annotations = annotations_avg, cluster_data = cluster_results_avg), 3)
-
-
+# For group averaged data
+generate_a_combined_table(
+  matched_data = matched_avg, annotations = annotations_avg,
+  cluster_data = cluster_results_avg) |>
+  head(n = 3)
 ```
 
 
 ### Heat map
 Another way to visualize diversity data is to use a heat map. We can easily see how correlated data is between samples with a heatmap.
 ```{r heat_map, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_shared(community_object_avg, 4000, 100, "jaccard") |> 
+dist_shared(community_object_avg, 40000, 200, "bray") |> 
   as.matrix() |>
-  reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
-  ggplot(aes(x = A, y = B, fill = distances)) +
+  as_tibble(rownames = "A") |>
+  pivot_longer(-A, names_to = "B", values_to = "distance") |>
+  ggplot(aes(x = A, y = B, fill = distance)) +
   geom_tile() +
-  scale_fill_gradient(low="#FF0000", high = "#FFFFFF")
+  scale_fill_gradient(low = "#FFFFFF", high="#FF0000") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    panel.background = element_blank()
+  )
 ```
 
 
 ### Box Plot
 A box and whisker plot can also be used to depict the variation of the data. We can take advantage of this to look at the distributions inside of our generate beta and alpha diversity data. Below is a box plot using alpha diversity.
 ```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+metadata <- get_metadata(filtered_data)
 
-alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson")
+alpha <- alpha_summary(community_object_avg, 40000, 200, "simpson")
 
-# Convert Sample_Codes into Biological Groups
-metadata <- mpactr::get_metadata(filtered_data)
-alpha$group <- sapply(alpha$name, function(x) {
-   metadata$Biological_Group[[which(x == metadata$Sample_Code)[[1]]]]
-}, USE.NAMES = FALSE)
-
-# Plot 
-colnames(alpha) <- c("sample_code", "diversity", "group")
-alpha |>
-  ggplot(aes(x = sample_code, y = diversity, group = group)) +
-  geom_point()  + 
-  geom_boxplot(alpha = 0.3) +
-  facet_wrap(~group, scales = "free_x")
-
+inner_join(alpha, metadata, by = c("samples" = "sample_code")) |>
+  ggplot(aes(x = biological_group, y = simpson)) +
+  geom_boxplot(outliers = FALSE, fill = NA, color = "gray") +
+  geom_jitter(width = 0.3)  + 
+  scale_y_continuous(limits = c(0, NA)) +
+  theme_classic()
 ```

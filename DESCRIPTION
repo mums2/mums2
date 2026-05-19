@@ -39,9 +39,8 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    reshape2,
     testthat (>= 3.0.0),
-    ggplot2,
+    tidyverse,
     networkD3
 Config/testthat/edition: 3
 VignetteBuilder: knitr

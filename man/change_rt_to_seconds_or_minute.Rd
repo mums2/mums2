@@ -26,7 +26,7 @@ data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
                    metadata =
-                   mums2::mums2_example("boryillus_metadata.csv"),
+                   mums2::mums2_example("metadata_boryillus.csv"),
                    format = "None")
 change_rt_to_seconds_or_minute(data, "minutes")
 }
