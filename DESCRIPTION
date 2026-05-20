@@ -24,7 +24,6 @@ LinkingTo:
     RcppProgress
 Imports: 
     clustur,
-    msentropy,
     Rcpp,
     data.table,
     mpactr,
@@ -32,10 +31,8 @@ Imports:
     utils,
     stats,
     parallel,
-    progress,
     Rdisop,
     xml2,
-    pbapply
 Suggests: 
     knitr,
     rmarkdown,

@@ -43,14 +43,14 @@ modified_cosine_params <- function(frag_tolerance) {
 #' @details
 #' `spec_entropy_params()` will initiate spectral entropy similarity scoring via
 #' the `msentropy` package (Li et al. 2021). For more information about
-#' parameters, see [msentropy::msentropy_similarity()].
+#' parameters see there [GitHub](https://github.com/YuanyueLi/MSEntropy).
 #'
 #' @param ms2_tolerance_in_da MS2 peak tolerance in Da, set to -1 to disable.
 #' Defaults to `0.02`.
 #' @param ms2_tolerance_in_ppm MS2 peak tolerance in ppm, set to -1 to disable.
 #' Defaults to `-1`.
 #' @param clean_spectra Either `TRUE` or `FALSE` to clean the spectra prior to
-#' calculating similarity. See `msentropy::clean_spectrum` for more information.
+#' calculating similarity.
 #' Defaults to `TRUE`.
 #' @param min_mz `numeric`, minimum mz to keep, set to -1 to disable. Defaults
 #' to `0`.
