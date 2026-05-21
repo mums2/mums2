@@ -58,8 +58,6 @@ reference:
   - compute_molecular_formulas
 - title: Getter Functions
   contents:
-  - get_peaks_table_mpactr
-  - get_metadata_mpactr
   - get_ms2_matches
   - get_ms1_data
   - get_ms2_peaks_data

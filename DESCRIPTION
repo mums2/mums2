@@ -31,7 +31,6 @@ Imports:
     utils,
     stats,
     parallel,
-    Rdisop,
     xml2,
 Suggests: 
     knitr,

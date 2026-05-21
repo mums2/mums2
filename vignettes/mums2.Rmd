@@ -238,7 +238,7 @@ get_community_matrix(community_w_omus) |>
 ```
 
 We can see the sample with the lowest intensity is a blank with a total intensity of 303998.8. We might be tempted to use a `size` of 303998. However,
-that would take a very long time to run. In our experience such a large value does not yield meaningfully more precision than using a smaller value. In this case, we would encourage one to use a value of 4000 as is illustrated in the rest of this tutorial.
+that would take a very long time to run. In our experience such a large value does not yield meaningfully more precision than using a smaller value. In this case, we would encourage one to use a value of 40000 as is illustrated in the rest of this tutorial.
 
 
 ### Alpha Diversity
