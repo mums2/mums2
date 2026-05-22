@@ -74,27 +74,6 @@ Rcpp::NumericMatrix RarefactionCalculation(const SEXP& communityMatrix, const ui
     return resultantMatrix;
 }
 
-
-CppMatrix RarefactionCalculationParallelized2(const CommunityMatrix& communityMatrix,
-    ParallelRandomNumberSitmo& rngEngine, const int rows, const int columns, const uint64_t size,
-    const uint64_t threshold) {
-    const std::vector<std::vector<uint64_t>>& abundanceRanges = communityMatrix.GetAbundanceRanges();
-    const std::vector<std::vector<uint64_t>>& communityAbundances = communityMatrix.GetCommunityAbundances();
-    const std::vector<std::vector<uint64_t>>& eligibleIndexes = communityMatrix.GetColumnEligibleIndexes();
-    const std::vector<uint64_t>& sums = communityMatrix.GetSums();
-
-    std::vector<double> resultantMatrix(rows * columns);
-    for (int i = 0; i < rows; i++) {
-        const std::vector<uint64_t> data = Rarefaction::Rarefy(communityAbundances[i], eligibleIndexes[i],
-        abundanceRanges[i],rngEngine, size, sums[i], threshold);
-        size_t counter = 0;
-        for (int j = columns * i; j < columns * i + columns; j++) {
-            resultantMatrix[j] = static_cast<double>(data[counter++]);
-        }
-    }
-    return CppMatrix(resultantMatrix, rows, columns);
-}
-
 CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint64_t>>& communityAbundances,
     const std::vector<std::vector<uint64_t>>& eligibleIndexes,
     const std::vector<std::vector<uint64_t>>& abundanceRanges,
