@@ -30,9 +30,7 @@ spec_entropy_params(
 - clean_spectra:
 
   Either `TRUE` or `FALSE` to clean the spectra prior to calculating
-  similarity. See
-  [`msentropy::clean_spectrum`](https://rdrr.io/pkg/msentropy/man/clean_spectrum.html)
-  for more information. Defaults to `TRUE`.
+  similarity. Defaults to `TRUE`.
 
 - min_mz:
 
@@ -67,8 +65,8 @@ A parameters `list` for similarity scoring method "spectral_entropy"
 
 `spec_entropy_params()` will initiate spectral entropy similarity
 scoring via the `msentropy` package (Li et al. 2021). For more
-information about parameters, see
-[`msentropy::msentropy_similarity()`](https://rdrr.io/pkg/msentropy/man/msentropy_similarity.html).
+information about parameters see there
+[GitHub](https://github.com/YuanyueLi/MSEntropy).
 
 ## References
 

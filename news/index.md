@@ -1,5 +1,5 @@
 # Changelog
 
-## mums2 (development version)
+## mums2 0.1.0
 
 - Initial CRAN submission.

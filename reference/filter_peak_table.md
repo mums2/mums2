@@ -56,8 +56,8 @@ a `mpactr` object that has been filter based on the supplied parameters.
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
-                   meta_data =
-                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   metadata =
+                   mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 filtered_data <- data |>
    filter_peak_table(filter_mispicked_ions_params()) |>

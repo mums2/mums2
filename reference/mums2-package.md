@@ -30,6 +30,8 @@ Useful links:
 
 - <https://github.com/mums2/mums2>
 
+- <https://www.mums2.org/mums2/>
+
 - Report bugs at <https://github.com/mums2/mums2/issues>
 
 ## Author
@@ -38,6 +40,9 @@ Useful links:
 ([ORCID](https://orcid.org/0000-0002-6935-4275))
 
 Authors:
+
+- Patrick Schloss <pschloss@umich.edu>
+  ([ORCID](https://orcid.org/0000-0002-6935-4275))
 
 - Allison Mason <masonar@umich.edu>
   ([ORCID](https://orcid.org/0000-0003-1339-1592))

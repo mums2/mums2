@@ -1,26 +1,24 @@
 # mums2
 
-The mums2 package is designed to provide researchers with tools to
-analyze untargeted metabolomics data generated using tandem mass
-spectroscopy from microbial communities. The overall approach taken to
-analyze metabolomics data parallels that used to analyze microbial
-communities using 16S rRNA gene sequencing data. To showcase how to do
-this, we will demonstrate the package using a previously published
-database that analyzed the metabolome of [**Botryllus
-Schlosseri**](https://doi.org/10.1128/msystems.00793-25).
+The [mums2](https://github.com/mums2/mums2) package is designed to
+provide researchers with tools to analyze untargeted metabolomics data
+generated using tandem mass spectroscopy from microbial communities. The
+overall approach taken to analyze metabolomics data parallels that used
+to analyze microbial communities using 16S rRNA gene sequencing data. To
+showcase how to do this, we will demonstrate the package using a
+previously published dataset that analyzed the metabolome of [*Botryllus
+schlosseri*](https://doi.org/10.1128/msystems.00793-25).
 
 ``` r
 
 library(mums2)
-library(ggplot2)
-library(mpactr)
+library(tidyverse)
 library(networkD3)
-library(reshape2)
 ```
 
 ## Process data
 
-Before we begin to analyze your data, we have to process it into a
+Before we begin to analyze the data, we have to process it into a
 readable `data.frame` or object that can be viewed and transformed. To
 load your data, we need to run two functions:
 [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md),
@@ -47,80 +45,112 @@ and illustrate how to go through the pipeline.
 
 The
 [`import_all_data()`](https://www.mums2.org/mums2/reference/import_all_data.md)
-function takes in a peak_table and meta_data tables as input and
-converts them into an `mpactr` object (this is a wrapper for
-[`mpactr::import_data()`](https://www.mums2.org/mpactr/reference/import_data.html)).
-The format parameter accepts three different formats: Metaboscape,
-Progenesis, and None. You can read up more about each of the formats
-here([`mpactr::import_data()`](https://www.mums2.org/mpactr/reference/import_data.html)).
-If you need a deeper understanding of what format the peak_table and
-meta_data files should be in, take a look at mpactr’s [getting started
+function takes in two files one describing the peak data (i.e.,
+peak_table) and the other describing the metadata (i.e., `metadata`) and
+converts them into an `mpactr` object. The `peak_table` argument takes a
+path to a file describing the peak table data. You can specify the
+format of the peak table data using the `format` argument: Metaboscape,
+Progenesis, and None. The value given to the `metadata` argument is the
+path to a CSV-formatted file that provides information about the
+samples. In order for your metadata to be valid, it needs the following
+columns: “injection”, “sample_code”, “biological_group”. The values in
+the “injection” column should match the sample injection columns inside
+of the peak_table. “sample_code” is the ID of your technical replicates.
+Finally, “biological_group” is the ID of your biological replicate
+groups. If you need a deeper understanding of what format the objects
+given to the `peak_table` and `metadata` arguments should be in, take a
+look at mpactr’s [getting started
 page](https://www.mums2.org/mpactr/articles/mpactr.html).
-
-meta_data is a csv that provides information about the samples. In order
-for your meta_data to be valid, it needs the following columns:
-“Injection”, “Sample_Code”, ”Biological_Group”. The values in the
-“Injection” column should match the sample injection columns inside of
-the peak_table. “Sample_Code” is the ID of your technical replicates.
-Finally, “Biological_Group” is the ID of your biological replicate
-groups (you can learn more about the meta_data file format here
-[`mpactr::import_data()`](https://www.mums2.org/mpactr/reference/import_data.html)).
 
 ``` r
 
 data <- import_all_data(
-  peak_table = mums2::mums2_example("230112_botryllus_peaktable.csv"), 
-  meta_data = mums2::mums2_example("meta_data_boryillus.csv"), 
+  peak_table = mums2_example("boryillus_peaktable.csv"), 
+  metadata = mums2_example("boryillus_metadata.csv"), 
   format = "Progenesis")
 ```
 
 #### Peak Table
 
-Below is the expected format for a progenesis peak table. It contains
+Below is the expected format for a Progenesis peak table. It contains
 samples as columns and features as rows. The feature intensities are
 expected to be un-normalized.
 
 ``` r
 
-read.csv(mums2::mums2_example("230112_botryllus_peaktable.csv"), check.names = FALSE)
-#>            Raw abundance                                                      
-#>                       
-#>  [ reached 'max' / getOption("max.print") -- omitted 8 columns ]
-#>  [ reached 'max' / getOption("max.print") -- omitted 12824 rows ]
+read_csv(mums2_example("boryillus_peaktable.csv"), skip = 2)
+#> Rows: 12822 Columns: 48
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr  (1): Compound
+#> dbl (47): m/z, Retention time (min), 221012_DGM_Blank1_1_1_390, 221012_DGM_B...
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> # A tibble: 12,822 × 48
+#>    Compound              `m/z` `Retention time (min)` 221012_DGM_Blank1_1_1_39…¹
+#>    <chr>                 <dbl>                  <dbl>                      <dbl>
+#>  1 403.23332 Da 188.08 s  404.                   3.13                         0 
+#>  2 387.24448 Da 188.56 s  388.                   3.14                      8674.
+#>  3 387.27587 Da 188.61 s  388.                   3.14                         0 
+#>  4 392.23176 Da 190.26 s  393.                   3.17                         0 
+#>  5 497.99335 Da 190.74 s  499.                   3.18                         0 
+#>  6 279.96160 Da 191.42 s  281.                   3.19                         0 
+#>  7 244.13361 Da 203.39 s  245.                   3.39                       412.
+#>  8 447.25451 Da 211.76 s  448.                   3.53                         0 
+#>  9 315.05243 Da 214.18 s  316.                   3.57                       258.
+#> 10 436.22069 Da 218.58 s  437.                   3.64                      6328.
+#> # ℹ 12,812 more rows
+#> # ℹ abbreviated name: ¹​`221012_DGM_Blank1_1_1_390`
+#> # ℹ 44 more variables: `221012_DGM_Blank1_1_2_391` <dbl>,
+#> #   `221012_DGM_Blank1_1_3_392` <dbl>, `221012_DGM_MB1588_3_1_395` <dbl>,
+#> #   `221012_DGM_MB1588_3_2_396` <dbl>, `221012_DGM_MB1588_3_3_397` <dbl>,
+#> #   `221012_DGM_MB1589_4_1_398` <dbl>, `221012_DGM_MB1589_4_2_399` <dbl>,
+#> #   `221012_DGM_MB1589_4_3_400` <dbl>, `221012_DGM_MB1590_5_1_401` <dbl>, …
 ```
 
 #### Metadata
 
 The expected format for metadata is below. The metadata file needs to
-contain at minimum columns for “Injection”, “Sample_Code”, and
-”Biological_Group”.
+contain at minimum columns for “injection”, “sample_code”, and
+“biological_group”.
 
 ``` r
 
-read.csv(mums2::mums2_example("meta_data_boryillus.csv"), check.names = FALSE)
-#>                   Injection File Text Sample_Notes MS method LC method
-#> 1 221012_DGM_Blank1_1_1_390        NA           NA        NA        NA
-#> 2 221012_DGM_Blank1_1_2_391        NA           NA        NA        NA
-#> 3 221012_DGM_Blank1_1_3_392        NA           NA        NA        NA
-#> 4 221012_DGM_MB1588_3_1_395        NA           NA        NA        NA
-#>   Vial_Position Injection volume Sample_Code Biological_Group
-#> 1            NA                2       blank           Blanks
-#> 2            NA                2       blank           Blanks
-#> 3            NA                2       blank           Blanks
-#> 4            NA                2      MB1588        botryllus
-#>  [ reached 'max' / getOption("max.print") -- omitted 41 rows ]
+read_csv(mums2_example("boryillus_metadata.csv"))
+#> Rows: 45 Columns: 9
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr (3): Injection, Sample_Code, Biological_Group
+#> dbl (1): Injection volume
+#> lgl (5): File Text, Sample_Notes, MS method, LC method, Vial_Position
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> # A tibble: 45 × 9
+#>    Injection      `File Text` Sample_Notes `MS method` `LC method` Vial_Position
+#>    <chr>          <lgl>       <lgl>        <lgl>       <lgl>       <lgl>        
+#>  1 221012_DGM_Bl… NA          NA           NA          NA          NA           
+#>  2 221012_DGM_Bl… NA          NA           NA          NA          NA           
+#>  3 221012_DGM_Bl… NA          NA           NA          NA          NA           
+#>  4 221012_DGM_MB… NA          NA           NA          NA          NA           
+#>  5 221012_DGM_MB… NA          NA           NA          NA          NA           
+#>  6 221012_DGM_MB… NA          NA           NA          NA          NA           
+#>  7 221012_DGM_MB… NA          NA           NA          NA          NA           
+#>  8 221012_DGM_MB… NA          NA           NA          NA          NA           
+#>  9 221012_DGM_MB… NA          NA           NA          NA          NA           
+#> 10 221012_DGM_MB… NA          NA           NA          NA          NA           
+#> # ℹ 35 more rows
+#> # ℹ 3 more variables: `Injection volume` <dbl>, Sample_Code <chr>,
+#> #   Biological_Group <chr>
 ```
 
 ### Filter
 
 After importing the data, you can use functions from mpactR to filter
 the data. There are four different filters in the mpactR package:
-[`mpactr::filter_mispicked_ions()`](https://www.mums2.org/mpactr/reference/filter_mispicked_ions.html),
-[`mpactr::filter_group()`](https://www.mums2.org/mpactr/reference/filter_group.html),
-[`mpactr::filter_cv()`](https://www.mums2.org/mpactr/reference/filter_cv.html),
-and
-[`mpactr::filter_insource_ions()`](https://www.mums2.org/mpactr/reference/filter_insource_ions.html)
-(You can find more information on
+`filter_mispicked_ions()`, `filter_group()`, `filter_cv()`, and
+`filter_insource_ions()` (You can find more information on
 [mpactR’s](https://www.mums2.org/mpactr/) website). Although data
 filtering is not required, it will help reduce noise and correct peak
 selection errors, which will also speed up the analysis.
@@ -144,123 +174,17 @@ filtered_data <- data |>
 #> ℹ Parsing 5626 peaks for insource ions.
 #> ✔ 1082 ions failed the insource filter, 4544 ions remain.
 
-head(get_peak_table(filtered_data), 3)
-#> Key: <Compound, mz, kmd, rt>
-#>                  Compound       mz     kmd    rt 221012_DGM_Blank1_1_1_390
-#>                    <char>    <num>   <num> <num>                     <num>
-#> 1: 1000.05311 Da 399.15 s 1001.060 0.06039  6.65                         0
-#> 2: 1000.20067 Da 536.14 s 1001.208 0.20795  8.94                         0
-#> 3: 1000.54504 Da 353.23 s 1023.534 0.53397  5.89                         0
-#>    221012_DGM_Blank1_1_2_391 221012_DGM_Blank1_1_3_392
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_Blank2_1_3_406 221012_DGM_Blank3_1_1_419
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_Blank3_1_2_420 221012_DGM_Blank3_1_3_421
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_Blank4_1_1_434 221012_DGM_Blank4_1_2_435
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_Blank4_1_3_436 221012_DGM_MB1588_3_1_395
-#>                        <num>                     <num>
-#> 1:                         0                      0.00
-#> 2:                         0                  13693.07
-#> 3:                         0                      0.00
-#>    221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
-#>                        <num>                     <num>
-#> 1:                      0.00                      0.00
-#> 2:                  16856.57                  16332.37
-#> 3:                      0.00                      0.00
-#>    221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1590_5_2_402 221012_DGM_MB1590_5_3_403
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1591_6_1_407 221012_DGM_MB1591_6_2_408
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1591_6_3_409 221012_DGM_MB1592_7_1_410
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1592_7_2_411 221012_DGM_MB1592_7_3_412
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1593_8_1_413 221012_DGM_MB1593_8_2_414
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1593_8_3_415 221012_DGM_MB1594_9_1_416
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1594_9_2_417 221012_DGM_MB1594_9_3_418
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#> 2:                         0                         0
-#> 3:                         0                         0
-#>    221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_2_423
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#> 2:                          0                          0
-#> 3:                          0                          0
-#>    221012_DGM_MB1595_10_3_424 221012_DGM_MB1597_11_1_425
-#>                         <num>                      <num>
-#> 1:                          0                   15105.36
-#> 2:                          0                       0.00
-#> 3:                          0                  168557.48
-#>    221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_3_427
-#>                         <num>                      <num>
-#> 1:                   13140.04                   17551.49
-#> 2:                       0.00                       0.00
-#> 3:                  176505.77                  160923.45
-#>    221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_2_429
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#> 2:                          0                          0
-#> 3:                          0                          0
-#>    221012_DGM_MB1598_12_3_430 221012_DGM_MB1599_13_1_431
-#>                         <num>                      <num>
-#> 1:                          0                   13573.71
-#> 2:                          0                       0.00
-#> 3:                          0                  153978.06
-#>    221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_3_433    cor
-#>                         <num>                      <num> <lgcl>
-#> 1:                   13245.09                   13221.95   TRUE
-#> 2:                       0.00                       0.00   TRUE
-#> 3:                  158672.23                  165991.44   TRUE
+filtered_data
+#> Key: <compound, mz, kmd, rt>
+#>                     compound        mz     kmd    rt 221012_DGM_Blank1_1_1_390
+#>                       <char>     <num>   <num> <num>                     <num>
+#>       221012_DGM_Blank1_1_2_391 221012_DGM_Blank1_1_3_392
+#>                           <num>                     <num>
+#>       221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
+#>                           <num>                     <num>
+#>       221012_DGM_Blank2_1_3_406
+#>                           <num>
+#>  [ reached 'max' / getOption("max.print") -- omitted 11 rows and 40 columns ]
 ```
 
 ### Convert retention time to “rt in minutes” or “rt in seconds”
@@ -270,222 +194,99 @@ MS1 file will report in seconds. This mismatch will cause incorrect peak
 matching between MS1 and MS2 data. The
 [`change_rt_to_seconds_or_minute()`](https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.md)
 function allows users to synthesize data with different units. Be aware
-that this function modifies the mpactr object in place. Therefore, you
-will need to call the function again to revert the units. Below will
-display a vector of retention time.
+that this function modifies the [mpactr](https://www.mums2.org/mpactr/)
+object in place. Therefore, you will need to call the function again to
+revert the units. Below will display a vector of retention time.
 
 ``` r
 
 get_peak_table(filtered_data)$rt
-#>  [1]  6.65  8.94  5.89  6.86  6.98  5.91 10.07  7.35  6.91  6.67  6.68  7.38
-#> [13]  5.81  4.79  7.48
-#>  [ reached 'max' / getOption("max.print") -- omitted 4529 entries ]
+#> [1] 6.65 8.94 5.89 6.86 6.98
+#>  [ reached 'max' / getOption("max.print") -- omitted 4539 entries ]
 ```
 
 ``` r
 
-
-filtered_data <- change_rt_to_seconds_or_minute(mpactr_object = filtered_data, rt_type = "seconds")
+filtered_data <- change_rt_to_seconds_or_minute(
+  mpactr_object = filtered_data, rt_type = "seconds"
+)
 #> [1] "Changing rt values to seconds"
-head(get_peak_table(filtered_data), 1)
-#> Key: <Compound, mz, kmd, RTINSECONDS>
-#>                  Compound      mz     kmd RTINSECONDS 221012_DGM_Blank1_1_1_390
-#>                    <char>   <num>   <num>       <num>                     <num>
-#> 1: 1000.05311 Da 399.15 s 1001.06 0.06039         399                         0
-#>    221012_DGM_Blank1_1_2_391 221012_DGM_Blank1_1_3_392
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank2_1_3_406 221012_DGM_Blank3_1_1_419
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank3_1_2_420 221012_DGM_Blank3_1_3_421
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank4_1_1_434 221012_DGM_Blank4_1_2_435
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank4_1_3_436 221012_DGM_MB1588_3_1_395
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1590_5_2_402 221012_DGM_MB1590_5_3_403
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_1_407 221012_DGM_MB1591_6_2_408
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_3_409 221012_DGM_MB1592_7_1_410
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1592_7_2_411 221012_DGM_MB1592_7_3_412
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_1_413 221012_DGM_MB1593_8_2_414
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_3_415 221012_DGM_MB1594_9_1_416
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1594_9_2_417 221012_DGM_MB1594_9_3_418
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_2_423
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1595_10_3_424 221012_DGM_MB1597_11_1_425
-#>                         <num>                      <num>
-#> 1:                          0                   15105.36
-#>    221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_3_427
-#>                         <num>                      <num>
-#> 1:                   13140.04                   17551.49
-#>    221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_2_429
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1598_12_3_430 221012_DGM_MB1599_13_1_431
-#>                         <num>                      <num>
-#> 1:                          0                   13573.71
-#>    221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_3_433    cor
-#>                         <num>                      <num> <lgcl>
-#> 1:                   13245.09                   13221.95   TRUE
 
-filtered_data <- change_rt_to_seconds_or_minute(mpactr_object = filtered_data, rt_type = "minutes")
+filtered_data
+#> Key: <compound, mz, kmd, RTINSECONDS>
+#>                     compound        mz     kmd RTINSECONDS
+#>                       <char>     <num>   <num>       <num>
+#>       221012_DGM_Blank1_1_1_390
+#>                           <num>
+#>  [ reached 'max' / getOption("max.print") -- omitted 11 rows and 45 columns ]
+```
+
+``` r
+
+filtered_data <- change_rt_to_seconds_or_minute(
+  mpactr_object = filtered_data, rt_type = "minutes"
+)
 #> [1] "Changing rt values to minutes"
-head(get_peak_table(filtered_data), 1)
-#> Key: <Compound, mz, kmd, RTINMINUTES>
-#>                  Compound      mz     kmd RTINMINUTES 221012_DGM_Blank1_1_1_390
-#>                    <char>   <num>   <num>       <num>                     <num>
-#> 1: 1000.05311 Da 399.15 s 1001.06 0.06039        6.65                         0
-#>    221012_DGM_Blank1_1_2_391 221012_DGM_Blank1_1_3_392
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank2_1_3_406 221012_DGM_Blank3_1_1_419
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank3_1_2_420 221012_DGM_Blank3_1_3_421
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank4_1_1_434 221012_DGM_Blank4_1_2_435
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_Blank4_1_3_436 221012_DGM_MB1588_3_1_395
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1590_5_2_402 221012_DGM_MB1590_5_3_403
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_1_407 221012_DGM_MB1591_6_2_408
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_3_409 221012_DGM_MB1592_7_1_410
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1592_7_2_411 221012_DGM_MB1592_7_3_412
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_1_413 221012_DGM_MB1593_8_2_414
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_3_415 221012_DGM_MB1594_9_1_416
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1594_9_2_417 221012_DGM_MB1594_9_3_418
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_2_423
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1595_10_3_424 221012_DGM_MB1597_11_1_425
-#>                         <num>                      <num>
-#> 1:                          0                   15105.36
-#>    221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_3_427
-#>                         <num>                      <num>
-#> 1:                   13140.04                   17551.49
-#>    221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_2_429
-#>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1598_12_3_430 221012_DGM_MB1599_13_1_431
-#>                         <num>                      <num>
-#> 1:                          0                   13573.71
-#>    221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_3_433    cor
-#>                         <num>                      <num> <lgcl>
-#> 1:                   13245.09                   13221.95   TRUE
+
+filtered_data
+#> Key: <compound, mz, kmd, RTINMINUTES>
+#>                     compound        mz     kmd RTINMINUTES
+#>                       <char>     <num>   <num>       <num>
+#>       221012_DGM_Blank1_1_1_390
+#>                           <num>
+#>  [ reached 'max' / getOption("max.print") -- omitted 11 rows and 45 columns ]
 ```
 
 ### Preprocess MS2 data
 
-We can use a .mgf/.mzxml/.mzml file to match MS2 spectra to MS1 peaks.
-The
+We can use a .mgf/.mzxml/.mzml-formatted file to match MS2 spectra to
+MS1 peaks. The
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
 function reads a list of mgf files and matches them to a MS1 feature
 based on the mass-to-charge ratio and retention time tolerance. If there
 are multiple matches, this function will select the MS2 spectra with the
-highest intensity. Keep in mind that MS2 spectra files are very memory
-intensive, they can be anywhere from 1 MB to 100 GB. Therefore,
-depending on how big the file is, it might take a few moments for the
-function to complete.
+highest intensity. Keep in mind that MS2 spectra files are very large,
+they can be anywhere from 1 MB to 100 GB. Therefore, depending on how
+big the file is, it might take a few moments for the function to
+complete.
 
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
-generates a list of data with two data.frames (“ms1_data”, “peak_data”),
-a list (“peak_data”), and a character vector (“samples”).
+generates a list of data with two data frames (`ms1_data`,
+`ms2_matches`), a list (`peak_data`), and a character vector
+(“samples”):
 
-**ms2_matches** - One of the two data.frames, “ms2_matches”, is a
-data.frame that contains five columns: “mz”, “rt”, “ms1_compound_id”,
-“spectra_index”, and “ms2_spectrum_id.” “mz” and “rt” are reported from
-the MS2 file as mass-to-charge ratio and retention time, respectively.
-“ms1_compound_id” is the compound id that was imported from the MS1
-peak_table. “spectra_index” matches the MS2 data with its MS2 spectrum.
-Finally, “ms2_spectrum_id” is the generated name to represent your MS2
-spectra (combination of your mz and rt). This is necessary to properly
-compare compounds. Since compounds with similar structures are expected
-to have similar MS2 patterns, we can use algorithmic techniques to
-compute the similarity between two spectra. This allows us to generate
-annotations and cluster similar spectra together.
-
-**ms1_data** - The other “data.frame”, “ms1_data”, is a data.frame of
-the created mpactr object.
-
-**peak_data** - The list that is generate from
-[`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)
-is named “peak_data.” “peak_data” is a collection of MS2 peak list. A
-peak list a collection of fragment ions, they all have a value to
-represent their intensity and mass-charge ratio.
-
-**samples** - The last slot inside of the list is a character vector
-named “samples.” This is a list of the groups/samples contained inside
-of your peak_table file.
+- **`ms2_matches`** is a `data.frame` object that contains five columns:
+  `mz`, `rt`, `ms1_compound_id`, `spectra_index`, and `ms2_spectrum_id`.
+  `mz` and `rt` are reported from the MS2 file as mass-to-charge ratio
+  and retention time, respectively. `ms1_compound_id` is the compound id
+  that was imported from the MS1 peak_table. `spectra_index` matches the
+  MS2 data with its MS2 spectrum. Finally, `ms2_spectrum_id` is the
+  generated name to represent your MS2 spectra (combination of your mz
+  and rt). This is necessary to properly compare compounds. Since
+  compounds with similar structures are expected to have similar MS2
+  patterns, we can use algorithmic techniques to compute the similarity
+  between two spectra. This allows us to generate annotations and
+  cluster similar spectra together.
+- **`ms1_data`** is a `data.frame` object containing the data created by
+  running filtering steps from [mpactr](https://www.mums2.org/mpactr/).
+- **`peak_data`** is a list object that is generated from
+  [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md).
+  `peak_data` is a collection of MS2 peak list. A peak list a collection
+  of fragment ions, they all have a value to represent their intensity
+  and mass-charge ratio.
+- **`samples`** is a character vector named listing the groups/samples
+  contained in the `peak_table` file.
 
 ``` r
 
 matched_data <- ms2_ms1_compare(
-  ms2_files = mums2_example("botryllus_v2.gnps.mgf"),mpactr_object = filtered_data, mz_tolerance = 5, rt_tolerance = 6)
+  ms2_files = mums2_example("botryllus_v2.gnps.mgf"),
+  mpactr_object = filtered_data, mz_tolerance = 5, rt_tolerance = 6)
 #> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/botryllus_v2.gnps.mgf ..."
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> [1] "674/4544 peaks have an MS2 spectra."
 
-head(matched_data$ms2_matches)
+head(get_ms2_matches(matched_data))
 #>         mz   rt        ms1_compound_id spectra_index    ms2_spectrum_id
 #> 1 1023.533 5.89 1000.54504 Da 353.23 s             1 mz1023.53293rt5.89
 #> 2 1002.552 5.89 1001.54432 Da 354.35 s             2 mz1002.55208rt5.89
@@ -494,88 +295,212 @@ head(matched_data$ms2_matches)
 #> 5 1046.580 5.91 1045.57237 Da 354.13 s             5 mz1046.57957rt5.91
 #> 6  524.361 6.67 1046.70233 Da 400.23 s             6  mz524.36102rt6.67
 
-head(matched_data$ms1_data, 1)
-#> Key: <Compound, mz, kmd, RTINMINUTES>
-#>                  Compound      mz     kmd RTINMINUTES 221012_DGM_Blank1_1_1_390
-#>                    <char>   <num>   <num>       <num>                     <num>
-#> 1: 1000.05311 Da 399.15 s 1001.06 0.06039        6.65                         0
-#>    221012_DGM_Blank1_1_2_391 221012_DGM_Blank1_1_3_392
+head(get_ms1_data(matched_data))
+#> Key: <compound, mz, kmd, RTINMINUTES>
+#>                  compound       mz     kmd RTINMINUTES
+#>                    <char>    <num>   <num>       <num>
+#> 1: 1000.05311 Da 399.15 s 1001.060 0.06039        6.65
+#> 2: 1000.20067 Da 536.14 s 1001.208 0.20795        8.94
+#> 3: 1000.54504 Da 353.23 s 1023.534 0.53397        5.89
+#> 4: 1000.55418 Da 411.36 s 1001.561 0.56146        6.86
+#> 5: 1000.65345 Da 418.99 s 1001.661 0.66073        6.98
+#> 6: 1001.54432 Da 354.35 s 1002.552 0.55160        5.91
+#>    221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_Blank1_1_3_392 221012_DGM_Blank2_1_1_404
+#>                        <num>                     <num>
+#> 1:                         0                     0.000
+#> 2:                         0                     0.000
+#> 3:                         0                     0.000
+#> 4:                         0                  5560.354
+#> 5:                         0                     0.000
+#> 6:                         0                     0.000
+#>    221012_DGM_Blank2_1_2_405 221012_DGM_Blank2_1_3_406
+#>                        <num>                     <num>
+#> 1:                     0.000                      0.00
+#> 2:                     0.000                      0.00
+#> 3:                     0.000                      0.00
+#> 4:                  5621.311                   4907.17
+#> 5:                     0.000                      0.00
+#> 6:                     0.000                      0.00
+#>    221012_DGM_Blank3_1_1_419 221012_DGM_Blank3_1_2_420
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_Blank2_1_3_406 221012_DGM_Blank3_1_1_419
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_Blank3_1_3_421 221012_DGM_Blank4_1_1_434
+#>                        <num>                     <num>
+#> 1:                         0                     0.000
+#> 2:                         0                     0.000
+#> 3:                         0                     0.000
+#> 4:                         0                  3961.063
+#> 5:                         0                  1538.230
+#> 6:                         0                     0.000
+#>    221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_3_436
+#>                        <num>                     <num>
+#> 1:                     0.000                     0.000
+#> 2:                     0.000                     0.000
+#> 3:                     0.000                     0.000
+#> 4:                  4465.566                  3834.320
+#> 5:                  1201.261                  1180.144
+#> 6:                     0.000                     0.000
+#>    221012_DGM_MB1588_3_1_395 221012_DGM_MB1588_3_2_396
+#>                        <num>                     <num>
+#> 1:                      0.00                      0.00
+#> 2:                  13693.07                  16856.57
+#> 3:                      0.00                      0.00
+#> 4:                      0.00                      0.00
+#> 5:                      0.00                      0.00
+#> 6:                      0.00                      0.00
+#>    221012_DGM_MB1588_3_3_397 221012_DGM_MB1589_4_1_398
+#>                        <num>                     <num>
+#> 1:                      0.00                         0
+#> 2:                  16332.37                         0
+#> 3:                      0.00                         0
+#> 4:                      0.00                         0
+#> 5:                      0.00                         0
+#> 6:                      0.00                         0
+#>    221012_DGM_MB1589_4_2_399 221012_DGM_MB1589_4_3_400
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_Blank3_1_2_420 221012_DGM_Blank3_1_3_421
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1590_5_1_401 221012_DGM_MB1590_5_2_402
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_Blank4_1_1_434 221012_DGM_Blank4_1_2_435
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1590_5_3_403 221012_DGM_MB1591_6_1_407
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_Blank4_1_3_436 221012_DGM_MB1588_3_1_395
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1591_6_2_408 221012_DGM_MB1591_6_3_409
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1592_7_1_410 221012_DGM_MB1592_7_2_411
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1592_7_3_412 221012_DGM_MB1593_8_1_413
+#>                        <num>                     <num>
+#> 1:                         0                     0.000
+#> 2:                         0                     0.000
+#> 3:                         0                     0.000
+#> 4:                         0                  8178.693
+#> 5:                         0                     0.000
+#> 6:                         0                     0.000
+#>    221012_DGM_MB1593_8_2_414 221012_DGM_MB1593_8_3_415
+#>                        <num>                     <num>
+#> 1:                     0.000                     0.000
+#> 2:                     0.000                     0.000
+#> 3:                     0.000                     0.000
+#> 4:                  7220.826                  5520.573
+#> 5:                     0.000                     0.000
+#> 6:                     0.000                     0.000
+#>    221012_DGM_MB1594_9_1_416 221012_DGM_MB1594_9_2_417
 #>                        <num>                     <num>
 #> 1:                         0                         0
-#>    221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1590_5_2_402 221012_DGM_MB1590_5_3_403
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_1_407 221012_DGM_MB1591_6_2_408
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1591_6_3_409 221012_DGM_MB1592_7_1_410
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1592_7_2_411 221012_DGM_MB1592_7_3_412
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_1_413 221012_DGM_MB1593_8_2_414
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1593_8_3_415 221012_DGM_MB1594_9_1_416
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1594_9_2_417 221012_DGM_MB1594_9_3_418
-#>                        <num>                     <num>
-#> 1:                         0                         0
-#>    221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_2_423
+#> 2:                         0                         0
+#> 3:                         0                         0
+#> 4:                         0                         0
+#> 5:                         0                         0
+#> 6:                         0                         0
+#>    221012_DGM_MB1594_9_3_418 221012_DGM_MB1595_10_1_422
+#>                        <num>                      <num>
+#> 1:                         0                      0.000
+#> 2:                         0                      0.000
+#> 3:                         0                      0.000
+#> 4:                         0                      0.000
+#> 5:                         0                   9122.671
+#> 6:                         0                      0.000
+#>    221012_DGM_MB1595_10_2_423 221012_DGM_MB1595_10_3_424
 #>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1595_10_3_424 221012_DGM_MB1597_11_1_425
+#> 1:                      0.000                       0.00
+#> 2:                      0.000                       0.00
+#> 3:                      0.000                       0.00
+#> 4:                      0.000                       0.00
+#> 5:                   9405.939                   10668.91
+#> 6:                      0.000                       0.00
+#>    221012_DGM_MB1597_11_1_425 221012_DGM_MB1597_11_2_426
 #>                         <num>                      <num>
-#> 1:                          0                   15105.36
-#>    221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_3_427
+#> 1:                   15105.36                   13140.04
+#> 2:                       0.00                       0.00
+#> 3:                  168557.48                  176505.77
+#> 4:                   19095.97                   20017.36
+#> 5:                       0.00                       0.00
+#> 6:                   53858.91                   49121.79
+#>    221012_DGM_MB1597_11_3_427 221012_DGM_MB1598_12_1_428
 #>                         <num>                      <num>
-#> 1:                   13140.04                   17551.49
-#>    221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_2_429
+#> 1:                   17551.49                       0.00
+#> 2:                       0.00                       0.00
+#> 3:                  160923.45                       0.00
+#> 4:                   23794.62                   45269.16
+#> 5:                       0.00                       0.00
+#> 6:                   52025.21                       0.00
+#>    221012_DGM_MB1598_12_2_429 221012_DGM_MB1598_12_3_430
 #>                         <num>                      <num>
-#> 1:                          0                          0
-#>    221012_DGM_MB1598_12_3_430 221012_DGM_MB1599_13_1_431
+#> 1:                       0.00                       0.00
+#> 2:                       0.00                       0.00
+#> 3:                       0.00                       0.00
+#> 4:                   55623.04                   39774.37
+#> 5:                       0.00                       0.00
+#> 6:                       0.00                       0.00
+#>    221012_DGM_MB1599_13_1_431 221012_DGM_MB1599_13_2_432
 #>                         <num>                      <num>
-#> 1:                          0                   13573.71
-#>    221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_3_433    cor
-#>                         <num>                      <num> <lgcl>
-#> 1:                   13245.09                   13221.95   TRUE
+#> 1:                   13573.71                   13245.09
+#> 2:                       0.00                       0.00
+#> 3:                  153978.06                  158672.23
+#> 4:                   53121.98                   50611.88
+#> 5:                   10114.79                   10594.81
+#> 6:                   41070.83                   53104.70
+#>    221012_DGM_MB1599_13_3_433    cor
+#>                         <num> <lgcl>
+#> 1:                   13221.95   TRUE
+#> 2:                       0.00   TRUE
+#> 3:                  165991.44   TRUE
+#> 4:                   70537.56   TRUE
+#> 5:                   10425.28   TRUE
+#> 6:                   52851.14   TRUE
 
-matched_data$peak_data[[1]]
-#> $mz
+get_ms2_peaks_data(matched_data)[1]
+#> [[1]]
+#> [[1]]$mz
 #> [1] 1022.596 1023.534 1024.468 1024.540 1024.590 1025.538 1025.577 1025.880
 #> [9] 1026.543
 #> 
-#> $intensity
+#> [[1]]$intensity
 #> [1]   88.035540 3698.286100   37.559235 1735.583300   43.992560  803.445070
 #> [7]  159.595730    8.381788  224.810270
 
-matched_data$samples
+get_samples(matched_data)
 #>  [1] "221012_DGM_Blank1_1_1_390"  "221012_DGM_Blank1_1_2_391" 
 #>  [3] "221012_DGM_Blank1_1_3_392"  "221012_DGM_MB1588_3_1_395" 
 #>  [5] "221012_DGM_MB1588_3_2_396"  "221012_DGM_MB1588_3_3_397" 
@@ -601,10 +526,10 @@ matched_data$samples
 #> [45] "221012_DGM_Blank4_1_3_436"
 ```
 
-## Generate Metadata
+## Annotating data
 
 Once you have preprocessed your data, we can start to generate
-additional metadata like molecular formulas and annotations.
+additional information like molecular formulas and annotations.
 [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
 allows us to generate molecular formulas and
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
@@ -615,8 +540,8 @@ be used.
 
 ### Molecular formula prediction
 
-mums2 can generate de novo molecular formula predictions using
-fragmentation trees. The
+[mums2](https://github.com/mums2/mums2) can generate de novo molecular
+formula predictions using fragmentation trees. The
 [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
 function uses MS2 data to generate the most explained molecular formula
 and return it as a result (for more information: [Fragmentation
@@ -628,28 +553,21 @@ every possible molecular formula the parent mass can create (using only
 CHNOPS). We then look at every mass and intensity pair inside of the
 spectra and compute every molecular formula. We then create a one
 directional graph based on all the molecular formulas using. A molecular
-formula will point to another if it is a subformula of another formula
+formula will point to another if it is a sub-formula of another formula
 (meaning it contains at most as many atoms as the parent formula).
 Finally, we can compute a score for each one of the nodes using methods
 like Ring Double Bond equivalents, compute molecular formula score, etc.
-You can learn how other open-sourced software such as
-[MZMine](https://mzio.io/mzmine-news/) and
-[Sirius](https://github.com/sirius-ms/sirius) generate molecular
-formula. Due to the time this function will take to run, we are going to
-use a small testset.
-
-It is possible for a formula to be unable to be generated. In this case,
-we return an NA to represent an unknown molecular formula.
-
-Warning messages will be printed if no molecular formula is generated or
-there is only one possible molecular formula.
+It is possible that the function is unable to compute a molecular
+formula. In these cases, a value of `NA` is returned. Warning messages
+will be printed if no molecular formula is generated or there is only
+one possible molecular formula. Due to the time this function will take
+to run, we are going to use a small dataset.
 
 ``` r
 
-
 data_small <- import_all_data(
-  peak_table = mums2::mums2_example("botryllus_pt_small.csv"), 
-  meta_data = mums2::mums2_example("meta_data_boryillus.csv"), 
+  peak_table = mums2_example("botryllus_pt_small.csv"), 
+  metadata = mums2_example("boryillus_metadata.csv"), 
   format = "None") |> 
     filter_peak_table(filter_mispicked_ions_params()) |>
     filter_peak_table(filter_cv_params(cv_threshold = 0.05)) |>
@@ -668,19 +586,22 @@ data_small <- import_all_data(
 #> ✔ 10 ions failed the insource filter, 261 ions remain.
 
 matched_data_small <- ms2_ms1_compare(
-  ms2_files = mums2_example("botryllus_v2.gnps.mgf"), mpactr_object = data_small, mz_tolerance = .5, rt_tolerance = 6)
+  ms2_files = mums2_example("botryllus_v2.gnps.mgf"),
+  mpactr_object = data_small, mz_tolerance = .5, rt_tolerance = 6)
 #> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/botryllus_v2.gnps.mgf ..."
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> [1] "9/261 peaks have an MS2 spectra."
 
 
-matched_data_small <- compute_molecular_formulas(mass_data = matched_data_small, parent_ppm = 3)
-#> Calculating decomposition masses...
+matched_data_small <- compute_molecular_formulas(
+  mass_data = matched_data_small, parent_ppm = 3)
+#> Calculating potential molecular formulas...
 #> Computing                                                    | 11%  ETA: -...Computing ■■■■■                                              | 11%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 33%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 55%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> Calculating fragmentation trees...
 #> Computing                                                    | 11%  ETA: -...Computing ■■■■■                                              | 11%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 33%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 55%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #> 9/9 chemical formulas were predicted
-matched_data_small$predicted_molecular_formulas
+
+get_molecular_formula_predictions(matched_data_small)
 #> [1] "C40H192N7O5P3S4"  "C9H185N6O6PS"     "C10H187N5O5P2S2"  "C6H183N2O5PS2"   
 #> [5] "C10H61N7O9P2S"    "C11H58N6O4P4S2"   "C6H99N5O6P6S2"    "C17H68N5O6P3S2"  
 #> [9] "C17H57N13O17P2S3"
@@ -690,18 +611,18 @@ matched_data_small$predicted_molecular_formulas
 
 Beyond predicting the molecular formula, we can also use the
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
-function to annotate the data in the matched_ms2_ms1 object using
+function to annotate the data in the `matched_ms2_ms1` object using
 reference databases. A reference database can be input as msp files
 using the
 [`read_msp()`](https://www.mums2.org/mums2/reference/read_msp.md)
 function. It returns a reference database that can be used as an input
 for the
 [`annotate_ms2()`](https://www.mums2.org/mums2/reference/annotate_ms2.md)
-function. In the mums2 package, MS2 spectral similarity can be
-determined using either spectral entropy (for more information:
-[Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or gnps
-algorithm (for more information:
-[GNPS](https://doi.org/10.1038/nbt.3597)). While gnps uses a modified
+function. In the [mums2](https://github.com/mums2/mums2) package, MS2
+spectral similarity can be determined using either spectral entropy (for
+more information: [Spectral
+Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or the [GNPS
+algorithm](https://doi.org/10.1038/nbt.3597). While GNPS uses a modified
 cosine score to compute similarity between spectra, spectral entropy
 takes advantage of the total intensities of the spectra. The chosen
 method can be used by supplying either, `gnps_param()` or
@@ -717,6 +638,7 @@ that is preloaded in the package and can be used to annotate data.
 reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
 #> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/massbank_example_data.msp ..."
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = reference_db,
   scoring_params = modified_cosine_params(0.5), ppm = 1000,
@@ -768,72 +690,65 @@ annotations[1:5,]
 #> 5 Anthocyanidin 3-O-6-p-coumaroyl glycosides 1051.291974  C47H55O27
 ```
 
-## Create OMUs
+## Operational Metabolomic Units (OMUs)
 
-Let’s look into generating OMUs. OMUs are cluster of metabolites with
+Operational Metabolomic Units (OMUs) are clusters of metabolites with
 similar MS2 spectral patterns and can be used for numerous analyses. To
 properly cluster your data together, you need to generate some
 similarity or distance between the features of your data. This is where
 our [`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
-function comes in. After you generate a distance `data.frame` we can use
-the
+function comes in. After you generate a `data.frame` object containing
+the distances you can use the
 [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
-function to create your OMUs. Below will show you the process how this
-works.
+function to create your OMUs.
 
-### Scoring/Distance
+### Calculating distances
 
 We have implemented two different distance calculations to generate
 distances between compounds. To generate the distances you can use the
-gnps algorithm
+GNPS algorithm
 ([`modified_cosine_params()`](https://www.mums2.org/mums2/reference/modified_cosine_params.md))
 or spectral entropy algorithm
 ([`spec_entropy_params()`](https://www.mums2.org/mums2/reference/spec_entropy_params.md)).
 Just like above, being able to compute the similarity between MS2
 spectra is what allows us to cluster data. We can also use the
-similarity distances to generate a simple distance data.frame for later
-use.
+similarity distances to generate a data.frame for later use.
 
 ``` r
 
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_threshold = -1,
   score_params = modified_cosine_params(0.5), min_peaks = 0)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 16%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 22%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+
 dist
 #>   i   j       dist
 #> 1 1   2 0.05989299
 #> 2 1   3 0.06767390
-#> 3 1   5 0.06993205
-#> 4 1 506 0.24147716
-#> 5 1 341 0.19118126
-#>  [ reached 'max' / getOption("max.print") -- omitted 59729 rows ]
+#> 3 1 506 0.24147716
+#>  [ reached 'max' / getOption("max.print") -- omitted 59731 rows ]
 ```
 
-### Operational Metabolomic Units (OMUs)
+### Clustering into OMUs
 
-OMUs, or Operational Metabolomic Units, are clusters of metabolomic
-features. We cluster these features based on how similar their MS2
-spectra are to each other. The
-[`dist_ms2()`](https://www.mums2.org/mums2/reference/dist_ms2.md)
-function generates a distance `data.frame`, or a `data.frame` of
-closeness between metabolomic features. Using the generated object along
-with the matched_ms2_ms1 object, we are able to cluster the features to
-generate OMUs using the
+We can now cluster these features based on how similar their MS2 spectra
+are. Using the output of `dist_ms2` and the `matched_ms2_ms1` object, we
+are able to cluster the features to generate OMUs using the
 [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
-function. This function returns a list with five slots: label,
-abundance, cluster, cluster_metrics, and iteration_metrics.
+function. This function implements the iterative [OptiClust
+algorithm](https://journals.asm.org/doi/10.1128/mspheredirect.00073-17).
+This function returns a list object with five slots: `label`,
+`abundance`, `cluster`, `cluster_metrics`, and `iteration_metrics`:
 
-**label** - Represents the cutoff distance used for the cluster.
-**abundance** - A
-[`data.frame()`](https://rdrr.io/r/base/data.frame.html) that shows the
-absolute abundance of the clusters by sample. **cluster** - A
-[`data.frame()`](https://rdrr.io/r/base/data.frame.html) that shows
-which features clustered together by cluster ID. **cluster_metrics** - A
-[`data.frame()`](https://rdrr.io/r/base/data.frame.html) representing
-metrics for how the clusters were formed. **iteration_metrics** - A
-[`data.frame()`](https://rdrr.io/r/base/data.frame.html) that shows how
-the features was clustered at each iteration.
+- **label**. Represents the cutoff distance used for the cluster
+- **abundance**. A `data.frame` object that indicates the absolute
+  abundance of the clusters by sample
+- **cluster**. A `data.frame` object that indicates which features
+  clustered together by cluster ID
+- **cluster_metrics**. A `data.frame` object that includes metrics for
+  how the clusters were formed.
+- **iteration_metrics**. A `data.frame` object that shows how the
+  features were clustered at each iteration.
 
 ``` r
 
@@ -850,9 +765,7 @@ cluster_results
 #> 1  221012_DGM_Blank4_1_2_435 omu1      0.00
 #> 2  221012_DGM_Blank4_1_1_434 omu1      0.00
 #> 3 221012_DGM_MB1599_13_3_433 omu1  48932.22
-#> 4 221012_DGM_MB1599_13_1_431 omu1  48982.59
-#> 5 221012_DGM_MB1598_12_3_430 omu1      0.00
-#>  [ reached 'max' / getOption("max.print") -- omitted 5440 rows ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 5442 rows ]
 #> 
 #> $cluster
 #>                  feature  omu
@@ -861,38 +774,76 @@ cluster_results
 #> 3 1067.55304 Da 352.68 s omu3
 #> 4 1072.74610 Da 382.97 s omu4
 #> 5 1076.25679 Da 479.00 s omu5
-#> 6 1083.57570 Da 350.99 s omu6
-#> 7 1127.60610 Da 352.16 s omu7
-#>  [ reached 'max' / getOption("max.print") -- omitted 114 rows ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 116 rows ]
 #> 
 #> $cluster_metrics
-#>      label   cutoff specificity      ppv          ttp  f1score            tn
-#> 1 0.300000 0.300000    0.963847 0.889087 48417.000000 0.848000 161027.000000
-#>        mcc           fn          fp sensitivity      npv      fdr accuracy
-#> 1 0.798530 11317.000000 6040.000000    0.810543 0.934335 0.889087 0.923470
+#>      label cutoff specificity ppv ttp f1score tn mcc fn fp
+#>  [ reached 'max' / getOption("max.print") -- omitted 4 columns ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 1 rows ]
 #> 
 #> $iteration_metrics
-#>      iter time label num_otus cutoff tp tn fp fn sensitivity specificity ppv
-#>      npv fdr accuracy
-#>  [ reached 'max' / getOption("max.print") -- omitted 2 columns ]
+#>      iter time label num_otus cutoff tp tn fp fn sensitivity
+#>  [ reached 'max' / getOption("max.print") -- omitted 7 columns ]
 #>  [ reached 'max' / getOption("max.print") -- omitted 5 rows ]
 #> 
 #> attr(,"class")
 #> [1] "mothur_cluster"
 ```
 
-### Display OMUs when you annotate
-
-After your data has been clustered, if you wish to see which OMUs the
-annotated features are in, you can supply that to the annotation
-function using the “cluster_data” parameter. Doing so will add a column
-named OMU to the annotations result `data.frame`. This column will
-display the OMU the feature is represented in.
+Now that the metabolomic features have been clustered into OMUs, it is
+possible to use the abundance of each OMU across samples to perform
+ecological analyses using the
+[`create_community_matrix_object()`](https://www.mums2.org/mums2/reference/create_community_matrix_object.md)
+function followed by the
+[`get_community_matrix()`](https://www.mums2.org/mums2/reference/get_community_matrix.md)
+function.
 
 ``` r
 
-annotations <- annotate_ms2(mass_data = matched_data, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.7, chemical_min_score = 0, cluster_data = cluster_results)
+community_w_omus <- create_community_matrix_object(cluster_results)
+get_community_matrix(community_w_omus)
+#>                                omu1      omu2     omu3      omu4     omu5
+#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00      0.00     0.00
+#>                                omu6     omu7     omu8     omu9     omu10
+#> 221012_DGM_Blank4_1_2_435       0.0      0.0     0.00    0.000      0.00
+#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 111 columns ]
+```
+
+You also have the ability to generate a community matrix object without
+clustering your data into OMUs. If you are familiar with 16S rRNA gene
+sequencing analysis, this would be similar to ASVs…
+
+``` r
+
+community_wo_omus <- create_community_matrix_object(data = matched_data)
+get_community_matrix(community_wo_omus)
+#>                            1000.54504 Da 353.23 s 1001.54432 Da 354.35 s
+#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
+#>                            1007.58494 Da 332.99 s 1028.72044 Da 383.88 s
+#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
+#>                            1045.57237 Da 354.13 s 1046.70233 Da 400.23 s
+#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
+#>                            1050.56754 Da 368.94 s 1061.59820 Da 352.58 s
+#> 221012_DGM_Blank1_1_1_390                    0.00                    0.0
+#>                            1066.55379 Da 352.85 s 1067.55304 Da 352.68 s
+#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
+#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 664 columns ]
+```
+
+### Annotation of OMUs
+
+After your data has been clustered, if you wish to see which OMUs the
+annotated features are in, you can supply that to the annotation
+function using the `cluster_data` argument. Doing so will add a column
+named OMU to the annotations result `data.frame` object. This column
+will display the OMU the feature is represented in.
+
+``` r
+
+annotations <- annotate_ms2(
+  mass_data = matched_data, reference = reference_db,
+  scoring_params = modified_cosine_params(0.5), ppm = 1000, min_score = 0.7,
+  chemical_min_score = 0, cluster_data = cluster_results)
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 
 annotations[1:5,]
@@ -901,13 +852,13 @@ annotations[1:5,]
 #> 2 1088.53252 Da 351.76 s mz545.27303rt7.97 545.273030 7.970000    3768
 #> 3  365.28353 Da 397.38 s mz366.29238rt6.11 366.292380 6.110000    6302
 #> 4  365.28353 Da 397.38 s mz366.29238rt6.11 366.292380 6.110000    6304
-#> 5  368.29309 Da 463.53 s  mz369.2987rt7.73 369.298700 7.730000    6056
+#> 5  368.29309 Da 463.53 s  mz369.2987rt7.73 369.298700 7.730000    6034
 #>   query_formula chemical_similarity    score collisionenergy instrument
 #> 1                          0.000000 0.810909              15           
 #> 2                          0.000000 0.805937              15           
 #> 3                          0.000000 0.711204            10.0           
 #> 4                          0.000000 0.719118            10.0           
-#> 5                          0.000000 0.816973                           
+#> 5                          0.000000 0.822626                           
 #>   instrumenttype                comment  ionmode         ccs
 #> 1    LC-ESI-ITFT registered in MassBank Positive          -1
 #> 2    LC-ESI-ITFT registered in MassBank Positive          -1
@@ -919,19 +870,19 @@ annotations[1:5,]
 #> 2 OP(O)(=O)OCCC(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F
 #> 3 CC(C)=CCNC1=C2N(C=NC2=NC=N1)[C@@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O
 #> 4 CC(C)=CCNC1=C2N=CN([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C2=NC=N1
-#> 5                    CC(C)CCCC(C)C1CCC2C3CC[C@@H]4CC(=O)CCC4(C)C3CCC12C
+#> 5                    CC(C)CCCC(C)C1CCC2C3CC=C4C[C@@H](O)CCC4(C)C3CCC12C
 #>                      inchikey retentiontime precursortype num.peaks
 #> 1 MIABSAQIFYEDJP-UHFFFAOYSA-N                      [M+H]+         2
 #> 2 MIABSAQIFYEDJP-UHFFFAOYSA-N                      [M+H]+         2
 #> 3 ORUWKZNXHJIZKV-HDNYONAXSA-N                      [M+H]+         3
 #> 4 XEHLLUQVSRLWMH-HDNYONAXSA-N                      [M+H]+         3
-#> 5 PESKGJQREUXSRR-JAGYRSRJSA-N                  [M-H2O+H]+         3
+#> 5 HVYWMOMLDIMFJA-LBHVWCRMSA-N                  [M-H2O+H]+         2
 #>                                                    name
 #> 1        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE
 #> 2        Perfluorodecyl phosphate; LC-ESI-ITFT; MS2; CE
 #> 3 N6-Isopentenyladenine-7-glucoside; LC-ESI-QQ; MS2; CE
 #> 4 N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
-#> 5                     Coprostanone; LC-APPI-QQ; MS2; CE
+#> 5                      Cholesterol; LC-APPI-QQ; MS2; CE
 #>                       ontology precursormz     formula   omu
 #> 1         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
 #> 2         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
@@ -940,191 +891,146 @@ annotations[1:5,]
 #> 5 Cholesterols and derivatives  369.351578     C27H46O omu56
 ```
 
-## Ecological Analysis
+## OMU-based Ecological Analyses
 
-After your data is processed with our clustering algorithm, we can start
-to analyze your data with community metrics. To begin, you have to
-create a “community_object”. A community object is a Rcpp Object used
-for all ecological analyses. You can generate a “community_object” by
-running the
-[`create_community_matrix_object()`](https://www.mums2.org/mums2/reference/create_community_matrix_object.md).
-Once your object is created, we can start computing the diversity inside
-of the samples. We can compute beta
-([`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md))
-and alpha diversity
-([`alpha_summary()`](https://www.mums2.org/mums2/reference/alpha_summary.md)).
-For more information and how to analyze beta and alpha diversities,
-continue reading below.
-
-### Create the community object/matrix
-
-NNow that the metabolomic features have been clustered into OMUs, it is
-possible to use the abundance of each OMU across samples to perform
-ecological analyses. First, it is necessary to transform it using the
-[`create_community_matrix_object()`](https://www.mums2.org/mums2/reference/create_community_matrix_object.md)
-function. This will create a Rcpp object that contains all of your
-generated ecological data. If you wish to see what your data looks like,
-you can call the
-[`get_community_matrix()`](https://www.mums2.org/mums2/reference/get_community_matrix.md)
-function.
-
-Packages like vegan opt for using a matrix object as input for
-ecological analyses (see more `vegan::rarefy()`). However, if we were to
-use the same methodology, the computation would take far too long, in
-particular for the rarefaction algorithm. Rarefaction is the process of
-randomly selecting n number of samples without replacement, with n being
-the user defined sum threshold. However, in mass spectrometry, in order
-to account for machine limits and background noise, we have to define a
-sample threshold. After selecting n number of samples, we only add the
-samples that are above the size threshold. If the total is below the sum
-threshold, we continue until we are equal to or above the sum threshold.
-Therefore, adding the sample threshold adds another layer of complexity
-to the algorithm. In order to retain efficiency, we create a custom
-object that contains all of the necessary data for the calculation.
+Because of the variation in total ion intensity across samples, it is
+necessary to control for uneven sampling of ions. In ecological
+analyses, this is typically performed using rarefaction. Those analyses
+anticipate that abundances are counts or whole numbers. However,
+intensity values are not whole numbers, they have decimal values.
+Therefore, because other tools like
+[vegan](https://vegandevs.github.io/vegan/) will not work with this type
+of data, it was necessary to adapt the traditional rarefaction approach
+to account for decimal values. In the analyses that follow, it is
+necessary to set a `threshold` value below which intensities are not
+included. The default value is 100. To determine the `size` parameter in
+the following
+[`alpha_summary()`](https://www.mums2.org/mums2/reference/alpha_summary.md)
+and
+[`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md)
+functions, it is helpful to look at the distribution of total ion
+intensities for each sample
 
 ``` r
 
-community_w_omus <- create_community_matrix_object(data = cluster_results)
-community_w_omus
-#>                                omu1      omu2     omu3      omu4     omu5
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00      0.00     0.00
-#>                                omu6     omu7     omu8     omu9     omu10
-#> 221012_DGM_Blank4_1_2_435       0.0      0.0     0.00    0.000      0.00
-#>                               omu11     omu12    omu13    omu14     omu15
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00      0.00
-#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 106 columns ]
+get_community_matrix(community_w_omus) |>
+  rowSums() |>
+  sort()
+#>  221012_DGM_Blank3_1_2_420  221012_DGM_Blank3_1_3_421 
+#>                   303998.8                   310580.8 
+#>  221012_DGM_Blank3_1_1_419  221012_DGM_Blank1_1_2_391 
+#>                   324211.2                   675179.8 
+#>  221012_DGM_Blank1_1_3_392  221012_DGM_Blank1_1_1_390 
+#>                   689332.8                   721682.6 
+#>  221012_DGM_Blank4_1_2_435  221012_DGM_Blank4_1_1_434 
+#>                   903126.7                   951002.6 
+#>  221012_DGM_Blank4_1_3_436  221012_DGM_Blank2_1_3_406 
+#>                   952071.9                  1053454.3 
+#>  221012_DGM_Blank2_1_2_405  221012_DGM_Blank2_1_1_404 
+#>                  1063862.6                  1076876.6 
+#>  221012_DGM_MB1588_3_1_395  221012_DGM_MB1588_3_3_397 
+#>                  5059034.9                  5197294.3 
+#>  221012_DGM_MB1588_3_2_396 221012_DGM_MB1598_12_2_429 
+#>                  5234123.4                 14144913.4 
+#> 221012_DGM_MB1598_12_3_430 221012_DGM_MB1598_12_1_428 
+#>                 14271743.5                 14803909.9 
+#>  221012_DGM_MB1591_6_1_407  221012_DGM_MB1591_6_3_409 
+#>                 17226885.5                 18308059.8 
+#>  221012_DGM_MB1591_6_2_408  221012_DGM_MB1590_5_1_401 
+#>                 18429174.8                 20222447.4 
+#>  221012_DGM_MB1590_5_2_402  221012_DGM_MB1593_8_1_413 
+#>                 20378085.6                 22136160.9 
+#>  221012_DGM_MB1593_8_2_414  221012_DGM_MB1590_5_3_403 
+#>                 22717256.1                 23404200.9 
+#>  221012_DGM_MB1593_8_3_415  221012_DGM_MB1589_4_3_400 
+#>                 23845593.3                 23984121.1 
+#>  221012_DGM_MB1589_4_1_398  221012_DGM_MB1589_4_2_399 
+#>                 24154120.6                 24215611.5 
+#>  221012_DGM_MB1594_9_1_416  221012_DGM_MB1594_9_2_417 
+#>                 24362501.1                 26800114.1 
+#>  221012_DGM_MB1594_9_3_418 221012_DGM_MB1599_13_1_431 
+#>                 27639693.4                 34810189.5 
+#> 221012_DGM_MB1599_13_2_432 221012_DGM_MB1595_10_2_423 
+#>                 35101388.1                 35221428.6 
+#> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1595_10_1_422 
+#>                 35619721.0                 35801270.3 
+#> 221012_DGM_MB1595_10_3_424  221012_DGM_MB1592_7_3_412 
+#>                 38070863.1                 40131211.4 
+#>  221012_DGM_MB1592_7_1_410  221012_DGM_MB1592_7_2_411 
+#>                 42153786.9                 45847532.7 
+#> 221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_1_425 
+#>                 49222461.0                 51314213.2 
+#> 221012_DGM_MB1597_11_3_427 
+#>                 52616171.6
 ```
 
-You have the option of not clustering your data to generate a community
-object as well. However, by not creating OMUs, it may be more difficult
-to determine unknown metabolites. Creating OMUs allows users to cluster
-similar spectra together which means similar features stay together for
-the community analyses.
-
-``` r
-
-community_wo_omus <- create_community_matrix_object(data = matched_data)
-community_wo_omus
-#>                            1000.54504 Da 353.23 s 1001.54432 Da 354.35 s
-#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
-#>                            1007.58494 Da 332.99 s 1028.72044 Da 383.88 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
-#>                            1045.57237 Da 354.13 s 1046.70233 Da 400.23 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
-#>                            1050.56754 Da 368.94 s 1061.59820 Da 352.58 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                    0.0
-#>                            1066.55379 Da 352.85 s 1067.55304 Da 352.68 s
-#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
-#>                            1071.29741 Da 576.91 s 1071.30015 Da 562.34 s
-#> 221012_DGM_Blank1_1_1_390                   0.000                 0.0000
-#>                            1071.30332 Da 476.90 s 1072.29636 Da 562.42 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                 0.0000
-#>                            1072.30288 Da 475.93 s 1072.30310 Da 484.44 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
-#>                            1072.74610 Da 382.97 s 1073.29826 Da 560.08 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                 0.0000
-#>                            1073.30391 Da 481.38 s 1076.25679 Da 479.00 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
-#>                            1083.57570 Da 350.99 s 1086.75641 Da 398.91 s
-#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
-#>                            1088.53252 Da 351.76 s 1089.59728 Da 354.07 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                   0.00
-#>                            1090.73035 Da 399.68 s 1090.73102 Da 379.03 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                  0.000
-#>                            1105.62322 Da 351.91 s 1106.62388 Da 352.21 s
-#> 221012_DGM_Blank1_1_1_390                     0.0                   0.00
-#>                            1110.57917 Da 351.79 s 1112.66289 Da 331.88 s
-#> 221012_DGM_Blank1_1_1_390                    0.00                    0.0
-#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 644 columns ]
-```
-
-### Community Matrix
-
-The vegan package uses an object called a “community matrix.” A
-community matrix is a matrix that represents samples as rows, and
-species as columns. Vegan does not account for machine limits and
-background noise, so there is no threshold needed when vegan rarefies
-data. In an effort to make a fast and efficient tool, we have opted to
-create a community object. It is the same as a community matrix, but it
-is created and held in an Rcpp class for speedy access. However, if you
-wish to use vegan for other analyses, we have created a
-[`get_community_matrix()`](https://www.mums2.org/mums2/reference/get_community_matrix.md)
-function. This function will convert your community object into a
-community matrix for ease of use.
-
-``` r
-
-  get_community_matrix(community_object = community_w_omus)
-#>                                omu1      omu2     omu3      omu4     omu5
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00      0.00     0.00
-#>                                omu6     omu7     omu8     omu9     omu10
-#> 221012_DGM_Blank4_1_2_435       0.0      0.0     0.00    0.000      0.00
-#>                               omu11     omu12    omu13    omu14     omu15
-#> 221012_DGM_Blank4_1_2_435      0.00      0.00     0.00     0.00      0.00
-#>                               omu16     omu17     omu18    omu19    omu20
-#> 221012_DGM_Blank4_1_2_435      0.00     0.000      0.00    0.000     0.00
-#>                                omu21     omu22    omu23    omu24     omu25
-#> 221012_DGM_Blank4_1_2_435      0.000     0.000     0.00     0.00     0.000
-#>                               omu26    omu27      omu28    omu29     omu30
-#> 221012_DGM_Blank4_1_2_435      0.00     0.00      0.000     0.00     0.000
-#>  [ reached 'max' / getOption("max.print") -- omitted 44 rows and 91 columns ]
-```
+We can see the sample with the lowest intensity is a blank with a total
+intensity of 303998.8. We might be tempted to use a `size` of 303998.
+However, that would take a very long time to run. In our experience such
+a large value does not yield meaningfully more precision than using a
+smaller value. In this case, we would encourage one to use a value of
+40000 as is illustrated in the rest of this tutorial.
 
 ### Alpha Diversity
 
-Using your created community object, you can compute alpha diversity.
-Alpha diversity represents diversity (or richness) on a local scale. In
-our case, it represents the diversity inside of a single sample. You can
-determine alpha diversity in this package using two different methods:
-Simpson’s and Shannon’s diversity. Simpson’s diversity represents the
-diversity on a scale of zero to one, zero meaning no diversity and one
-meaning maximum diversity. Shannon’s diversity is not bound by zero or
-one; essentially, the higher the value, the more diversity there is in a
-single sample.
+Using your community data, you can calculate alpha diversity metrics.
+Alpha diversity represents richness or diversity in each sample
+separately. Within [mums2](https://github.com/mums2/mums2) you can
+quantify diversity using Simpson’s and Shannon’s diversity indices.
 
 ``` r
 
-alpha_summary(community_object = community_w_omus, size = 4000, threshold = 100,
-              diversity_index = c("simpson", "shannon", "richness"), subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+alpha_summary(
+  community_object = community_w_omus, size = 40000, threshold = 200,
+              diversity_index = c("simpson", "shannon", "richness"),
+              subsample = TRUE) |>
+  head()
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 7s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 7s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 6s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 5s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 #>                                               samples   simpson   shannon
-#> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.6095089 0.9401740
-#> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.6201988 0.9679359
-#> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 0.2965709 0.3522099
+#> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.6218898 0.9725834
+#> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.6334562 1.0036431
+#> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 0.4263663 0.5557598
 #>                            richness
-#> 221012_DGM_Blank4_1_2_435      6.00
-#> 221012_DGM_Blank4_1_1_434      6.00
-#> 221012_DGM_MB1599_13_3_433     4.69
-#>  [ reached 'max' / getOption("max.print") -- omitted 42 rows ]
+#> 221012_DGM_Blank4_1_2_435      8.59
+#> 221012_DGM_Blank4_1_1_434      8.77
+#> 221012_DGM_MB1599_13_3_433    12.00
+#>  [ reached 'max' / getOption("max.print") -- omitted 3 rows ]
 ```
 
 ### Beta Diversity
 
-Beta diversity values can be calculated using the Bray-Curtis, Theta-YC,
-Jaccard, Hamming, Moristia-Horn, or Sorenson distance calculators. Users
-are strongly encouraged to use rarefaction to control for uneven
-sampling effort when calculating any diversity metric. By default, the
-[`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md)
-function uses subsample = TRUE, which automatically rarefies the
-samples.
-
 Beta diversity represents the dissimilarity between different samples.
-With this calculation the user can generate distances between the
-community that can be used for visualizations. And, with all of the
-annotations and clusters that were computed earlier, you can see how
-dissimilar/similar the samples are.
-
-Below are examples of using rarefaction to calculate Bray-Curtis
-distances using OMU or individual metabolites.
+Beta diversity values can be calculated using community structure
+metrics (i.e., Bray-Curtis, Theta-YC, Moristia-Horn) or community
+membership metrics (i.e., Jaccard, Hamming, or Sorenson). With the
+resulting distance values further analyses are possible. Below are
+examples use Bray-Curtis distances using unclustered metabolites or
+OMUs.
 
 ``` r
 
-bray_w_omus <- dist_shared(community_object = community_w_omus, size = 4000,
-                          threshold = 100, diversity_index = "bray", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 40000,
+                           threshold = 200, diversity_index = "bray")
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: 11s ...Computing ■■■■■                                              | 10%  ETA: 8s ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 7s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 7s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 6s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 5s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 7s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 6s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 6s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+bray_no_omus
+#>                            221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
+#> 221012_DGM_Blank1_1_2_391                 0.03033033                          
+#>                            221012_DGM_Blank1_1_3_392 221012_DGM_MB1588_3_1_395
+#> 221012_DGM_Blank1_1_2_391                                                     
+#>                            221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
+#> 221012_DGM_Blank1_1_2_391                                                     
+#>                            221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
+#> 221012_DGM_Blank1_1_2_391                                                     
+#>                            221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
+#> 221012_DGM_Blank1_1_2_391                                                     
+#>  [ reached 'max' / getOption("max.print") -- omitted 43 rows and 34 columns ]
+
+bray_w_omus <- dist_shared(community_object = community_w_omus, size = 40000,
+                          threshold = 200, diversity_index = "bray")
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 5s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 4s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 3s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 bray_w_omus
 #>                            221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_1_434
-#> 221012_DGM_Blank4_1_1_434                 0.02407000                          
+#> 221012_DGM_Blank4_1_1_434                0.022657902                          
 #>                            221012_DGM_MB1599_13_3_433
 #> 221012_DGM_Blank4_1_1_434                            
 #>                            221012_DGM_MB1599_13_1_431
@@ -1141,80 +1047,43 @@ bray_w_omus
 #> 221012_DGM_Blank4_1_1_434                            
 #>                            221012_DGM_MB1597_11_3_427
 #> 221012_DGM_Blank4_1_1_434                            
-#>                            221012_DGM_MB1595_10_1_422 221012_DGM_Blank2_1_1_404
-#> 221012_DGM_Blank4_1_1_434                                                      
-#>                            221012_DGM_Blank3_1_1_419 221012_DGM_MB1590_5_3_403
-#> 221012_DGM_Blank4_1_1_434                                                     
-#>                            221012_DGM_Blank1_1_2_391
-#> 221012_DGM_Blank4_1_1_434                           
-#>  [ reached 'max' / getOption("max.print") -- omitted 43 rows and 29 columns ]
-
-bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 4000,
-                           threshold = 100, diversity_index = "bray", subsample = TRUE)
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
-bray_no_omus
-#>                            221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
-#> 221012_DGM_Blank1_1_2_391                 0.06219456                          
-#>                            221012_DGM_Blank1_1_3_392 221012_DGM_MB1588_3_1_395
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_MB1588_3_2_396 221012_DGM_MB1588_3_3_397
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_MB1589_4_1_398 221012_DGM_MB1589_4_2_399
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_MB1589_4_3_400 221012_DGM_MB1590_5_1_401
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_MB1590_5_2_402 221012_DGM_MB1590_5_3_403
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_Blank2_1_1_404 221012_DGM_Blank2_1_2_405
-#> 221012_DGM_Blank1_1_2_391                                                     
-#>                            221012_DGM_Blank2_1_3_406
-#> 221012_DGM_Blank1_1_2_391                           
-#>  [ reached 'max' / getOption("max.print") -- omitted 43 rows and 29 columns ]
+#>  [ reached 'max' / getOption("max.print") -- omitted 43 rows and 34 columns ]
 ```
 
-## Visualizations
-
-There are a few different ways to visualize the data generated from this
-package. Below we have examples of a PCOA plot, Hierarchical Clustering
-graph, Network graph, and Box plot.
-
-### PCOA
-
-Principal Coordinate Analysis (PCOA) is a statistical technique used to
-show similarities between data. PCOA allows us, in particular, to use
-the distances generated from our ecological analysis. And, unlike
-Principle Component Analysis (PCA), it is not limited to only euclidean
-distances. So, we can use the distances generated from
+The output of
 [`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md)
-as input for this calculation. To start, we need to convert the
-[`dist_shared()`](https://www.mums2.org/mums2/reference/dist_shared.md)
-result into cartisan coordinates. To do this, we can use the
-[`stats::cmdscale()`](https://rdrr.io/r/stats/cmdscale.html) function.
-Then, we can extract the points from the
-[`stats::cmdscale()`](https://rdrr.io/r/stats/cmdscale.html) function
-and rename them to be more readable. Finally, we plot the values. PCOA
-is a great way to look at your beta diversity results visually and shows
-us how similar samples are to each other.
+is a `dist` object, which lends itself well to visualization techniques
+like PCoA and NMDS and hierarchical clustering.
+
+### Visualizations
+
+There are no functions built-in to
+[mums2](https://github.com/mums2/mums2) for data visualization. Instead,
+we encourage users to leverage the functionality of
+[ggplot2](https://ggplot2.tidyverse.org) and the rest of the
+[tidyverse](https://tidyverse.tidyverse.org).
+
+#### Principal Coordinate Analysis (PCoA)
+
+PCoA is a statistical technique used to show similarities between data.
+PCOA allows us, in particular, to use the distances generated from our
+ecological analysis.
 
 ``` r
 
-dist_obj <- bray_w_omus
+pcoa <- cmdscale(bray_w_omus, k = 2, eig = T, add = T)
 
-pcoa <- cmdscale(dist_obj, k = 2, eig = T, add = T)
-pcoa_points <- as.data.frame(pcoa$points)
 variance <- round(pcoa$eig*100/sum(pcoa$eig), 1)
-names(pcoa_points) <- paste0("PCOA", seq(1:2))
-pcoa_points$Samples <- rownames(pcoa_points)
+colnames(pcoa$points) <- c("pcoa_1", "pcoa_2")
 
-meta_data <- get_meta_data(filtered_data)
-for(i in 1:nrow(pcoa_points)) {
-  idx <- which(pcoa_points$Samples[[i]] == meta_data$Injection)
-  pcoa_points$Samples[[i]] <- meta_data$Biological_Group[[idx]]
-}
-
-pcoa_points |>
-  ggplot(aes(x=PCOA1, y = PCOA2, color = Samples)) +
+as_tibble(pcoa$points, rownames = "sample") |>
+  inner_join(get_metadata(filtered_data), by = c("sample" = "injection")) |>
+  ggplot(aes(x=pcoa_1, y = pcoa_2, color = biological_group)) +
     geom_point(size = 5.5) +
+    labs(
+      x = paste0("PCoA 1 (", variance[1], "%)"),
+      y = paste0("PCoA 2 (", variance[2], "%)"),
+      color = "Sample type") +
     theme(
       legend.text = element_text(size = 10), 
       legend.title = element_text(size = 15)
@@ -1235,7 +1104,7 @@ or clusters using this type of graph.
 
 ``` r
 
-hclust_result <- hclust(dist_obj, "complete")
+hclust_result <- hclust(bray_w_omus, "average")
 par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
 ```
@@ -1253,19 +1122,22 @@ we can generate a simple network plot.
 ``` r
 
 distance_df_annotations <- annotations[, c("query_ms2_id", "name", "score")]
-simpleNetwork(distance_df_annotations, height="100px", width="100px", zoom = TRUE)
+
+simpleNetwork(
+  distance_df_annotations, height="100px", width="100px", zoom = TRUE)
 ```
 
 ### Using Group Averages
 
-Another feature included inside of mums2 is the ability to run your
+Another feature included inside of
+[mums2](https://github.com/mums2/mums2) is the ability to run your
 analysis using group averages. Some researchers conduct mass
 spectrometry experiments by running samples in technical/injection
 triplicate to account for instrument variability. Since we know all
 three injections are from the same vial, we can average all of these
 into one group. We can generate group averages by using the metadata
 file that was supplied when you imported your data based on
-“Sample_Code”. We can accomplish this by using the
+“sample_code”. We can accomplish this by using the
 [`convert_to_group_averages()`](https://www.mums2.org/mums2/reference/convert_to_group_averages.md)
 function.
 
@@ -1274,22 +1146,28 @@ ran above. But this time, we are using group averages.
 
 ``` r
 
-  matched_avg <- convert_to_group_averages(matched_data = matched_data, mpactr_object = filtered_data)
-  dist_avg <- dist_ms2(
-    data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
-    score_params = modified_cosine_params(0.5), min_peaks = 0)
+  matched_avg <- convert_to_group_averages(
+  matched_data = matched_data, mpactr_object = filtered_data)
+
+dist_avg <- dist_ms2(
+  data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
+  score_params = modified_cosine_params(0.5), min_peaks = 0)
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 
-  cluster_results_avg <- cluster_data(
-    distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
-    cluster_method = "opticlust")
+cluster_results_avg <- cluster_data(
+  distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
+  cluster_method = "opticlust")
 
-  annotations_avg <- annotate_ms2(mass_data = matched_avg, reference = reference_db, scoring_params = modified_cosine_params(0.5), 
-                            ppm = 1000, min_score = 0.6, chemical_min_score = 0, cluster_data = cluster_results_avg)
+annotations_avg <- annotate_ms2(
+  mass_data = matched_avg,
+  reference = reference_db, scoring_params = modified_cosine_params(0.5), 
+  ppm = 1000, min_score = 0.6, chemical_min_score = 0,
+  cluster_data = cluster_results_avg)
 #> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 2%  ETA: ...Computing ■■                                                 | 4%  ETA: ...Computing ■■■                                                | 6%  ETA: ...Computing ■■■■                                               | 8%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 12%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 16%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 22%  ETA: ...Computing ■■■■■■■■■■■■                                       | 24%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 26%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 32%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 38%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 42%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 44%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 48%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 52%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 58%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 64%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 70%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 76%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 78%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 82%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 84%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 88%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 90%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 94%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 96%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 
-  community_object_avg <- create_community_matrix_object(data = cluster_results_avg)
-  head(get_community_matrix(community_object = community_object_avg), 3)
+community_object_avg <- create_community_matrix_object(
+  data = cluster_results_avg)
+head(get_community_matrix(community_object = community_object_avg), 3)
 #>            omu1    omu2 omu3    omu4 omu5 omu6 omu7 omu8 omu9 omu10 omu11 omu12
 #> blank3     0.00     0.0    0     0.0    0    0    0    0    0     0     0     0
 #> MB1589 23337.03 24115.4    0 14022.7    0    0    0    0    0     0     0     0
@@ -1353,19 +1231,19 @@ adjusted based on the information supplied in the metadata file.
 
 ``` r
 
-  # Normal
-  head(matched_data$samples)
+# Normal
+head(get_samples(matched_data))
 #> [1] "221012_DGM_Blank1_1_1_390" "221012_DGM_Blank1_1_2_391"
 #> [3] "221012_DGM_Blank1_1_3_392" "221012_DGM_MB1588_3_1_395"
 #> [5] "221012_DGM_MB1588_3_2_396" "221012_DGM_MB1588_3_3_397"
 
-  # Group Average
-  head(matched_avg$samples)
+# Group Average
+head(get_samples(matched_avg))
 #> [1] "blank"  "MB1588" "MB1589" "MB1590" "blank1" "MB1591"
 
-  # The items in the Injection have been converted into the corresponding sample code.
-  get_meta_data(filtered_data)[, c("Injection", "Sample_Code")]
-#>                      Injection Sample_Code
+# The items in the injection have been converted into the corresponding sample code.
+get_metadata(filtered_data)[, c("injection", "sample_code")]
+#>                      injection sample_code
 #>                         <char>      <char>
 #>  1:  221012_DGM_Blank1_1_1_390       blank
 #>  2:  221012_DGM_Blank1_1_2_391       blank
@@ -1412,14 +1290,14 @@ adjusted based on the information supplied in the metadata file.
 #> 43:  221012_DGM_Blank4_1_1_434      blank3
 #> 44:  221012_DGM_Blank4_1_2_435      blank3
 #> 45:  221012_DGM_Blank4_1_3_436      blank3
-#>                      Injection Sample_Code
+#>                      injection sample_code
 #>                         <char>      <char>
 ```
 
 ### Combined data frames
 
-mums2 also allows you to view your all of your generated data together
-using the
+[mums2](https://github.com/mums2/mums2) also allows you to view your all
+of your generated data together using the
 [`generate_a_combined_table()`](https://www.mums2.org/mums2/reference/generate_a_combined_table.md)
 function. This function will take your matched object (generated from
 [`ms2_ms1_compare()`](https://www.mums2.org/mums2/reference/ms2_ms1_compare.md)),
@@ -1431,8 +1309,11 @@ to generate a combined data.frame with all of the generated data.
 
 ``` r
 
-  # For normal data
-  head(generate_a_combined_table(matched_data = matched_data, annotations = annotations, cluster_data = cluster_results), 3)
+# For normal data
+generate_a_combined_table(
+  matched_data = matched_data, annotations = annotations, 
+  cluster_data = cluster_results) |> 
+  head(n = 3)
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
@@ -1510,8 +1391,11 @@ to generate a combined data.frame with all of the generated data.
 #> 2                          0
 #> 3                165991.4375
 
-  # For group averaged data
-  head(generate_a_combined_table(matched_data = matched_avg, annotations = annotations_avg, cluster_data = cluster_results_avg), 3)
+# For group averaged data
+generate_a_combined_table(
+  matched_data = matched_avg, annotations = annotations_avg,
+  cluster_data = cluster_results_avg) |>
+  head(n = 3)
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
@@ -1533,13 +1417,18 @@ easily see how correlated data is between samples with a heatmap.
 
 ``` r
 
-dist_shared(community_object_avg, 4000, 100, "jaccard") |> 
+dist_shared(community_object_avg, 40000, 200, "bray") |> 
   as.matrix() |>
-  reshape2::melt(varnames = c("A", "B"), value.name = "distances") |>
-  ggplot(aes(x = A, y = B, fill = distances)) +
+  as_tibble(rownames = "A") |>
+  pivot_longer(-A, names_to = "B", values_to = "distance") |>
+  ggplot(aes(x = A, y = B, fill = distance)) +
   geom_tile() +
-  scale_fill_gradient(low="#FF0000", high = "#FFFFFF")
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+  scale_fill_gradient(low = "#FFFFFF", high="#FF0000") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    panel.background = element_blank()
+  )
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 ```
 
 ![](mums2_files/figure-html/heat_map-1.png)
@@ -1553,23 +1442,17 @@ alpha diversity.
 
 ``` r
 
+metadata <- get_metadata(filtered_data)
 
-alpha <- alpha_summary(community_object_avg, 4000, 100, "simpson")
-#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: ...Computing ■■■■■■■                                            | 14%  ETA: ...Computing ■■■■■■■■                                           | 15%  ETA: ...Computing ■■■■■■■■■                                          | 18%  ETA: ...Computing ■■■■■■■■■■                                         | 20%  ETA: ...Computing ■■■■■■■■■■■                                        | 21%  ETA: ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
+alpha <- alpha_summary(community_object_avg, 40000, 200, "simpson")
+#> Computing                                                    | 0%  ETA: -...Computing ■                                                  | 1%  ETA: ...Computing ■■                                                 | 3%  ETA: ...Computing ■■■                                                | 5%  ETA: ...Computing ■■■■                                               | 7%  ETA: ...Computing ■■■■■                                              | 10%  ETA: ...Computing ■■■■■■                                             | 11%  ETA: 7s ...Computing ■■■■■■■                                            | 14%  ETA: 6s ...Computing ■■■■■■■■                                           | 15%  ETA: 5s ...Computing ■■■■■■■■■                                          | 18%  ETA: 4s ...Computing ■■■■■■■■■■                                         | 20%  ETA: 3s ...Computing ■■■■■■■■■■■                                        | 21%  ETA: 3s ...Computing ■■■■■■■■■■■■                                       | 23%  ETA: 3s ...Computing ■■■■■■■■■■■■■                                      | 25%  ETA: 2s ...Computing ■■■■■■■■■■■■■■                                     | 28%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■                                    | 30%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■                                   | 31%  ETA: 2s ...Computing ■■■■■■■■■■■■■■■■■                                  | 34%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■                                 | 36%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■                                | 37%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■                               | 40%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■                              | 41%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■                             | 43%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■                            | 46%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■                           | 47%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■                          | 50%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■                         | 51%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■                        | 54%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       | 56%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      | 57%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     | 60%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    | 62%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   | 63%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  | 66%  ETA: 1s ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 | 68%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                | 69%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               | 72%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              | 74%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             | 75%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            | 77%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           | 80%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          | 81%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         | 83%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        | 86%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       | 87%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      | 89%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     | 92%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    | 93%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   | 95%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  | 98%  ETA: ...Computing ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ | 100%  ETA: ...
 
-# Convert Sample_Codes into Biological Groups
-meta_data <- get_meta_data(filtered_data)
-alpha$group <- sapply(alpha$samples, function(x) {
-   meta_data$Biological_Group[[which(x == meta_data$Sample_Code)[[1]]]]
-}, USE.NAMES = FALSE)
-
-# Plot 
-colnames(alpha) <- c("sample_code", "diversity", "group")
-alpha |>
-  ggplot(aes(x = sample_code, y = diversity, group = group)) +
-  geom_point()  + 
-  geom_boxplot(alpha = 0.3) +
-  facet_wrap(~group, scales = "free_x")
+inner_join(alpha, metadata, by = c("samples" = "sample_code")) |>
+  ggplot(aes(x = biological_group, y = simpson)) +
+  geom_boxplot(outliers = FALSE, fill = NA, color = "gray") +
+  geom_jitter(width = 0.3)  + 
+  scale_y_continuous(limits = c(0, NA)) +
+  theme_classic()
 ```
 
 ![](mums2_files/figure-html/box_plot-1.png)

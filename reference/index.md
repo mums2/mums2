@@ -87,6 +87,19 @@
 - [`compute_molecular_formulas()`](https://www.mums2.org/mums2/reference/compute_molecular_formulas.md)
   : Compute Molecular formula Other
 
+## Getter Functions
+
+- [`get_ms2_matches()`](https://www.mums2.org/mums2/reference/get_ms2_matches.md)
+  : Get MS2 Matches
+- [`get_ms1_data()`](https://www.mums2.org/mums2/reference/get_ms1_data.md)
+  : Get MS1 Matches
+- [`get_ms2_peaks_data()`](https://www.mums2.org/mums2/reference/get_ms2_peaks_data.md)
+  : Get Peaks Data
+- [`get_samples()`](https://www.mums2.org/mums2/reference/get_samples.md)
+  : Get Samples
+- [`get_molecular_formula_predictions()`](https://www.mums2.org/mums2/reference/get_molecular_formula_predictions.md)
+  : Get Molecular Formula Predictions
+
 ## Helper Functions
 
 - [`change_rt_to_seconds_or_minute()`](https://www.mums2.org/mums2/reference/change_rt_to_seconds_or_minute.md)

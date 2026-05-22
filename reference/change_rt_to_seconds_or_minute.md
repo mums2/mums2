@@ -33,12 +33,12 @@ a modified `mpactr` object.
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
-                   meta_data =
-                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   metadata =
+                   mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 change_rt_to_seconds_or_minute(data, "minutes")
 #> [1] "Changing rt values to minutes"
-#>                    Compound       mz RTINMINUTES 221012_DGM_Blank1_1_1_390
+#>                    compound       mz RTINMINUTES 221012_DGM_Blank1_1_1_390
 #>                      <char>    <num>       <num>                     <num>
 #>    1: 413.12834 Da 319.32 s 414.1356  0.08866667                  1643.672
 #>    2: 655.22101 Da 481.62 s 656.2283  0.13383333                     0.000

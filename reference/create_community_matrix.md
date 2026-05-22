@@ -16,8 +16,8 @@ create_community_matrix(cluster_object)
   the result of the
   [`cluster_data()`](https://www.mums2.org/mums2/reference/cluster_data.md)
   function. data \<- import_all_data(peak_table =
-  mums2::mums2_example("botryllus_pt_small.csv"), meta_data =
-  mums2::mums2_example("meta_data_boryillus.csv"), format = "None")
+  mums2::mums2_example("botryllus_pt_small.csv"), metadata =
+  mums2::mums2_example("boryillus_metadata.csv"), format = "None")
 
   filtered_data \<- data \|\>
   filter_peak_table(filter_mispicked_ions_params()) \|\>

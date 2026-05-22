@@ -15,13 +15,13 @@ Source:
 [`DESCRIPTION`](https://github.com/mums2/mums2/blob/main/DESCRIPTION)
 
 Mason A, Johnson G, Schloss P (2026). *mums2: Microbial Ecology by
-Tandem Mass Spectrometry*. R package version 0.0.0.9000,
+Tandem Mass Spectrometry*. R package version 0.1.0,
 <https://github.com/mums2/mums2>.
 
     @Manual{,
       title = {mums2: Microbial Ecology by Tandem Mass Spectrometry},
       author = {Allison Mason and Gregory Johnson and Patrick Schloss},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.1.0},
       url = {https://github.com/mums2/mums2},
     }

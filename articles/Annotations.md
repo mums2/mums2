@@ -7,11 +7,9 @@ library(mums2)
 
 To allow users to access data inside of reference databases without
 causing lag, we opted to created reference databases as a Rcpp object.
-This means that users are not able to access them unless you use
-specific getter functions
-([`get_reference_data()`](https://www.mums2.org/mums2/reference/get_reference_data.md),
-and
-[`combined_reference_database()`](https://www.mums2.org/mums2/reference/combined_reference_database.md)).
+This means that users are not able to access them unless you use the
+[`get_reference_data()`](https://www.mums2.org/mums2/reference/get_reference_data.md)
+function.
 
 To create a reference database object, you can either use the
 [`read_msp()`](https://www.mums2.org/mums2/reference/read_msp.md)
