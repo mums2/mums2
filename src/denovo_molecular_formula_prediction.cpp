@@ -40,7 +40,7 @@ std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVec
 	DecomposeMass decomposeMass;
 	CliProgressBar progressBar;
 	int counter = 0;
-	Rcpp::Rcout << "Calculating decomposition masses..." << std::endl;
+	Rcpp::Rcout << "Calculating potential molecular formulas..." << std::endl;
 	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass,
 		&allNodes, &ppm, &mutex, &progressBar, &counter, &size](int i) {
 			const std::vector<DecompResult> result =

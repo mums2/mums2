@@ -11,8 +11,8 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -52,7 +52,7 @@ create_community_matrix_object <- function(data) {
 create_community_matrix_object.mass_data <- function(data) {
   samples <- data$samples
   ms2_matches <-  data$ms2_matches$ms1_compound_id
-  filtered_data <- data$ms1_data[which(data$ms1_data$Compound %in% ms2_matches),
+  filtered_data <- data$ms1_data[which(data$ms1_data$compound %in% ms2_matches),
   ][, samples, with = FALSE]
   matrix <- as.matrix(t(filtered_data))
   rownames(matrix) <- samples
@@ -95,8 +95,8 @@ create_community_matrix_object.mothur_cluster <- function(data) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -139,8 +139,8 @@ get_community_matrix <- function(community_object) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>

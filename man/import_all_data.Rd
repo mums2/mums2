@@ -4,16 +4,16 @@
 \alias{import_all_data}
 \title{Import all data}
 \usage{
-import_all_data(peak_table, meta_data, format)
+import_all_data(peak_table, metadata, format)
 }
 \arguments{
 \item{peak_table}{The file path to your feature table
 file.}
 
-\item{meta_data}{The file path to your meta_data file or \code{data.frame}.}
+\item{metadata}{The file path to your metadata file or \code{data.frame}.}
 
 \item{format}{The expected exported type of your peak table, can be
-one of "Progenesis", "None", "None".}
+one of "Progenesis", "Metaboscape", "None".}
 }
 \value{
 a \code{mpactr} object.
@@ -26,7 +26,7 @@ It will import your peak table and meta data and create a mpactr_object.
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
-                   meta_data =
-                   mums2::mums2_example("meta_data_boryillus.csv"),
+                   metadata =
+                   mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 }

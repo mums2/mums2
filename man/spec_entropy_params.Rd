@@ -23,7 +23,7 @@ Defaults to \code{0.02}.}
 Defaults to \code{-1}.}
 
 \item{clean_spectra}{Either \code{TRUE} or \code{FALSE} to clean the spectra prior to
-calculating similarity. See \code{msentropy::clean_spectrum} for more information.
+calculating similarity.
 Defaults to \code{TRUE}.}
 
 \item{min_mz}{\code{numeric}, minimum mz to keep, set to -1 to disable. Defaults
@@ -51,7 +51,7 @@ Calculate spectral entropy similarity between two MS2 spectra
 \details{
 \code{spec_entropy_params()} will initiate spectral entropy similarity scoring via
 the \code{msentropy} package (Li et al. 2021). For more information about
-parameters, see \code{\link[msentropy:msentropy_similarity]{msentropy::msentropy_similarity()}}.
+parameters see there \href{https://github.com/YuanyueLi/MSEntropy}{GitHub}.
 }
 \examples{
 spec_entropy_params()

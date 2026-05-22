@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 library(mums2)
 ```
 
-To allow users to access data inside of reference databases without causing lag, we opted to created reference databases as a Rcpp object. This means that users are not able to access them unless you use specific getter functions (`get_reference_data()`, and `combined_reference_database()`). 
+To allow users to access data inside of reference databases without causing lag, we opted to created reference databases as a Rcpp object. This means that users are not able to access them unless you use the `get_reference_data()` function. 
 
 To create a reference database object, you can either use the `read_msp()` function or the `read_hmdb()` function. Using the `length()` function will allow you to see the amount of references. 
 ```{r}

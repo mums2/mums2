@@ -11,8 +11,8 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -66,7 +66,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
                 which(colnames(ms1_peak_table) == "RTINMINUTES"),
                 which(colnames(ms1_peak_table) == "RTINSECONDS"))
   rt1 <- ms1_peak_table[[rt_index]]
-  ms1_compounds <- ms1_peak_table$Compound
+  ms1_compounds <- ms1_peak_table$compound
   len <- length(ms1_compounds)
   result <- CompareMS2Ms1(mz2, mz1, rt2, rt1, mz_tolerance, rt_tolerance)
   matched_peaks <- length(which(result != -1))
@@ -102,7 +102,8 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
   match_df$spectra_index <- as.numeric(match_df$spectra_index)
   result <- list(ms2_matches = match_df, peak_data = ms2_peaks,
                  ms1_data = ms1_peak_table,
-                 samples = get_meta_data(mpactr_object)$Injection)
+                 samples = get_metadata(mpactr_object)$injection)
+
   class(result) <- "mass_data"
   result
 }

@@ -8,8 +8,8 @@
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -68,8 +68,8 @@ create_community_matrix <- function(cluster_object) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -98,25 +98,25 @@ convert_to_group_averages <- function(matched_data, mpactr_object) {
                 "`import_all_data()` function"))
   }
   trips <- t(get_triplicate_averages(mpactr_object, matched_data))
-  meta_data <- get_meta_data(mpactr_object)
-  injection_samples <- meta_data$Injection
+  metadata <- get_metadata(mpactr_object)
+  injection_samples <- metadata$injection
   modified_peak_table <-
     matched_data$ms1_data[, which(!(colnames(matched_data$ms1_data)
                                     %in% injection_samples)), with = FALSE]
   matched_data$ms1_data <- cbind(modified_peak_table, trips)
-  matched_data$samples <- unique(meta_data$Sample_Code)
+  matched_data$samples <- unique(metadata$sample_code)
   matched_data
 }
 
 # Helper function for creating count tables
 create_count_table <- function(ms2_match_data) {
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
-  peak_table <- ms2_match_data$ms1_data[, c("Compound",
+  peak_table <- ms2_match_data$ms1_data[, c("compound",
                                             ms2_match_data$samples),
                                         with = FALSE]
 
-  samples <- peak_table[which(peak_table$Compound %in% ms2_matches_compounds), ]
-  data.frame(Representative_Sequence = samples$Compound,
+  samples <- peak_table[which(peak_table$compound %in% ms2_matches_compounds), ]
+  data.frame(Representative_Sequence = samples$compound,
              total = rowSums(samples[, -1]),
              samples[, -1], check.names = FALSE)
 }
@@ -126,14 +126,14 @@ create_count_table <- function(ms2_match_data) {
 # displays the average of the triplicates
 get_triplicate_averages <- function(mpactr_data, matched_data) {
   peak <- get_peak_table(mpactr_data)
-  meta_data <- get_meta_data(mpactr_data)
-  sample_codes <- unique(meta_data$Sample_Code)
+  metadata <- get_metadata(mpactr_data)
+  sample_codes <- unique(metadata$sample_code)
   triplicate_averages <- matrix(0, nrow(peak), 0)
-  rownames(triplicate_averages) <- peak$Compound
+  rownames(triplicate_averages) <- peak$compound
   for (sample in sample_codes) {
     means <-
-      as.matrix(rowMeans(peak[, meta_data$Injection
-                              [which(meta_data$Sample_Code == sample)],
+      as.matrix(rowMeans(peak[, metadata$injection
+                              [which(metadata$sample_code == sample)],
                               with = FALSE]))
     triplicate_averages <- cbind(triplicate_averages, means)
   }
@@ -156,8 +156,8 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' data <-
 #'    import_all_data(peak_table =
 #'                    mums2::mums2_example("botryllus_pt_small.csv"),
-#'                    meta_data =
-#'                    mums2::mums2_example("meta_data_boryillus.csv"),
+#'                    metadata =
+#'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
 #' filtered_data <- data |>
@@ -195,9 +195,9 @@ generate_a_combined_table <- function(matched_data,
   }
 
 
-  size <- length(matched_data$ms1_data$Compound)
+  size <- length(matched_data$ms1_data$compound)
   env <- new.env(hash = TRUE)
-  env$ms1_id <- matched_data$ms1_data$Compound
+  env$ms1_id <- matched_data$ms1_data$compound
   env$mz <- matched_data$ms1_data$mz
   retention_time_string <- "rt"
   if ("RTINMINUTES" %in% colnames(matched_data$ms1_data)) {
@@ -209,7 +209,7 @@ generate_a_combined_table <- function(matched_data,
   env$rt <- matched_data$ms1_data[[retention_time_string]]
   env$ms2_id <- rep("", size)
   collected_column_names <- c("ms1_id", "ms2_id", "mz", retention_time_string)
-  ms2_data_idx <- which(matched_data$ms1_data$Compound  %in%
+  ms2_data_idx <- which(matched_data$ms1_data$compound  %in%
                           matched_data$ms2_matches$ms1_compound_id)
   count <- 1
   for (i in ms2_data_idx) {
