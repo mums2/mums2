@@ -15,7 +15,7 @@ test_that("read_mgf will fail if the file does not exist", {
   expect_error(read_mgf(".mgf"))
 })
 
-test_that("read_mzml_mzxml will read an mgf data properly", {
+test_that("read_mzml_mzxml will read mzxml data properly", {
   path <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
   mzml_data <- read_mzml_mzxml(path)
   expect_true(length(mzml_data) == 2)
@@ -30,6 +30,12 @@ test_that("read_mzml_mzxml will fail if file has the wrong extension", {
 test_that("read_mzml_mzxml will fail if the file does not exist", {
   expect_error(read_mzml_mzxml(".mzml"))
   expect_error(read_mzml_mzxml(".mzxml"))
+})
+
+test_that("read_mzml_mzxml will fail if mzR not installed", {
+  local_mocked_bindings(require_namespace = function(...) FALSE)
+  expect_error(read_mzml_mzxml(".mzml"), 
+  "To use this functionality you have to install the mzR package.")
 })
 
 test_that("read_msp will read an msp data properly", {

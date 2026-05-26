@@ -62,7 +62,7 @@ reference:
   - get_ms1_data
   - get_ms2_peaks_data
   - get_samples 
-  - get_molecular_formula_predictions
+  - get_molecular_formula_preds
 - title: Helper Functions
   contents:
   - change_rt_to_seconds_or_minute

@@ -76,7 +76,7 @@ test_that("get_triplicate_averages returns a dataframe with all
               import_all_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
-                                                    "metadata.csv"),
+                                                   "metadata.csv"),
                               format = "Progenesis")
 
             mgf_files <- test_path("exttestdata",
@@ -95,7 +95,7 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),
                     metadata = test_path("exttestdata",
-                                          "metadata.csv"),
+                                         "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",
@@ -156,7 +156,7 @@ test_that("generate_a_combined_table will fail if sent the wrong parameters", {
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),
                     metadata = test_path("exttestdata",
-                                          "metadata.csv"),
+                                         "metadata.csv"),
                     format = "Progenesis")
 
   mgf_files <- test_path("exttestdata",

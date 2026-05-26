@@ -24,11 +24,7 @@
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
+#'    filter_peak_table(filter_mispicked_ions_params())
 #' @returns a `mpactr` object that has been filter based on
 #' the supplied parameters.
 filter_peak_table <- function(mpactr_object, params) {
@@ -117,7 +113,7 @@ filter_mispicked_ions_params <- function(ringwin = 0.5, isowin = 0.01,
                  merge_peaks = merge_peaks, merge_method = merge_method,
                  copy_object = copy_object)
   class(params) <- "filter_mispicked_ions"
-  return(params)
+  params
 }
 
 #' @export
@@ -141,7 +137,7 @@ filter_group_params <- function(group_threshold = 0.01, group_to_remove,
                  group_to_remove = group_to_remove, remove_ions = remove_ions,
                  copy_object = copy_object)
   class(params) <- "filter_group"
-  return(params)
+  params
 }
 
 #' @export
@@ -163,7 +159,7 @@ filter_cv_params <- function(cv_threshold = NULL,
   params <- list(cv_threshold = cv_threshold,
                  copy_object = copy_object)
   class(params) <- "filter_cv"
-  return(params)
+  params
 }
 
 #' @export
@@ -183,5 +179,5 @@ filter_insource_ions_params <- function(cluster_threshold = 0.95,
   params <- list(cluster_threshold = cluster_threshold,
                  copy_object = copy_object)
   class(params) <- "filter_insource_ions"
-  return(params)
+  params
 }

@@ -22,25 +22,12 @@ data <-
                    mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 
-filtered_data <- data |>
-   filter_peak_table(filter_mispicked_ions_params()) |>
-   filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-   filter_peak_table(filter_group_params(group_threshold = 0.1,
-                                             "Blanks")) |>
-   filter_peak_table(filter_insource_ions_params())
 
-change_rt_to_seconds_or_minute(filtered_data, "minutes")
 
 matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
- filtered_data, 10, 6)
+ data, 1, 6)
 
-dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
- score_params = modified_cosine_params(0.5), min_peaks = 0)
-
-cluster_results <- cluster_data(distance_df = dist,
- ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
-
-community_object <- create_community_matrix_object(cluster_results)
+community_object <- create_community_matrix_object(matched_data)
 print(community_object)
 
 }

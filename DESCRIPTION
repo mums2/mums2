@@ -27,7 +27,6 @@ Imports:
     Rcpp,
     data.table,
     mpactr,
-    mzR,
     utils,
     stats,
     parallel,
@@ -37,7 +36,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     tidyverse,
-    networkD3
+    networkD3,
+    mzR
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown

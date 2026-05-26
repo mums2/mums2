@@ -15,17 +15,9 @@
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
-#'
-#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
 #' @return returns a `mass_data` object of all of the ms2 and ms1 matches.
 ms2_ms1_compare <- function(ms2_files, mpactr_object,
                             mz_tolerance, rt_tolerance) {
@@ -78,7 +70,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
                                "ms1_compound_id", "spectra_index",
                                "ms2_spectrum_id")
   row_index <- 1
-  for (i in seq_len(length(result))) {
+  for (i in seq_along(result)) {
     if (result[[i]] < 0) {
       next
     }

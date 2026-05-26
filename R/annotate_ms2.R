@@ -53,21 +53,15 @@
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
-#'
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
 #'  massbank <- read_msp(mums2_example("MSMS-Neg-Respect.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
 #'    reference = massbank, scoring_params = modified_cosine_params(0.5),
-#'    ppm = 25,
-#'    min_score =  0.5, chemical_min_score = 0)
+#'    ppm = 1.6e3,
+#'    min_score =  0.5, chemical_min_score = 0,
+#'    number_of_threads = 2)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params,
 #'                     ppm, min_score,
@@ -163,5 +157,5 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
     }
     annotations$omu[annotation_omus[[i]]] <- names(annotation_omus[i])
   }
-  return(annotations)
+  annotations
 }
