@@ -21,7 +21,7 @@
 #'
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  data, 0.02, 1)
+#'  data, 0.1, 1)
 #' compute_molecular_formulas(matched_data, number_of_threads = 2)
 #' @references
 #' Sebastian Böcker, Florian Rasche, Towards de novo identification of
