@@ -113,584 +113,429 @@ matrix of rarefied feature intensities.</p>
 <span class="r-in"><span>                   <span class="fu">mums2</span><span class="fu">::</span><span class="fu"><a href="mums2_example.html">mums2_example</a></span><span class="op">(</span><span class="st">"boryillus_metadata.csv"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   format <span class="op">=</span> <span class="st">"None"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_mispicked_ions_params.html">filter_mispicked_ions_params</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_cv_params.html">filter_cv_params</a></span><span class="op">(</span>cv_threshold <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_group_params.html">filter_group_params</a></span><span class="op">(</span>group_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>                                             <span class="st">"Blanks"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_insource_ions_params.html">filter_insource_ions_params</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking 1500 peaks for mispicked peaks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Argument merge_peaks is: TRUE. Merging mispicked peaks with method sum.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 50 ions failed the mispicked filter, 1450 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 1450 peaks for replicability across technical replicates.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 329 ions failed the cv_filter filter, 1121 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 1121 peaks based on the sample group: Blanks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Argument remove_ions is: TRUE.Removing peaks from Blanks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 342 ions failed the Blanks filter, 779 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 779 peaks for insource ions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 55 ions failed the insource filter, 724 ions remain.</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="change_rt_to_seconds_or_minute.html">change_rt_to_seconds_or_minute</a></span><span class="op">(</span><span class="va">filtered_data</span>, <span class="st">"minutes"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Changing rt values to minutes"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;compound, mz, kmd, RTINMINUTES&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    compound        mz     kmd RTINMINUTES</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      &lt;char&gt;     &lt;num&gt;   &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: 1000.65345 Da 418.99 s 1001.6607 0.66073   0.1163333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 1002.23833 Da 440.75 s 1003.2456 0.24560   0.1225000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 1002.57692 Da 414.74 s 1003.5842 0.58419   0.1151667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: 1004.19672 Da 603.96 s 1005.2040 0.20400   0.1678333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: 1004.23580 Da 548.28 s 1005.2431 0.24307   0.1523333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:  980.84769 Da 515.58 s  981.8550 0.85497   0.1431667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:  984.23693 Da 604.23 s  985.2442 0.24420   0.1678333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:  984.65546 Da 460.05 s  985.6627 0.66274   0.1278333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:  997.30596 Da 605.90 s  998.3132 0.31323   0.1683333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:  998.28767 Da 556.84 s  981.2843 0.28429   0.1546667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank1_1_3_392 221012_DGM_Blank2_1_1_404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank2_1_2_405 221012_DGM_Blank2_1_3_406</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank3_1_1_419 221012_DGM_Blank3_1_2_420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank3_1_3_421 221012_DGM_Blank4_1_1_434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                   1538.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_3_436</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                  1201.261                  1180.144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1588_3_1_395 221012_DGM_MB1588_3_2_396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                  6487.566                  5098.135</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                202552.359                148361.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1588_3_3_397 221012_DGM_MB1589_4_1_398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                  7221.981                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                155704.094                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1589_4_2_399 221012_DGM_MB1589_4_3_400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1590_5_1_401 221012_DGM_MB1590_5_2_402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                  1977.438                  1953.256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                  5517.501                  4006.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                 17435.523                 17933.676</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1590_5_3_403 221012_DGM_MB1591_6_1_407</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                  2209.528                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                  4882.215                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                 18599.828                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1591_6_2_408 221012_DGM_MB1591_6_3_409</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1592_7_1_410 221012_DGM_MB1592_7_2_411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1592_7_3_412 221012_DGM_MB1593_8_1_413</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                  3522.783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                 14306.895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1593_8_2_414 221012_DGM_MB1593_8_3_415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                   5010.69                  3815.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                  10564.97                 14566.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1594_9_1_416 221012_DGM_MB1594_9_2_417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1594_9_3_418 221012_DGM_MB1595_10_1_422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                   9122.671</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                  35174.156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                   1316.851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1595_10_2_423 221012_DGM_MB1595_10_3_424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   9405.939                  10668.905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                  32907.184                  30415.164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                   1761.997                   1803.242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1597_11_1_425 221012_DGM_MB1597_11_2_426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                   7123.614                    9147.79</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1597_11_3_427 221012_DGM_MB1598_12_1_428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                   9354.261                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1598_12_2_429 221012_DGM_MB1598_12_3_430</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1599_13_1_431 221012_DGM_MB1599_13_2_432</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   10114.79                   10594.81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                   15386.47                   15706.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1599_13_3_433    cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt; &lt;lgcl&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   10425.28   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                   16543.69   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                       0.00   TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">matched_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="ms2_ms1_compare.html">ms2_ms1_compare</a></span><span class="op">(</span><span class="fu"><a href="mums2_example.html">mums2_example</a></span><span class="op">(</span><span class="st">"botryllus_v2.gnps.mgf"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> <span class="va">filtered_data</span>, <span class="fl">10</span>, <span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">data</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/botryllus_v2.gnps.mgf ..."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■                                                 </span><span style="color: #BBBBBB;"> | 2%  ETA: ...Computing </span><span style="color: #00BB00;">■■                                                </span><span style="color: #BBBBBB;"> | 4%  ETA: ...Computing </span><span style="color: #00BB00;">■■■                                               </span><span style="color: #BBBBBB;"> | 6%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■                                              </span><span style="color: #BBBBBB;"> | 8%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■                                             </span><span style="color: #BBBBBB;"> | 10%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■                                            </span><span style="color: #BBBBBB;"> | 12%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■                                           </span><span style="color: #BBBBBB;"> | 14%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■                                          </span><span style="color: #BBBBBB;"> | 16%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■                                         </span><span style="color: #BBBBBB;"> | 18%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■                                        </span><span style="color: #BBBBBB;"> | 20%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■                                       </span><span style="color: #BBBBBB;"> | 22%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■                                      </span><span style="color: #BBBBBB;"> | 24%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■                                     </span><span style="color: #BBBBBB;"> | 26%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■                                    </span><span style="color: #BBBBBB;"> | 28%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■                                   </span><span style="color: #BBBBBB;"> | 30%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■                                  </span><span style="color: #BBBBBB;"> | 32%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■                                 </span><span style="color: #BBBBBB;"> | 34%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■                                </span><span style="color: #BBBBBB;"> | 36%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■                               </span><span style="color: #BBBBBB;"> | 38%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■                              </span><span style="color: #BBBBBB;"> | 40%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■                             </span><span style="color: #BBBBBB;"> | 42%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■                            </span><span style="color: #BBBBBB;"> | 44%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■                           </span><span style="color: #BBBBBB;"> | 46%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■                          </span><span style="color: #BBBBBB;"> | 48%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■                         </span><span style="color: #BBBBBB;"> | 50%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■                        </span><span style="color: #BBBBBB;"> | 52%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■                       </span><span style="color: #BBBBBB;"> | 54%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      </span><span style="color: #BBBBBB;"> | 56%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     </span><span style="color: #BBBBBB;"> | 58%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    </span><span style="color: #BBBBBB;"> | 60%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   </span><span style="color: #BBBBBB;"> | 62%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  </span><span style="color: #BBBBBB;"> | 64%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 </span><span style="color: #BBBBBB;"> | 66%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                </span><span style="color: #BBBBBB;"> | 68%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               </span><span style="color: #BBBBBB;"> | 70%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              </span><span style="color: #BBBBBB;"> | 72%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             </span><span style="color: #BBBBBB;"> | 74%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            </span><span style="color: #BBBBBB;"> | 76%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           </span><span style="color: #BBBBBB;"> | 78%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          </span><span style="color: #BBBBBB;"> | 80%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         </span><span style="color: #BBBBBB;"> | 82%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        </span><span style="color: #BBBBBB;"> | 84%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       </span><span style="color: #BBBBBB;"> | 86%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      </span><span style="color: #BBBBBB;"> | 88%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span><span style="color: #BBBBBB;"> | 90%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span><span style="color: #BBBBBB;"> | 92%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span><span style="color: #BBBBBB;"> | 94%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span><span style="color: #BBBBBB;"> | 96%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span><span style="color: #BBBBBB;"> | 98%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">[1] "41/724 peaks have an MS2 spectra."</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">[1] "17/349 peaks have an MS2 spectra."</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="dist_ms2.html">dist_ms2</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">matched_data</span>, cutoff <span class="op">=</span> <span class="fl">0.3</span>, precursor_thresh <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span> score_params <span class="op">=</span> <span class="fu"><a href="modified_cosine_params.html">modified_cosine_params</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, min_peaks <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■                                                 </span><span style="color: #BBBBBB;"> | 2%  ETA: ...Computing </span><span style="color: #00BB00;">■■                                                </span><span style="color: #BBBBBB;"> | 4%  ETA: ...Computing </span><span style="color: #00BB00;">■■■                                               </span><span style="color: #BBBBBB;"> | 7%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■                                              </span><span style="color: #BBBBBB;"> | 9%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■                                            </span><span style="color: #BBBBBB;"> | 12%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■                                           </span><span style="color: #BBBBBB;"> | 14%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■                                          </span><span style="color: #BBBBBB;"> | 17%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■                                         </span><span style="color: #BBBBBB;"> | 19%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■                                        </span><span style="color: #BBBBBB;"> | 21%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■                                      </span><span style="color: #BBBBBB;"> | 24%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■                                     </span><span style="color: #BBBBBB;"> | 26%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■                                    </span><span style="color: #BBBBBB;"> | 29%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■                                   </span><span style="color: #BBBBBB;"> | 31%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■                                 </span><span style="color: #BBBBBB;"> | 34%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■                                </span><span style="color: #BBBBBB;"> | 36%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■                               </span><span style="color: #BBBBBB;"> | 39%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■                              </span><span style="color: #BBBBBB;"> | 41%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■                             </span><span style="color: #BBBBBB;"> | 43%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■                           </span><span style="color: #BBBBBB;"> | 46%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■                          </span><span style="color: #BBBBBB;"> | 48%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■                         </span><span style="color: #BBBBBB;"> | 51%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■                        </span><span style="color: #BBBBBB;"> | 53%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      </span><span style="color: #BBBBBB;"> | 56%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     </span><span style="color: #BBBBBB;"> | 58%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    </span><span style="color: #BBBBBB;"> | 60%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   </span><span style="color: #BBBBBB;"> | 63%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  </span><span style="color: #BBBBBB;"> | 65%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                </span><span style="color: #BBBBBB;"> | 68%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               </span><span style="color: #BBBBBB;"> | 70%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              </span><span style="color: #BBBBBB;"> | 73%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             </span><span style="color: #BBBBBB;"> | 75%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           </span><span style="color: #BBBBBB;"> | 78%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          </span><span style="color: #BBBBBB;"> | 80%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         </span><span style="color: #BBBBBB;"> | 82%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        </span><span style="color: #BBBBBB;"> | 85%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       </span><span style="color: #BBBBBB;"> | 87%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span><span style="color: #BBBBBB;"> | 90%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span><span style="color: #BBBBBB;"> | 92%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span><span style="color: #BBBBBB;"> | 95%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span><span style="color: #BBBBBB;"> | 97%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cluster_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="cluster_data.html">cluster_data</a></span><span class="op">(</span>distance_df <span class="op">=</span> <span class="va">dist</span>,</span></span>
-<span class="r-in"><span> ms2_match_data <span class="op">=</span> <span class="va">matched_data</span>, cutoff <span class="op">=</span> <span class="fl">0.3</span>, cluster_method <span class="op">=</span> <span class="st">"opticlust"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">community_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_community_matrix_object.html">create_community_matrix_object</a></span><span class="op">(</span><span class="va">cluster_results</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">rarefy_ms</span><span class="op">(</span><span class="va">community_object</span>, <span class="fl">4000</span>, <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            omu1 omu2 omu3 omu4 omu5 omu6 omu7 omu8 omu9 omu10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433  472  246    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431  414  254    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430    0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428    0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426  265  134    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424    0    0    0    0    0    0    0    0  110     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423    0    0    0    0    0    0    0    0  145     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427  275  142    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422    0    0    0    0    0    0    0    0  132     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391     0    0    0    0    0    0    0    0  656     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432  496  264    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425  256  109    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390     0    0    0    0    0    0    0    0  856     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392     0    0    0    0    0    0    0    0  884     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411     0    0    0    0    0    0    0    0  185     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407     0    0    0    0    0    0    0    0  142     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412     0    0    0    0    0    0    0    0  194     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429    0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408     0    0    0    0    0    0    0    0  126     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409     0    0    0    0    0    0    0    0  114     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410     0    0    0    0    0    0    0    0  147     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420     0    0    0    0    0    0    0    0    0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            omu11 omu12 omu13 omu14 omu15 omu16 omu17 omu18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435   2950     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434   2933     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433     0     0   161     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431     0     0   156     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424  2331     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423  1994     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427   101     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422  2289     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404   3324     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403   2081     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432     0     0   137     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402   2180     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425   113     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401   2215     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411   2044     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407   1906     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398   2879     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436   3016     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412   2022     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414   1974     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400   2916     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399   2859     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405   3257     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408   2025     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406   3212     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413   2104     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409   2106     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410   1952     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415   1973     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416    723     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417    776     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418    763     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            omu19 omu20 omu21 omu22 omu23 omu24 omu25 omu26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435      0     0     0   176     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434      0     0     0   215     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433     0   268   256   554   513     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431     0   222   299   610   493     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426     0   179   208   197   151     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424     0     0     0   929   630     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423     0     0     0  1101   760     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427     0   163   192   205   151     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422     0     0     0   877   702     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404      0     0     0   120   154     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419      0     0     0     0  2765     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403      0     0     0  1016   887     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391      0     0     0  2219     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432     0   212   281   565   462     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402      0     0     0  1034   786     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425     0   173   209   182   153     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390      0     0     0  1909     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401      0     0     0   993   766     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397      0     0     0  2034  1688     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395      0     0     0  2002  1631     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392      0     0     0  1806     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411      0     0     0     0  1597     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407      0     0     0   918   747     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398      0     0     0   434   341     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436      0     0     0   169     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421      0     0     0     0  2796     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412      0     0     0     0  1618     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414      0     0     0  1008   762     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400      0     0     0   411   345     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399      0     0     0   462   359     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405      0     0     0   131   180     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408      0     0     0   946   766     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406      0     0     0   156   134     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413      0     0     0   960   698     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409      0     0     0   891   651     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410      0     0     0     0  1746     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396      0     0     0  2067  1574     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415      0     0     0  1045   734     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416      0     0     0  1126   727     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417      0     0     0   995   787     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418      0     0     0  1031   767     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420      0     0     0     0  2964     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            omu27 omu28 omu29 omu30 omu31 omu32 omu33 omu34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435      0     0     0     0     0     0   874     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434      0     0     0     0     0     0   852     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433     0     0  1147     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431     0     0  1050     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430     0     0  3804   196     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428     0     0  3742   258     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426     0     0   780     0     0     0  1843     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427     0     0   707     0     0     0  1916     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404      0     0     0     0     0     0   402     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419   1235     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403      0     0     0     0     0     0   103     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391      0     0     0     0     0     0  1125     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432     0     0  1198     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402      0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425     0     0   771     0     0     0  1810     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390      0     0     0     0     0     0  1235     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401      0     0     0     0     0     0   102     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397    278     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395    367     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392      0     0     0     0     0     0  1310     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411      0     0     0     0     0     0   174     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407      0     0     0     0     0     0   164   123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398      0     0     0     0     0     0   202   144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436      0     0     0     0     0     0   815     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421   1204     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412      0     0     0     0     0     0   166     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414      0     0     0     0     0     0   256     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400      0     0     0     0     0     0   214   114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429     0     0  3769   231     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399      0     0     0     0     0     0   219   101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405      0     0     0     0     0     0   432     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408      0     0     0     0     0     0   137     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406      0     0     0     0     0     0   498     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413      0     0     0     0     0     0   238     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409      0     0     0     0     0     0   126   112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410      0     0     0     0     0     0   155     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396    359     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415      0     0     0     0     0     0   248     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416      0     0     0     0     0     0   479   945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417      0     0     0     0     0     0   512   930</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418      0     0     0     0     0     0   482   957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420   1036     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            omu35 omu36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433   383     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431   397   105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426   243     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427   205     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432   385     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425   224     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418      0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420      0     0</span>
+<span class="r-in"><span><span class="va">community_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_community_matrix_object.html">create_community_matrix_object</a></span><span class="op">(</span><span class="va">matched_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">rarefy_ms</span><span class="op">(</span><span class="va">community_object</span>, <span class="fl">400</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            559.37264 Da 448.87 s 882.45822 Da 458.82 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                     17                    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0                    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                    27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0                    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                      0                    11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0                    33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                     26                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                      0                    48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                     29                    63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                     20                    23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                     13                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                     12                    28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                      0                    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                     32                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                      0                    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                      0                    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                    67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                    56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                    24                    32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                    58                    47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                    37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                     0                   206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                    20                   205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                     0                   304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                   117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                     0                   173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                     0                   155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                    12                    74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                    16                    96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                    17                   111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                     27                    18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                    27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                      0                    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            782.56450 Da 436.43 s 536.52815 Da 486.44 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0                    64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                    18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0                    56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0                    53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                     27                    47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                      0                    88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                    32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0                    95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                    46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                    87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0                    54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                    142                    58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                    157                   124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                     48                    65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                     74                    66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                      0                    65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                     74                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                    180                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                    53                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                    53                    31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                    32                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                    90                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                    84                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                   108                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                    56                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                    55                    47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                     0                   112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                   147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                     81                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            648.44226 Da 504.36 s 609.17531 Da 532.76 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                   360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                   265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                     42                   226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                     58                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                     45                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                    106                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                   201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                     10                   375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                   295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                    151                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                   122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0                    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                     55                    59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                     93                    56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                      0                   104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                     68                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0                    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                     86                    73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                   163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0                    55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                    11                    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                    64                    27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                     0                    70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                      0                   219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                   152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                      0                    74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            647.41630 Da 447.95 s 778.53241 Da 445.03 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                     32                    53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                     14                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                     10                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                    73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                   249</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                    59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                     39                   174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                     21                    78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0                   167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                     21                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                    19                    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                    27                    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                    25                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                    57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                    36                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                    47                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                     0                    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                    53                    36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                      0                    39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            555.39892 Da 347.32 s 761.54191 Da 605.01 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                     14                    84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                     12                   213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                    95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                   282</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0                   235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                      0                   167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                     16                   138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                    56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                     10                   148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                     27                    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                     16                    67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0                   104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                    62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                     26                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                     17                   115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                    73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                     12                   104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                      0                    64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                     29                    99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                     15                    84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                     25                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                     11                    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                     21                    26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                     20                    43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                     45                    88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                     69                   102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                    13                   134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                    15                   124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                   157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                    16                    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                    17                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                    27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                    27                    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                    25                    51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                     0                    45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                    18                    65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                    35                    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                     11                    33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                     18                    28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                     12                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            687.48123 Da 402.80 s 1298.31327 Da 555.75 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0                     64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                     18                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                     30                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                     23                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                     15                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                     56                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                    159                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                    147                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                    152                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                     57                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                     65                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                     49                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                    116                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                     65                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                     88                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                    85                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                   104                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                    93                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                    24                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                    19                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                    22                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                    51                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                    56                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                    60                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                    131                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            794.53451 Da 530.10 s 1293.35540 Da 486.71 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0                    117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                     15                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                     61                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0                     28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                     99                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                     36                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                     18                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                    14                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                     0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                    18                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                    10                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                     17                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                     18                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                     11                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            677.46670 Da 408.06 s 687.48111 Da 390.53 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                     26                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                     15                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                     13                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                     30                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0                   137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0                    74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                     59                    44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                     40                    49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                    119                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0                    57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0                    52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                    76                    37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                    53                    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0                    37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                     0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                     61                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                      0                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                     18                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            872.25849 Da 530.21 s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392                     60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399                    102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400                     29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409                     27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410                     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413                     22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415                     18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416                     19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417                     27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419                     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420                     20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421                     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430                     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431                    11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432                    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433                    13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434                     14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435                     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436                     13</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

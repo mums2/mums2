@@ -97,7 +97,7 @@
   : Get Peaks Data
 - [`get_samples()`](https://www.mums2.org/mums2/reference/get_samples.md)
   : Get Samples
-- [`get_molecular_formula_predictions()`](https://www.mums2.org/mums2/reference/get_molecular_formula_predictions.md)
+- [`get_molecular_formula_preds()`](https://www.mums2.org/mums2/reference/get_molecular_formula_preds.md)
   : Get Molecular Formula Predictions
 
 ## Helper Functions

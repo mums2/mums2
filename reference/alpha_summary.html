@@ -82,8 +82,8 @@ species to reach before it is included in the rarefaction sum.</p></dd>
 
 <dt id="arg-diversity-index">diversity_index<a class="anchor" aria-label="anchor" href="#arg-diversity-index"></a></dt>
 <dd><p>the diversity index you wish to calculate diversity,
-the options are shannon, simpson, or richness. You may also compute many indexes
-at the same time using a vector (ie. c("shannon", "simpson")).</p></dd>
+the options are shannon, simpson, or richness. You may also compute many
+indexes at the same time using a vector (ie. c("shannon", "simpson")).</p></dd>
 
 
 <dt id="arg-subsample">subsample<a class="anchor" aria-label="anchor" href="#arg-subsample"></a></dt>
@@ -118,450 +118,123 @@ you want the calculation to use.</p></dd>
 <span class="r-in"><span>                   <span class="fu">mums2</span><span class="fu">::</span><span class="fu"><a href="mums2_example.html">mums2_example</a></span><span class="op">(</span><span class="st">"boryillus_metadata.csv"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   format <span class="op">=</span> <span class="st">"None"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_mispicked_ions_params.html">filter_mispicked_ions_params</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_cv_params.html">filter_cv_params</a></span><span class="op">(</span>cv_threshold <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_group_params.html">filter_group_params</a></span><span class="op">(</span>group_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>                                             <span class="st">"Blanks"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="filter_peak_table.html">filter_peak_table</a></span><span class="op">(</span><span class="fu"><a href="filter_insource_ions_params.html">filter_insource_ions_params</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Checking 1500 peaks for mispicked peaks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Argument merge_peaks is: TRUE. Merging mispicked peaks with method sum.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 50 ions failed the mispicked filter, 1450 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 1450 peaks for replicability across technical replicates.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 329 ions failed the cv_filter filter, 1121 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 1121 peaks based on the sample group: Blanks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Argument remove_ions is: TRUE.Removing peaks from Blanks.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 342 ions failed the Blanks filter, 779 ions remain.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Parsing 779 peaks for insource ions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> 55 ions failed the insource filter, 724 ions remain.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="change_rt_to_seconds_or_minute.html">change_rt_to_seconds_or_minute</a></span><span class="op">(</span><span class="va">filtered_data</span>, <span class="st">"minutes"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Changing rt values to minutes"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;compound, mz, kmd, RTINMINUTES&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    compound        mz     kmd RTINMINUTES</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      &lt;char&gt;     &lt;num&gt;   &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: 1000.65345 Da 418.99 s 1001.6607 0.66073   0.1163333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 1002.23833 Da 440.75 s 1003.2456 0.24560   0.1225000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 1002.57692 Da 414.74 s 1003.5842 0.58419   0.1151667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: 1004.19672 Da 603.96 s 1005.2040 0.20400   0.1678333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: 1004.23580 Da 548.28 s 1005.2431 0.24307   0.1523333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:  980.84769 Da 515.58 s  981.8550 0.85497   0.1431667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:  984.23693 Da 604.23 s  985.2442 0.24420   0.1678333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:  984.65546 Da 460.05 s  985.6627 0.66274   0.1278333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:  997.30596 Da 605.90 s  998.3132 0.31323   0.1683333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:  998.28767 Da 556.84 s  981.2843 0.28429   0.1546667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank1_1_3_392 221012_DGM_Blank2_1_1_404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank2_1_2_405 221012_DGM_Blank2_1_3_406</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank3_1_1_419 221012_DGM_Blank3_1_2_420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank3_1_3_421 221012_DGM_Blank4_1_1_434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                   1538.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                      0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_3_436</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                  1201.261                  1180.144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1588_3_1_395 221012_DGM_MB1588_3_2_396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                  6487.566                  5098.135</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                202552.359                148361.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1588_3_3_397 221012_DGM_MB1589_4_1_398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                  7221.981                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                155704.094                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1589_4_2_399 221012_DGM_MB1589_4_3_400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1590_5_1_401 221012_DGM_MB1590_5_2_402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                  1977.438                  1953.256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                  5517.501                  4006.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                 17435.523                 17933.676</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1590_5_3_403 221012_DGM_MB1591_6_1_407</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                  2209.528                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                  4882.215                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                 18599.828                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                     0.000                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1591_6_2_408 221012_DGM_MB1591_6_3_409</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1592_7_1_410 221012_DGM_MB1592_7_2_411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1592_7_3_412 221012_DGM_MB1593_8_1_413</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                  3522.783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                 14306.895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1593_8_2_414 221012_DGM_MB1593_8_3_415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                   5010.69                  3815.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                  10564.97                 14566.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.00                     0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1594_9_1_416 221012_DGM_MB1594_9_2_417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1594_9_3_418 221012_DGM_MB1595_10_1_422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                         0                   9122.671</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                         0                  35174.156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                         0                   1316.851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                         0                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1595_10_2_423 221012_DGM_MB1595_10_3_424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   9405.939                  10668.905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                  32907.184                  30415.164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                   1761.997                   1803.242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                      0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1597_11_1_425 221012_DGM_MB1597_11_2_426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                   7123.614                    9147.79</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1597_11_3_427 221012_DGM_MB1598_12_1_428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                   9354.261                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                      0.000                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1598_12_2_429 221012_DGM_MB1598_12_3_430</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                          0                          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1599_13_1_431 221012_DGM_MB1599_13_2_432</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt;                      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   10114.79                   10594.81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                   15386.47                   15706.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                       0.00                       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      221012_DGM_MB1599_13_3_433    cor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;num&gt; &lt;lgcl&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                   10425.28   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                   16543.69   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 722:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 723:                       0.00   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 724:                       0.00   TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">matched_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="ms2_ms1_compare.html">ms2_ms1_compare</a></span><span class="op">(</span><span class="fu"><a href="mums2_example.html">mums2_example</a></span><span class="op">(</span><span class="st">"botryllus_v2.gnps.mgf"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> <span class="va">filtered_data</span>, <span class="fl">10</span>, <span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">data</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Reading: /home/runner/work/_temp/Library/mums2/extdata/botryllus_v2.gnps.mgf ..."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■                                                 </span><span style="color: #BBBBBB;"> | 2%  ETA: ...Computing </span><span style="color: #00BB00;">■■                                                </span><span style="color: #BBBBBB;"> | 4%  ETA: ...Computing </span><span style="color: #00BB00;">■■■                                               </span><span style="color: #BBBBBB;"> | 6%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■                                              </span><span style="color: #BBBBBB;"> | 8%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■                                             </span><span style="color: #BBBBBB;"> | 10%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■                                            </span><span style="color: #BBBBBB;"> | 12%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■                                           </span><span style="color: #BBBBBB;"> | 14%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■                                          </span><span style="color: #BBBBBB;"> | 16%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■                                         </span><span style="color: #BBBBBB;"> | 18%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■                                        </span><span style="color: #BBBBBB;"> | 20%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■                                       </span><span style="color: #BBBBBB;"> | 22%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■                                      </span><span style="color: #BBBBBB;"> | 24%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■                                     </span><span style="color: #BBBBBB;"> | 26%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■                                    </span><span style="color: #BBBBBB;"> | 28%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■                                   </span><span style="color: #BBBBBB;"> | 30%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■                                  </span><span style="color: #BBBBBB;"> | 32%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■                                 </span><span style="color: #BBBBBB;"> | 34%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■                                </span><span style="color: #BBBBBB;"> | 36%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■                               </span><span style="color: #BBBBBB;"> | 38%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■                              </span><span style="color: #BBBBBB;"> | 40%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■                             </span><span style="color: #BBBBBB;"> | 42%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■                            </span><span style="color: #BBBBBB;"> | 44%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■                           </span><span style="color: #BBBBBB;"> | 46%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■                          </span><span style="color: #BBBBBB;"> | 48%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■                         </span><span style="color: #BBBBBB;"> | 50%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■                        </span><span style="color: #BBBBBB;"> | 52%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■                       </span><span style="color: #BBBBBB;"> | 54%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      </span><span style="color: #BBBBBB;"> | 56%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     </span><span style="color: #BBBBBB;"> | 58%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    </span><span style="color: #BBBBBB;"> | 60%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   </span><span style="color: #BBBBBB;"> | 62%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  </span><span style="color: #BBBBBB;"> | 64%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 </span><span style="color: #BBBBBB;"> | 66%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                </span><span style="color: #BBBBBB;"> | 68%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               </span><span style="color: #BBBBBB;"> | 70%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              </span><span style="color: #BBBBBB;"> | 72%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             </span><span style="color: #BBBBBB;"> | 74%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            </span><span style="color: #BBBBBB;"> | 76%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           </span><span style="color: #BBBBBB;"> | 78%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          </span><span style="color: #BBBBBB;"> | 80%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         </span><span style="color: #BBBBBB;"> | 82%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        </span><span style="color: #BBBBBB;"> | 84%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       </span><span style="color: #BBBBBB;"> | 86%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      </span><span style="color: #BBBBBB;"> | 88%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span><span style="color: #BBBBBB;"> | 90%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span><span style="color: #BBBBBB;"> | 92%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span><span style="color: #BBBBBB;"> | 94%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span><span style="color: #BBBBBB;"> | 96%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span><span style="color: #BBBBBB;"> | 98%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">[1] "41/724 peaks have an MS2 spectra."</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">[1] "17/349 peaks have an MS2 spectra."</span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="dist_ms2.html">dist_ms2</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">matched_data</span>, cutoff <span class="op">=</span> <span class="fl">0.3</span>, precursor_thresh <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span> score_params <span class="op">=</span> <span class="fu"><a href="modified_cosine_params.html">modified_cosine_params</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, min_peaks <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■                                                 </span><span style="color: #BBBBBB;"> | 2%  ETA: ...Computing </span><span style="color: #00BB00;">■■                                                </span><span style="color: #BBBBBB;"> | 4%  ETA: ...Computing </span><span style="color: #00BB00;">■■■                                               </span><span style="color: #BBBBBB;"> | 7%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■                                              </span><span style="color: #BBBBBB;"> | 9%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■                                            </span><span style="color: #BBBBBB;"> | 12%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■                                           </span><span style="color: #BBBBBB;"> | 14%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■                                          </span><span style="color: #BBBBBB;"> | 17%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■                                         </span><span style="color: #BBBBBB;"> | 19%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■                                        </span><span style="color: #BBBBBB;"> | 21%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■                                      </span><span style="color: #BBBBBB;"> | 24%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■                                     </span><span style="color: #BBBBBB;"> | 26%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■                                    </span><span style="color: #BBBBBB;"> | 29%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■                                   </span><span style="color: #BBBBBB;"> | 31%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■                                 </span><span style="color: #BBBBBB;"> | 34%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■                                </span><span style="color: #BBBBBB;"> | 36%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■                               </span><span style="color: #BBBBBB;"> | 39%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■                              </span><span style="color: #BBBBBB;"> | 41%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■                             </span><span style="color: #BBBBBB;"> | 43%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■                           </span><span style="color: #BBBBBB;"> | 46%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■                          </span><span style="color: #BBBBBB;"> | 48%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■                         </span><span style="color: #BBBBBB;"> | 51%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■                        </span><span style="color: #BBBBBB;"> | 53%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      </span><span style="color: #BBBBBB;"> | 56%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     </span><span style="color: #BBBBBB;"> | 58%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    </span><span style="color: #BBBBBB;"> | 60%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   </span><span style="color: #BBBBBB;"> | 63%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  </span><span style="color: #BBBBBB;"> | 65%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                </span><span style="color: #BBBBBB;"> | 68%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               </span><span style="color: #BBBBBB;"> | 70%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              </span><span style="color: #BBBBBB;"> | 73%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             </span><span style="color: #BBBBBB;"> | 75%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           </span><span style="color: #BBBBBB;"> | 78%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          </span><span style="color: #BBBBBB;"> | 80%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         </span><span style="color: #BBBBBB;"> | 82%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        </span><span style="color: #BBBBBB;"> | 85%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       </span><span style="color: #BBBBBB;"> | 87%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span><span style="color: #BBBBBB;"> | 90%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    </span><span style="color: #BBBBBB;"> | 92%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span><span style="color: #BBBBBB;"> | 95%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  </span><span style="color: #BBBBBB;"> | 97%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
+<span class="r-in"><span> score_params <span class="op">=</span> <span class="fu"><a href="modified_cosine_params.html">modified_cosine_params</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, min_peaks <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span> number_of_threads <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■■                                                </span><span style="color: #BBBBBB;"> | 5%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■                                             </span><span style="color: #BBBBBB;"> | 11%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■                                          </span><span style="color: #BBBBBB;"> | 17%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■                                       </span><span style="color: #BBBBBB;"> | 23%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■                                    </span><span style="color: #BBBBBB;"> | 29%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■                                 </span><span style="color: #BBBBBB;"> | 35%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■                              </span><span style="color: #BBBBBB;"> | 41%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■                           </span><span style="color: #BBBBBB;"> | 47%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■                        </span><span style="color: #BBBBBB;"> | 52%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     </span><span style="color: #BBBBBB;"> | 58%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  </span><span style="color: #BBBBBB;"> | 64%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               </span><span style="color: #BBBBBB;"> | 70%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            </span><span style="color: #BBBBBB;"> | 76%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         </span><span style="color: #BBBBBB;"> | 82%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      </span><span style="color: #BBBBBB;"> | 88%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span><span style="color: #BBBBBB;"> | 94%  ETA: ...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cluster_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="cluster_data.html">cluster_data</a></span><span class="op">(</span>distance_df <span class="op">=</span> <span class="va">dist</span>,</span></span>
 <span class="r-in"><span> ms2_match_data <span class="op">=</span> <span class="va">matched_data</span>,</span></span>
 <span class="r-in"><span> cutoff <span class="op">=</span> <span class="fl">0.3</span>, cluster_method <span class="op">=</span> <span class="st">"opticlust"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>[WARNING]: The mcc metric is not suitible for your data with a cutoff of 0.300000 using tptn instead.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">community_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_community_matrix_object.html">create_community_matrix_object</a></span><span class="op">(</span><span class="va">cluster_results</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">alpha_summary</span><span class="op">(</span>community_object <span class="op">=</span> <span class="va">community_object</span>, size <span class="op">=</span> <span class="fl">400</span>,</span></span>
-<span class="r-in"><span>              threshold <span class="op">=</span> <span class="fl">100</span>, diversity_index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"shannon"</span>, <span class="st">"simpson"</span>, <span class="st">"richness"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              subsample <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>              threshold <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>              diversity_index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"shannon"</span>, <span class="st">"simpson"</span>, <span class="st">"richness"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              subsample <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">1</span>, number_of_threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBBBB;">Computing                                                    | 0%  ETA: -...Computing </span><span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</span><span style="color: #BBBBBB;"> | 100%  ETA: ...</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                               samples   shannon   simpson</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.4788682 0.3812893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.3983712 0.3292497</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 0.9734037 0.6235755</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431 221012_DGM_MB1599_13_1_431 0.9959194 0.6319328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430 221012_DGM_MB1598_12_3_430 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_1_428 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_2_426 0.5775888 0.4398496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424 221012_DGM_MB1595_10_3_424 0.4782276 0.3809948</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423 221012_DGM_MB1595_10_2_423 0.9079997 0.5978826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427 221012_DGM_MB1597_11_3_427 0.5124728 0.4019925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_1_422 0.8630103 0.5791496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404   221012_DGM_Blank2_1_1_404 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419   221012_DGM_Blank3_1_1_419 0.5447272 0.4210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403   221012_DGM_MB1590_5_3_403 0.5775888 0.4398496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391   221012_DGM_Blank1_1_2_391 0.5161732 0.4040506</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_2_432 0.5712836 0.4362907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402   221012_DGM_MB1590_5_2_402 0.8615502 0.5785688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425 221012_DGM_MB1597_11_1_425 0.5447272 0.4210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390   221012_DGM_Blank1_1_1_390 1.0153478 0.6390067</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401   221012_DGM_MB1590_5_1_401 0.8475118 0.5725670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397   221012_DGM_MB1588_3_3_397 0.6776430 0.4934211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395   221012_DGM_MB1588_3_1_395 0.6499919 0.4791479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392   221012_DGM_Blank1_1_3_392 1.0101411 0.6371221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411   221012_DGM_MB1592_7_2_411 0.6889311 0.4991353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407   221012_DGM_MB1591_6_1_407 0.9451152 0.6125101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398   221012_DGM_MB1589_4_1_398 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436   221012_DGM_Blank4_1_3_436 0.3913292 0.3244954</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421   221012_DGM_Blank3_1_3_421 0.5124728 0.4019925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412   221012_DGM_MB1592_7_3_412 0.6723402 0.4907143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414   221012_DGM_MB1593_8_2_414 0.9773761 0.6249731</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400   221012_DGM_MB1589_4_3_400 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429 221012_DGM_MB1598_12_2_429 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399   221012_DGM_MB1589_4_2_399 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.6901267 0.4997368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 1.0308735 0.6446367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431 221012_DGM_MB1599_13_1_431 1.3606209 0.7450190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430 221012_DGM_MB1598_12_3_430 0.6539265 0.4812030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428 221012_DGM_MB1598_12_1_428 1.0688209 0.6578568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426 221012_DGM_MB1597_11_2_426 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424 221012_DGM_MB1595_10_3_424 0.6821825 0.4957268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423 221012_DGM_MB1595_10_2_423 0.6931472 0.5012531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427 221012_DGM_MB1597_11_3_427 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422 221012_DGM_MB1595_10_1_422 0.6901267 0.4997368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404   221012_DGM_Blank2_1_1_404 0.5142872 0.4029306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419   221012_DGM_Blank3_1_1_419 1.0844799 0.6633429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403   221012_DGM_MB1590_5_3_403 0.6457396 0.4768800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391   221012_DGM_Blank1_1_2_391 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432 221012_DGM_MB1599_13_2_432 1.3146591 0.7327544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402   221012_DGM_MB1590_5_2_402 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425 221012_DGM_MB1597_11_1_425 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390   221012_DGM_Blank1_1_1_390 1.3293724 0.7366675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401   221012_DGM_MB1590_5_1_401 0.4362592 0.3543390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397   221012_DGM_MB1588_3_3_397 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395   221012_DGM_MB1588_3_1_395 0.4620097 0.3708023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392   221012_DGM_Blank1_1_3_392 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411   221012_DGM_MB1592_7_2_411 0.4306658 0.3506380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407   221012_DGM_MB1591_6_1_407 0.6393932 0.4735714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398   221012_DGM_MB1589_4_1_398 0.4241572 0.3464192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436   221012_DGM_Blank4_1_3_436 1.0325149 0.6452834</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421   221012_DGM_Blank3_1_3_421 0.5975411 0.4508573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412   221012_DGM_MB1592_7_3_412 0.5956576 0.4499248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414   221012_DGM_MB1593_8_2_414 1.3632266 0.7453416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400   221012_DGM_MB1589_4_3_400 1.0166440 0.6394369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429 221012_DGM_MB1598_12_2_429 0.9673828 0.6211535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399   221012_DGM_MB1589_4_2_399 0.6123970 0.4590977</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405   221012_DGM_Blank2_1_2_405 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408   221012_DGM_MB1591_6_2_408 0.5927364 0.4483083</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406   221012_DGM_Blank2_1_3_406 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413   221012_DGM_MB1593_8_1_413 0.9095743 0.5984004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409   221012_DGM_MB1591_6_3_409 0.4878061 0.3869472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410   221012_DGM_MB1592_7_1_410 0.6678694 0.4884211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396   221012_DGM_MB1588_3_2_396 0.6930472 0.5012030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415   221012_DGM_MB1593_8_3_415 0.6539265 0.4812030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416   221012_DGM_MB1594_9_1_416 1.3374042 0.7387216</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417   221012_DGM_MB1594_9_2_417 1.3782619 0.7492367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418   221012_DGM_MB1594_9_3_418 1.3685711 0.7466149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420   221012_DGM_Blank3_1_2_420 0.4442854 0.3594497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408   221012_DGM_MB1591_6_2_408 0.6925224 0.5009398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406   221012_DGM_Blank2_1_3_406 0.5531454 0.4259137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413   221012_DGM_MB1593_8_1_413 1.3025835 0.7295853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409   221012_DGM_MB1591_6_3_409 0.6437620 0.4758772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410   221012_DGM_MB1592_7_1_410 0.6629818 0.4859023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396   221012_DGM_MB1588_3_2_396 0.5806894 0.4415915</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415   221012_DGM_MB1593_8_3_415 1.3498998 0.7420265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416   221012_DGM_MB1594_9_1_416 1.3090645 0.7311946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417   221012_DGM_MB1594_9_2_417 0.6227819 0.4647118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418   221012_DGM_MB1594_9_3_418 1.0076959 0.6362609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420   221012_DGM_Blank3_1_2_420 0.9013939 0.5951752</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            richness</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_2_435         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_1_434         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_3_433        3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431        3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430        1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428        1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_1_431        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_3_430        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_1_428        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_2_426        1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_3_424        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423        3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422        3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_2_423        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_3_427        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1595_10_1_422        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_1_404         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_1_419         3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_3_403         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_2_391         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1599_13_2_432        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_2_402         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1597_11_1_425        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_1_390         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1590_5_1_401         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_3_397         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_1_395         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank1_1_3_392         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_2_411         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_1_407         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_1_398         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank4_1_3_436         3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_3_421         2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_3_412         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429        1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_2_414         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_3_400         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1598_12_2_429        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1589_4_2_399         2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_2_405         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_2_408         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank2_1_3_406         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_1_413         4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1591_6_3_409         2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1592_7_1_410         2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1588_3_2_396         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1593_8_3_415         4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_1_416         4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417         4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418         4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_2_417         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_MB1594_9_3_418         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221012_DGM_Blank3_1_2_420         3</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

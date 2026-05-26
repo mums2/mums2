@@ -65,14 +65,14 @@ filtered_data <- data |>
    filter_peak_table(filter_group_params(group_threshold = 0.1,
                                              "Blanks")) |>
    filter_peak_table(filter_insource_ions_params())
-#> ℹ Checking 1500 peaks for mispicked peaks.
+#> ℹ Checking 349 peaks for mispicked peaks.
 #> ℹ Argument merge_peaks is: TRUE. Merging mispicked peaks with method sum.
-#> ✔ 50 ions failed the mispicked filter, 1450 ions remain.
-#> ℹ Parsing 1450 peaks for replicability across technical replicates.
-#> ✔ 329 ions failed the cv_filter filter, 1121 ions remain.
-#> ℹ Parsing 1121 peaks based on the sample group: Blanks.
+#> ✔ 1 ions failed the mispicked filter, 348 ions remain.
+#> ℹ Parsing 348 peaks for replicability across technical replicates.
+#> ✔ 87 ions failed the cv_filter filter, 261 ions remain.
+#> ℹ Parsing 261 peaks based on the sample group: Blanks.
 #> ℹ Argument remove_ions is: TRUE.Removing peaks from Blanks.
-#> ✔ 342 ions failed the Blanks filter, 779 ions remain.
-#> ℹ Parsing 779 peaks for insource ions.
-#> ✔ 55 ions failed the insource filter, 724 ions remain.
+#> ✔ 85 ions failed the Blanks filter, 176 ions remain.
+#> ℹ Parsing 176 peaks for insource ions.
+#> ✔ 6 ions failed the insource filter, 170 ions remain.
 ```
