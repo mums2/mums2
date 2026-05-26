@@ -23,8 +23,8 @@
 #'                    metadata =
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
-#' filtered_data <- data |> 
-#'    filter_peak_table(filter_mispicked_ions_params())  
+#' filtered_data <- data |>
+#'    filter_peak_table(filter_mispicked_ions_params())
 #' @returns a `mpactr` object that has been filter based on
 #' the supplied parameters.
 filter_peak_table <- function(mpactr_object, params) {

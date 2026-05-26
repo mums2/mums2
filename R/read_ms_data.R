@@ -22,10 +22,11 @@ read_mzml_mzxml <- function(file) {
     print(paste0("Reading: ", file, " ..."))
     file_reader <- mzR::openMSfile(file)
     peak_length <- length(mzR::peaks(file_reader))
-    mass_spec_data <- mzR::header(file_reader, 1:peak_length)[c("seqNum",
-                                                           "msLevel",
-                                                           "basePeakMZ",
-                                                           "retentionTime")]
+    mass_spec_data <-
+      mzR::header(file_reader, 1:peak_length)[c("seqNum",
+                                                "msLevel",
+                                                "basePeakMZ",
+                                                "retentionTime")]
 
     mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
     mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
@@ -36,7 +37,7 @@ read_mzml_mzxml <- function(file) {
     peak_data <- vector("list", nrow(mass_spec_data))
     for (i in seq_along(peak_data)) {
       peak_data[[i]] <- as.data.frame(mzR::peaks(file_reader,
-                                            mass_spec_data$seqNum[i]))
+                                                 mass_spec_data$seqNum[i]))
     }
     mzR::close(file_reader)
     all_data$mass_spec_data <- rbind(all_data$mass_spec_data, mass_spec_data)

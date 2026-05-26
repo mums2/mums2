@@ -157,5 +157,5 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
     }
     annotations$omu[annotation_omus[[i]]] <- names(annotation_omus[i])
   }
-  return(annotations)
+  annotations
 }
