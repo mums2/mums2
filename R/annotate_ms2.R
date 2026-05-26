@@ -55,12 +55,13 @@
 #'
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  data, 2, 6)
+#'  data, 1, 6)
 #'  massbank <- read_msp(mums2_example("MSMS-Neg-Respect.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
 #'    reference = massbank, scoring_params = modified_cosine_params(0.5),
-#'    ppm = 25,
-#'    min_score =  0.5, chemical_min_score = 0)
+#'    ppm = 1.6e3,
+#'    min_score =  0.5, chemical_min_score = 0,
+#'    number_of_threads = 2)
 #'
 #' @usage annotate_ms2(mass_data, reference, scoring_params,
 #'                     ppm, min_score,

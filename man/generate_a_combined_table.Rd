@@ -52,7 +52,7 @@ cluster_results <- cluster_data(distance_df = dist,
  annotations <- annotate_ms2(mass_data = matched_data,
    reference = massbank, scoring_params = modified_cosine_params(0.5),
    ppm = 1000,
-   min_score =  0.1, chemical_min_score = 0)
+   min_score =  0.1, chemical_min_score = 0, number_of_threads = 2)
 
 generate_a_combined_table(matched_data, annotations, cluster_results)
 }

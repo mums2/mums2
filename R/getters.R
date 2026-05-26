@@ -124,7 +124,8 @@ get_samples <- function(mass_data) {
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
 #'  data, 0.1, 1)
 #'
-#' matched_data <- compute_molecular_formulas(matched_data)
+#' matched_data <- compute_molecular_formulas(matched_data,
+#'                                            number_of_threads = 2)
 #'
 #' get_molecular_formula_preds(matched_data)
 #'
