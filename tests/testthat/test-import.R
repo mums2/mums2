@@ -2,13 +2,13 @@ test_that("Ensure we can import data properly", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                               "metadata.csv"),
                           format = "Progenesis")
 
   expect_true("filter_pactr" %in% class(data))
   expect_error(import_all_data(peak_table = "",
                                metadata = test_path("exttestdata",
-                                                     "metadata.csv"),
+                                                    "metadata.csv"),
                                format = "Progenesis"))
 
   expect_error(import_all_data(peak_table = test_path("exttestdata",
@@ -21,7 +21,7 @@ test_that("Ensure data is properly converted to utf-8", {
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
-                                                    "metadata.csv"),
+                                                   "metadata.csv"),
                               format = "Progenesis")
   dat <- get_peak_table(data)
   corrupted_feature_name <- "779_[Dâ€?Asp3,Dha7]MCâ€?FR_1000.50475 Da 187.19 s"
@@ -37,7 +37,7 @@ test_that("Ensure utf-8 data formatter messages properly", {
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
-                                                    "metadata.csv"),
+                                                   "metadata.csv"),
                               format = "Progenesis")
 
   expect_no_message(format_to_uft8_remove_commas(data))
@@ -47,12 +47,12 @@ test_that("Ensure utf-8 data formatter messages properly", {
   dat$compound[[1]] <-  corrupted_feature_name
   data$mpactr_data$set_peak_table(dat)
   expect_message(format_to_uft8_remove_commas(data),
-  "Converted compound names to UTF-8.")
+                 "Converted compound names to UTF-8.")
 
-   data <- mpactr::import_data(peak_table = test_path("exttestdata",
+  data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
-                                                    "metadata.csv"),
+                                                   "metadata.csv"),
                               format = "Progenesis")
 
   dat <- get_peak_table(data)
@@ -60,14 +60,14 @@ test_that("Ensure utf-8 data formatter messages properly", {
   dat$compound[[1]] <-  corrupted_feature_name
   data$mpactr_data$set_peak_table(dat)
   expect_message(format_to_uft8_remove_commas(data),
-  "Converted all commas to periods in compound names.")
+                 "Converted all commas to periods in compound names.")
 })
 
 test_that("Ensure we can change rt to RTINMINUTES or RTINSECONDS", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                               "metadata.csv"),
                           format = "Progenesis")
   data <- change_rt_to_seconds_or_minute(data, "seconds")
   expect_true("RTINSECONDS" %in% colnames(get_peak_table(data)))
@@ -80,7 +80,7 @@ test_that("Ensure we change_rt_to_seconds_or_minute fails if the data frame
             data <- import_all_data(peak_table = test_path("exttestdata",
                                                            "peak_table.csv"),
                                     metadata = test_path("exttestdata",
-                                                          "metadata.csv"),
+                                                         "metadata.csv"),
                                     format = "Progenesis")
             data$mpactr_data$set_peak_table(data.frame())
             expect_error(change_rt_to_seconds_or_minute(data, "seconds"))
@@ -92,7 +92,7 @@ test_that("change_rt_to_seconds_or_minute fails if given the wrong
             data <- import_all_data(peak_table = test_path("exttestdata",
                                                            "peak_table.csv"),
                                     metadata = test_path("exttestdata",
-                                                          "metadata.csv"),
+                                                         "metadata.csv"),
                                     format = "Progenesis")
 
             expect_error(change_rt_to_seconds_or_minute(data, "a"),

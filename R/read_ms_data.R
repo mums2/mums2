@@ -1,4 +1,7 @@
 read_mzml_mzxml <- function(file) {
+  if (!require_namespace("mzR")) {
+    stop("To use this functionality you have to install the mzR package.")
+  }
   file_list <- unique(as.list(file))
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
                                                basePeakMZ = as.numeric(),
@@ -17,12 +20,13 @@ read_mzml_mzxml <- function(file) {
     }
 
     print(paste0("Reading: ", file, " ..."))
-    file_reader <- openMSfile(file)
-    peak_length <- length(peaks(file_reader))
-    mass_spec_data <- header(file_reader, 1:peak_length)[c("seqNum",
-                                                           "msLevel",
-                                                           "basePeakMZ",
-                                                           "retentionTime")]
+    file_reader <- mzR::openMSfile(file)
+    peak_length <- length(mzR::peaks(file_reader))
+    mass_spec_data <-
+      mzR::header(file_reader, 1:peak_length)[c("seqNum",
+                                                "msLevel",
+                                                "basePeakMZ",
+                                                "retentionTime")]
 
     mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
     mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
@@ -32,10 +36,10 @@ read_mzml_mzxml <- function(file) {
 
     peak_data <- vector("list", nrow(mass_spec_data))
     for (i in seq_along(peak_data)) {
-      peak_data[[i]] <- as.data.frame(peaks(file_reader,
-                                            mass_spec_data$seqNum[i]))
+      peak_data[[i]] <- as.data.frame(mzR::peaks(file_reader,
+                                                 mass_spec_data$seqNum[i]))
     }
-    close(file_reader)
+    mzR::close(file_reader)
     all_data$mass_spec_data <- rbind(all_data$mass_spec_data, mass_spec_data)
     all_data$peak_data[[file]] <- peak_data
   }
@@ -173,4 +177,8 @@ read_and_match_spectra_files <- function(ms2_files, database) {
   AddSpectra(database, ls, database_names)
   print("Processing Spectra Files...")
   ProcessMs2Files(database)
+}
+
+require_namespace <- function(package_name) {
+  requireNamespace(package_name, quietly = TRUE)
 }

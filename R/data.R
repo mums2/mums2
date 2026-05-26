@@ -21,6 +21,5 @@ mums2_example <- function(file = NULL) {
   } else {
     path <- system.file("extdata", file, package = "mums2", mustWork = TRUE)
   }
-  return(path)
-
+  path
 }
