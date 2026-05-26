@@ -83,13 +83,13 @@ format_to_uft8_remove_commas <- function(mpactr_object) {
   # Converts non-utf8 data to utf8 data
   current_compounds <- peak_table$compound
   peak_table$compound <- iconv(peak_table$compound, from = "latin1", "UTF-8")
-  if(!all(peak_table$compound == current_compounds)) {
+  if (!all(peak_table$compound == current_compounds)) {
     message("Converted compound names to UTF-8.")
     current_compounds <- peak_table$compound
   }
 
   peak_table$compound <- gsub(",", ".", peak_table$compound)
-  if(!all(peak_table$compound == current_compounds)) {
+  if (!all(peak_table$compound == current_compounds)) {
     message("Converted all commas to periods in compound names.")
   }
   mpactr_object$mpactr_data$set_peak_table(peak_table)

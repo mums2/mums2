@@ -2,7 +2,7 @@ test_that("all the filters work as expected", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                               "metadata.csv"),
                           format = "Progenesis")
   current_peak_table <- get_peak_table(data)
   data_filtered <- data |>
@@ -21,7 +21,7 @@ test_that("filter_peak_table will fail if given incorrect parameters", {
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                               "metadata.csv"),
                           format = "Progenesis")
   expect_error(filter_peak_table("a", filter_mispicked_ions_params()),
                "The mpactr object")

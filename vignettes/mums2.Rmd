@@ -146,7 +146,7 @@ matched_data_small <- ms2_ms1_compare(
 matched_data_small <- compute_molecular_formulas(
   mass_data = matched_data_small, parent_ppm = 3)
 
-get_molecular_formula_predictions(matched_data_small)
+get_molecular_formula_preds(matched_data_small)
 ```
 
 ### Annotations

@@ -28,19 +28,13 @@
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
-#'
-#'  change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
+#'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
-#'  score_params = modified_cosine_params(0.5), min_peaks = 6)
+#'  score_params = modified_cosine_params(0.5), min_peaks = 6,
+#'  number_of_threads = 2)
 #'
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data,
@@ -48,7 +42,9 @@
 #'
 #' community_object <- create_community_matrix_object(cluster_results)
 #'
-#' dist_shared(community_object, 400, 100, "bray", TRUE, 1)
+#' dist_shared(community_object = community_object,
+#'  size = 400, threshold = 100, diversity_index = "bray",
+#'  subsample = TRUE, number_of_threads =  1)
 #' @return a `data.frame` object that shows the
 #' dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold,
@@ -105,8 +101,8 @@ dist_shared <- function(community_object, size, threshold,
 #' @param threshold the threshold you want your
 #' species to reach before it is included in the rarefaction sum.
 #' @param diversity_index the diversity index you wish to calculate diversity,
-#' the options are shannon, simpson, or richness. You may also compute many indexes
-#'  at the same time using a vector (ie. c("shannon", "simpson")).
+#' the options are shannon, simpson, or richness. You may also compute many
+#' indexes at the same time using a vector (ie. c("shannon", "simpson")).
 #' @param subsample if true, we will rarefy the data before we
 #' run the diversity calculations. Default is TRUE.
 #' @param number_of_threads the amount of threads
@@ -121,19 +117,14 @@ dist_shared <- function(community_object, size, threshold,
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
 #'
-#'  change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
+#'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
-#'  score_params = modified_cosine_params(0.5), min_peaks = 0)
+#'  score_params = modified_cosine_params(0.5), min_peaks = 0,
+#'  number_of_threads = 2)
 #'
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data,
@@ -142,8 +133,9 @@ dist_shared <- function(community_object, size, threshold,
 #' community_object <- create_community_matrix_object(cluster_results)
 #'
 #' alpha_summary(community_object = community_object, size = 400,
-#'               threshold = 100, diversity_index = c("shannon", "simpson", "richness"),
-#'               subsample = TRUE, iterations = 1)
+#'               threshold = 100,
+#'               diversity_index = c("shannon", "simpson", "richness"),
+#'               subsample = TRUE, iterations = 1, number_of_threads = 1)
 #' @return a `data.frame` object that shows the dissimilarity in samples.
 alpha_summary <- function(community_object, size, threshold,
                           diversity_index = c("shannon", "simpson"),
@@ -186,14 +178,4 @@ alpha_summary <- function(community_object, size, threshold,
                                      size, threshold, subsample,
                                      number_of_threads, iterations, seed)
   data.frame(samples = rownames(diversity), diversity)
-
-  # result <- data.frame(samples = rownames(diversity_result[[1]]))
-  # index <- 1
-  # for(diversity in diversity_result) {
-  #   data <- data.frame(unname(diversity[, 1]))
-  #   colnames(data) <- diversity_index[[index]]
-  #   result <- cbind(result, data)
-  #   index <- index + 1
-  # }
-  # result
 }

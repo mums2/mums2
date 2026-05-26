@@ -12,16 +12,9 @@
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
-#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
 #'   score_params = modified_cosine_params(0.5), min_peaks = 0)
@@ -72,20 +65,13 @@ create_community_matrix <- function(cluster_object) {
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
 #'
-#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
 #'
 #' matched_data_avg <- convert_to_group_averages(matched_data,
-#'                                                       filtered_data)
+#'                                               data)
 #' @return a `mass_data` object using group averages
 convert_to_group_averages <- function(matched_data, mpactr_object) {
   if (!inherits(matched_data, "mass_data")) {
@@ -160,20 +146,14 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #'                    mums2::mums2_example("boryillus_metadata.csv"),
 #'                    format = "None")
 #'
-#' filtered_data <- data |>
-#'    filter_peak_table(filter_mispicked_ions_params()) |>
-#'    filter_peak_table(filter_cv_params(cv_threshold = 0.2)) |>
-#'    filter_peak_table(filter_group_params(group_threshold = 0.1,
-#'                                              "Blanks")) |>
-#'    filter_peak_table(filter_insource_ions_params())
 #'
-#' change_rt_to_seconds_or_minute(filtered_data, "minutes")
 #'
 #' matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
-#'  filtered_data, 10, 6)
+#'  data, 1, 6)
 #'
 #' dist <- dist_ms2(data = matched_data, cutoff = 0.3, precursor_thresh = 2,
-#'  score_params = modified_cosine_params(0.5), min_peaks = 0)
+#'  score_params = modified_cosine_params(0.5), min_peaks = 0,
+#'  number_of_threads = 2)
 #'
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
@@ -292,14 +272,14 @@ generate_a_combined_table <- function(matched_data,
     current_index <- 1
     for (i in seq_along(env$ms1_id)) {
       if (length(env$annotations[[i]]) > 0) {
-        for (j in seq_len(length(env$annotations[[i]]))) {
+        for (j in seq_along(env$annotations[[i]])) {
           matrix_df$ms1_id[[current_index]] <- env$ms1_id[[i]]
           matrix_df$ms2_id[[current_index]] <- env$ms2_id[[i]]
           matrix_df$mz[[current_index]] <- env$mz[[i]]
           matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
           matrix_df$omus[[current_index]] <- env$omus[[i]]
           matrix_df$annotations[[current_index]] <- env$annotations[[i]][[j]]
-          for (sample_index in seq_len(length(samples))) {
+          for (sample_index in seq_along(samples)) {
             matrix_samples[current_index, sample_index] <-
               env[[samples[sample_index]]][[i]]
           }
@@ -313,7 +293,7 @@ generate_a_combined_table <- function(matched_data,
       matrix_df[[retention_time_string]][[current_index]] <- rt_strings[[i]]
       matrix_df$omus[[current_index]] <- env$omus[[i]]
       matrix_df$annotations[[current_index]] <- NA
-      for (sample_index in seq_len(length(samples))) {
+      for (sample_index in seq_along(samples)) {
         matrix_samples[current_index, sample_index] <-
           env[[samples[sample_index]]][[i]]
       }
@@ -327,6 +307,6 @@ generate_a_combined_table <- function(matched_data,
   for (i in samples) {
     df <- cbind(df, env[[i]])
   }
-  colnames(df)[current_column_count + seq_len(length(samples))] <- samples
-  return(df)
+  colnames(df)[current_column_count + seq_along(samples)] <- samples
+  df
 }
