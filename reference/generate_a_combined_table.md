@@ -629,8 +629,8 @@ generate_a_combined_table(matched_data, annotations, cluster_results)
 #> 201                                                           <NA>
 #> 202                                                           <NA>
 #> 203                                                           <NA>
-#> 204                       Leucine_Enkephalin; LC-ESI-QTOF; MS2; CE
-#> 205 7',8',9',10'-Tetrahydro-beta-cryptoxanthin; FAB-EBEB; MS2; m/z
+#> 204 7',8',9',10'-Tetrahydro-beta-cryptoxanthin; FAB-EBEB; MS2; m/z
+#> 205                       Leucine_Enkephalin; LC-ESI-QTOF; MS2; CE
 #> 206                                  Robinin; LC-ESI-QTOF; MS2; CE
 #> 207                                                           <NA>
 #> 208                                                           <NA>
