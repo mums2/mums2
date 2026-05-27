@@ -24,6 +24,11 @@ library(tidyverse)
 library(networkD3)
 ```
 
+```{r setupDT, message = FALSE, warning = FALSE, include = FALSE}
+data.table::setDTthreads(threads = 1)
+```
+
+
 ## Process data
 
 Before we begin to analyze the data, we have to process it into a readable `data.frame` or object that can be viewed and transformed. To load your data, we need to run two functions: `import_all_data()`, and `ms2_ms1_compare()`. `import_all_data()` creates an object reflecting MS1 data, and `ms2_ms1_compare()`assigns MS2 spectra to your MS1 data. At this point, you may need to filter out noise or transform certain parameters before you can properly analyze your data. To accommodate for those issues, we have two other functions: `filter_peak_table()`, and `change_rt_to_seconds_or_minute()`. `filter_peak_table()` allows your to remove low-quality features and `change_rt_to_seconds_or_minute()` allows you to transform your retention time to minutes or seconds. This allows you to ensure that the retention time in your MS1 data matches your MS2 data. Below will explain what each function does in more detail and illustrate how to go through the pipeline.
