@@ -24,7 +24,7 @@ library(tidyverse)
 library(networkD3)
 ```
 
-```{r setup, message = FALSE, warning = FALSE, include = FALSE}
+```{r setupDT, message = FALSE, warning = FALSE, include = FALSE}
 data.table::setDTthreads(threads = 1)
 ```
 
