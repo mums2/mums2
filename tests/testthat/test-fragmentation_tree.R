@@ -1,6 +1,6 @@
 test_that("test that fragmentation tree makes predictions", {
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-  dat <- compute_molecular_formulas(dat)
+  dat <- compute_molecular_formulas(dat, number_of_threads = 2)
   expect_true(length(which(dat$predicted_molecular_formulas == "")) <= 0)
 })
 
@@ -33,7 +33,7 @@ test_that("Return NA when there are no parent decompositions", {
   dat$ms2_matches$mz[[1]] <- 70
   dat$ms2_matches <- dat$ms2_matches[1, ]
   dat$peak_data <- dat$peak_data[1]
-  result <- compute_molecular_formulas(dat, 1)
+  result <- compute_molecular_formulas(dat, 1, number_of_threads = 2)
   expect_equal(result$predicted_molecular_formulas[[1]], NA_character_)
 })
 
@@ -43,7 +43,7 @@ test_that("Will return the first candidate if there
             dat$ms2_matches$mz[[1]] <- 99
             dat$ms2_matches <- dat$ms2_matches[1, ]
             dat$peak_data <- dat$peak_data[1]
-            result <- compute_molecular_formulas(dat, 1)
+            result <- compute_molecular_formulas(dat, 1, number_of_threads = 2)
             expect_true(!is.na(result$predicted_molecular_formulas[[1]]))
           })
 
@@ -56,7 +56,7 @@ test_that("Returns replaces valid indexes with invalid indexes if there are no
             dat$peak_data <- dat$peak_data[1]
             dat$peak_data[[1]]$mz <- 70
             dat$peak_data[[1]]$intensity <- 10
-            result <- compute_molecular_formulas(dat)
+            result <- compute_molecular_formulas(dat, number_of_threads = 2)
             expect_true(!is.na(result$predicted_molecular_formulas[[1]]))
           })
 
@@ -70,6 +70,6 @@ test_that("Returns the first candidate if there are no children
             dat$peak_data <- dat$peak_data[1]
             dat$peak_data[[1]]$mz <- 70
             dat$peak_data[[1]]$intensity <- 10
-            expect_message(compute_molecular_formulas(dat),
+            expect_message(compute_molecular_formulas(dat, number_of_threads = 2),
                            "1/1 chemical formulas")
           })

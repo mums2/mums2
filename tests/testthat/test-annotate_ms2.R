@@ -29,7 +29,8 @@ test_that("annotate_ms_features returns the omu where the query is present", {
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
+                        number_of_threads = 2)
   cluster <- cluster_data(distances, dat,  0.3, "opticlust")
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
@@ -44,7 +45,8 @@ test_that("annotate_ms_features returns the correct
             dir <- "exttestdata"
             r_file <- "database_data/PSU-MSMLS.msp"
             dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-            distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+            distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
+                                  number_of_threads = 2)
             psu_msmls <- read_msp(test_path(dir, r_file))
             annotations <- annotate_ms2(dat, psu_msmls,
                                         modified_cosine_params(0.5), 20,
