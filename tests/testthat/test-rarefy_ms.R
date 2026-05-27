@@ -1,6 +1,7 @@
 test_that("rarefy_ms returns the correct rowSum totals", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
+                        number_of_threads = 2)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
   size <- 400
@@ -11,7 +12,8 @@ test_that("rarefy_ms returns the correct rowSum totals", {
 
 test_that("rarefy_ms errors when given incorrect parameters", {
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5))
+  distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
+                        number_of_threads = 2)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
   expect_error(rarefy_ms("community_object", size, 10),
