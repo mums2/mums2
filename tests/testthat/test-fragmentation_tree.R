@@ -70,6 +70,7 @@ test_that("Returns the first candidate if there are no children
             dat$peak_data <- dat$peak_data[1]
             dat$peak_data[[1]]$mz <- 70
             dat$peak_data[[1]]$intensity <- 10
-            expect_message(compute_molecular_formulas(dat, number_of_threads = 2),
+            expect_message(compute_molecular_formulas(dat,
+                                                      number_of_threads = 2),
                            "1/1 chemical formulas")
           })

@@ -34,8 +34,10 @@ test_that("read_mzml_mzxml will fail if the file does not exist", {
 
 test_that("read_mzml_mzxml will fail if mzR not installed", {
   local_mocked_bindings(require_namespace = function(...) FALSE)
-  expect_error(read_mzml_mzxml(".mzml"), 
-  "To use this functionality you have to install the mzR package.")
+  message <- ""
+  expect_error(read_mzml_mzxml(".mzml"),
+               paste0("To use this functionality you have ",
+                      "to install the mzR package."))
 })
 
 test_that("read_msp will read an msp data properly", {
