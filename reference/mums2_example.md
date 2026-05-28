@@ -29,8 +29,8 @@ returns a `character` object
 mums2_example()
 #> [1] "MSMS-Neg-Respect.msp"               "boryillus_metadata.csv"            
 #> [3] "boryillus_peaktable.csv"            "botryllus_pt_small.csv"            
-#> [5] "botryllus_v2.gnps.mgf"              "ion_masses"                        
-#> [7] "massbank_example_data.msp"          "massbank_example_data_negative.msp"
+#> [5] "botryllus_v2.gnps.mgf"              "massbank_example_data.msp"         
+#> [7] "massbank_example_data_negative.msp"
 
 mums2_example("massbank_example_data.msp")
 #> [1] "/home/runner/work/_temp/Library/mums2/extdata/massbank_example_data.msp"
