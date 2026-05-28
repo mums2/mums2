@@ -25,7 +25,7 @@ test_that("annotate_ms_features returns the correct annotations in the
             expect_true(all(colnames %in% colnames(annotations)))
             expect_true(nrow(annotations) > 0)
             expect_s3_class(annotations, "data.frame")
-           })
+          })
 
 test_that("annotate_ms_features returns the omu where the query is present", {
   limit_cores()
@@ -105,7 +105,7 @@ test_that("annotate_ms2 will fail if not supplied a mass_data object", {
 
   expect_error(annotate_ms2(c(), psu_msmls,
                             modified_cosine_params(0.5),
-                            100, .1, 0, min_peaks = 0, 
+                            100, .1, 0, min_peaks = 0,
                             number_of_threads = 1),
                "The mass_data object must be created using")
 })
