@@ -265,11 +265,11 @@ Beta diversity represents the dissimilarity between different samples. Beta dive
 
 ```{r  dist_shared, R.options=list(max.print=10)}
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 40000,
-                           threshold = 200, diversity_index = "bray", number_of_threads =  1)
+                           threshold = 200, diversity_index = "bray", number_of_threads =  2)
 bray_no_omus
 
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 40000,
-                          threshold = 200, diversity_index = "bray", number_of_threads =  1)
+                          threshold = 200, diversity_index = "bray", number_of_threads =  2)
 bray_w_omus
 ```
 
