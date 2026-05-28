@@ -150,7 +150,7 @@ matched_data_small <- ms2_ms1_compare(
 
 
 matched_data_small <- compute_molecular_formulas(
-  mass_data = matched_data_small, parent_ppm = 3, number_of_threads = 1)
+  mass_data = matched_data_small, parent_ppm = 3, number_of_threads = 2)
 
 get_molecular_formula_preds(matched_data_small)
 ```
@@ -165,7 +165,7 @@ reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = reference_db,
   scoring_params = modified_cosine_params(0.5), ppm = 1000,
-  min_score =  0.1, chemical_min_score = 0, number_of_threads = 1)
+  min_score =  0.1, chemical_min_score = 0, number_of_threads = 2)
 
 annotations[1:5,]
 ```
@@ -181,7 +181,7 @@ We have implemented two different distance calculations to generate distances be
 ```{r  scoring_distance, R.options=list(max.print=10)}
 dist <- dist_ms2(
   data = matched_data, cutoff = 0.3, precursor_threshold = -1,
-  score_params = modified_cosine_params(0.5), min_peaks = 0, number_of_threads = 1)
+  score_params = modified_cosine_params(0.5), min_peaks = 0, number_of_threads = 2)
 
 dist
 ```
@@ -227,7 +227,7 @@ After your data has been clustered, if you wish to see which OMUs the annotated 
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = reference_db,
   scoring_params = modified_cosine_params(0.5), ppm = 1000, min_score = 0.7,
-  chemical_min_score = 0, cluster_data = cluster_results, number_of_threads = 1)
+  chemical_min_score = 0, cluster_data = cluster_results, number_of_threads = 2)
 
 annotations[1:5,]
 ```
@@ -255,7 +255,7 @@ Using your community data, you can calculate alpha diversity metrics. Alpha dive
 alpha_summary(
   community_object = community_w_omus, size = 40000, threshold = 200,
               diversity_index = c("simpson", "shannon", "richness"),
-              subsample = TRUE) |>
+              subsample = TRUE, number_of_threads = 2) |>
   head()
 ```
 
@@ -265,11 +265,11 @@ Beta diversity represents the dissimilarity between different samples. Beta dive
 
 ```{r  dist_shared, R.options=list(max.print=10)}
 bray_no_omus <- dist_shared(community_object = community_wo_omus, size = 40000,
-                           threshold = 200, diversity_index = "bray")
+                           threshold = 200, diversity_index = "bray", number_of_threads =  1)
 bray_no_omus
 
 bray_w_omus <- dist_shared(community_object = community_w_omus, size = 40000,
-                          threshold = 200, diversity_index = "bray")
+                          threshold = 200, diversity_index = "bray", number_of_threads =  1)
 bray_w_omus
 ```
 
@@ -340,7 +340,7 @@ Below, you can see a copy of the alpha and beta diversity functions we ran above
 
 dist_avg <- dist_ms2(
   data = matched_avg, cutoff = 0.3, precursor_thresh = 2,
-  score_params = modified_cosine_params(0.5), min_peaks = 0, number_of_threads = 1)
+  score_params = modified_cosine_params(0.5), min_peaks = 0, number_of_threads = 2)
 
 cluster_results_avg <- cluster_data(
   distance_df = dist, ms2_match_data = matched_avg, cutoff = 0.3,
@@ -350,7 +350,7 @@ annotations_avg <- annotate_ms2(
   mass_data = matched_avg,
   reference = reference_db, scoring_params = modified_cosine_params(0.5), 
   ppm = 1000, min_score = 0.6, chemical_min_score = 0,
-  cluster_data = cluster_results_avg, number_of_threads = 1)
+  cluster_data = cluster_results_avg, number_of_threads = 2)
 
 community_object_avg <- create_community_matrix_object(
   data = cluster_results_avg)
@@ -389,7 +389,7 @@ generate_a_combined_table(
 ### Heat map
 Another way to visualize diversity data is to use a heat map. We can easily see how correlated data is between samples with a heatmap.
 ```{r heat_map, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
-dist_shared(community_object_avg, 40000, 200, "bray") |> 
+dist_shared(community_object_avg, 40000, 200, "bray", number_of_threads = 2) |> 
   as.matrix() |>
   as_tibble(rownames = "A") |>
   pivot_longer(-A, names_to = "B", values_to = "distance") |>
@@ -408,7 +408,7 @@ A box and whisker plot can also be used to depict the variation of the data. We 
 ```{r box_plot, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
 metadata <- get_metadata(filtered_data)
 
-alpha <- alpha_summary(community_object_avg, 40000, 200, "simpson")
+alpha <- alpha_summary(community_object_avg, 40000, 200, "simpson", number_of_threads = 2)
 
 inner_join(alpha, metadata, by = c("samples" = "sample_code")) |>
   ggplot(aes(x = biological_group, y = simpson)) +
