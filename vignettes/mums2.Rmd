@@ -25,6 +25,7 @@ library(networkD3)
 ```
 
 ```{r setup_dt, message = FALSE, warning = FALSE, include = FALSE}
+Sys.setenv("OMP_THREAD_LIMIT" = 1)
 data.table::setDTthreads(threads = 1)
 ```
 

@@ -1,4 +1,5 @@
 test_that("all the filters work as expected", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -18,6 +19,7 @@ test_that("all the filters work as expected", {
 })
 
 test_that("filter_peak_table will fail if given incorrect parameters", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -30,6 +32,7 @@ test_that("filter_peak_table will fail if given incorrect parameters", {
 })
 
 test_that("filter_mispicked_ions parameters return correct data", {
+  limit_cores()
   params <- filter_mispicked_ions_params()
   ls <- list(ringwin = 0, isowin = 0,
     trwin = 0, max_iso_shift = 0,
@@ -41,6 +44,7 @@ test_that("filter_mispicked_ions parameters return correct data", {
 })
 
 test_that("filter_groups_parameters return correct data", {
+  limit_cores()
   params <- filter_group_params(group_to_remove = "Blank")
   ls <- list(group_threshold = 0,
     group_to_remove = 0, remove_ions = 0,
@@ -51,6 +55,7 @@ test_that("filter_groups_parameters return correct data", {
 })
 
 test_that("filter_cv_params return correct data", {
+  limit_cores()
   params <- filter_cv_params(cv_threshold = 0.2)
   ls <- list(cv_threshold = 0,
              copy_object = FALSE)
@@ -59,6 +64,7 @@ test_that("filter_cv_params return correct data", {
 })
 
 test_that("filter_insource_ions_params return correct data", {
+  limit_cores()
   params <- filter_insource_ions_params(0.2)
   ls <- list(cluster_threshold = 0,
              copy_object = 0)

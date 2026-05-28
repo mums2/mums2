@@ -1,4 +1,5 @@
 test_that("Ensure we can import data properly", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -18,6 +19,7 @@ test_that("Ensure we can import data properly", {
 })
 
 test_that("Ensure data is properly converted to utf-8", {
+  limit_cores()
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
@@ -34,6 +36,7 @@ test_that("Ensure data is properly converted to utf-8", {
 })
 
 test_that("Ensure utf-8 data formatter messages properly", {
+  limit_cores()
   data <- mpactr::import_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
                               metadata = test_path("exttestdata",
@@ -64,6 +67,7 @@ test_that("Ensure utf-8 data formatter messages properly", {
 })
 
 test_that("Ensure we can change rt to RTINMINUTES or RTINSECONDS", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -77,6 +81,7 @@ test_that("Ensure we can change rt to RTINMINUTES or RTINSECONDS", {
 
 test_that("Ensure we change_rt_to_seconds_or_minute fails if the data frame
           doesn't have correct columns", {
+            limit_cores()
             data <- import_all_data(peak_table = test_path("exttestdata",
                                                            "peak_table.csv"),
                                     metadata = test_path("exttestdata",
@@ -89,6 +94,7 @@ test_that("Ensure we change_rt_to_seconds_or_minute fails if the data frame
 
 test_that("change_rt_to_seconds_or_minute fails if given the wrong
           parameters", {
+            limit_cores()
             data <- import_all_data(peak_table = test_path("exttestdata",
                                                            "peak_table.csv"),
                                     metadata = test_path("exttestdata",

@@ -1,4 +1,5 @@
 test_that("I can get all slots within the mass_data object", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
 
   expect_equal(dat$ms2_matches, get_ms2_matches(dat))
@@ -10,6 +11,7 @@ test_that("I can get all slots within the mass_data object", {
 })
 
 test_that("Getter functions fail if not given the proper parameter", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
   dat$predicted_molecular_formulas <- NULL
   expect_error(get_molecular_formula_preds(dat),

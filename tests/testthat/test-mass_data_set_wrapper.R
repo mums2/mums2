@@ -1,4 +1,5 @@
 test_that("We can add ms2 data to our massdataset with mgf files", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -19,6 +20,7 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
 })
 
 test_that("We can add ms2 data to our massdataset with mzml files", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",
@@ -33,12 +35,13 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
     filter_peak_table(filter_insource_ions_params())
 
   mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
-  ms2_matches <- ms2_ms1_compare(mzxml_files, data, 100000, 150)
+  ms2_matches <- suppressWarnings({ms2_ms1_compare(mzxml_files, data, 100000, 150)})
   expect_true(nrow(ms2_matches$ms2_matches) > 0)
 })
 
 
 test_that("ms2_ms2_compare fails if given incorrect parameters", {
+  limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
                                                  "peak_table.csv"),
                           metadata = test_path("exttestdata",

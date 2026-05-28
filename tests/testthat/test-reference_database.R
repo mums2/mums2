@@ -1,4 +1,5 @@
 test_that("We can get one of the reference by index from the database", {
+  limit_cores()
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   data <- get_reference_data(psu_msmls_data, 2)
@@ -13,6 +14,7 @@ test_that("We can get one of the reference by index from the database", {
 
 test_that("get_reference_data index will fail if the size is greater than
           the length of the database", {
+            limit_cores()
             psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                                  "PSU-MSMLS.msp"))
             expect_error(get_reference_data(psu_msmls_data, 577),
@@ -21,6 +23,7 @@ test_that("get_reference_data index will fail if the size is greater than
 
 
 test_that("You can add another database file to the reference data", {
+  limit_cores()
   path <- test_path("exttestdata/database_data", "PSU-MSMLS.msp")
   psu_msmls_data <- read_msp(path)
   psu_msmls_data2 <- read_msp(path)
@@ -35,6 +38,7 @@ test_that("You can add another database file to the reference data", {
 
 
 test_that("We can add another reference to the database", {
+  limit_cores()
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   expect_output(print(psu_msmls_data),
@@ -42,6 +46,7 @@ test_that("We can add another reference to the database", {
 })
 
 test_that("Expect print to output a custom message", {
+  limit_cores()
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   expect_output(print(psu_msmls_data),

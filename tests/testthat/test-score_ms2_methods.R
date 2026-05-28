@@ -1,4 +1,5 @@
 test_that("modified_cosine_params works", {
+  limit_cores()
   parameters <- modified_cosine_params(frag_tolerance = 0.5)
 
   expect_equal(length(parameters), 2)
@@ -8,6 +9,7 @@ test_that("modified_cosine_params works", {
 })
 
 test_that("spec_entropy_params works", {
+  limit_cores()
   parameters <- spec_entropy_params()
 
   expect_equal(length(parameters), 9)
