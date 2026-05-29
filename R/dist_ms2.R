@@ -22,8 +22,8 @@
 #'  See [modified_cosine_params()] and [spec_entropy_params()] for more details.
 #' @param min_peaks the minimum number of peaks that need to be present before
 #' you compare the ms2 spectra.
-#' @param number_of_threads the number of
-#' threads you want to use for this calculation.
+#' @param number_of_threads the number of threads you wish to use for this
+#' calculation. Defaults to the number of threads on your computer.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =

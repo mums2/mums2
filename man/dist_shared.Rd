@@ -31,8 +31,8 @@ bray, jaccard, soren, hamming, morista, and thetayc.}
 \item{subsample}{if true, we will rarefy the data before we run
 the diversity calculations. Default is TRUE.}
 
-\item{number_of_threads}{the amount of threads you want the
-calculation to use.}
+\item{number_of_threads}{the number of threads you wish to use for this
+calculation. Defaults to the number of threads on your computer.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
 

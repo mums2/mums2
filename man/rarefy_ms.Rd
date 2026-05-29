@@ -20,8 +20,8 @@ rarefy_ms(
 \item{threshold}{The individual feature threshold. Each subsampled feature
 must be >= this value to be retained.}
 
-\item{number_of_threads}{the amount of threads
-you want the calculation to use.}
+\item{number_of_threads}{the number of threads you wish to use for this
+calculation. Defaults to the number of threads on your computer.}
 
 \item{seed}{the RNG (random number generator) seed you would like to use.}
 }

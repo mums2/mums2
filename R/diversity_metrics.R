@@ -16,8 +16,8 @@
 #' bray, jaccard, soren, hamming, morista, and thetayc.
 #' @param subsample if true, we will rarefy the data before we run
 #' the diversity calculations. Default is TRUE.
-#' @param number_of_threads the amount of threads you want the
-#' calculation to use.
+#' @param number_of_threads the number of threads you wish to use for this
+#' calculation. Defaults to the number of threads on your computer.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples
