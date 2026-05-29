@@ -1,4 +1,5 @@
 test_that("test that we can create a communiy object", {
+  limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
                    number_of_threads = 2)
@@ -8,12 +9,14 @@ test_that("test that we can create a communiy object", {
 })
 
 test_that("test that we can create a communiy object without clustering", {
+  limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   communiy_object <- create_community_matrix_object(ms2_match_data)
   expect_true("community_object" %in% class(communiy_object))
 })
 
 test_that("Test that get community object returns a community matrix", {
+  limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
                    number_of_threads = 2)
@@ -23,6 +26,7 @@ test_that("Test that get community object returns a community matrix", {
   expect_true("matrix" %in% class(community_matrix))
 })
 test_that("Printing a community object prints out the matrix", {
+  limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
                    number_of_threads = 2)
@@ -33,6 +37,7 @@ test_that("Printing a community object prints out the matrix", {
 
 test_that("Expect get_community_object and matrix to error when
           given the wrong object", {
+            limit_cores()
             count_table <- test_path("exttestdata", "final.count_table")
             expect_error(create_community_matrix_object(count_table))
             expect_error(get_community_matrix(count_table))

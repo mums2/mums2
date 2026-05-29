@@ -1,4 +1,5 @@
 test_that("test that fragmentation tree makes predictions", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
   dat <- compute_molecular_formulas(dat, number_of_threads = 2)
   expect_true(length(which(dat$predicted_molecular_formulas == "")) <= 0)
@@ -6,6 +7,7 @@ test_that("test that fragmentation tree makes predictions", {
 
 test_that("compute_molecular_formulas will fail if given incorrect
           parameters", {
+            limit_cores()
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
             expect_error(compute_molecular_formulas("dat"),
                          "The mass_data object must be created")
@@ -29,6 +31,7 @@ test_that("compute_molecular_formulas will fail if given incorrect
 
 
 test_that("Return NA when there are no parent decompositions", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
   dat$ms2_matches$mz[[1]] <- 70
   dat$ms2_matches <- dat$ms2_matches[1, ]
@@ -39,6 +42,7 @@ test_that("Return NA when there are no parent decompositions", {
 
 test_that("Will return the first candidate if there
           is only one parent decomposition", {
+            limit_cores()
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
             dat$ms2_matches$mz[[1]] <- 99
             dat$ms2_matches <- dat$ms2_matches[1, ]
@@ -50,6 +54,7 @@ test_that("Will return the first candidate if there
 
 test_that("Returns replaces valid indexes with invalid indexes if there are no
           valid indexes", {
+            limit_cores()
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
             dat$ms2_matches$mz[1] <- 130
             dat$ms2_matches <- dat$ms2_matches[1:2, ]
@@ -64,6 +69,7 @@ test_that("Returns replaces valid indexes with invalid indexes if there are no
 
 test_that("Returns the first candidate if there are no children
           decompositions", {
+            limit_cores()
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
             dat$ms2_matches$mz[1] <- 150
             dat$ms2_matches <- dat$ms2_matches[1:2, ]

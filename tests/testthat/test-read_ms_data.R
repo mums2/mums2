@@ -1,4 +1,5 @@
 test_that("read_mgf will read an mgf data properly", {
+  limit_cores()
 
   mgf_files <- test_path("exttestdata",
                          "12152023_Coculture_with_new_JC1.gnps.mgf")
@@ -8,14 +9,17 @@ test_that("read_mgf will read an mgf data properly", {
 })
 
 test_that("read_mgf will fail if file has the wrong extension", {
+  limit_cores()
   expect_error(read_mgf(test_path("exttestdata", "matched_data.RDS")))
 })
 
 test_that("read_mgf will fail if the file does not exist", {
+  limit_cores()
   expect_error(read_mgf(".mgf"))
 })
 
 test_that("read_mzml_mzxml will read mzxml data properly", {
+  limit_cores()
   path <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
   mzml_data <- read_mzml_mzxml(path)
   expect_true(length(mzml_data) == 2)
@@ -24,15 +28,18 @@ test_that("read_mzml_mzxml will read mzxml data properly", {
 })
 
 test_that("read_mzml_mzxml will fail if file has the wrong extension", {
+  limit_cores()
   expect_error(read_mzml_mzxml(test_path("exttestdata", "matched_data.RDS")))
 })
 
 test_that("read_mzml_mzxml will fail if the file does not exist", {
+  limit_cores()
   expect_error(read_mzml_mzxml(".mzml"))
   expect_error(read_mzml_mzxml(".mzxml"))
 })
 
 test_that("read_mzml_mzxml will fail if mzR not installed", {
+  limit_cores()
   local_mocked_bindings(require_namespace = function(...) FALSE)
   message <- ""
   expect_error(read_mzml_mzxml(".mzml"),
@@ -41,6 +48,7 @@ test_that("read_mzml_mzxml will fail if mzR not installed", {
 })
 
 test_that("read_msp will read an msp data properly", {
+  limit_cores()
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   expect_true(length(psu_msmls_data) == 576)
@@ -48,16 +56,19 @@ test_that("read_msp will read an msp data properly", {
 })
 
 test_that("read_msp will fail if file has the wrong extension", {
+  limit_cores()
   expect_error(read_msp(test_path("exttestdata", "matched_data.RDS")))
 })
 
 test_that("read_hmdb will properly read hmdb data", {
+  limit_cores()
   hmdb_db <- read_hmdb(test_path("exttestdata", "sweat_metabo_small.xml"),
                        test_path("exttestdata", "Spectra"))
   expect_true(length(hmdb_db) == 2)
 })
 
 test_that("read_hmdb will fail if given incorrect parameters", {
+  limit_cores()
   expect_error(read_hmdb("", test_path("exttestdata", "Spectra")),
                "hmdb file does not exist")
 
@@ -66,6 +77,7 @@ test_that("read_hmdb will fail if given incorrect parameters", {
 })
 
 test_that("read_hmdb will default prescursor mz to NA if not given", {
+  limit_cores()
   hmdb_db <- read_hmdb(test_path("exttestdata",
                                  "sweat_metabo_small_no_mass.xml"),
                        test_path("exttestdata", "Spectra"))

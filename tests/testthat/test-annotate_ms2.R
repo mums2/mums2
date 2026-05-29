@@ -1,5 +1,6 @@
 test_that("annotate_ms_features returns the correct annotations in the
            first n ms features", {
+            limit_cores()
             dir <- "exttestdata"
             q_file <- "matched_data.RDS"
             r_file <- "database_data/PSU-MSMLS.msp"
@@ -10,7 +11,8 @@ test_that("annotate_ms_features returns the correct annotations in the
 
             annotations <- annotate_ms2(dat, psu_msmls,
                                         modified_cosine_params(0.5), 20,
-                                        .2, 0, min_peaks = 0)
+                                        .2, 0, min_peaks = 0,
+                                        number_of_threads = 1)
 
             colnames <- c("query_ms1_id", "query_ms2_id", "query_mz",
                           "query_rt", "ref_idx", "query_formula",
@@ -26,78 +28,90 @@ test_that("annotate_ms_features returns the correct annotations in the
           })
 
 test_that("annotate_ms_features returns the omu where the query is present", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
-                        number_of_threads = 2)
+                        number_of_threads = 1)
   cluster <- cluster_data(distances, dat,  0.3, "opticlust")
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
                               modified_cosine_params(0.5), 20, .2, 0,
-                              min_peaks = 0, cluster_data = cluster)
+                              min_peaks = 0, cluster_data = cluster,
+                              number_of_threads = 1)
 
   expect_true("omu" %in% colnames(annotations))
 })
 
 test_that("annotate_ms_features returns the correct 
           of rows and columns", {
+            limit_cores()
             dir <- "exttestdata"
             r_file <- "database_data/PSU-MSMLS.msp"
             dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
             distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
-                                  number_of_threads = 2)
+                                  number_of_threads = 1)
             psu_msmls <- read_msp(test_path(dir, r_file))
             annotations <- annotate_ms2(dat, psu_msmls,
                                         modified_cosine_params(0.5), 20,
-                                        .2, 0, min_peaks = 0)
+                                        .2, 0, min_peaks = 0,
+                                        number_of_threads = 1)
 
             expect_true(nrow(annotations) == 3)
             expect_true(ncol(annotations) == 23)
 
             annotations <- annotate_ms2(dat, psu_msmls,
                                         modified_cosine_params(0.5), -1,
-                                        .7, 0, min_peaks = 0)
+                                        .7, 0, min_peaks = 0,
+                                        number_of_threads = 1)
 
             expect_true(nrow(annotations) == 209)
             expect_true(ncol(annotations) == 23)
           })
 
 test_that("annotate_ms_features works with predicted molecular formulas", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-  dat <- compute_molecular_formulas(dat)
+  dat <- compute_molecular_formulas(dat, number_of_threads = 1)
   psu_msmls <- read_msp(test_path(dir, r_file))
   annotations <- annotate_ms2(dat, psu_msmls,
                               modified_cosine_params(0.5),
-                              1000, .1, 0, min_peaks = 0)
+                              1000, .1, 0, min_peaks = 0,
+                              number_of_threads = 1)
   expect_true("query_formula" %in% colnames(annotations))
 })
 
 test_that("annotate_ms2 will return a warning if the annotations are empty", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-  dat <- compute_molecular_formulas(dat)
+  dat <- compute_molecular_formulas(dat, number_of_threads = 1)
   psu_msmls <- read_msp(test_path(dir, r_file))
   expect_warning(annotate_ms2(dat, psu_msmls,
                               modified_cosine_params(0.5),
-                              100, .1, 0, min_peaks = 0))
+                              100, .1, 0, min_peaks = 0,
+                              number_of_threads = 1))
 })
 
 test_that("annotate_ms2 will fail if not supplied a mass_data object", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   psu_msmls <- read_msp(test_path(dir, r_file))
 
   expect_error(annotate_ms2(c(), psu_msmls,
                             modified_cosine_params(0.5),
-                            100, .1, 0, min_peaks = 0),
+                            100, .1, 0, min_peaks = 0,
+                            number_of_threads = 1),
                "The mass_data object must be created using")
 })
 
 test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
@@ -111,6 +125,7 @@ test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
 })
 
 test_that("annotate_ms2 will fail if not supplied correct clustering data", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
@@ -123,6 +138,7 @@ test_that("annotate_ms2 will fail if not supplied correct clustering data", {
 })
 
 test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
+  limit_cores()
   dir <- "exttestdata"
   r_file <- "database_data/PSU-MSMLS.msp"
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))

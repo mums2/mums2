@@ -1,4 +1,5 @@
 test_that("mums2_example returns proper paths to test data", {
+  limit_cores()
   path <- mums2_example("")
   expect_true("character" %in%
                 class(mums2_example("boryillus_peaktable.csv")))

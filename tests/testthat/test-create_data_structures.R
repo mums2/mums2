@@ -1,4 +1,5 @@
 test_that("test that we can create a community matrix", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
                         min_peaks = 0, number_of_threads = 2)
@@ -13,6 +14,7 @@ test_that("test that we can create a community matrix", {
 
 test_that("test that create a community matrix errors
           when given wrong inputs", {
+            limit_cores()
             dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
             distances <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5),
                                   min_peaks = 0, number_of_threads = 2)
@@ -23,6 +25,7 @@ test_that("test that create a community matrix errors
 
 
 test_that("test that we create a proper count table", {
+  limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   count_table <- create_count_table(ms2_match_data)
   ms2_matches_compounds <- ms2_match_data$ms2_matches$ms1_compound_id
@@ -38,6 +41,7 @@ test_that("test that we create a proper count table", {
 
 
 test_that("We can convert a mass_data object to an averaged mass data object", {
+  limit_cores()
   data <-
     import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"),
                     metadata = test_path("exttestdata", "metadata.csv"),
@@ -54,6 +58,7 @@ test_that("We can convert a mass_data object to an averaged mass data object", {
 })
 
 test_that("convert to group averages fail if given wrong parameters", {
+  limit_cores()
   data <-
     import_all_data(peak_table = test_path("exttestdata", "peak_table.csv"),
                     metadata = test_path("exttestdata", "metadata.csv"),
@@ -73,6 +78,7 @@ test_that("convert to group averages fail if given wrong parameters", {
 
 test_that("get_triplicate_averages returns a dataframe with all
           the triplicate averages", {
+            limit_cores()
             data <-
               import_all_data(peak_table = test_path("exttestdata",
                                                      "peak_table.csv"),
@@ -92,6 +98,7 @@ test_that("get_triplicate_averages returns a dataframe with all
           })
 
 test_that("generate_a_combined_table returns a data.frame with proper data", {
+  limit_cores()
   data <-
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),
@@ -152,7 +159,7 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
 
 
 test_that("generate_a_combined_table will fail if sent the wrong parameters", {
-
+  limit_cores()
   data <-
     import_all_data(peak_table = test_path("exttestdata",
                                            "peak_table.csv"),

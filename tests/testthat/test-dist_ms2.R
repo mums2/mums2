@@ -1,4 +1,5 @@
 test_that("dist_ms2 works with gnps parameters", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(dat, 0.3, 2, modified_cosine_params(0.5), min_peaks = 0,
                    number_of_threads = 2)
@@ -7,6 +8,7 @@ test_that("dist_ms2 works with gnps parameters", {
 })
 
 test_that("dist_ms2 works with spectral entropy parameters", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(dat, 0.3, 2, spec_entropy_params(), min_peaks = 0,
                    number_of_threads = 2)
@@ -25,6 +27,7 @@ test_that("dist_ms2 works with spectral entropy parameters", {
 
 
 test_that("dist_ms2 error conditions are working as expected", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   expect_error(dist_ms2("dat", 0.3, 2, spec_entropy_params(), min_peaks = 0),
                "The mass_data object must be created using")
@@ -43,6 +46,7 @@ test_that("dist_ms2 error conditions are working as expected", {
 })
 
 test_that("fails when there are no ms2 matches", {
+  limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dat$ms2_matches <- data.frame()
   expect_error(dist_ms2(dat, 0.3, 2, spec_entropy_params(),
