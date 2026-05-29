@@ -12,6 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{mpactr}{\code{\link[mpactr]{get_metadata}}, \code{\link[mpactr]{get_peak_table}}}
+  \item{mpactr}{\code{\link[mpactr:get_metadata]{get_metadata()}}, \code{\link[mpactr:get_peak_table]{get_peak_table()}}}
 }}
 

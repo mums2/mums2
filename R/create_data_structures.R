@@ -158,10 +158,10 @@ get_triplicate_averages <- function(mpactr_data, matched_data) {
 #' cluster_results <- cluster_data(distance_df = dist,
 #'  ms2_match_data = matched_data, cutoff = 0.3, cluster_method = "opticlust")
 #'
-#'  massbank <- read_msp(mums2_example("massbank_example_data.msp"))
+#'  massbank <- read_msp(mums2_example("MSMS-Neg-CASMI2016.msp"))
 #'  annotations <- annotate_ms2(mass_data = matched_data,
 #'    reference = massbank, scoring_params = modified_cosine_params(0.5),
-#'    ppm = 1000,
+#'    ppm = 1.6e3,
 #'    min_score =  0.1, chemical_min_score = 0, number_of_threads = 2)
 #'
 #' generate_a_combined_table(matched_data, annotations, cluster_results)

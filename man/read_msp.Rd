@@ -19,6 +19,6 @@ sites like https://systemsomicslab.github.io/compms/msdial/main.html#MSP
 or https://mona.fiehnlab.ucdavis.edu/downloads
 }
 \examples{
-read_msp(mums2_example("massbank_example_data.msp"))
+read_msp(mums2_example("MSMS-Neg-CASMI2016.msp"))
 
 }

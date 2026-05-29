@@ -90,7 +90,7 @@ read_mgf <- function(file) {
 #' or https://mona.fiehnlab.ucdavis.edu/downloads
 #' @param msp_file the file path of your msp file
 #' @examples
-#' read_msp(mums2_example("massbank_example_data.msp"))
+#' read_msp(mums2_example("MSMS-Neg-CASMI2016.msp"))
 #'
 #' @return a `reference_database` object.
 read_msp <- function(msp_file) {
@@ -117,7 +117,7 @@ read_msp <- function(msp_file) {
 #' @param hmdb_file the xml hmdb file.
 #' @param ms2_folder the folder path of your ms2 spectra files.
 #' @examples
-#' read_msp(mums2_example("massbank_example_data.msp" ))
+#' read_msp(mums2_example("MSMS-Neg-CASMI2016.msp" ))
 #'
 #' @references
 #' Wishart DS, Guo A, Oler E, Wang F, Anjum A, Peters H, Dizon R,

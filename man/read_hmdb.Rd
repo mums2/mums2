@@ -21,7 +21,7 @@ that contains all of the ms2 spectras from the hmdb download
 page https://www.hmdb.ca/downloads.
 }
 \examples{
-read_msp(mums2_example("massbank_example_data.msp" ))
+read_msp(mums2_example("MSMS-Neg-CASMI2016.msp" ))
 
 }
 \references{
