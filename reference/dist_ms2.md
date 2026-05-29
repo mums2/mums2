@@ -50,7 +50,8 @@ dist_ms2(
 
 - number_of_threads:
 
-  the number of threads you want to use for this calculation.
+  the number of threads you wish to use for this calculation. Defaults
+  to the number of threads on your computer.
 
 ## Value
 

@@ -49,7 +49,8 @@ dist_shared(
 
 - number_of_threads:
 
-  the amount of threads you want the calculation to use.
+  the number of threads you wish to use for this calculation. Defaults
+  to the number of threads on your computer.
 
 - iterations:
 
