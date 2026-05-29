@@ -19,8 +19,8 @@ reference databases.
 Add another database to your reference database.
 }
 \examples{
-reference <- read_msp(mums2_example("MSMS-Neg-CASMI2016.msp"))
-reference2 <- read_msp(mums2_example("MSMS-Neg-CASMI2016.msp"))
+reference <- read_msp(mums2_example("massbank_example_data.msp"))
+reference2 <- read_msp(mums2_example("massbank_example_data.msp"))
 combined_reference_database(reference, reference2)
 
 }

@@ -23,5 +23,5 @@ paths are used in function examples.
 \examples{
 mums2_example()
 
-mums2_example("MSMS-Neg-CASMI2016.msp")
+mums2_example("massbank_example_data.msp")
 }

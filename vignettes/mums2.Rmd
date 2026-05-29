@@ -160,7 +160,7 @@ get_molecular_formula_preds(matched_data_small)
 Beyond predicting the molecular formula, we can also use the `annotate_ms2()` function to annotate the data in the `matched_ms2_ms1` object using reference databases. A reference database can be input as msp files using the `read_msp()` function. It returns a reference database that can be used as an input for the `annotate_ms2()` function. In the `{mums2}` package, MS2 spectral similarity can be determined using either spectral entropy (for more information: [Spectral Entropy](https://doi.org/10.1038/s41592-021-01331-z)) or the [GNPS algorithm](https://doi.org/10.1038/nbt.3597). While GNPS uses a modified cosine score to compute similarity between spectra, spectral entropy takes advantage of the total intensities of the spectra. The chosen method can be used by supplying either, `gnps_param()` or `spec_entropy_params()`. Using these two methods, we can effectively generate a collection of annotations based on the reference databases. We have a small massbank database provided from [MSDial on 05/12/2026](https://systemsomicslab.github.io/compms/msdial/main.html#MSP) that is preloaded in the package and can be used to annotate data.
 
 ```{r annotations}
-reference_db <- read_msp(msp_file = mums2_example("MSMS-Neg-CASMI2016.msp"))
+reference_db <- read_msp(msp_file = mums2_example("massbank_example_data.msp"))
 
 annotations <- annotate_ms2(
   mass_data = matched_data, reference = reference_db,

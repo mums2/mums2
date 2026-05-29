@@ -12,7 +12,7 @@
 #' @examples
 #' mums2_example()
 #'
-#' mums2_example("MSMS-Neg-CASMI2016.msp")
+#' mums2_example("massbank_example_data.msp")
 #' @return returns a `character` object
 mums2_example <- function(file = NULL) {
   path <- ""
