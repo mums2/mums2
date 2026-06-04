@@ -6,7 +6,7 @@
 \alias{mums2-package}
 \title{mums2: Microbial Ecology by Tandem Mass Spectrometry}
 \description{
-Tools that researchers can use to analyze untargeted metabolomics data generated using tandem mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data. Thus, we have a number of methods a user is able to use to generate data. Firstly, users can import Mass Spectrometry 1(MS1) data and filter it. Users are then able to match Mass Spectrometry 2(MS2) data to the filtered (or unfiltered) MS1 data. With the matched data users are able to cluster it, annotate it, predict de novo chemical formulas and calculate alpha and beta diversity. For chemical formula predictions, this was the method used; Towards de novo identification of metabolites by analyzing tandem mass spectra (Sebastian Böcker, Florian Rasche (2008) \doi{10.1093/bioinformatics/btn270}). The similarity/dissimilarity calculations we used to cluster our data together was: Spectral entropy outperforms MS/MS dot product similarity for small-molecule compound identification (Li, Y., Kind, T., Folz, J. et al. (2021) \doi{10.1038/s41592-021-01331-z}) and Sharing and community curation of mass spectrometry data with Global Natural Products Social Molecular Networking (Wang, M., Carver, J., Phelan, V. et al. (2021) \doi{10.1038/nbt.3597}).
+Tools that researchers can use to analyze untargeted metabolomics data generated using tandem mass spectroscopy from microbial communities. The overall approach taken to analyze metabolomics data parallels that used to analyze microbial communities using 16S rRNA gene sequencing data. Thus, we have a number of methods a user is able to use to generate data. Firstly, users can import Mass Spectrometry 1(MS1) data and filter it. Users are then able to match Mass Spectrometry 2(MS2) data to the filtered (or unfiltered) MS1 data. With the matched data users are able to cluster it, annotate it, predict de novo chemical formulas and calculate alpha and beta diversity. For chemical formula predictions, this was the method used; "Towards de novo identification of metabolites by analyzing tandem mass spectra" (Sebastian Böcker, Florian Rasche (2008) \doi{10.1093/bioinformatics/btn270}). The similarity/dissimilarity calculations we used to cluster our data together was: "Spectral entropy outperforms MS/MS dot product similarity for small-molecule compound identification" (Li, Y., Kind, T., Folz, J. et al. (2021) \doi{10.1038/s41592-021-01331-z}) and "Sharing and community curation of mass spectrometry data with Global Natural Products Social Molecular Networking" (Wang, M., Carver, J., Phelan, V. et al. (2021) \doi{10.1038/nbt.3597}).
 }
 \seealso{
 Useful links:
@@ -25,6 +25,15 @@ Authors:
   \item Patrick Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID})
   \item Allison Mason \email{masonar@umich.edu} (\href{https://orcid.org/0000-0003-1339-1592}{ORCID})
   \item Gregory Johnson \email{grejoh@umich.edu} (\href{https://orcid.org/0009-0008-3890-0297}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Anton Pervukhin \email{apervukh@minet.uni-jena.de} [contributor, copyright holder]
+  \item Florian Rasche \email{m3rafl@minet.uni-jena.de} [contributor, copyright holder]
+  \item Henner Sudek \email{Henner.Sudek@CeBiTec.Uni-Bielefeld.DE} [contributor, copyright holder]
+  \item Marcel Martin \email{Marcel.Martin@CeBiTec.Uni-Bielefeld.DE} [contributor, copyright holder]
+  \item Yuanyue Li \email{mail@yli.one} [contributor, copyright holder]
 }
 
 }

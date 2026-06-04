@@ -20,3 +20,4 @@
 ^MassBank_NIST\.msp$
 ^MassBank_RIKEN\.msp$
 ^vignettes/articles$
+^CRAN-SUBMISSION$
