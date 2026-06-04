@@ -42,5 +42,5 @@ test_that("Expect print to output a custom message", {
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
   expect_message(print(psu_msmls_data),
-                "You have 576 references in this object.")
+                 "You have 576 references in this object.")
 })
