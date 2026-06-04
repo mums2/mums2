@@ -10,17 +10,17 @@ it. Users are then able to match Mass Spectrometry 2(MS2) data to the
 filtered (or unfiltered) MS1 data. With the matched data users are able
 to cluster it, annotate it, predict de novo chemical formulas and
 calculate alpha and beta diversity. For chemical formula predictions,
-this was the method used; Towards de novo identification of metabolites
-by analyzing tandem mass spectra (Sebastian Böcker, Florian Rasche
+this was the method used; "Towards de novo identification of metabolites
+by analyzing tandem mass spectra" (Sebastian Böcker, Florian Rasche
 (2008)
 [doi:10.1093/bioinformatics/btn270](https://doi.org/10.1093/bioinformatics/btn270)
 ). The similarity/dissimilarity calculations we used to cluster our data
-together was: Spectral entropy outperforms MS/MS dot product similarity
-for small-molecule compound identification (Li, Y., Kind, T., Folz, J.
+together was: "Spectral entropy outperforms MS/MS dot product similarity
+for small-molecule compound identification" (Li, Y., Kind, T., Folz, J.
 et al. (2021)
 [doi:10.1038/s41592-021-01331-z](https://doi.org/10.1038/s41592-021-01331-z)
-) and Sharing and community curation of mass spectrometry data with
-Global Natural Products Social Molecular Networking (Wang, M., Carver,
+) and "Sharing and community curation of mass spectrometry data with
+Global Natural Products Social Molecular Networking" (Wang, M., Carver,
 J., Phelan, V. et al. (2021)
 [doi:10.1038/nbt.3597](https://doi.org/10.1038/nbt.3597) ).
 
@@ -49,3 +49,19 @@ Authors:
 
 - Gregory Johnson <grejoh@umich.edu>
   ([ORCID](https://orcid.org/0009-0008-3890-0297))
+
+Other contributors:
+
+- Anton Pervukhin <apervukh@minet.uni-jena.de> \[contributor, copyright
+  holder\]
+
+- Florian Rasche <m3rafl@minet.uni-jena.de> \[contributor, copyright
+  holder\]
+
+- Henner Sudek <Henner.Sudek@CeBiTec.Uni-Bielefeld.DE> \[contributor,
+  copyright holder\]
+
+- Marcel Martin <Marcel.Martin@CeBiTec.Uni-Bielefeld.DE> \[contributor,
+  copyright holder\]
+
+- Yuanyue Li <mail@yli.one> \[contributor, copyright holder\]

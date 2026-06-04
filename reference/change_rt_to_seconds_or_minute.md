@@ -37,7 +37,7 @@ data <-
                    mums2::mums2_example("boryillus_metadata.csv"),
                    format = "None")
 change_rt_to_seconds_or_minute(data, "minutes")
-#> [1] "Changing rt values to minutes"
+#> Changing rt values to minutes
 #>                    compound        mz RTINMINUTES 221012_DGM_Blank1_1_1_390
 #>                      <char>     <num>       <num>                     <num>
 #>   1:  413.12834 Da 319.32 s  414.1356  0.08866667                  1643.672

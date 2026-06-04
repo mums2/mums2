@@ -9,6 +9,16 @@
 - **Patrick Schloss**. Author, maintainer.
   [](https://orcid.org/0000-0002-6935-4275)
 
+- **Anton Pervukhin**. Contributor, copyright holder.
+
+- **Florian Rasche**. Contributor, copyright holder.
+
+- **Henner Sudek**. Contributor, copyright holder.
+
+- **Marcel Martin**. Contributor, copyright holder.
+
+- **Yuanyue Li**. Contributor, copyright holder.
+
 ## Citation
 
 Source:
