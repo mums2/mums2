@@ -23,9 +23,9 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
   limit_cores()
   if (require_namespace("mzR")) {
     data <- import_all_data(peak_table = test_path("exttestdata",
-                                                  "peak_table.csv"),
+                                                   "peak_table.csv"),
                             metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                                 "metadata.csv"),
                             format = "Progenesis")
 
     data_filtered <- data |>
