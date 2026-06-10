@@ -6,6 +6,7 @@
 #define CLIPROGRESSBAR_H
 #include <Rcpp.h>
 #include <RcppThread.h>
+#include <cmath>
 #include "progress_bar.hpp"
 class CliProgressBar : public ProgressBar {
 public:
@@ -82,8 +83,10 @@ protected:
         << time_string << "...";
     }
     static std::string _time_to_string(const double seconds) {
-
-        int time = static_cast<int>(seconds);
+        int time = 0;
+        if (!std::isnan(seconds)) {
+            time = static_cast<int>(seconds);
+        }
 
         int hour = 0;
         int min = 0;
