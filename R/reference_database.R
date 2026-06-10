@@ -63,7 +63,7 @@ combined_reference_database <- function(reference, other_reference) {
 #' @return prints customized message to the console
 print.reference_database <- function(x, ...) {
   node_count <- GetNodeCount(x)
-  print(paste0("You have ", node_count, " references in this object."))
+  message(paste0("You have ", node_count, " references in this object."))
 }
 
 

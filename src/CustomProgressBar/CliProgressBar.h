@@ -17,6 +17,7 @@ public:
     void display() override { RcppThread::Rcout << "\033[37mComputing: "; }
 
     void update(const float progress) override {
+        if (!isInteractive) return;
         if (_firstTime) {
             _display_ticks(progress);
             std::time(&start);
@@ -34,12 +35,9 @@ public:
     }
 
     void reset() {
-        // Rcpp::Environment cli = Rcpp::Environment::namespace_env("cli");
-        // const Rcpp::Function console_width = cli["console_width"];
-
-        // From fiddling around with it, it seems that dividing the console
-        // width by 2 produces the best display.
-        _max_ticks = 50;//std::floor(Rcpp::as<int>(console_width()) / 2);
+        const Rcpp::Function interactive("interactive");
+        isInteractive = interactive();
+        _max_ticks = 30;//std::floor(Rcpp::as<int>(console_width()) / 2);
         _ticks_displayed = 0;
         _finalized = false;
     }
@@ -113,6 +111,7 @@ protected:
 
 
 private:
+    bool isInteractive;
     int _max_ticks;        // the total number of ticks to print
     int _ticks_displayed;  // the nb of ticks already displayed
     bool _finalized;

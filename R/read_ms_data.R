@@ -19,7 +19,7 @@ read_mzml_mzxml <- function(file) {
                   it is currently a .", extension))
     }
 
-    print(paste0("Reading: ", file, " ..."))
+    message(paste0("Reading: ", file, " ..."))
     file_reader <- mzR::openMSfile(file)
     peak_length <- length(mzR::peaks(file_reader))
     mass_spec_data <-
@@ -64,7 +64,7 @@ read_mgf <- function(file) {
       stop(paste0("Please ensure the input file is a
                   .mgf, it is currently a .", extension))
     }
-    print(paste0("Reading: ", file, " ..."))
+    message(paste0("Reading: ", file, " ..."))
     result_data_list <- ReadMgf(file)
     row_length <- nrow(result_data_list$ms2_table)
     columns <- colnames(result_data_list$ms2_table)
@@ -99,7 +99,7 @@ read_msp <- function(msp_file) {
     stop(paste0("Please ensure the input file is a msp,
                 it is currently a .", extension))
   }
-  print(paste0("Reading: ", msp_file, " ..."))
+  message(paste0("Reading: ", msp_file, " ..."))
   reference <- ReadMsp(msp_file)
   class(reference) <- "reference_database"
   reference
@@ -142,16 +142,16 @@ read_hmdb <- function(hmdb_file, ms2_folder) {
   }
   database <- process_xml(hmdb_file)
   read_and_match_spectra_files(ms2_folder, database)
-  print("Creating Annotation Database...")
+  message("Creating Annotation Database...")
   annotations <- CreateAnnotationController(database)
   class(annotations) <- "reference_database"
   annotations
 }
 
 process_xml <- function(xml_file) {
-  print("Reading Metabolites from XML Files...")
+  message("Reading Metabolites from XML Files...")
   records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
-  print("Processing XML Files...")
+  message("Processing XML Files...")
   pb <- CreateProgressBarObject()
   size <- length(records)
   database <- CreateHumanMetabolomicsDB(size)
@@ -173,9 +173,9 @@ process_xml <- function(xml_file) {
 read_and_match_spectra_files <- function(ms2_files, database) {
   ls <- list.files(ms2_files, full.names = TRUE)
   database_names <- sub("_.*", "", list.files(ms2_files, full.names = FALSE))
-  print("Adding Spectra Files...")
+  message("Adding Spectra Files...")
   AddSpectra(database, ls, database_names)
-  print("Processing Spectra Files...")
+  message("Processing Spectra Files...")
   ProcessMs2Files(database)
 }
 

@@ -49,7 +49,7 @@ change_rt_to_seconds_or_minute <- function(mpactr_object,
   if (rt_type != "seconds" && rt_type != "minutes") {
     stop("rt_type can only be equal to 'seconds', or 'minutes'")
   }
-  print(paste0("Changing rt values to ", rt_type))
+  message(paste0("Changing rt values to ", rt_type))
   peak_table <- get_peak_table(mpactr_object)
   colnames(peak_table)
 

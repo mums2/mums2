@@ -20,22 +20,28 @@ test_that("read_mgf will fail if the file does not exist", {
 
 test_that("read_mzml_mzxml will read mzxml data properly", {
   limit_cores()
-  path <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
-  mzml_data <- read_mzml_mzxml(path)
-  expect_true(length(mzml_data) == 2)
-  expect_true(length(mzml_data$peak_data[[1]])
-              == nrow(mzml_data$mass_spec_data))
+  if (require_namespace("mzR")) {
+    path <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
+    mzml_data <- read_mzml_mzxml(path)
+    expect_true(length(mzml_data) == 2)
+    expect_true(length(mzml_data$peak_data[[1]])
+                == nrow(mzml_data$mass_spec_data))
+  }
 })
 
 test_that("read_mzml_mzxml will fail if file has the wrong extension", {
   limit_cores()
-  expect_error(read_mzml_mzxml(test_path("exttestdata", "matched_data.RDS")))
+  if (require_namespace("mzR")) {
+    expect_error(read_mzml_mzxml(test_path("exttestdata", "matched_data.RDS")))
+  }
 })
 
 test_that("read_mzml_mzxml will fail if the file does not exist", {
   limit_cores()
-  expect_error(read_mzml_mzxml(".mzml"))
-  expect_error(read_mzml_mzxml(".mzxml"))
+  if (require_namespace("mzR")) {
+    expect_error(read_mzml_mzxml(".mzml"), "file: .mzml")
+    expect_error(read_mzml_mzxml(".mzxml"), "file: .mzxml")
+  }
 })
 
 test_that("read_mzml_mzxml will fail if mzR not installed", {

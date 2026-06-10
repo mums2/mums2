@@ -120,9 +120,9 @@ get_community_matrix <- function(community_object) {
 #' @export
 #' @title Print Community Object
 #' @description
-#' S3 function for print the community object
+#' S3 function for printing the community object
 #' @param x the object created from the `create_community_object()` function.
-#' @param ... other parameters that are included in the print function.
+#' @param ... other parameters that are included in the `print()` function.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =
@@ -138,7 +138,9 @@ get_community_matrix <- function(community_object) {
 #'
 #' community_object <- create_community_matrix_object(matched_data)
 #' print(community_object)
-#'
+#' @return returns `matrix` representation of the community object and
+#' prints it to the screen.
 print.community_object <- function(x, ...) {
-  print(get_community_matrix(x), ...)
+  community_matrix <- get_community_matrix(x)
+  print(community_matrix, ...)
 }

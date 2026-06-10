@@ -62,7 +62,7 @@ ms2_ms1_compare <- function(ms2_files, mpactr_object,
   len <- length(ms1_compounds)
   result <- CompareMS2Ms1(mz2, mz1, rt2, rt1, mz_tolerance, rt_tolerance)
   matched_peaks <- length(which(result != -1))
-  print(paste0(matched_peaks, "/", len, " peaks have an MS2 spectra."))
+  message(paste0(matched_peaks, "/", len, " peaks have an MS2 spectra."))
 
   resultant_mat <- matrix(0, nrow = matched_peaks, ncol = 5)
   ms2_peaks <- vector("list", matched_peaks)

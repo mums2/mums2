@@ -37,18 +37,10 @@ test_that("You can add another database file to the reference data", {
 })
 
 
-test_that("We can add another reference to the database", {
-  limit_cores()
-  psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
-                                       "PSU-MSMLS.msp"))
-  expect_output(print(psu_msmls_data),
-                "You have 576 references in this object.")
-})
-
 test_that("Expect print to output a custom message", {
   limit_cores()
   psu_msmls_data <- read_msp(test_path("exttestdata/database_data",
                                        "PSU-MSMLS.msp"))
-  expect_output(print(psu_msmls_data),
-                "You have 576 references in this object.")
+  expect_message(print(psu_msmls_data),
+                 "You have 576 references in this object.")
 })

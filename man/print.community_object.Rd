@@ -9,10 +9,14 @@
 \arguments{
 \item{x}{the object created from the \code{create_community_object()} function.}
 
-\item{...}{other parameters that are included in the print function.}
+\item{...}{other parameters that are included in the \code{print()} function.}
+}
+\value{
+returns \code{matrix} representation of the community object and
+prints it to the screen.
 }
 \description{
-S3 function for print the community object
+S3 function for printing the community object
 }
 \examples{
 data <-
@@ -29,5 +33,4 @@ matched_data <- ms2_ms1_compare(mums2_example("botryllus_v2.gnps.mgf"),
 
 community_object <- create_community_matrix_object(matched_data)
 print(community_object)
-
 }

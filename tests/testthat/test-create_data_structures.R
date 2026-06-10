@@ -115,7 +115,9 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
 
   distances <- dist_ms2(ms2_data, 0.3, 2, modified_cosine_params(0.5),
                         min_peaks = 0, number_of_threads = 2)
-  cluster_results <- cluster_data(distances, ms2_data,  0.3, "opticlust")
+  cluster_results <- suppressWarnings({
+    cluster_data(distances, ms2_data,  0.3, "opticlust")
+  })
   matched_data_and_cluster_data <-
     generate_a_combined_table(matched_data = ms2_data,
                               cluster_data = cluster_results)

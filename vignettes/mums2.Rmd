@@ -310,9 +310,11 @@ as_tibble(pcoa$points, rownames = "sample") |>
 Another visualization approach is to perform hierarchical clustering using the `stats::hclust()` function. Hierarchical clustering generates a tree of samples based on their beta diversity values to show the similarities of the samples. The results are similar to that of PCoA but it uses a tree like structure to showcase relationships. It tends to be easier to look at relationships or clusters using this type of graph.
 
 ```{r hierarchical_clustering, fig.width=10, fig.height=10, fig.fullwidth=TRUE}
+old_par <- par(no.readonly = TRUE)
 hclust_result <- hclust(bray_w_omus, "average")
 par(cex=0.6, mar=c(5, 8, 4, 1))
 plot(hclust_result)
+par(old_par)
 ```
 
 
