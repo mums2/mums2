@@ -18,7 +18,7 @@ You can install the CRAN version with:
 install.packages("mums2")
 ```
 
-You can install the development version of mpactr from
+You can install the development version of mums2 from
 [GitHub](https://github.com/mums2/mums2) with:
 
 ``` r
