@@ -28,6 +28,7 @@ std::vector<uint64_t> Rarefaction::Rarefy(const std::vector<uint64_t>& abundance
     const size_t vectorSize = abundance.size();
     uint64_t grandTotal = 0;
     uint64_t incrementer = size;
+    size_t globalIndex = 0;
 
     std::vector<uint64_t> counter(vectorSize, 0);
     std::unordered_map<size_t, size_t> indexSwap;
@@ -40,22 +41,29 @@ std::vector<uint64_t> Rarefaction::Rarefy(const std::vector<uint64_t>& abundance
             randomNumbers[index++] = rngEngine.NextRandomValue(i, sum);
 
         }
-        for(size_t i = 0; i < randomNumbers.size(); i++) {
-            auto randomValue = randomNumbers[i];
+        for(size_t randomValue : randomNumbers) {
             if (indexSwap.find(randomValue) != indexSwap.end()) {
                 // Set the random number to the next index
                 size_t currentRandomValue = randomValue;
                 randomValue = indexSwap[randomValue];
-                if (indexSwap.find(randomValue) != indexSwap.end())
-                    randomValue = indexSwap[randomValue];
-                indexSwap[currentRandomValue] = i;
+                if (indexSwap.find(globalIndex) == indexSwap.end()) {
+                    indexSwap[currentRandomValue] = globalIndex;
+                }
+                else
+                    indexSwap[currentRandomValue] = indexSwap[globalIndex];
             }
-            else
-                indexSwap[randomValue] = i;
+            else {
+                if (indexSwap.find(globalIndex) == indexSwap.end()) {
+                    indexSwap[randomValue] = globalIndex;
+                }
+                else
+                    indexSwap[randomValue] = indexSwap[globalIndex];
+            }
 
             const auto index = std::lower_bound(abundancesRanges.begin(),
                 abundancesRanges.end(), randomValue) - abundancesRanges.begin();
             counter[eligibleIndex[index]]++;
+            globalIndex++;
         }
         if(currentIndex <= 0) currentIndex += size;
         else currentIndex += incrementer;
