@@ -1,7 +1,4 @@
 read_mzml_mzxml <- function(file) {
-  if (!require_namespace("mzR")) {
-    stop("To use this functionality you have to install the mzR package.")
-  }
   file_list <- unique(as.list(file))
   all_data <- list(mass_spec_data = data.frame(SpectraIndex = as.integer(),
                                                basePeakMZ = as.numeric(),
@@ -20,32 +17,56 @@ read_mzml_mzxml <- function(file) {
     }
 
     message(paste0("Reading: ", file, " ..."))
-    file_reader <- mzR::openMSfile(file)
-    peak_length <- length(mzR::peaks(file_reader))
-    mass_spec_data <-
-      mzR::header(file_reader, 1:peak_length)[c("seqNum",
-                                                "msLevel",
-                                                "basePeakMZ",
-                                                "retentionTime")]
-
-    mass_spec_data$basePeakMZ <- as.numeric(mass_spec_data$basePeakMZ)
-    mass_spec_data$retentionTime <- as.numeric(mass_spec_data$retentionTime)
-    mass_spec_data$file <- rep(file, times = peak_length)
-    mass_spec_data$SpectraIndex <- 1:peak_length
-    mass_spec_data <- mass_spec_data[mass_spec_data$msLevel == 2, ]
-
-    peak_data <- vector("list", nrow(mass_spec_data))
-    for (i in seq_along(peak_data)) {
-      peak_data[[i]] <- as.data.frame(mzR::peaks(file_reader,
-                                                 mass_spec_data$seqNum[i]))
-    }
-    mzR::close(file_reader)
-    all_data$mass_spec_data <- rbind(all_data$mass_spec_data, mass_spec_data)
-    all_data$peak_data[[file]] <- peak_data
+    result <- read_ms_data(file)
+    all_data$mass_spec_data <- rbind(all_data$mass_spec_data, result$mass_spec_data)
+    all_data$peak_data[[file]] <- result$peak_data
   }
+  
   all_data
-
 }
+
+
+read_ms_data <- function(file) {
+  mzml_dat <- RaMS::grabMSdata(file, "MS2")
+  mzml_dat$MS2$seq_id <- 1
+  counter <- 1
+  current_mz <- mzml_dat$MS2$premz[[1]]
+  current_rt <- mzml_dat$MS2$rt[[1]]
+  for(i in seq(nrow(mzml_dat$MS2))) {
+    if(mzml_dat$MS2$premz[[i]] != current_mz ||
+      mzml_dat$MS2$rt[[i]] != current_rt) {
+
+      current_mz <- mzml_dat$MS2$premz[[i]]
+      current_rt <-  mzml_dat$MS2$rt[[i]]
+      counter <- counter + 1
+    }
+    mzml_dat$MS2$seq_id[[i]] <- counter 
+  }
+
+  size <- max(mzml_dat$MS2$seq_id)
+  peak_data <- vector("list", size)
+  peak_sizes <- table(mzml_dat$MS2$seq_id)
+  mass_spec_data <- as.data.frame(matrix(0, nrow = size, ncol = 6))
+  colnames(mass_spec_data) <- c("seqNum", "msLevel", "basePeakMZ", "retentionTime", "file", "SpectraIndex")
+  idx <- 1
+  for(i in seq(size)) {
+    # Create Peak Data
+    range <- idx:(peak_sizes[[i]] + idx - 1)
+    peak_data[[i]]$mz <- mzml_dat$MS2$fragmz[range]
+    peak_data[[i]]$intensity <- mzml_dat$MS2$int[range]
+
+    # Create Ms2 Data.frame
+    mass_spec_data$seqNum[[i]] <- mzml_dat$MS2$seq_id[[idx]]
+    mass_spec_data$msLevel[[i]] <- 2
+    mass_spec_data$basePeakMZ[[i]] <- mzml_dat$MS2$premz[[idx]]
+    mass_spec_data$retentionTime[[i]] <- mzml_dat$MS2$rt[[idx]]
+    mass_spec_data$SpectraIndex[[i]] <- i
+    idx <- idx + peak_sizes[[i]]
+  }
+  mass_spec_data$file <- file
+  list(mass_spec_data = mass_spec_data, peak_data = peak_data)
+}
+
 
 read_mgf <- function(file) {
   file_list <- unique(as.list(file))
@@ -177,8 +198,4 @@ read_and_match_spectra_files <- function(ms2_files, database) {
   AddSpectra(database, ls, database_names)
   message("Processing Spectra Files...")
   ProcessMs2Files(database)
-}
-
-require_namespace <- function(package_name) {
-  requireNamespace(package_name, quietly = TRUE)
 }
