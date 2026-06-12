@@ -20,6 +20,7 @@ test_that("read_mgf will fail if the file does not exist", {
 
 test_that("read_mzml_mzxml will read mzxml data properly", {
   limit_cores()
+  skip_on_cran()
   if (require_namespace("mzR")) {
     path <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
     mzml_data <- read_mzml_mzxml(path)

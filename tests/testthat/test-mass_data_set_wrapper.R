@@ -21,6 +21,7 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
 
 test_that("We can add ms2 data to our massdataset with mzml files", {
   limit_cores()
+  skip_on_cran()
   if (require_namespace("mzR")) {
     data <- import_all_data(peak_table = test_path("exttestdata",
                                                    "peak_table.csv"),
