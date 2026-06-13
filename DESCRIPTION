@@ -20,7 +20,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/mums2/mums2, https://www.mums2.org/mums2/
 BugReports: https://github.com/mums2/mums2/issues
-biocViews:
 LinkingTo: 
     sitmo,
     Rcpp,
@@ -36,13 +35,13 @@ Imports:
     stats,
     parallel,
     xml2,
+    RaMS
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyverse,
-    networkD3,
-    mzR
+    networkD3
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
