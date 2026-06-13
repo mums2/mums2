@@ -22,9 +22,9 @@ test_that("We can add ms2 data to our massdataset with mgf files", {
 test_that("We can add ms2 data to our massdataset with mzml files", {
   limit_cores()
   data <- import_all_data(peak_table = test_path("exttestdata",
-                                                  "peak_table.csv"),
+                                                 "peak_table.csv"),
                           metadata = test_path("exttestdata",
-                                                "metadata.csv"),
+                                               "metadata.csv"),
                           format = "Progenesis")
 
   data_filtered <- data |>
@@ -33,7 +33,7 @@ test_that("We can add ms2 data to our massdataset with mzml files", {
     filter_peak_table(filter_group_params(group_threshold = 0.1,
                                           "Blanks")) |>
     filter_peak_table(filter_insource_ions_params())
-      
+
   mzxml_files <- test_path("exttestdata", "threonine_i2_e35_pH_tree.mzXML")
   ms2_matches <- ms2_ms1_compare(mzxml_files, data, 100000, 150)
   expect_true(nrow(ms2_matches$ms2_matches) > 0)

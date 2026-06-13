@@ -18,10 +18,11 @@ read_mzml_mzxml <- function(file) {
 
     message(paste0("Reading: ", file, " ..."))
     result <- read_ms_data(file)
-    all_data$mass_spec_data <- rbind(all_data$mass_spec_data, result$mass_spec_data)
+    all_data$mass_spec_data <-
+      rbind(all_data$mass_spec_data, result$mass_spec_data)
     all_data$peak_data[[file]] <- result$peak_data
   }
-  
+
   all_data
 }
 
@@ -32,24 +33,25 @@ read_ms_data <- function(file) {
   counter <- 1
   current_mz <- mzml_dat$MS2$premz[[1]]
   current_rt <- mzml_dat$MS2$rt[[1]]
-  for(i in seq(nrow(mzml_dat$MS2))) {
-    if(mzml_dat$MS2$premz[[i]] != current_mz ||
-      mzml_dat$MS2$rt[[i]] != current_rt) {
+  for (i in seq_len(nrow(mzml_dat$MS2))) {
+    if (mzml_dat$MS2$premz[[i]] != current_mz ||
+          mzml_dat$MS2$rt[[i]] != current_rt) {
 
       current_mz <- mzml_dat$MS2$premz[[i]]
       current_rt <-  mzml_dat$MS2$rt[[i]]
       counter <- counter + 1
     }
-    mzml_dat$MS2$seq_id[[i]] <- counter 
+    mzml_dat$MS2$seq_id[[i]] <- counter
   }
 
   size <- max(mzml_dat$MS2$seq_id)
   peak_data <- vector("list", size)
   peak_sizes <- table(mzml_dat$MS2$seq_id)
   mass_spec_data <- as.data.frame(matrix(0, nrow = size, ncol = 6))
-  colnames(mass_spec_data) <- c("seqNum", "msLevel", "basePeakMZ", "retentionTime", "file", "SpectraIndex")
+  colnames(mass_spec_data) <- c("seqNum", "msLevel", "basePeakMZ",
+                                "retentionTime", "file", "SpectraIndex")
   idx <- 1
-  for(i in seq(size)) {
+  for (i in seq_len(size)) {
     # Create Peak Data
     range <- idx:(peak_sizes[[i]] + idx - 1)
     peak_data[[i]]$mz <- mzml_dat$MS2$fragmz[range]
