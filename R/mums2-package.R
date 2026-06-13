@@ -18,6 +18,7 @@
 #' @importFrom mpactr get_peak_table
 #' @importFrom mpactr import_data
 #' @importFrom parallel detectCores
+#' @importFrom RaMS grabMSdata
 #' @importFrom Rcpp sourceCpp
 #' @importFrom stats as.dist
 #' @importFrom utils head
