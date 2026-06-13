@@ -66,8 +66,7 @@ context("Test CppMatrix Operations") {
         expectedResult[1] = {0,0,0};
         expectedResult[2] = {0,0,0};
         const CppMatrix expectedMatrix(expectedResult);
-        expect_true
-        (res == expectedMatrix);
+        expect_true(res == expectedMatrix);
     }
 
     test_that("Cpp Matrix errors when you perform operations on matrices of different sizes") {

@@ -27,7 +27,7 @@ read_mzml_mzxml <- function(file) {
 
 
 read_ms_data <- function(file) {
-  mzml_dat <- RaMS::grabMSdata(file, "MS2")
+  mzml_dat <- grabMSdata(file, "MS2")
   mzml_dat$MS2$seq_id <- 1
   counter <- 1
   current_mz <- mzml_dat$MS2$premz[[1]]
