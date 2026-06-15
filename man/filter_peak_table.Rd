@@ -42,6 +42,7 @@ You can also find more information on these functions in\code{mpactr}
 documentation.
 }
 \examples{
+data.table::setDTthreads(threads = 1)
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),

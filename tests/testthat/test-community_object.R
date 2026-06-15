@@ -2,7 +2,7 @@ test_that("test that we can create a community object", {
   limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
-                   number_of_threads = 2)
+                   number_of_threads = 1)
   final_cluster <- cluster_data(dist, ms2_match_data, 0.03, "opticlust")
   community_object <- create_community_matrix_object(final_cluster)
   expect_true("community_object" %in% class(community_object))
@@ -19,7 +19,7 @@ test_that("Test that get community object returns a community matrix", {
   limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
-                   number_of_threads = 2)
+                   number_of_threads = 1)
   final_cluster <- cluster_data(dist, ms2_match_data, 0.03, "opticlust")
   community_object <- create_community_matrix_object(final_cluster)
   community_matrix <- get_community_matrix(community_object)
@@ -29,7 +29,7 @@ test_that("Printing a community object prints out the matrix", {
   limit_cores()
   ms2_match_data <- readRDS(test_path("exttestdata", "matched_data.RDS"))
   dist <- dist_ms2(ms2_match_data, 0.3, 2, modified_cosine_params(0.5),
-                   number_of_threads = 2)
+                   number_of_threads = 1)
   final_cluster <- cluster_data(dist, ms2_match_data, 0.03, "opticlust")
   community_object <- create_community_matrix_object(final_cluster)
   expect_output(print(community_object))
