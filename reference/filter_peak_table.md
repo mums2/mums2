@@ -53,6 +53,7 @@ a `mpactr` object that has been filter based on the supplied parameters.
 ## Examples
 
 ``` r
+data.table::setDTthreads(threads = 1)
 data <-
    import_all_data(peak_table =
                    mums2::mums2_example("botryllus_pt_small.csv"),
