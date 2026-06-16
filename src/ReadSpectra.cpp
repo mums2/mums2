@@ -5,9 +5,8 @@
 #include "Spectra/ReadSpectra.h"
 #include "Spectra/MetaDataValuePair.h"
 #include "CustomProgressBar/CliProgressBar.h"
-#include "CustomProgressBar/ETAProgressBar.h"
 
-Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
+Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath, const bool interactive) {
     std::ifstream spectraData(filePath);
     std::string line;
     std::list<std::list<double>> mzContainer;
@@ -21,7 +20,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
          std::istream_iterator<char>(spectraData),
          std::istream_iterator<char>(),
          '\n'));
-    CliProgressBar p;
+    CliProgressBar p(interactive);
     spectraData.close();
     spectraData.open(filePath);
     float currentLine = 0;
@@ -75,7 +74,7 @@ Rcpp::List ReadSpectra::ReadMGF(const std::string& filePath) {
         Rcpp::Named("mzIntensityList") = mzIntensityList);
 }
 
-std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
+std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath, const bool interactive) {
         std::ifstream spectraData(filePath);
     std::string line;
     std::list<std::list<double>> mzContainer;
@@ -90,7 +89,7 @@ std::vector<AnnotationNode> ReadSpectra::ReadMSP(const std::string &filePath) {
         std::istream_iterator<char>(spectraData),
         std::istream_iterator<char>(),
         '\n'));
-    CliProgressBar p;
+    CliProgressBar p(interactive);
     spectraData.close();
     spectraData.open(filePath);
     float currentLine = 0;

@@ -56,7 +56,8 @@ compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
   mzs <- lapply(mass_data$peak_data, function(x) x$mz)
   resultant_formulas <-
     DeNovoMolecularFormulaPrediction(mass_data$ms2_matches$mz, mzs,
-                                     parent_ppm, number_of_threads)
+                                     parent_ppm, number_of_threads,
+                                     interactive())
   resultant_formulas[which(resultant_formulas == "")] <- NA_character_
   failed_amount <- length(which(is.na(resultant_formulas)))
   message(paste0(abs(length(resultant_formulas) - failed_amount),

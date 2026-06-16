@@ -130,7 +130,7 @@ test_that("generate_a_combined_table returns a data.frame with proper data", {
   psu_msmls <- read_msp(test_path("exttestdata", "database_data/PSU-MSMLS.msp"))
   annotations <- annotate_ms2(ms2_data, psu_msmls,
                               modified_cosine_params(0.5), 2000, 0, 0,
-                              min_peaks = 0)
+                              min_peaks = 0, number_of_threads = 1)
 
   all_data <- generate_a_combined_table(matched_data = ms2_data,
                                         annotations = annotations,
@@ -184,7 +184,7 @@ test_that("generate_a_combined_table will fail if sent the wrong parameters", {
   psu_msmls <- read_msp(test_path("exttestdata", "database_data/PSU-MSMLS.msp"))
   annotations <- annotate_ms2(ms2_data, psu_msmls,
                               modified_cosine_params(0.5),
-                              2000, 0, 0, min_peaks = 0)
+                              2000, 0, 0, min_peaks = 0, number_of_threads = 1)
 
   expect_error(generate_a_combined_table(matched_data = ms2_data,
                                          annotations = annotations[, 1:5]),

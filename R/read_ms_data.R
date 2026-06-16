@@ -88,7 +88,7 @@ read_mgf <- function(file) {
                   .mgf, it is currently a .", extension))
     }
     message(paste0("Reading: ", file, " ..."))
-    result_data_list <- ReadMgf(file)
+    result_data_list <- ReadMgf(file, interactive())
     row_length <- nrow(result_data_list$ms2_table)
     columns <- colnames(result_data_list$ms2_table)
     rt_type <- which(columns %in% c("RTINMINUTES", "RTINSECONDS"))
@@ -123,7 +123,7 @@ read_msp <- function(msp_file) {
                 it is currently a .", extension))
   }
   message(paste0("Reading: ", msp_file, " ..."))
-  reference <- ReadMsp(msp_file)
+  reference <- ReadMsp(msp_file, interactive())
   class(reference) <- "reference_database"
   reference
 }
@@ -175,7 +175,7 @@ process_xml <- function(xml_file) {
   message("Reading Metabolites from XML Files...")
   records <- xml_find_all(read_xml(xml_file), "//d1:metabolite")
   message("Processing XML Files...")
-  pb <- CreateProgressBarObject()
+  pb <- CreateProgressBarObject(interactive())
   size <- length(records)
   database <- CreateHumanMetabolomicsDB(size)
   progress <- 0
@@ -197,7 +197,7 @@ read_and_match_spectra_files <- function(ms2_files, database) {
   ls <- list.files(ms2_files, full.names = TRUE)
   database_names <- sub("_.*", "", list.files(ms2_files, full.names = FALSE))
   message("Adding Spectra Files...")
-  AddSpectra(database, ls, database_names)
+  AddSpectra(database, ls, database_names, interactive())
   message("Processing Spectra Files...")
-  ProcessMs2Files(database)
+  ProcessMs2Files(database, interactive())
 }

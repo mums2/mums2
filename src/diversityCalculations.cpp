@@ -100,8 +100,8 @@ CppMatrix RarefactionCalculationParallelized(const std::vector<std::vector<uint6
 // [[Rcpp::export]]
 Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std::string& index,
     const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
-    const int iterations = 100, const int seed = 123) {
-    CliProgressBar p;
+    const int iterations = 100, const int seed = 123, const bool interactive = true) {
+    CliProgressBar p(interactive);
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const Rcpp::CharacterVector samples = communityObject.get()->GetSampleNames();
     const size_t matrixRowSize = samples.size();
@@ -153,7 +153,7 @@ Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std:
 // [[Rcpp::export]]
 Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std::vector<std::string>& indexes,
     const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads,
-    const int iterations = 100, const int seed = 123) {
+    const int iterations = 100, const int seed = 123, const bool interactive = true) {
 
     const Rcpp::XPtr<CommunityMatrix> communityObject(communityMatrix);
     const std::vector<std::vector<uint64_t>>& abundanceRanges = communityObject.get()->GetAbundanceRanges();
@@ -174,7 +174,7 @@ Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std
     int columnSize = communityObject.get()->GetColumn();
     int currentProgress = 0;
     const CppMatrix& matrix = communityObject.get()->GetCppMatrixOfAbundances();
-    CliProgressBar p;
+    CliProgressBar p(interactive);
     RcppThread::parallelFor(0, iterations, [&communityAbundances, &eligibleIndexes, &abundanceRanges,
         &diversityMatrixes, &rngEngines, &matrix, &sums, &matrixRowSize, &columnSize, &size, &threshold,
         &subsample, &indexes, &iterations, &indexesSize, &mutex, &p, &currentProgress](int i) {

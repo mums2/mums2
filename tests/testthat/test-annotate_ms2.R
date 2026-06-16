@@ -120,7 +120,8 @@ test_that("annotate_ms2 will fail if not supplied a correct scoring method", {
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             c(),
-                            100, .1, 0, min_peaks = 0),
+                            100, .1, 0, min_peaks = 0,
+                            number_of_threads = 1),
                "score_params must be created using the")
 })
 
@@ -133,7 +134,8 @@ test_that("annotate_ms2 will fail if not supplied correct clustering data", {
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
-                            .2, 0, min_peaks = 0, cluster_data = data.frame()),
+                            .2, 0, min_peaks = 0, cluster_data = data.frame(),
+                            number_of_threads = 1),
                "cluster_data must be created using")
 })
 
@@ -146,22 +148,26 @@ test_that("annotate_ms2 will fail if not supplied the correct numeric data", {
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), "20",
-                            .2, 0, min_peaks = 0),
+                            .2, 0, min_peaks = 0,
+                            number_of_threads = 1),
                "ppm")
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
-                            ".2", 0, min_peaks = 0),
+                            ".2", 0, min_peaks = 0,
+                            number_of_threads = 1),
                "min_score")
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
-                            .2, "0", min_peaks = 0),
+                            .2, "0", min_peaks = 0,
+                            number_of_threads = 1),
                "chemical_min_score")
 
   expect_error(annotate_ms2(dat, psu_msmls,
                             modified_cosine_params(0.5), 20,
-                            .2, 0, min_peaks = "0"),
+                            .2, 0, min_peaks = "0",
+                            number_of_threads = 1),
                "min_peaks")
 
   expect_error(annotate_ms2(dat, psu_msmls,

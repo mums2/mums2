@@ -22,7 +22,7 @@ public:
     std::vector<AnnotationNode>& GetAnnotationNodes() {return annotations;}
     std::queue<AnnotatedNode> AnnotateFeature(const std::vector<Feature>& features, const ScoringFactory& factory,
         double minScoreThreshold, double chemicalMinScore, double precursorThreshold, size_t minPeaks,
-        int threadCount) const;
+        int threadCount, bool interactive) const;
 
 private:
     std::vector<AnnotationNode> annotations;

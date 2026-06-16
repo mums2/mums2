@@ -121,7 +121,8 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
   annotations <- AnnotateMs2Features(mass_data$ms2_matches, mass_data$peak_data,
                                      reference, scoring_params, preds, ppm,
                                      min_score, chemical_min_score,
-                                     min_peaks, number_of_threads)
+                                     min_peaks, number_of_threads,
+                                     interactive())
   if (nrow(annotations) <= 0) {
     warning("No annotations have been found. Try adjusting your variables.")
     return(annotations)

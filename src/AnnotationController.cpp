@@ -28,10 +28,10 @@ AnnotationNode AnnotationController::GetNode(const int index) {
 // [[Rcpp::depends(RcppThread)]]
 std::queue<AnnotatedNode> AnnotationController::AnnotateFeature(const std::vector<Feature> &features,
 const ScoringFactory& factory, const double minScoreThreshold, const double chemicalMinScore,
-const double precursorThreshold, const size_t minPeaks, const int threadCount) const {
+const double precursorThreshold, const size_t minPeaks, const int threadCount, const bool interactive) const {
 
     std::queue<AnnotatedNode> result;
-    CliProgressBar progressBar;
+    CliProgressBar progressBar(interactive);
     int currentProgress = 0;
     const int size = static_cast<int>(annotations.size());
     const size_t featureSize = features.size();

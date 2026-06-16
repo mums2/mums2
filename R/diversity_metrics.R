@@ -84,7 +84,8 @@ dist_shared <- function(community_object, size, threshold,
 
   result <- MeasureBetaDiversity(community_object, diversity_index,
                                  size, threshold, subsample,
-                                 number_of_threads, iterations, seed)
+                                 number_of_threads, iterations, seed,
+                                 interactive())
   result[which(is.nan(result))] <- 0
   as.dist(result)
 }
@@ -176,6 +177,7 @@ alpha_summary <- function(community_object, size, threshold,
 
   diversity <- MeasureAlphaDiversity(community_object, diversity_index,
                                      size, threshold, subsample,
-                                     number_of_threads, iterations, seed)
+                                     number_of_threads, iterations, seed,
+                                     interactive())
   data.frame(samples = rownames(diversity), diversity)
 }

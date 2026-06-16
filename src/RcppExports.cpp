@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // AnnotateMs2Features
-Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks, const int threadCount);
-RcppExport SEXP _mums2_AnnotateMs2Features(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP, SEXP threadCountSEXP) {
+Rcpp::DataFrame AnnotateMs2Features(const Rcpp::DataFrame& queryList, const Rcpp::List querySpectra, const SEXP annotationController, const Rcpp::List& scoringParameters, const Rcpp::StringVector& formulas, const double precursorThreshold, const double minScoreThreshold, const double chemicalMinScore, const size_t minPeaks, const int threadCount, const bool interactive);
+RcppExport SEXP _mums2_AnnotateMs2Features(SEXP queryListSEXP, SEXP querySpectraSEXP, SEXP annotationControllerSEXP, SEXP scoringParametersSEXP, SEXP formulasSEXP, SEXP precursorThresholdSEXP, SEXP minScoreThresholdSEXP, SEXP chemicalMinScoreSEXP, SEXP minPeaksSEXP, SEXP threadCountSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -27,7 +27,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type chemicalMinScore(chemicalMinScoreSEXP);
     Rcpp::traits::input_parameter< const size_t >::type minPeaks(minPeaksSEXP);
     Rcpp::traits::input_parameter< const int >::type threadCount(threadCountSEXP);
-    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(AnnotateMs2Features(queryList, querySpectra, annotationController, scoringParameters, formulas, precursorThreshold, minScoreThreshold, chemicalMinScore, minPeaks, threadCount, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -67,8 +68,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // DeNovoMolecularFormulaPrediction
-std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads);
-RcppExport SEXP _mums2_DeNovoMolecularFormulaPrediction(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP) {
+std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVector& mzData, const Rcpp::List& masses, const double ppm, const int numberOfThreads, const bool interactive);
+RcppExport SEXP _mums2_DeNovoMolecularFormulaPrediction(SEXP mzDataSEXP, SEXP massesSEXP, SEXP ppmSEXP, SEXP numberOfThreadsSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -76,13 +77,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type masses(massesSEXP);
     Rcpp::traits::input_parameter< const double >::type ppm(ppmSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(DeNovoMolecularFormulaPrediction(mzData, masses, ppm, numberOfThreads));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(DeNovoMolecularFormulaPrediction(mzData, masses, ppm, numberOfThreads, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
 // distMS2
-Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads);
-RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP) {
+Rcpp::DataFrame distMS2(const Rcpp::List spectraDataList, const Rcpp::List parameters, const double precursor_thresh, const double cutoff, const int minPeaks, const int numberOfThreads, const bool interactive);
+RcppExport SEXP _mums2_distMS2(SEXP spectraDataListSEXP, SEXP parametersSEXP, SEXP precursor_threshSEXP, SEXP cutoffSEXP, SEXP minPeaksSEXP, SEXP numberOfThreadsSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -92,7 +94,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type cutoff(cutoffSEXP);
     Rcpp::traits::input_parameter< const int >::type minPeaks(minPeaksSEXP);
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(distMS2(spectraDataList, parameters, precursor_thresh, cutoff, minPeaks, numberOfThreads, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -134,8 +137,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // MeasureBetaDiversity
-Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
-RcppExport SEXP _mums2_MeasureBetaDiversity(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
+Rcpp::NumericMatrix MeasureBetaDiversity(const SEXP& communityMatrix, const std::string& index, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed, const bool interactive);
+RcppExport SEXP _mums2_MeasureBetaDiversity(SEXP communityMatrixSEXP, SEXP indexSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -147,13 +150,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(MeasureBetaDiversity(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(MeasureBetaDiversity(communityMatrix, index, size, threshold, subsample, numberOfThreads, iterations, seed, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
 // MeasureAlphaDiversity
-Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std::vector<std::string>& indexes, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed);
-RcppExport SEXP _mums2_MeasureAlphaDiversity(SEXP communityMatrixSEXP, SEXP indexesSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP) {
+Rcpp::NumericMatrix MeasureAlphaDiversity(const SEXP& communityMatrix, const std::vector<std::string>& indexes, const uint64_t size, const uint64_t threshold, const bool subsample, const int numberOfThreads, const int iterations, const int seed, const bool interactive);
+RcppExport SEXP _mums2_MeasureAlphaDiversity(SEXP communityMatrixSEXP, SEXP indexesSEXP, SEXP sizeSEXP, SEXP thresholdSEXP, SEXP subsampleSEXP, SEXP numberOfThreadsSEXP, SEXP iterationsSEXP, SEXP seedSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -165,7 +169,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type numberOfThreads(numberOfThreadsSEXP);
     Rcpp::traits::input_parameter< const int >::type iterations(iterationsSEXP);
     Rcpp::traits::input_parameter< const int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(MeasureAlphaDiversity(communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations, seed));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(MeasureAlphaDiversity(communityMatrix, indexes, size, threshold, subsample, numberOfThreads, iterations, seed, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -194,24 +199,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // AddSpectra
-void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames);
-RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP) {
+void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames, const std::vector<std::string>& databaseNames, const bool interactive);
+RcppExport SEXP _mums2_AddSpectra(SEXP hmdbPtrSEXP, SEXP fileNamesSEXP, SEXP databaseNamesSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type fileNames(fileNamesSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type databaseNames(databaseNamesSEXP);
-    AddSpectra(hmdbPtr, fileNames, databaseNames);
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    AddSpectra(hmdbPtr, fileNames, databaseNames, interactive);
     return R_NilValue;
 END_RCPP
 }
 // ProcessMs2Files
-void ProcessMs2Files(SEXP& hmdbPtr);
-RcppExport SEXP _mums2_ProcessMs2Files(SEXP hmdbPtrSEXP) {
+void ProcessMs2Files(SEXP& hmdbPtr, const bool interactive);
+RcppExport SEXP _mums2_ProcessMs2Files(SEXP hmdbPtrSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP& >::type hmdbPtr(hmdbPtrSEXP);
-    ProcessMs2Files(hmdbPtr);
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    ProcessMs2Files(hmdbPtr, interactive);
     return R_NilValue;
 END_RCPP
 }
@@ -243,12 +250,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // CreateProgressBarObject
-SEXP CreateProgressBarObject();
-RcppExport SEXP _mums2_CreateProgressBarObject() {
+SEXP CreateProgressBarObject(const bool interactive);
+RcppExport SEXP _mums2_CreateProgressBarObject(SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CreateProgressBarObject());
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(CreateProgressBarObject(interactive));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -274,24 +282,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // ReadMgf
-Rcpp::List ReadMgf(const std::string& path);
-RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP) {
+Rcpp::List ReadMgf(const std::string& path, const bool interactive);
+RcppExport SEXP _mums2_ReadMgf(SEXP pathSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMgf(path));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMgf(path, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
 // ReadMsp
-SEXP ReadMsp(const std::string& path);
-RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP) {
+SEXP ReadMsp(const std::string& path, const bool interactive);
+RcppExport SEXP _mums2_ReadMsp(SEXP pathSEXP, SEXP interactiveSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(ReadMsp(path));
+    Rcpp::traits::input_parameter< const bool >::type interactive(interactiveSEXP);
+    rcpp_result_gen = Rcpp::wrap(ReadMsp(path, interactive));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -299,28 +309,28 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 10},
+    {"_mums2_AnnotateMs2Features", (DL_FUNC) &_mums2_AnnotateMs2Features, 11},
     {"_mums2_GetNodeCount", (DL_FUNC) &_mums2_GetNodeCount, 1},
     {"_mums2_GetNode", (DL_FUNC) &_mums2_GetNode, 2},
     {"_mums2_CombineReferenceDatabases", (DL_FUNC) &_mums2_CombineReferenceDatabases, 2},
-    {"_mums2_DeNovoMolecularFormulaPrediction", (DL_FUNC) &_mums2_DeNovoMolecularFormulaPrediction, 4},
-    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 6},
+    {"_mums2_DeNovoMolecularFormulaPrediction", (DL_FUNC) &_mums2_DeNovoMolecularFormulaPrediction, 5},
+    {"_mums2_distMS2", (DL_FUNC) &_mums2_distMS2, 7},
     {"_mums2_CreateCommunityMatrix", (DL_FUNC) &_mums2_CreateCommunityMatrix, 1},
     {"_mums2_GetCommunityMatrix", (DL_FUNC) &_mums2_GetCommunityMatrix, 1},
     {"_mums2_RarefactionCalculation", (DL_FUNC) &_mums2_RarefactionCalculation, 5},
-    {"_mums2_MeasureBetaDiversity", (DL_FUNC) &_mums2_MeasureBetaDiversity, 8},
-    {"_mums2_MeasureAlphaDiversity", (DL_FUNC) &_mums2_MeasureAlphaDiversity, 8},
+    {"_mums2_MeasureBetaDiversity", (DL_FUNC) &_mums2_MeasureBetaDiversity, 9},
+    {"_mums2_MeasureAlphaDiversity", (DL_FUNC) &_mums2_MeasureAlphaDiversity, 9},
     {"_mums2_CreateHumanMetabolomicsDB", (DL_FUNC) &_mums2_CreateHumanMetabolomicsDB, 1},
     {"_mums2_AddHumanMetabolomicNode", (DL_FUNC) &_mums2_AddHumanMetabolomicNode, 4},
-    {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 3},
-    {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 1},
+    {"_mums2_AddSpectra", (DL_FUNC) &_mums2_AddSpectra, 4},
+    {"_mums2_ProcessMs2Files", (DL_FUNC) &_mums2_ProcessMs2Files, 2},
     {"_mums2_CreateAnnotationController", (DL_FUNC) &_mums2_CreateAnnotationController, 1},
     {"_mums2_CompareMS2Ms1", (DL_FUNC) &_mums2_CompareMS2Ms1, 6},
-    {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 0},
+    {"_mums2_CreateProgressBarObject", (DL_FUNC) &_mums2_CreateProgressBarObject, 1},
     {"_mums2_IncrementProgressBar", (DL_FUNC) &_mums2_IncrementProgressBar, 2},
     {"_mums2_DestroyProgressBar", (DL_FUNC) &_mums2_DestroyProgressBar, 1},
-    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 1},
-    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 1},
+    {"_mums2_ReadMgf", (DL_FUNC) &_mums2_ReadMgf, 2},
+    {"_mums2_ReadMsp", (DL_FUNC) &_mums2_ReadMsp, 2},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

@@ -6,8 +6,8 @@
 #include "CustomProgressBar/CliProgressBar.h"
 
 // [[Rcpp::export]]
-SEXP CreateProgressBarObject() {
-    auto* progressBar = new CliProgressBar();
+SEXP CreateProgressBarObject(const bool interactive) {
+    auto* progressBar = new CliProgressBar(interactive);
     return Rcpp::XPtr<CliProgressBar>(progressBar);
 }
 

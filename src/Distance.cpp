@@ -20,9 +20,9 @@ void Distance::CreateSpectraList(Rcpp::List data) {
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppThread)]]
 void Distance::CalculateDistances(const double prec_threshold, const double cutoff,
-    const ScoringFactory& scoreMethod, const int minPeaks, const int numberOfThreads) {
+    const ScoringFactory& scoreMethod, const int minPeaks, const int numberOfThreads, const bool interactive) {
     const auto size = static_cast<int>(spectraList.size());
-    CliProgressBar p;
+    CliProgressBar p(interactive);
     bool disablePPMFilter = prec_threshold <= -1;
     for(int i = 0; i < size; i++) {
         Spectra firstSpectra = spectraList[i];

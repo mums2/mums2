@@ -21,9 +21,9 @@ void AddHumanMetabolomicNode(SEXP& hmdbPtr, const std::vector<std::string>& name
 
 // [[Rcpp::export]]
 void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames,
-    const std::vector<std::string>& databaseNames) {
+    const std::vector<std::string>& databaseNames, const bool interactive) {
     Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
-    CliProgressBar progressBar;
+    CliProgressBar progressBar(interactive);
     float counter = 0;
     const float maxSize = static_cast<float>(fileNames.size());
     for (size_t i = 0; i < fileNames.size(); i++) {
@@ -34,9 +34,9 @@ void AddSpectra(SEXP& hmdbPtr, const std::vector<std::string>& fileNames,
 }
 
 // [[Rcpp::export]]
-void ProcessMs2Files(SEXP& hmdbPtr) {
+void ProcessMs2Files(SEXP& hmdbPtr, const bool interactive) {
     Rcpp::XPtr<HumanMetabolomicsDB> hmdbPointer(hmdbPtr);
-    hmdbPointer.get()->ProcessSpectraFiles();
+    hmdbPointer.get()->ProcessSpectraFiles(interactive);
 }
 
 // [[Rcpp::export]]

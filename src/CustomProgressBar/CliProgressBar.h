@@ -10,7 +10,10 @@
 #include "progress_bar.hpp"
 class CliProgressBar : public ProgressBar {
 public:
-    CliProgressBar() { reset(); }
+    CliProgressBar(const bool interactive) {
+        isInteractive = interactive;
+        reset();
+    }
 
     ~CliProgressBar() = default;
 
@@ -36,8 +39,6 @@ public:
     }
 
     void reset() {
-        const Rcpp::Function interactive("interactive");
-        isInteractive = interactive();
         _max_ticks = 30;//std::floor(Rcpp::as<int>(console_width()) / 2);
         _ticks_displayed = 0;
         _finalized = false;

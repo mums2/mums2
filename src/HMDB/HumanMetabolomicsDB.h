@@ -19,7 +19,7 @@ public:
     explicit HumanMetabolomicsDB(size_t nodeSize);
     void AddHumanMetabolomicNode(const HumanMetabolomicsDBNode& node, size_t index);
     void AddSpectraFiles(const std::string &spectraFile, const std::string& databaseName);
-    void ProcessSpectraFiles();
+    void ProcessSpectraFiles(bool interactive);
     AnnotationController* ConstructDataBase() const;
 private: // We could probably remove the unordered map and use a list. Add the spectra to the node
     std::vector<HumanMetabolomicsDBNode> nodes;

@@ -18,7 +18,7 @@ public:
     ~Distance() = default;
     void CreateSpectraList(Rcpp::List data);
     void CalculateDistances(double prec_threshold, double cutoff, const ScoringFactory &scoreMethod, int minPeaks,
-        int numberOfThreads);
+        int numberOfThreads, bool interactive);
     Rcpp::DataFrame ExtractMatrix();
 
 private:

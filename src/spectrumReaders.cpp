@@ -10,13 +10,13 @@
 
 
 // [[Rcpp::export]]
-Rcpp::List ReadMgf(const std::string& path) {
-    return ReadSpectra::ReadMGF(path);
+Rcpp::List ReadMgf(const std::string& path, const bool interactive) {
+    return ReadSpectra::ReadMGF(path, interactive);
 }
 
 // [[Rcpp::export]]
-SEXP ReadMsp(const std::string& path) {
-    const std::vector<AnnotationNode> annotationData = ReadSpectra::ReadMSP(path);
+SEXP ReadMsp(const std::string& path, const bool interactive) {
+    const std::vector<AnnotationNode> annotationData = ReadSpectra::ReadMSP(path, interactive);
     auto* controller = new AnnotationController(annotationData);
     return Rcpp::XPtr<AnnotationController>(controller);
 }

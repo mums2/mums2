@@ -21,8 +21,8 @@ void HumanMetabolomicsDB::AddSpectraFiles(const std::string &spectraFile, const 
     spectraFiles[nameToIndexMap[databaseName]].emplace_back(spectraFile);
 }
 
-void HumanMetabolomicsDB::ProcessSpectraFiles() {
-    CliProgressBar progressBar;
+void HumanMetabolomicsDB::ProcessSpectraFiles(const bool interactive) {
+    CliProgressBar progressBar(interactive);
     const auto nodeMapCount = static_cast<float>(spectraFiles.size());
     float counter = 0;
     for (size_t i = 0; i < spectraFiles.size(); i++) {

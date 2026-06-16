@@ -31,14 +31,14 @@ std::vector<DecompositionMassInputData> CreateInputData(const Rcpp::NumericVecto
 //[[Rcpp::depends(RcppThread)]]
 //[[Rcpp::export]]
 std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVector& mzData, const Rcpp::List& masses,
-	const double ppm, const int numberOfThreads = 1) {
+	const double ppm, const int numberOfThreads = 1, const bool interactive = true) {
 	const int size = static_cast<int>(masses.size());
 	const std::vector<DecompositionMassInputData> inputData = CreateInputData(mzData, masses);
 	std::mutex mutex;
 
 	std::vector<std::vector<DecompResult>> allNodes(size);
 	DecomposeMass decomposeMass;
-	CliProgressBar progressBar;
+	CliProgressBar progressBar(interactive);
 	int counter = 0;
 	Rcpp::Rcout << "Calculating potential molecular formulas..." << std::endl;
 	RcppThread::parallelFor(0, size, [&inputData, &decomposeMass,
@@ -54,7 +54,7 @@ std::vector<std::string> DeNovoMolecularFormulaPrediction(const Rcpp::NumericVec
 	}, numberOfThreads);
 	progressBar.end_display();
 
-	CliProgressBar progressBar2;
+	CliProgressBar progressBar2(interactive);
 	std::vector<std::string> resultantFormulas(size);
 	const DetectNeutralLoses detectNeutralLoses;
 	counter = 0;

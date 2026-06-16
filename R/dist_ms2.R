@@ -84,8 +84,8 @@ dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
                     "spectra" = data$peak_data)
 
   dist <- distMS2(data_list, score_params, precursor_threshold,
-                  cutoff, min_peaks, number_of_threads)
+                  cutoff, min_peaks, number_of_threads, interactive())
 
   class(dist) <- c(class(dist), "mass_data_dist")
-  return(dist)
+  dist
 }
