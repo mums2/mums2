@@ -156,7 +156,7 @@ test_that("Test dist_shared errors when given wrong parameters", {
                            iterations = 100, number_of_threads = "1"),
                "number_of_threads")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
-                           iterations = 100, seed = "1", 
+                           iterations = 100, seed = "1",
                            number_of_threads = 1),
                "seed")
   expect_error(dist_shared(community_object, 400, 10, "12", TRUE,
@@ -253,7 +253,7 @@ test_that("Alpha summary fails when given wrong input", {
                         number_of_threads = 1)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
-  expect_error(alpha_summary(results, 400, 10, "shannon", TRUE, 2, 
+  expect_error(alpha_summary(results, 400, 10, "shannon", TRUE, 2,
                              number_of_threads = 1))
   expect_error(alpha_summary(community_object, 400, 10, "bray", TRUE,
                              iterations = 1, number_of_threads = 1))
@@ -282,7 +282,7 @@ test_that("Test Alpha summary errors when given wrong parameters", {
                              iterations = 100, number_of_threads = "1"),
                "number_of_threads")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                             iterations = 100, number_of_threads = 1, 
+                             iterations = 100, number_of_threads = 1,
                              seed = "1"),
                "seed")
   expect_error(alpha_summary(community_object, 400, 10, "a", TRUE,
