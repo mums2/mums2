@@ -19,11 +19,14 @@ test_that("rarefy_ms errors when given incorrect parameters", {
                         number_of_threads = 1)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
-  expect_error(rarefy_ms("community_object", size, 10, 2),
+  expect_error(rarefy_ms("community_object", size, 10, 2,
+                         number_of_threads = 1),
                "Please ensure the community_object")
-  expect_error(rarefy_ms(community_object, "size", 10, 2),
+  expect_error(rarefy_ms(community_object, "size", 10, 2,
+                         number_of_threads = 1),
                "size must be numeric")
-  expect_error(rarefy_ms(community_object, 1, "10", 2),
+  expect_error(rarefy_ms(community_object, 1, "10", 2,
+                         number_of_threads = 1),
                "threshold must be numeric")
   expect_error(rarefy_ms(community_object, 1, 10, "a"),
                "number_of_threads must be numeric")

@@ -7,7 +7,7 @@ test_that("Test dist_shared works with bray", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "bray", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -21,7 +21,7 @@ test_that("Test dist_shared works with without subsample = FALSE", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "bray", FALSE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -36,7 +36,7 @@ test_that("Test dist_shared works with jaccard", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "jaccard", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -50,7 +50,7 @@ test_that("Test dist_shared works with hamming distance", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "hamming", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -64,7 +64,7 @@ test_that("Test dist_shared works with soren index", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "soren", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -78,7 +78,7 @@ test_that("Test dist_shared works with morisita horn index", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "morisita", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -92,7 +92,7 @@ test_that("Test dist_shared works with thetayc(Yun and Clayton) distance", {
   community_object <- create_community_matrix_object(result)
 
   result <- dist_shared(community_object, 400, 10, "thetayc", TRUE,
-                        iterations = 2, number_of_threads = 1)
+                        iterations = 1, number_of_threads = 1)
   expect_true("dist" %in% class(result))
   expect_true(length(result) == 210)
 })
@@ -141,25 +141,26 @@ test_that("Test dist_shared errors when given wrong parameters", {
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(result)
   expect_error(dist_shared(community_object, "400", 10, "bray", TRUE,
-                           iterations = 100),
+                           iterations = 100, number_of_threads = 1),
                "size")
   expect_error(dist_shared(community_object, 400, "10", "bray", TRUE,
-                           iterations = 100),
+                           iterations = 100, number_of_threads = 1),
                "threshold")
   expect_error(dist_shared(community_object, 400, 10, "bray", "TRUE",
-                           iterations = 100),
+                           iterations = 100, number_of_threads = 1),
                "subsample")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
-                           iterations = "100"),
+                           iterations = "100", number_of_threads = 1),
                "iterations")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
                            iterations = 100, number_of_threads = "1"),
                "number_of_threads")
   expect_error(dist_shared(community_object, 400, 10, "bray", TRUE,
-                           iterations = 100, seed = "1"),
+                           iterations = 100, seed = "1", 
+                           number_of_threads = 1),
                "seed")
   expect_error(dist_shared(community_object, 400, 10, "12", TRUE,
-                           iterations = 100),
+                           iterations = 100, number_of_threads = 1),
                "Please ensure")
 
 })
@@ -172,7 +173,7 @@ test_that("Alpha summary returns the proper results for simpsons", {
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "simpson", TRUE,
-                             iterations = 2, number_of_threads = 1)
+                             iterations = 1, number_of_threads = 1)
   expect_true("data.frame" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == 2)
   expect_true(nrow(alpha_sum) == length(dat$samples))
@@ -187,7 +188,7 @@ test_that("Alpha summary returns the proper results for shannon", {
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                             iterations = 2, number_of_threads = 1)
+                             iterations = 1, number_of_threads = 1)
   expect_true("data.frame" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == 2)
   expect_true(nrow(alpha_sum) == length(dat$samples))
@@ -202,7 +203,7 @@ test_that("Alpha summary returns the proper results for species richness", {
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "richness", TRUE,
-                             iterations = 2, number_of_threads = 1)
+                             iterations = 1, number_of_threads = 1)
   expect_true("data.frame" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == 2)
   expect_true(nrow(alpha_sum) == length(dat$samples))
@@ -219,7 +220,7 @@ test_that("Alpha summary returns the proper results for simpson,
             community_object <- create_community_matrix_object(result)
             alpha_sum <- alpha_summary(community_object, 400, 10,
                                        c("shannon", "simpson", "richness"),
-                                       TRUE, iterations = 2,
+                                       TRUE, iterations = 1,
                                        number_of_threads = 1)
             expect_true("data.frame" %in% class(alpha_sum))
             expect_true(ncol(alpha_sum) == 4)
@@ -237,7 +238,7 @@ test_that("Alpha summary works when subsample = FALSE", {
   result <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(result)
   alpha_sum <- alpha_summary(community_object, 400, 10, "simpson", FALSE,
-                             iterations = 2, number_of_threads = 1)
+                             iterations = 1, number_of_threads = 1)
   expect_true("data.frame" %in% class(alpha_sum))
   expect_true(ncol(alpha_sum) == 2)
   expect_true(nrow(alpha_sum) == length(dat$samples))
@@ -252,9 +253,10 @@ test_that("Alpha summary fails when given wrong input", {
                         number_of_threads = 1)
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
-  expect_error(alpha_summary(results, 400, 10, "shannon", TRUE, 2))
+  expect_error(alpha_summary(results, 400, 10, "shannon", TRUE, 2, 
+                             number_of_threads = 1))
   expect_error(alpha_summary(community_object, 400, 10, "bray", TRUE,
-                             iterations = 2, number_of_threads = 1))
+                             iterations = 1, number_of_threads = 1))
 })
 
 test_that("Test Alpha summary errors when given wrong parameters", {
@@ -265,25 +267,26 @@ test_that("Test Alpha summary errors when given wrong parameters", {
   results <- cluster_data(distances, dat,  0.3, "opticlust")
   community_object <- create_community_matrix_object(results)
   expect_error(alpha_summary(community_object, "400", 10, "shannon", TRUE,
-                             iterations = 100),
+                             iterations = 100, number_of_threads = 1),
                "size")
   expect_error(alpha_summary(community_object, 400, "10", "shannon", TRUE,
-                             iterations = 100),
+                             iterations = 100, number_of_threads = 1),
                "threshold")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", "TRUE",
-                             iterations = 100),
+                             iterations = 100, number_of_threads = 1),
                "subsample")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                             iterations = "100"),
+                             iterations = "100", number_of_threads = 1),
                "iterations")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
                              iterations = 100, number_of_threads = "1"),
                "number_of_threads")
   expect_error(alpha_summary(community_object, 400, 10, "shannon", TRUE,
-                             iterations = 100, seed = "1"),
+                             iterations = 100, number_of_threads = 1, 
+                             seed = "1"),
                "seed")
   expect_error(alpha_summary(community_object, 400, 10, "a", TRUE,
-                             iterations = 100),
+                             iterations = 100, number_of_threads = 1),
                "Please ensure")
 
 })

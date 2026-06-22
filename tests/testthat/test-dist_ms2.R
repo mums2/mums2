@@ -29,15 +29,20 @@ test_that("dist_ms2 works with spectral entropy parameters", {
 test_that("dist_ms2 error conditions are working as expected", {
   limit_cores()
   dat <- readRDS(test_path("exttestdata", "matched_data.RDS"))
-  expect_error(dist_ms2("dat", 0.3, 2, spec_entropy_params(), min_peaks = 0),
+  expect_error(dist_ms2("dat", 0.3, 2, spec_entropy_params(), min_peaks = 0,
+                        number_of_threads = 1),
                "The mass_data object must be created using")
-  expect_error(dist_ms2(dat, "0.3", 2, spec_entropy_params(), min_peaks = 0),
+  expect_error(dist_ms2(dat, "0.3", 2, spec_entropy_params(), min_peaks = 0,
+                        number_of_threads = 1),
                "cutoff must be numeric")
-  expect_error(dist_ms2(dat, 0.3, "2", spec_entropy_params(), min_peaks = 0),
+  expect_error(dist_ms2(dat, 0.3, "2", spec_entropy_params(), min_peaks = 0,
+                        number_of_threads = 1),
                "precursor_threshold must be a numeric")
-  expect_error(dist_ms2(dat, 0.3, 2, c(), min_peaks = 0),
+  expect_error(dist_ms2(dat, 0.3, 2, c(), min_peaks = 0,
+                        number_of_threads = 1),
                "score_params must be created")
-  expect_error(dist_ms2(dat, 0.3, 2, spec_entropy_params(), min_peaks = ""),
+  expect_error(dist_ms2(dat, 0.3, 2, spec_entropy_params(), min_peaks = "",
+                        number_of_threads = 1),
                "min_peaks must be a numeric")
   expect_error(dist_ms2(dat, 0.3, 2, spec_entropy_params(),
                         number_of_threads = ""),

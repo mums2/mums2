@@ -9,7 +9,8 @@ test_that("compute_molecular_formulas will fail if given incorrect
           parameters", {
             limit_cores()
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
-            expect_error(compute_molecular_formulas("dat"),
+            expect_error(compute_molecular_formulas("dat",
+                                                    number_of_threads = 1),
                          "The mass_data object must be created")
 
             expect_error(compute_molecular_formulas(dat, parent_ppm = "a"),
@@ -20,12 +21,12 @@ test_that("compute_molecular_formulas will fail if given incorrect
                          "number_of_threads must be numeric")
 
             dat$ms2_matches <- data.frame()
-            expect_error(compute_molecular_formulas(dat),
+            expect_error(compute_molecular_formulas(dat, number_of_threads = 1),
                          "Your mass_data object has no ms2 matches")
 
             dat <- readRDS(test_path("exttestdata", "small_matched_data.RDS"))
             dat$peak_data <- list()
-            expect_error(compute_molecular_formulas(dat),
+            expect_error(compute_molecular_formulas(dat, number_of_threads = 1),
                          "Your mass_data object has no peak data")
           })
 
