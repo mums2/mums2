@@ -75,8 +75,7 @@ annotate_ms2(mass_data, reference, scoring_params,
 
 - number_of_threads:
 
-  the number of threads you wish to use for this calculation. Defaults
-  to the number of threads on your computer.
+  the number of threads you wish to use for this calculation.
 
 ## Value
 

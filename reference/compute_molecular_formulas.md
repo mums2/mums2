@@ -25,8 +25,7 @@ compute_molecular_formulas(mass_data, parent_ppm = 3, number_of_threads = 1)
 
 - number_of_threads:
 
-  the number of threads you wish to use for this calculation. Defaults
-  to the number of threads on your computer.
+  the number of threads you wish to use for this calculation.
 
 ## Value
 
