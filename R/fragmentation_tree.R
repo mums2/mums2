@@ -10,7 +10,7 @@
 #' @param parent_ppm the ppm you wish to generate the candidate
 #'  molecular formulas.
 #' @param number_of_threads the number of threads you wish to use for this
-#' calculation. Defaults to the number of threads on your computer.
+#' calculation.
 #' @examples
 #' data <-
 #'    import_all_data(peak_table =

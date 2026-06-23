@@ -17,7 +17,7 @@
 #' @param subsample if true, we will rarefy the data before we run
 #' the diversity calculations. Default is TRUE.
 #' @param number_of_threads the number of threads you wish to use for this
-#' calculation. Defaults to the number of threads on your computer.
+#' calculation.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples
@@ -107,7 +107,7 @@ dist_shared <- function(community_object, size, threshold,
 #' @param subsample if true, we will rarefy the data before we
 #' run the diversity calculations. Default is TRUE.
 #' @param number_of_threads the number of threads you wish to use for this
-#' calculation. Defaults to the number of threads on your computer.
+#' calculation.
 #' @param iterations the amount of times you wish to run your calculation.
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @examples

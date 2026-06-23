@@ -32,7 +32,7 @@ bray, jaccard, soren, hamming, morista, and thetayc.}
 the diversity calculations. Default is TRUE.}
 
 \item{number_of_threads}{the number of threads you wish to use for this
-calculation. Defaults to the number of threads on your computer.}
+calculation.}
 
 \item{iterations}{the amount of times you wish to run your calculation.}
 

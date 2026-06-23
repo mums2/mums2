@@ -36,7 +36,7 @@ without omu information.}
 you compare the ms2 spectra.}
 
 \item{number_of_threads}{the number of threads you wish to use for this
-calculation. Defaults to the number of threads on your computer.}
+calculation.}
 }
 \value{
 A \code{data.frame} with all comparisons with scores above the threshold.

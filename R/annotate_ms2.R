@@ -32,7 +32,7 @@
 #' @param min_peaks the minimum number of peaks that need to be present before
 #' you compare the ms2 spectra.
 #' @param number_of_threads the number of threads you wish to use for this
-#' calculation. Defaults to the number of threads on your computer.
+#' calculation.
 #' @return A `data.frame` with all comparisons with scores above the threshold.
 #'  Information for the query scan include `query_ms1_id` (the variable_id
 #'  for features in expression_data of the `mass_data` object)

@@ -14,7 +14,7 @@
 #' @param threshold The individual feature threshold. Each subsampled feature
 #'  must be >= this value to be retained.
 #' @param number_of_threads the number of threads you wish to use for this
-#' calculation. Defaults to the number of threads on your computer.
+#' calculation.
 #' @param seed the RNG (random number generator) seed you would like to use.
 #' @return A `external_pointer` that references a community
 #' matrix of rarefied feature intensities.
@@ -59,6 +59,6 @@ rarefy_ms <- function(community_object, size, threshold,
     stop("seed must be numeric")
   }
 
-  return(RarefactionCalculation(community_object, size,
-                                threshold, number_of_threads, seed))
+  RarefactionCalculation(community_object, size,
+                         threshold, number_of_threads, seed)
 }

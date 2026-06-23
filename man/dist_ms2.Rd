@@ -31,7 +31,7 @@ See \code{\link[=modified_cosine_params]{modified_cosine_params()}} and \code{\l
 you compare the ms2 spectra.}
 
 \item{number_of_threads}{the number of threads you wish to use for this
-calculation. Defaults to the number of threads on your computer.}
+calculation.}
 }
 \value{
 A sparse matrix of class \code{"data.frame"}
