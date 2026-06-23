@@ -67,7 +67,7 @@
 #'                     ppm, min_score,
 #'                     chemical_min_score,
 #'                     cluster_data = NULL, min_peaks = 0,
-#'                     number_of_threads = detectCores())
+#'                     number_of_threads = 1)
 #'
 #' @export
 #' @return a `data.frame` object containing annotations
@@ -75,7 +75,7 @@ annotate_ms2 <- function(mass_data, reference, scoring_params,
                          ppm, min_score,
                          chemical_min_score,
                          cluster_data = NULL, min_peaks = 0,
-                         number_of_threads = detectCores()) {
+                         number_of_threads = 1) {
 
   if (!inherits(mass_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",

@@ -37,7 +37,7 @@
 #'
 #' @return returns a `matrix` object that contains your rarefied data.
 rarefy_ms <- function(community_object, size, threshold,
-                      number_of_threads = detectCores(), seed = 123) {
+                      number_of_threads = 1, seed = 123) {
   if (!inherits(community_object, "community_object")) {
     stop("Please ensure the community_object is created from the 
          `create_community_object` function.")

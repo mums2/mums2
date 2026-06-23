@@ -49,7 +49,7 @@
 #' @export
 dist_ms2 <- function(data, cutoff, precursor_threshold, score_params,
                      min_peaks = 6,
-                     number_of_threads = detectCores()) {
+                     number_of_threads = 1) {
   if (!inherits(data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare() function`"))

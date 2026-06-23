@@ -49,7 +49,7 @@
 #' dissimilarity between all samples.
 dist_shared <- function(community_object, size, threshold,
                         diversity_index = "bray", subsample = TRUE,
-                        number_of_threads = detectCores(),
+                        number_of_threads = 1,
                         iterations = 100, seed = 123) {
   diversity_index_list <- c("bray", "jaccard", "soren",
                             "hamming", "morisita", "thetayc")
@@ -141,7 +141,7 @@ dist_shared <- function(community_object, size, threshold,
 alpha_summary <- function(community_object, size, threshold,
                           diversity_index = c("shannon", "simpson"),
                           subsample = TRUE,
-                          number_of_threads = detectCores(),
+                          number_of_threads = 1,
                           iterations = 100, seed = 123) {
   diversity_index_list <- c("shannon", "simpson", "richness")
   if (!("community_object" %in% class(community_object))) {

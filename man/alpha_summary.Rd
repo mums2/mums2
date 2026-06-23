@@ -10,7 +10,7 @@ alpha_summary(
   threshold,
   diversity_index = c("shannon", "simpson"),
   subsample = TRUE,
-  number_of_threads = detectCores(),
+  number_of_threads = 1,
   iterations = 100,
   seed = 123
 )

@@ -33,7 +33,7 @@
 #' @return your mass_data object with an additional `character`
 #'  vector of all the predicted formulas.
 compute_molecular_formulas <- function(mass_data, parent_ppm = 3,
-                                       number_of_threads = detectCores() - 1) {
+                                       number_of_threads = 1) {
   if (!inherits(mass_data, "mass_data")) {
     stop(paste0("The mass_data object must be created using the",
                 " `ms2_ms1_compare()`"))

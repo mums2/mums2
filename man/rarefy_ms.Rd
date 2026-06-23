@@ -4,13 +4,7 @@
 \alias{rarefy_ms}
 \title{Rarefy MS1 Feature Table}
 \usage{
-rarefy_ms(
-  community_object,
-  size,
-  threshold,
-  number_of_threads = detectCores(),
-  seed = 123
-)
+rarefy_ms(community_object, size, threshold, number_of_threads = 1, seed = 123)
 }
 \arguments{
 \item{community_object}{A \code{community_object}}

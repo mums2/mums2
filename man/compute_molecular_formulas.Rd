@@ -4,11 +4,7 @@
 \alias{compute_molecular_formulas}
 \title{Compute Molecular formula Other}
 \usage{
-compute_molecular_formulas(
-  mass_data,
-  parent_ppm = 3,
-  number_of_threads = detectCores() - 1
-)
+compute_molecular_formulas(mass_data, parent_ppm = 3, number_of_threads = 1)
 }
 \arguments{
 \item{mass_data}{your mass_data object generated from \code{ms2_ms1_compare()}}

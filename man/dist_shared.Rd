@@ -10,7 +10,7 @@ dist_shared(
   threshold,
   diversity_index = "bray",
   subsample = TRUE,
-  number_of_threads = detectCores(),
+  number_of_threads = 1,
   iterations = 100,
   seed = 123
 )
