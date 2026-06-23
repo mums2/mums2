@@ -9,11 +9,7 @@ it allows us to efficiently calculate a multitudeof chemical formulas.
 ## Usage
 
 ``` r
-compute_molecular_formulas(
-  mass_data,
-  parent_ppm = 3,
-  number_of_threads = detectCores() - 1
-)
+compute_molecular_formulas(mass_data, parent_ppm = 3, number_of_threads = 1)
 ```
 
 ## Arguments

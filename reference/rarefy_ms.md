@@ -11,13 +11,7 @@ samples at different dilutions regardless of the desired submsampling
 ## Usage
 
 ``` r
-rarefy_ms(
-  community_object,
-  size,
-  threshold,
-  number_of_threads = detectCores(),
-  seed = 123
-)
+rarefy_ms(community_object, size, threshold, number_of_threads = 1, seed = 123)
 ```
 
 ## Arguments

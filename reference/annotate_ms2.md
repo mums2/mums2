@@ -24,7 +24,7 @@ annotate_ms2(mass_data, reference, scoring_params,
                     ppm, min_score,
                     chemical_min_score,
                     cluster_data = NULL, min_peaks = 0,
-                    number_of_threads = detectCores())
+                    number_of_threads = 1)
 ```
 
 ## Arguments

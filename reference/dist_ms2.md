@@ -12,7 +12,7 @@ dist_ms2(
   precursor_threshold,
   score_params,
   min_peaks = 6,
-  number_of_threads = detectCores()
+  number_of_threads = 1
 )
 ```
 
