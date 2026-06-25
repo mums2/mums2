@@ -1,5 +1,7 @@
 # Changelog
 
+## mums2 (development version)
+
 ## mums2 0.1.1
 
 CRAN release: 2026-06-25
