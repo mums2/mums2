@@ -641,14 +641,14 @@ annotations[1:5,]
 #>             query_ms1_id       query_ms2_id    query_mz query_rt ref_idx
 #> 1 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3283
 #> 2 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3284
-#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
-#> 4 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3289
+#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3289
+#> 4 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
 #> 5 1050.56754 Da 368.94 s mz1051.57522rt6.15 1051.575220 6.150000    5777
 #>   query_formula chemical_similarity    score collisionenergy instrument
 #> 1                          0.000000 0.166047              15           
 #> 2                          0.000000 0.164341              30           
-#> 3                          0.000000 0.159757              30           
-#> 4                          0.000000 0.167768              15           
+#> 3                          0.000000 0.167768              15           
+#> 4                          0.000000 0.159757              30           
 #> 5                          0.000000 0.476564             0.0           
 #>   instrumenttype                comment  ionmode         ccs
 #> 1    LC-ESI-ITFT registered in MassBank Positive 229.5588665
@@ -665,8 +665,8 @@ annotations[1:5,]
 #>                      inchikey retentiontime precursortype num.peaks
 #> 1 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
 #> 2 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         4
-#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
-#> 4 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
+#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
+#> 4 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
 #> 5 OPWPCWHMCUWCGG-XKYKWVHPSA-O                        [M]+         4
 #>                                                                                                                           name
 #> 1                                                                                            Telmisartan; LC-ESI-ITFT; MS2; CE
