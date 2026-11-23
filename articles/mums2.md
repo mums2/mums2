@@ -640,14 +640,14 @@ annotations <- annotate_ms2(
 annotations[1:5,]
 #>             query_ms1_id       query_ms2_id    query_mz query_rt ref_idx
 #> 1 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3283
-#> 2 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
-#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3284
+#> 2 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3284
+#> 3 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3290
 #> 4 1028.72044 Da 383.88 s   mz515.36698rt6.4  515.366980 6.400000    3289
 #> 5 1050.56754 Da 368.94 s mz1051.57522rt6.15 1051.575220 6.150000    5777
 #>   query_formula chemical_similarity    score collisionenergy instrument
 #> 1                          0.000000 0.166047              15           
-#> 2                          0.000000 0.159757              30           
-#> 3                          0.000000 0.164341              30           
+#> 2                          0.000000 0.164341              30           
+#> 3                          0.000000 0.159757              30           
 #> 4                          0.000000 0.167768              15           
 #> 5                          0.000000 0.476564             0.0           
 #>   instrumenttype                comment  ionmode         ccs
@@ -664,8 +664,8 @@ annotations[1:5,]
 #> 5 OCC1O[C@@H](OC2=CC=C(\\C=C\\C(=O)OCC3O[C@@H](OC4=C([O+]=C5C=C(O)C=C(O[C@@H]6OC(CO)[C@@H](O)C(O)[C@@H]6O)C5=C4)C4=CC(O)=C(O)C=C4)[C@@H](O[C@@H]4OC[C@@H](O)[C@@H](O)C4O)C(O)[C@@H]3O)C=C2)[C@@H](O)C(O)[C@@H]1O
 #>                      inchikey retentiontime precursortype num.peaks
 #> 1 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
-#> 2 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
-#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         4
+#> 2 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         4
+#> 3 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         5
 #> 4 RMMXLENWKUUMAY-UHFFFAOYSA-N                      [M+H]+         2
 #> 5 OPWPCWHMCUWCGG-XKYKWVHPSA-O                        [M]+         4
 #>                                                                                                                           name
@@ -768,7 +768,7 @@ cluster_results
 #>  [ reached 'max' / getOption("max.print") -- omitted 116 rows ]
 #> 
 #> $cluster_metrics
-#>      label cutoff specificity ppv ttp f1score tn mcc fn fp
+#>      label cutoff specificity ppv tp f1score tn mcc fn fp
 #>  [ reached 'max' / getOption("max.print") -- omitted 4 columns ]
 #>  [ reached 'max' / getOption("max.print") -- omitted 1 rows ]
 #> 
@@ -874,11 +874,11 @@ annotations[1:5,]
 #> 4 N6-Isopentenyladenine-9-glucoside; LC-ESI-QQ; MS2; CE
 #> 5                      Cholesterol; LC-APPI-QQ; MS2; CE
 #>                       ontology precursormz     formula   omu
-#> 1         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
-#> 2         Monoalkyl phosphates  544.980501 C10H6F17O4P omu56
-#> 3               Glycosylamines  366.177195  C16H23N5O5 omu56
-#> 4               Glycosylamines  366.177195  C16H23N5O5 omu56
-#> 5 Cholesterols and derivatives  369.351578     C27H46O omu56
+#> 1         Monoalkyl phosphates  544.980501 C10H6F17O4P omu54
+#> 2         Monoalkyl phosphates  544.980501 C10H6F17O4P omu54
+#> 3               Glycosylamines  366.177195  C16H23N5O5 omu54
+#> 4               Glycosylamines  366.177195  C16H23N5O5 omu54
+#> 5 Cholesterols and derivatives  369.351578     C27H46O omu54
 ```
 
 ## OMU-based Ecological Analyses
@@ -976,12 +976,12 @@ alpha_summary(
               subsample = TRUE, number_of_threads = 2) |>
   head()
 #>                                               samples   simpson   shannon
-#> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.6218898 0.9725834
-#> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.6334562 1.0036431
-#> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 0.4263663 0.5557598
+#> 221012_DGM_Blank4_1_2_435   221012_DGM_Blank4_1_2_435 0.6217161 0.9721212
+#> 221012_DGM_Blank4_1_1_434   221012_DGM_Blank4_1_1_434 0.6334802 1.0037074
+#> 221012_DGM_MB1599_13_3_433 221012_DGM_MB1599_13_3_433 0.4264564 0.5559170
 #>                            richness
-#> 221012_DGM_Blank4_1_2_435      8.59
-#> 221012_DGM_Blank4_1_1_434      8.77
+#> 221012_DGM_Blank4_1_2_435      8.54
+#> 221012_DGM_Blank4_1_1_434      8.72
 #> 221012_DGM_MB1599_13_3_433    12.00
 #>  [ reached 'max' / getOption("max.print") -- omitted 3 rows ]
 ```
@@ -1017,7 +1017,7 @@ bray_w_omus <- dist_shared(community_object = community_w_omus, size = 40000,
                           threshold = 200, diversity_index = "bray", number_of_threads =  2)
 bray_w_omus
 #>                            221012_DGM_Blank4_1_2_435 221012_DGM_Blank4_1_1_434
-#> 221012_DGM_Blank4_1_1_434                0.022657902                          
+#> 221012_DGM_Blank4_1_1_434                0.022670514                          
 #>                            221012_DGM_MB1599_13_3_433
 #> 221012_DGM_Blank4_1_1_434                            
 #>                            221012_DGM_MB1599_13_1_431
@@ -1179,42 +1179,38 @@ head(get_community_matrix(community_object = community_object_avg), 3)
 #> blank3     0     0     0     0     0     0    0.000     0     0     0.00     0
 #> MB1589     0     0     0     0     0     0 9891.063     0     0 31016.72     0
 #> MB1588     0     0     0     0     0     0    0.000     0     0     0.00     0
-#>          omu51 omu52 omu53     omu54 omu55      omu56    omu57     omu58 omu59
-#> blank3     0.0     0     0      0.00     0   536344.8     0.00      0.00     0
-#> MB1589 18200.5     0     0  60820.68     0 11950209.3 10110.24  98530.36     0
-#> MB1588     0.0     0     0 212704.06     0  2761290.9     0.00 479136.87     0
-#>        omu60 omu61     omu62    omu63    omu64   omu65 omu66 omu67 omu68 omu69
-#> blank3     0     0  71059.94     0.00     0.00     0.0     0     0     0     0
-#> MB1589     0     0 578187.41 11067.09 20210.32 11347.3     0     0     0     0
-#> MB1588     0     0      0.00     0.00     0.00     0.0     0     0     0     0
-#>             omu70 omu71    omu72      omu73      omu74    omu75 omu76    omu77
-#> blank3      0.000     0    0.000   65837.39   4293.939     0.00     0     0.00
-#> MB1589 210327.208     0 7873.674 5096777.02 217270.654 49602.83     0 67868.33
-#> MB1588   6803.707     0    0.000 1098725.26  15809.002 27996.26     0     0.00
-#>           omu78 omu79 omu80 omu81     omu82     omu83    omu84     omu85
-#> blank3     0.00     0     0     0  101080.8  4267.063     0.00      0.00
-#> MB1589 83334.29     0     0     0 2751336.9 28711.179 96614.68  61664.97
-#> MB1588     0.00     0     0     0       0.0     0.000     0.00 138083.00
-#>            omu86 omu87     omu88    omu89 omu90    omu91    omu92 omu93 omu94
-#> blank3  98687.36     0  4669.115     0.00     0     0.00     0.00     0     0
-#> MB1589 322682.14     0 23251.863 19642.83     0 57334.46 38534.01     0     0
-#> MB1588 260084.95     0     0.000     0.00     0     0.00     0.00     0     0
-#>           omu95      omu96    omu97   omu98     omu99 omu100 omu101 omu102
-#> blank3     0.00   7709.688      0.0     0.0  37381.96      0      0      0
-#> MB1589 62575.24 278049.688 804098.7 37879.9 166117.64      0      0      0
-#> MB1588     0.00      0.000      0.0     0.0  26708.77      0      0      0
-#>        omu103 omu104 omu105   omu106 omu107    omu108 omu109   omu110 omu111
-#> blank3      0      0      0     0.00      0   4068.33      0     0.00      0
-#> MB1589      0      0      0 12633.89      0 118577.04      0 38765.94      0
-#> MB1588      0      0      0     0.00      0      0.00      0 46022.30      0
-#>        omu112 omu113   omu114   omu115 omu116 omu117 omu118 omu119 omu120
-#> blank3      0      0     0.00     0.00      0      0      0      0      0
-#> MB1589      0      0 73379.17 15677.16      0      0      0      0      0
-#> MB1588      0      0 90119.16     0.00      0      0      0      0      0
-#>        omu121
-#> blank3      0
-#> MB1589      0
-#> MB1588      0
+#>          omu51 omu52 omu53      omu54 omu55 omu56 omu57    omu58     omu59
+#> blank3     0.0     0     0   536344.8     0     0     0     0.00      0.00
+#> MB1589 18200.5     0     0 11950209.3     0     0     0 49602.83  98530.36
+#> MB1588     0.0     0     0  2761290.9     0     0     0 27996.26 479136.87
+#>        omu60 omu61 omu62    omu63   omu64 omu65    omu66    omu67 omu68 omu69
+#> blank3     0     0     0     0.00     0.0     0     0.00    0.000     0     0
+#> MB1589     0     0     0 20210.32 11347.3     0 11067.09 7873.674     0     0
+#> MB1588     0     0     0     0.00     0.0     0     0.00    0.000     0     0
+#>             omu70      omu71      omu72    omu73 omu74     omu75 omu76    omu77
+#> blank3      0.000   65837.39   4293.939     0.00     0  98687.36     0     0.00
+#> MB1589 210327.208 5096777.02 217270.654 73379.17     0 322682.14     0 67868.33
+#> MB1588   6803.707 1098725.26  15809.002 90119.16     0 260084.95     0     0.00
+#>        omu78    omu79 omu80 omu81     omu82 omu83     omu84     omu85 omu86
+#> blank3     0     0.00     0     0  101080.8     0  71059.94  4669.115     0
+#> MB1589     0 83334.29     0     0 2751336.9     0 578187.41 23251.863     0
+#> MB1588     0     0.00     0     0       0.0     0      0.00     0.000     0
+#>            omu87      omu88 omu89    omu90    omu91    omu92    omu93 omu94
+#> blank3  4267.063   7709.688     0     0.00     0.00     0.00     0.00     0
+#> MB1589 28711.179 278049.688     0 19642.83 57334.46 38534.01 38765.94     0
+#> MB1588     0.000      0.000     0     0.00     0.00     0.00 46022.30     0
+#>           omu95 omu96    omu97    omu98 omu99    omu100 omu101   omu102 omu103
+#> blank3      0.0     0     0.00     0.00     0  37381.96      0     0.00      0
+#> MB1589 804098.7     0 10110.24 96614.68     0 166117.64      0 62575.24      0
+#> MB1588      0.0     0     0.00     0.00     0  26708.77      0     0.00      0
+#>        omu104   omu105 omu106    omu107 omu108  omu109 omu110 omu111 omu112
+#> blank3      0     0.00      0   4068.33      0     0.0      0      0      0
+#> MB1589      0 12633.89      0 118577.04      0 37879.9      0      0      0
+#> MB1588      0     0.00      0      0.00      0     0.0      0      0      0
+#>        omu113   omu114 omu115 omu116 omu117 omu118    omu119 omu120    omu121
+#> blank3      0     0.00      0      0      0      0      0.00      0      0.00
+#> MB1589      0 15677.16      0      0      0      0  61664.97      0  60820.68
+#> MB1588      0     0.00      0      0      0      0 138083.00      0 212704.06
 ```
 
 You can also see how the samples in the matched object have been
@@ -1308,7 +1304,7 @@ generate_a_combined_table(
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
-#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu56
+#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu54
 #>   annotations 221012_DGM_Blank1_1_1_390 221012_DGM_Blank1_1_2_391
 #> 1        <NA>                         0                         0
 #> 2        <NA>                         0                         0
@@ -1390,7 +1386,7 @@ generate_a_combined_table(
 #>                   ms1_id             ms2_id         mz RTINMINUTES  omus
 #> 1 1000.05311 Da 399.15 s                    1001.06039        6.65      
 #> 2 1000.20067 Da 536.14 s                    1001.20795        8.94      
-#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu56
+#> 3 1000.54504 Da 353.23 s mz1023.53293rt5.89 1023.53397        5.89 omu54
 #>   annotations blank           MB1588 MB1589 MB1590 blank1 MB1591 MB1592 MB1593
 #> 1        <NA>     0                0      0      0      0      0      0      0
 #> 2        <NA>     0 15627.3391933333      0      0      0      0      0      0
